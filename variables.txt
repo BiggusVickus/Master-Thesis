@@ -1,0 +1,5 @@
+phage_population = 1000
+bacteria_population = 1000
+time = 100
+nutrition_concentration = 10000000
+bacteria_nutrition_usage = 1
