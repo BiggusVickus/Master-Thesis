@@ -1,10 +1,13 @@
+import Classes.Bacteria as Bacteria
+import Classes.Phage as Phage
+import Classes.Resource as Resource
 class SimulationSIR():
     def _init_(self, dictionary):
         self.bacteria_pop = dictionary
         self.time = dictionary['time']
-        self.bacteria_agents = []
-        self.phage_agents = []
-        self.resource_agents = []
+        self.bacteria_agents: Bacteria = []
+        self.phage_agents: Phage = []
+        self.resource_agents: Resource = []
 
     def add_agent(self, agent, type):
         if type == "Bacteria":
@@ -22,6 +25,26 @@ class SimulationSIR():
         if type == "Resource":
             self.resource_agents.pop(agent)
 
-    def main_loop(self):
-        for i in range(self.time):
-            
+    def bacteria(self):
+        for bacteria in self.bacteria_agents:
+            bacteria.population_reproduce_death()
+            bacteria.become_infected()
+
+    def phages(self):
+        for phage in self.phage_agents:
+            phage.population_reproduce_death()
+
+    def resources(self):
+        for resource in self.resource_agents:
+            for bacteria in self.bacteria_agents: 
+                if bacteria.id not in resource.reduced_by:
+                    continue
+                reduce_resources = bacteria.consume_resources()
+                add_resource = resource.added_concentration()
+                resource.add_reduce_concentration(add_resource, reduce_resources)
+
+    def run(self):
+        for _ in range(self.time):
+            self.bacteria()
+            self.phages()
+            self.resources()

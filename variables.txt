@@ -1,5 +1,6 @@
-phage_population = 1000
-bacteria_population = 1000
-time = 100
-nutrition_concentration = 10000000
-bacteria_nutrition_usage = 1
+chipmunk1 = chipmunk
+chipmunk2 = True
+chipmunk3 = False
+chipmuink4 = 10
+chipmunk5 = 10.01
+chipmunk6 = [1, 3, 4.01, chipmunk]
