@@ -90,12 +90,18 @@ def default_p_b_data():
     string += 'Adsorption Rate Bacteria to Phage: 0.1\n'
     string += 'Lysis Rate: 0.1\n'
     string += 'Carying Capacity: 100\n'
+    string += 'r: 0.1\n'
+    string += 'tau: 0.5\n'
     return string
 
 def default_b_r_data():
     string = ''
     string += 'Uptake Rate: 0.1\n'
     string += 'Release Rate: 0.1\n'
+    string += 'e: 0.1\n'
+    string += 'v: 0.1\n'
+    string += 'K: 100\n'
+
     return string
 
 def add_node():
@@ -306,7 +312,7 @@ def edit_edge_attributes():
     submit_button.pack()
 
 window = Tk() 
-window.title('Plotting in Tkinter') 
+window.title('GUI Tool For Creating Graph Topography') 
 # dimensions of the main window 
 window.geometry("800x500") 
 
