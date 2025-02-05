@@ -179,7 +179,7 @@ class Analysis():
         else:
             raise ValueError("Length must be an int or a list of ints")
 
-    def solve_system(self, ODE_system_function:function, y0_flattened:np.array, *ODE_system_parameters, **extra_parameters) -> np.array:
+    def solve_system(self, ODE_system_function, y0_flattened:np.array, *ODE_system_parameters, **extra_parameters) -> np.array:
         """Solves the system of ODEs given the ODE system function, initial conditions, and parameters
 
         Args:
