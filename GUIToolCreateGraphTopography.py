@@ -49,58 +49,60 @@ def plot():
     canvas.get_tk_widget().pack()
 
 def default_environment_data():
-    string = ''
-    string += 'Temperature: 25\n'
-    string += 'pH: 7\n'
-    string += "Simulation Time: 100\n"
-    string += "Time Step: 0.1\n"
+    string = ""
+    string += f"Temperature: {randomize_parameter_value(25)}\n"
+    string += f"pH: {randomize_parameter_value(7)}\n"
+    string += f"Simulation Time: {randomize_parameter_value(100)}\n"
+    string += f"Time Step: {randomize_parameter_value(0.1)}\n"
     return string
 
 def default_phage_data():
-    string = ''
-    string += 'Initial Population: 100\n'
-    string += 'Washout Rate: 0.1\n'
+    string = ""
+    string += f'Initial Population: {randomize_parameter_value(100)}\n'
+    string += f'Washout Rate: {randomize_parameter_value(0.1)}\n'
     return string
 
 def default_bacteria_data():
-    string = ''
-    string += 'Initial Population: 100\n'
-    string += 'Growth Rate: 0.1\n'
-    string += 'Death Rate: 0.1\n'
-    string += "Minimal Temperature: 20\n"
-    string += "Optimal Temperature: 25\n"
-    string += "Maximal Temperature: 30\n"
-    string += "Minimal pH: 6\n"
-    string += "Optimal pH: 7\n"
-    string += "Maximal pH: 8\n"
+    string = ""
+    string += f"Initial Population: {randomize_parameter_value(100)}\n"
+    string += f"Growth Rate: {randomize_parameter_value(0.1)}\n"
+    string += f"Death Rate: {randomize_parameter_value(0.1)}\n"
+    string += f"Minimal Temperature: {randomize_parameter_value(20)}\n"
+    string += f"Optimal Temperature: {randomize_parameter_value(25)}\n"
+    string += f"Maximal Temperature: {randomize_parameter_value(30)}\n"
+    string += f"Minimal pH: {randomize_parameter_value(6)}\n"
+    string += f"Optimal pH: {randomize_parameter_value(7)}\n"
+    string += f"Maximal pH: {randomize_parameter_value(8)}\n"
     return string
 
 def default_resource_data():
-    string = ''
-    string += 'Initial Concentration: 100\n'
-    string += 'Decay Rate: 0.1\n'
-    string += 'Replenishment Rate: 0.1\n'
-    string 
+    string = ""
+    string += f"Initial Concentration: {randomize_parameter_value(100)}\n"
+    string += f"Decay Rate: {randomize_parameter_value(0.1)}\n"
+    string += f"Replenishment Rate: {randomize_parameter_value(0.1)}\n"
     return string
 
+def randomize_parameter_value(main_value, sigma = 1):
+    return np.random.normal(main_value, sigma)
+
 def default_p_b_data():
-    string = ''
-    string += 'Burst Size: 100\n'
-    string += 'Adsorption Rate Phage to Bacteria: 0.1\n'
-    string += 'Adsorption Rate Bacteria to Phage: 0.1\n'
-    string += 'Lysis Rate: 0.1\n'
-    string += 'Carying Capacity: 100\n'
-    string += 'r: 0.1\n'
-    string += 'tau: 0.5\n'
+    string = ""
+    string += f"Burst Size: {randomize_parameter_value(100)}\n"
+    string += f"Adsorption Rate Phage to Bacteria: {randomize_parameter_value(0.1)}\n"
+    string += f"Adsorption Rate Bacteria to Phage: {randomize_parameter_value(0.1)}\n"
+    string += f"Lysis Rate: {randomize_parameter_value(0.1)}\n"
+    string += f"Carying Capacity: {randomize_parameter_value(100)}\n"
+    string += f"r: {randomize_parameter_value(0.1)}\n"
+    string += f"tau: {randomize_parameter_value(0.5)}\n"
     return string
 
 def default_b_r_data():
-    string = ''
-    string += 'Uptake Rate: 0.1\n'
-    string += 'Release Rate: 0.1\n'
-    string += 'e: 0.1\n'
-    string += 'v: 0.1\n'
-    string += 'K: 100\n'
+    string = ""
+    string += f"Uptake Rate: {randomize_parameter_value(0.1)}\n"
+    string += f"Release Rate: {randomize_parameter_value(0.1)}\n"
+    string += f"e: {randomize_parameter_value(0.1)}\n"
+    string += f"v: {randomize_parameter_value(0.1)}\n"
+    string += f"K: {randomize_parameter_value(100)}\n"
 
     return string
 
