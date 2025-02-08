@@ -1,0 +1,81 @@
+\documentclass[titlepage]{article}
+\usepackage{illcmolthesis}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{cleveref}
+\usepackage{biblatex} 
+\usepackage{textcomp}
+\usepackage[font=small,labelfont=bf]{caption}
+\hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black}
+\addbibresource{references.bib} %Import the bibliography file
+
+\begin{document}
+
+
+\title{Mathematically Modeling the Interactions Between Phages,  Bacteria, and the Environment}
+\author{Victor J. Piaskowski}
+\birthdate{August 2, 2001}
+\birthplace{Royal Oak, MI, USA}
+\defensedate{June 27, 2025}
+\supervisor{Dr. Matti Gralka}
+\committeemember{Dr. Matti Gralka}
+\committeemember{Dr. Jaap Kaandorp}
+\committeemember{Dr. Yuval Mulla}
+\pagenumbering{roman}
+\maketitle
+\begin{abstract}
+    \input{Chapters/Abstract}
+\end{abstract}
+\newpage
+
+\input{Chapters/Abbreviations}
+\newpage
+
+\tableofcontents
+\newpage 
+\pagenumbering{arabic}
+\section{Introduction}
+\label{sec:Introduction}
+\input{Chapters/Introduction}
+\newpage
+
+\section{Literary Review}
+\label{sec:Literature}
+\input{Chapters/Literature}
+\newpage
+
+\section{Methods}
+\label{sec:Methods}
+\input{Chapters/Methods}
+\newpage
+
+\section{Experiments and Results}
+    \label{sec:Experiments}
+    \input{Chapters/Results}
+    \newpage
+
+\section{Discussion}
+    \label{sec:Discussion}
+    \input{Chapters/Discussion}
+    \newpage
+
+\section{Conclusion and Future Work}
+    \label{sec:Conclusion}
+    \input{Chapters/Conclusion}
+    \newpage
+
+\printbibliography[heading=bibintoc, title={References}]
+\newpage
+
+\appendix 
+\section{Parameters}
+    \label{sec:Parameters}
+    \input{Chapters/Appendix/Parameters}
+    \newpage
+
+\section{Appendix 1}
+    \label{sec:Appendix1}
+    \input{Chapters/Appendix/Appendix1}
+    \newpage
+\end{document}
