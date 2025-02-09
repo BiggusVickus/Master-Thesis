@@ -1,5 +1,5 @@
 \subsection{Methods of Modelling Phages and Bacteria}
-There are numerous ways to model the interactions between phages and bacteria. Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods. On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria and bacteria can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs). DDEs are similar to ODEs, except where when ODEs are calculating the values of the equations at time $t$ using time $t-1$, DDEs can, but don't have to, use the value of the equation at time $t-\tau$, where $1 \leq \tau \leq t$. \newline 
+There are numerous ways to model the interactions between phages and bacteria. Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods. On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs). DDEs are similar to ODEs, except where when ODEs are calculating the values of the equations at time $t$ using time $t-1$, DDEs can, but don't have to, use the value of the equation at time $t-\tau$, where $1 \leq \tau \leq t$. \newline 
 
 Each type of system has its pros and cons. With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is in general much more complex. However, more information can be gained from the simulations and can guide research in creating phages for a certain type of bacteria. The ODE method is simpler and easier to set up, however it can only capture large population dynamics. Certain assumptions have to be made, for example $\omega$ percent of the bacteria population is washed out. The model can be made more complicated, by modelling each stage of a lysis, or when calculating the washout rate of bacteria, use a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to capture slight variations in a parameter at each step to controllably randomize parameter values to capture noise in measuring data. Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
 
@@ -29,22 +29,20 @@ where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with tradeoff if $r_i
 \subsubsection{Agent-Based Models}
 Agent-based Models (ABM) model the system through space and time. An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes. Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells. Resources are diffused through the system using a PDE solver for a Boundary Value Problem (BVP). Agents are allowed to move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as nutrient density, microbe density, or stochastic chance. \newline 
 ABMs are useful when simulating many individual elements interacting in a system. Chaotic or emergent behaviour can arise from these interactions. Chaotic behavior refers to the irregular and unpredictable evolution of a system's behavior due to nonlinear equations, exhibiting sensitive dependence on initial conditions \cite{encyclopedia_of_physical_science_and_technology}. \newline 
-Emergent behavior is something that is a nonobvious side effect of bringing together a new combination of capabilities—whether related to goods or services. Emergent behaviors can be either beneficial, benign, or potentially harmful, but in all cases they are very difficult to foresee until they manifest themselves. Agents can have simple rules, but when interacting with other agents, behavior that hasn't been programmed can arise. Emergent behaviors are also sometimes considered to be systems that are more complex than the sum of their parts \cite{macaulayThreatsImpactsIoT2017}. 
-
-
-
+Emergent behavior is something that is a nonobvious side effect of bringing together a new combination of capabilities—whether related to goods or services. Emergent behaviors can be either beneficial, benign, or potentially harmful, but in all cases they are very difficult to foresee until they manifest themselves. Agents can have simple rules, but when interacting with other agents, behavior that hasn't been programmed can arise. Sometimes, people consider systems with emergent behaviors more complex than the sum of their parts.
+The ABM model can be described as follows.
 \begin{align} 
     \frac{\delta R_\alpha(r, t)}{\delta t} = \nabla \left[D \left( R_\alpha, r\right) \nabla R_\alpha \left( r, t \right) \right], r = \left(x, y\right)
 \end{align}. 
-The cellular agents rules are as follows. 
+The cellular agents rules are as follows: 
 \begin{align} 
     \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
-\end{align}, where if $i>$ threshold, $\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
-The resource consumption and conversion into new sub-resource types are described as follows. 
+\end{align}, where if $i> \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
+The system consumes resources and converts them into new sub-resource types with the following equation:
 \begin{align}    
     \frac{dR_\alpha}{dt} &= -\sum_i C_{i\alpha}R_\alpha I \\
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
-\end{align}
+\end{align}. 
 
 
 
@@ -62,7 +60,7 @@ Phage cocktails like SalmoFresh\textsuperscript{TM} have been proven to safely r
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{Chapters/Figures/SalmoFresh_in_pet_food.png}
-    \caption{SalmoLyse\textsuperscript{\textregistered} reduces Salmonella contamination on various food surfaces: Mean and standard error bars shown. Statistical analyses were carried out for each food group independently. Asterisks denote signiﬁcant reduction from corresponding controls based on one-way ANOVA with Tukey’s post-hoc tests for multiple corrections: ** denotes $p < 0.01$, while *** denotes $p < 0.001$ compared to the corresponding controls. There was signiﬁcant reduction in Salmonella on all food surfaces with the addition of SalmoLyse\textsuperscript{\textregistered} compared to the controls; the mean percent reductions from the control are noted in the boxes above treatment bars. CFU/g D colony forming units per gram. Each letter denotes a food group that was tested with SalmoLyse\textsuperscript{\textregistered} and compared to a control: A= chicken; B= lettuce; C= tuna; D= cantaloupe; E= ground turkey. \cite{sofferBacteriophagesSafelyReduce2016}}
+    \caption{SalmoLyse\textsuperscript{\textregistered} reduces Salmonella contamination on various food surfaces: Mean and standard error bars shown. Statistical analyses were carried out for each food group independently. Asterisks denote signiﬁcant reduction from corresponding controls based on one-way ANOVA with Tukey’s post-hoc tests for multiple corrections: ** denotes $p < 0.01$, while *** denotes $p < 0.001$ compared to the corresponding controls. There was significant reduction in Salmonella on all food surfaces with the addition of SalmoLyse\textsuperscript{\textregistered} compared to the controls; the mean percent reductions from the control are noted in the boxes above treatment bars. CFU/g D colony forming units per gram. Each letter denotes a food group that was tested with SalmoLyse\textsuperscript{\textregistered} and compared to a control: A= chicken; B= lettuce; C= tuna; D= cantaloupe; E= ground turkey. \cite{sofferBacteriophagesSafelyReduce2016}}
     \label{fig:SalmoFresh_pet_food}
 \end{figure}
 
@@ -74,7 +72,7 @@ Phage cocktails like SalmoFresh\textsuperscript{TM} have been proven to safely r
 \end{figure}
 
 
-\subsubsection{Current Applications: Bacterial Infection Control}
+\subsubsection{Current Applicatio)ns: Bacterial Infection Control}
 
 
 \subsubsection{Current Applications: Environmental Control}
