@@ -61,26 +61,31 @@ class GraphMakerGUI(GraphMaker):
         node_type = simpledialog.askstring("Add Node: Node Type", "Enter exactly P, B, R for type of node type to input:")
         node_name = simpledialog.askstring("Add Node: Node Name", "Enter node name:")
         super().add_node(node_type, node_name)
+        self.plot()
 
     def remove_node(self):
         node_name = simpledialog.askstring("Remove Node", "Enter node name to remove:")
         super().remove_node(node_name)
+        self.plot()
 
     def add_edge(self):
         node1 = simpledialog.askstring("Add Edge", "Enter node 1:")
         node2 = simpledialog.askstring("Add Edge", "Enter node 2:")
         super().add_edge(node1, node2)
+        self.plot()
 
     def remove_edge(self):
         node1 = simpledialog.askstring("Remove Edge", "Enter node 1:")
         node2 = simpledialog.askstring("Remove Edge", "Enter node 2:")
         super().remove_edge(node1, node2)
+        self.plot()
     
     def mass_create_nodes(self):
         P = simpledialog.askinteger("Add Phage Nodes", "Enter number of P nodes:")
         B = simpledialog.askinteger("Add Bacteria Nodes", "Enter number of B nodes:")
         R = simpledialog.askinteger("Add Resource Nodes", "Enter number of R nodes:")
         super().mass_create_nodes(P, B, R)
+        self.plot()
     
     def mass_create_edges(self):
         def submit():
@@ -98,6 +103,7 @@ class GraphMakerGUI(GraphMaker):
                 if node1 in self.graph.nodes and node2 in self.graph.nodes:
                     edge_tuples.append((node1, node2))
             error_text = GraphMaker.mass_create_edges(self, edge_tuples)
+            self.plot()
             if error_text != "":
                 error_text = "Found issues with these edges, others have been successfully added: \n\n" + error_text
                 return self.error_message(error_text, message_type="Warning")
@@ -164,3 +170,6 @@ class GraphMakerGUI(GraphMaker):
 
         submit_button = tk.Button(new_window, text="Submit", command=submit)
         submit_button.pack()
+    
+    def get_graph(self):
+        return super().get_graph()

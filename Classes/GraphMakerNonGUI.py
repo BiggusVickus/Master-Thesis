@@ -34,3 +34,5 @@ class GraphMakerNonGUI(GraphMaker):
     def edit_edge_attributes(self, node1, node2, user_input):
         return super().edit_edge_attributes(node1, node2, user_input)
     
+    def get_graph(self):
+        return super().get_graph()

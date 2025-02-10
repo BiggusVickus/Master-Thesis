@@ -124,13 +124,11 @@ class GraphMaker:
             }.get(node_type, lambda: None)()
 
         self.graph.nodes[node_name]['data'] = node_data
-        self.plot()
         
     def remove_node(self, node_name):
         node_name = node_name.strip()
         if node_name in self.graph:
             self.graph.remove_node(node_name)
-            self.plot()
         else:
             return self.error_message("Node not found")
 
@@ -159,7 +157,6 @@ class GraphMaker:
         else:
             node_data = "Default edge data"
         self.graph.edges[node1, node2]['data'] = node_data
-        self.plot()
 
     def remove_edge(self, node1 = None, node2 = None):
         if node1 == None or node2 == None:
@@ -168,7 +165,6 @@ class GraphMaker:
         node2 = node2.strip()
         if self.graph.has_edge(node1, node2):
             self.graph.remove_edge(node1, node2)
-            self.plot()
         else:
             return self.error_message("Edge not found")
 
@@ -191,7 +187,6 @@ class GraphMaker:
             self.graph.add_node("R" + str(i))
             self.graph.nodes["R" + str(i)]['node_type'] = "R"
             self.graph.nodes["R" + str(i)]['data'] = self.default_resource_data()
-        self.plot()
 
     def verify_edge_connections(self, node1, node2, type1, type2):
         return (self.graph.nodes[node1]['node_type'] == type1 and self.graph.nodes[node2]['node_type'] == type2) or (self.graph.nodes[node1]['node_type'] == type2 and self.graph.nodes[node2]['node_type'] == type1)
@@ -227,7 +222,6 @@ class GraphMaker:
                 error_text += f"{node1} or {node2} not found in graph\n"
             self.graph.add_edge(node1, node2)
             self.graph.edges[node1, node2]['data'] = node_data
-            self.plot()
         return error_text
 
     def export_graph_to_file(self, file_name:str =None):
@@ -260,7 +254,6 @@ class GraphMaker:
                 nx.read_pajek(self.graph, file_name)
         except:
             return self.error_message("File not found")
-        self.plot()
 
     def edit_node_attributes(self, node_name:str, node_data):
         if node_name is None or node_name == "" or node_data is None:
@@ -288,3 +281,6 @@ class GraphMaker:
             else:
                 print(message)
                 return
+
+    def get_graph(self):
+        return self.graph
