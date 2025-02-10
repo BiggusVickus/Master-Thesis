@@ -3,3 +3,23 @@
 .DS_STORE
 .ipynb_checkpoints
 test.py
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.bbl
+*.bbl-SAVE-ERROR
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
