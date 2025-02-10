@@ -1,0 +1,378 @@
+object Form2: TForm2
+  Left = 163
+  Height = 665
+  Top = 232
+  Width = 1230
+  HorzScrollBar.Page = 244
+  VertScrollBar.Page = 586
+  Anchors = []
+  AutoScroll = True
+  Caption = 'Output'
+  ClientHeight = 665
+  ClientWidth = 1230
+  Constraints.MinHeight = 665
+  Constraints.MinWidth = 1230
+  OnClose = FormClose
+  OnCreate = FormCreate
+  Position = poDefaultPosOnly
+  LCLVersion = '2.0.12.0'
+  object Button1: TButton
+    Left = 1122
+    Height = 25
+    Top = 605
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Caption = 'Close'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 986
+    Height = 554
+    Top = 32
+    Width = 244
+    Anchors = [akTop, akRight]
+    BorderStyle = bsNone
+    Color = clMenu
+    Lines.Strings = (
+      'Memo1'
+    )
+    OnChange = Memo1Change
+    ReadOnly = True
+    TabOrder = 1
+  end
+  object Label1: TLabel
+    Left = 986
+    Height = 19
+    Top = 8
+    Width = 56
+    Anchors = [akTop, akRight]
+    AutoSize = False
+    Caption = 'Input'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Bevel5: TBevel
+    Left = 986
+    Height = 7
+    Top = 40
+    Width = 236
+    Anchors = [akTop, akRight]
+    Shape = bsTopLine
+    Visible = False
+  end
+  object Chart1: TChart
+    Left = 8
+    Height = 639
+    Top = 0
+    Width = 970
+    AxisList = <    
+      item
+        Grid.Visible = False
+        Intervals.MaxLength = 100
+        Intervals.MinLength = 20
+        Intervals.Options = [aipGraphCoords, aipUseMaxLength, aipUseMinLength, aipUseNiceSteps]
+        Intervals.Tolerance = 3
+        Marks.Format = '%:8.3e'
+        Marks.LabelBrush.Style = bsClear
+        Marks.Style = smsCustom
+        Minors = <>
+        Title.LabelFont.Orientation = 900
+        Title.Visible = True
+        Title.Caption = 'CFU, PFU /ml'
+        Title.LabelBrush.Style = bsClear
+        Transformations = LeftAxisTransformations
+      end    
+      item
+        Grid.Visible = False
+        Alignment = calBottom
+        Margin = 14
+        Marks.LabelBrush.Style = bsClear
+        Marks.Range.UseMin = True
+        Minors = <>
+        Range.UseMin = True
+        Title.Visible = True
+        Title.Caption = 'Time (h)'
+        Title.LabelBrush.Style = bsClear
+      end    
+      item
+        Grid.Visible = False
+        Visible = False
+        Alignment = calRight
+        Marks.Format = '%2f'
+        Marks.LabelBrush.Style = bsClear
+        Marks.Range.UseMin = True
+        Marks.Style = smsCustom
+        Minors = <>
+        Title.Alignment = taRightJustify
+        Title.LabelFont.Orientation = 900
+        Title.Visible = True
+        Title.Caption = 'Resource ug/ml'
+        Title.LabelBrush.Style = bsClear
+        Transformations = RightAxisTransformations
+      end>
+    BackColor = clWindow
+    ExtentSizeLimit.UseXMax = True
+    ExtentSizeLimit.UseXMin = True
+    ExtentSizeLimit.UseYMin = True
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Legend.GroupTitles.Strings = (
+      'Bacteria'
+      'Phages'
+      'Resource'
+    )
+    Legend.SymbolWidth = 25
+    Legend.Visible = True
+    ReticuleMode = rmCross
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
+    )
+    Toolset = ChartToolset1
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    OnMouseDown = Chart1MouseDown
+    object Chart1SensitiveOutLineSeries1: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 1
+      Title = 'Uninfected'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = 4227327
+      LinePen.Width = 2
+    end
+    object Chart1ResistantAOutLineSeries2: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 2
+      Title = 'A Resistant'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clRed
+      LinePen.Width = 2
+    end
+    object Chart1ResistantBOutLineSeries3: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 3
+      Title = 'B Resistant'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clFuchsia
+      LinePen.Width = 2
+    end
+    object Chart1ResistantABOutLineSeries4: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 4
+      Title = 'AB Resistant'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clMaroon
+      LinePen.Width = 2
+    end
+    object Chart1ResourceCOutLineSeries5: TLineSeries
+      Legend.GroupIndex = 2
+      Legend.Order = 12
+      Title = 'Resource'
+      AxisIndexX = 1
+      AxisIndexY = 2
+      LinePen.Width = 2
+    end
+    object Chart1PhageAOutLineSeries6: TLineSeries
+      Legend.GroupIndex = 1
+      Legend.Order = 11
+      Title = 'Phage A'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clBlue
+      LinePen.Width = 2
+    end
+    object Chart1PhageBOutLineSeries7: TLineSeries
+      Legend.GroupIndex = 1
+      Legend.Order = 12
+      Title = 'Phage B'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = 2676525
+      LinePen.Width = 2
+    end
+    object Chart1InfectedAOutLineSeries8: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 5
+      Title = 'Infected by A'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clBlue
+      LinePen.Style = psDot
+      LinePen.Width = 3
+    end
+    object Chart1InfectedBOutLineSeries9: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 6
+      Title = 'Infected by B'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = 2676525
+      LinePen.Style = psDot
+      LinePen.Width = 3
+    end
+    object Chart1InfectedABOutLineSeries10: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 7
+      Title = 'Infected by AB'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clOlive
+      LinePen.Style = psDot
+      LinePen.Width = 3
+    end
+    object Chart1AResInfBOutLineSeries11: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 8
+      Title = 'A res. inf. by B'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clRed
+      LinePen.Style = psDot
+      LinePen.Width = 3
+    end
+    object Chart1BResInfAOutLineSeries12: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 9
+      Title = 'B res. inf. by A'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = clFuchsia
+      LinePen.Style = psDot
+      LinePen.Width = 3
+    end
+    object Chart1RefugeOutLineSeries13: TLineSeries
+      Legend.GroupIndex = 0
+      Legend.Order = 10
+      Title = 'Refuge cells'
+      AxisIndexX = 1
+      AxisIndexY = 0
+      LinePen.Color = 4227327
+      LinePen.Style = psDot
+      LinePen.Width = 3
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 24
+    Top = 641
+    Width = 1230
+    AutoSize = False
+    BorderSpacing.CellAlignHorizontal = ccaLeftTop
+    BorderSpacing.CellAlignVertical = ccaLeftTop
+    Font.Style = [fsBold]
+    Panels = <>
+    ParentFont = False
+    SizeGrip = False
+  end
+  object Button2: TButton
+    Left = 1006
+    Height = 25
+    Top = 605
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Caption = 'Save'
+    OnClick = Button2Click
+    TabOrder = 4
+  end
+  object Button3: TButton
+    Left = 888
+    Height = 25
+    Hint = 'Saves the chart as a picture'#13#10'file in Portable Network Graphics'#13#10'(PNG) format.'#13#10'(Non-compressed graphics format'#13#10'read by a number of programs,'#13#10'including MS Office programs).'
+    Top = 518
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Caption = 'PNG'
+    OnClick = Button3Click
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
+  end
+  object Button4: TButton
+    Left = 888
+    Height = 25
+    Hint = 'Saves the chart as a picture'#13#10'file in a Scalable Vector Graphics'#13#10'(SVG) format. (XML-based vector'#13#10'graphics for e.g. web applicaions,'#13#10'CorelDraw, Adobe Illustrator etc).'
+    Top = 562
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Caption = 'SVG'
+    OnClick = Button4Click
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 6
+  end
+  object Button5: TButton
+    Left = 888
+    Height = 25
+    Hint = 'Saves the chart'#13#10'to the clipboard.'
+    Top = 605
+    Width = 80
+    Anchors = [akRight, akBottom]
+    Caption = 'Clipboard'
+    OnClick = Button5Click
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 7
+  end
+  object LeftAxisTransformations: TChartAxisTransformations
+    Left = 188
+    Top = 106
+    object LeftAxisAutoScaleTransform: TAutoScaleAxisTransform
+    end
+  end
+  object RightAxisTransformations: TChartAxisTransformations
+    Left = 188
+    Top = 188
+    object RightAxisAutoScaleTransform: TAutoScaleAxisTransform
+    end
+  end
+  object ChartToolset1: TChartToolset
+    Left = 188
+    Top = 288
+    object DataPointCrosshairTool1: TDataPointCrosshairTool
+      Enabled = False
+      Shift = [ssLeft]
+      GrabRadius = 8
+      CrosshairPen.Style = psDot
+    end
+    object ChartToolset1ZoomMouseWheelTool1: TZoomMouseWheelTool
+      Enabled = False
+      ZoomFactor = 1.1
+    end
+    object ChartToolset1DataPointClickTool1: TDataPointClickTool
+      Shift = [ssLeft]
+      GrabRadius = 8
+      OnPointClick = ChartToolset1DataPointClickTool1PointClick
+    end
+    object ChartToolset1PanDragTool1: TPanDragTool
+      Enabled = False
+      Shift = [ssLeft]
+      LimitToExtent = [pdLeft, pdUp, pdRight, pdDown]
+      ActiveCursor = crDefault
+      MinDragRadius = 20
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = '.ctl'
+    Filter = 'Cocktail input file|*.ctl|Text file|*.txt'
+    Left = 896
+    Top = 464
+  end
+  object SaveDialog2: TSaveDialog
+    DefaultExt = '.png'
+    Filter = 'PNG file|*.png'
+    Left = 896
+    Top = 400
+  end
+  object SaveDialog3: TSaveDialog
+    DefaultExt = '.svg'
+    Filter = 'SVG file|.svg'
+    Left = 896
+    Top = 336
+  end
+end

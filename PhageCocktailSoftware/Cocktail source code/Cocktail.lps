@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Count="1" Active="Release">
+      <Item1 Name="Release">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <PathDelim Value="\"/>
+          <Target>
+            <Filename Value="Cocktail"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <SmartLinkUnit Value="True"/>
+            <Optimizations>
+              <OptimizationLevel Value="3"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="False"/>
+            </Debugging>
+            <LinkSmart Value="True"/>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+          <Other>
+            <WriteFPCLogo Value="False"/>
+          </Other>
+        </CompilerOptions>
+      </Item1>
+    </BuildModes>
+    <Units Count="19">
+      <Unit0>
+        <Filename Value="Cocktail1.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Cocktail"/>
+        <EditorIndex Value="9"/>
+        <CursorPos X="72" Y="22"/>
+        <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="cocktailunit1.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="1467"/>
+        <CursorPos X="14" Y="618"/>
+        <UsageCount Value="201"/>
+        <Bookmarks Count="3">
+          <Item0 X="3" Y="808"/>
+          <Item1 Y="561" ID="1"/>
+          <Item2 Y="1038" ID="2"/>
+        </Bookmarks>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="cocktailunit2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="12"/>
+        <TopLine Value="172"/>
+        <CursorPos X="7" Y="217"/>
+        <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="globalvariables.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Globalvariables"/>
+        <EditorIndex Value="15"/>
+        <TopLine Value="50"/>
+        <CursorPos X="28" Y="86"/>
+        <UsageCount Value="201"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="cocktailunit1.lfm"/>
+        <EditorIndex Value="10"/>
+        <TopLine Value="641"/>
+        <CursorPos X="126" Y="687"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="cocktailunit2.lfm"/>
+        <ComponentName Value="Form2"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="11"/>
+        <CursorPos X="21" Y="11"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
+        <UnitName Value="Dialogs"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="650"/>
+        <CursorPos X="14" Y="142"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="C:\lazarus\lcl\include\control.inc"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="3947"/>
+        <CursorPos Y="3945"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="C:\lazarus\components\lazutils\lazutf8classes.pas"/>
+        <UnitName Value="LazUTF8Classes"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="139"/>
+        <CursorPos Y="143"/>
+        <UsageCount Value="23"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="C:\lazarus\fpc\3.0.2\source\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="675"/>
+        <CursorPos X="15" Y="687"/>
+        <UsageCount Value="34"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="742"/>
+        <CursorPos X="14" Y="763"/>
+        <UsageCount Value="101"/>
+        <Loaded Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="C:\lazarus\fpc\3.0.2\source\packages\fcl-stl\src\gstack.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="12"/>
+        <CursorPos X="55" Y="50"/>
+        <UsageCount Value="4"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="14"/>
+        <TopLine Value="151"/>
+        <CursorPos X="27" Y="186"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="C:\lazarus\components\tachart\tatools.pas"/>
+        <UnitName Value="TATools"/>
+        <EditorIndex Value="13"/>
+        <TopLine Value="963"/>
+        <CursorPos X="106" Y="972"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="C:\lazarus\components\tachart\tacustomsource.pas"/>
+        <UnitName Value="TACustomSource"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="762"/>
+        <CursorPos Y="785"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="C:\lazarus\components\tachart\tachartaxisutils.pas"/>
+        <UnitName Value="TAChartAxisUtils"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="331"/>
+        <CursorPos X="14" Y="131"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="C:\lazarus\components\tachart\tachartaxis.pas"/>
+        <UnitName Value="TAChartAxis"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="89"/>
+        <CursorPos X="39" Y="115"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="C:\lazarus\fpc\3.2.0\source\packages\fcl-stl\src\gvector.pp"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="193"/>
+        <CursorPos X="22" Y="101"/>
+        <UsageCount Value="100"/>
+        <Loaded Value="True"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="234"/>
+        <CursorPos X="31" Y="248"/>
+        <UsageCount Value="35"/>
+        <Loaded Value="True"/>
+      </Unit18>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="78" Column="21" TopLine="37"/>
+      </Position1>
+      <Position2>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="90" Column="30" TopLine="49"/>
+      </Position2>
+      <Position3>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="99" Column="25" TopLine="58"/>
+      </Position3>
+      <Position4>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="277" Column="28" TopLine="235"/>
+      </Position4>
+      <Position5>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="279" Column="23" TopLine="237"/>
+      </Position5>
+      <Position6>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="471" Column="56" TopLine="436"/>
+      </Position6>
+      <Position7>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="472" Column="9" TopLine="436"/>
+      </Position7>
+      <Position8>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="475" Column="24" TopLine="436"/>
+      </Position8>
+      <Position9>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="486" Column="33" TopLine="444"/>
+      </Position9>
+      <Position10>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="488" Column="35" TopLine="446"/>
+      </Position10>
+      <Position11>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="579" Column="35" TopLine="537"/>
+      </Position11>
+      <Position12>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="586" Column="23" TopLine="544"/>
+      </Position12>
+      <Position13>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="607" Column="56" TopLine="566"/>
+      </Position13>
+      <Position14>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="630" Column="47" TopLine="589"/>
+      </Position14>
+      <Position15>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="644" Column="89" TopLine="603"/>
+      </Position15>
+      <Position16>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="655" Column="103" TopLine="614"/>
+      </Position16>
+      <Position17>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="1462" Column="17" TopLine="1420"/>
+      </Position17>
+      <Position18>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="1475" Column="21" TopLine="1433"/>
+      </Position18>
+      <Position19>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="828" Column="107" TopLine="806"/>
+      </Position19>
+      <Position20>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="847" Column="75" TopLine="806"/>
+      </Position20>
+      <Position21>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="10" Column="26"/>
+      </Position21>
+      <Position22>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="498" Column="8"/>
+      </Position22>
+      <Position23>
+        <Filename Value="cocktailunit2.pas"/>
+      </Position23>
+      <Position24>
+        <Filename Value="cocktailunit2.pas"/>
+        <Caret Line="37" Column="17"/>
+      </Position24>
+      <Position25>
+        <Filename Value="cocktailunit2.pas"/>
+        <Caret Line="61" Column="19" TopLine="20"/>
+      </Position25>
+      <Position26>
+        <Filename Value="cocktailunit2.pas"/>
+        <Caret Line="157" Column="32" TopLine="133"/>
+      </Position26>
+      <Position27>
+        <Filename Value="cocktailunit2.pas"/>
+        <Caret Line="215" Column="22" TopLine="172"/>
+      </Position27>
+      <Position28>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="198" Column="40" TopLine="169"/>
+      </Position28>
+      <Position29>
+        <Filename Value="cocktailunit1.pas"/>
+        <Caret Line="652" Column="23" TopLine="616"/>
+      </Position29>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode="default"/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

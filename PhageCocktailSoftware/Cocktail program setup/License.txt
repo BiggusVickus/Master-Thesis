@@ -1,0 +1,13 @@
+Licence information
+-------------------
+
+The Cocktail program is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike
+4.0 International License. To view a copy of this license, visit 
+https://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons, 
+PO Box 1866, Mountain View, CA 94042, USA. In short, this means that it is free for everyone
+to use, to modify the source code, build upon the program or code, and free to distribute in 
+any medium. You must however give appropriate credit and a link to the license. If changes 
+were made to the program or code, these must be specified, and distribution of modifications 
+must be under the same license. It is not allowed for anyone to use any part of the program 
+or code for commercial purposes. If you benefit from the program, a donation to Medecins 
+Sans Frontieres would be appreciated: https://www.msf.org/donate

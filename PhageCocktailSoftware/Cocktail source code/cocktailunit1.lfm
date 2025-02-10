@@ -1,0 +1,1168 @@
+object Form1: TForm1
+  Left = 481
+  Height = 620
+  Top = 216
+  Width = 1000
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
+  Caption = 'Cocktail'
+  ClientHeight = 620
+  ClientWidth = 1000
+  Constraints.MaxHeight = 620
+  Constraints.MaxWidth = 1000
+  Constraints.MinHeight = 620
+  Constraints.MinWidth = 1000
+  OnCreate = FormCreate
+  OnDblClick = ShowMe
+  Position = poDesktopCenter
+  LCLVersion = '2.0.12.0'
+  object Button1: TButton
+    Left = 776
+    Height = 25
+    Top = 560
+    Width = 80
+    Caption = 'Run'
+    OnClick = Button1Click
+    TabOrder = 0
+  end
+  object Button2: TButton
+    Left = 896
+    Height = 25
+    Top = 560
+    Width = 80
+    Caption = 'Quit'
+    OnClick = Button2Click
+    TabOrder = 1
+  end
+  object Label1: TLabel
+    Left = 16
+    Height = 21
+    Top = 16
+    Width = 55
+    Caption = 'Bacteria'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Bevel1: TBevel
+    Left = 18
+    Height = 8
+    Top = 40
+    Width = 262
+    Shape = bsTopLine
+  end
+  object Label2: TLabel
+    Left = 18
+    Height = 15
+    Top = 64
+    Width = 108
+    Caption = 'Max growth rate, /h '
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 18
+    Height = 15
+    Top = 88
+    Width = 110
+    Caption = 'Monod const. ug/ml'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 18
+    Height = 15
+    Top = 112
+    Width = 157
+    Caption = 'Conversion efficiency, ug/cell'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 18
+    Height = 15
+    Top = 136
+    Width = 120
+    Caption = 'Bacterial decay rate, /h'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 18
+    Height = 15
+    Top = 160
+    Width = 168
+    Caption = 'A resistance mut. rate, /cell div. '
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 18
+    Height = 15
+    Top = 184
+    Width = 164
+    Caption = 'B resistance mut. rate, /cell div.'
+    ParentColor = False
+  end
+  object Label8: TLabel
+    Left = 18
+    Height = 15
+    Top = 208
+    Width = 134
+    Caption = 'A resistant start freq. /cell'
+    ParentColor = False
+  end
+  object Label9: TLabel
+    Left = 18
+    Height = 15
+    Top = 232
+    Width = 136
+    Caption = 'B resistant start freq.  /cell'
+    ParentColor = False
+  end
+  object Label10: TLabel
+    Left = 16
+    Height = 21
+    Top = 400
+    Width = 71
+    Caption = 'Resources'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Bevel2: TBevel
+    Left = 18
+    Height = 7
+    Top = 424
+    Width = 262
+    Shape = bsTopLine
+  end
+  object Label11: TLabel
+    Left = 18
+    Height = 15
+    Top = 448
+    Width = 142
+    Caption = 'Resource start conc. ug/ml'
+    ParentColor = False
+  end
+  object Label12: TLabel
+    Left = 18
+    Height = 15
+    Top = 472
+    Width = 116
+    Caption = 'Reservoir conc. ug/ml'
+    ParentColor = False
+  end
+  object FloatSpinEdit1: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'Maximum specific growth rate'#13#10'per hour in the logistic equation.'#13#10'Allowed range is 0 - 1.5'
+    Top = 60
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.05
+    MaxValue = 1.5
+    OnChange = FloatSpinEdit1Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 2
+    Value = 0.7
+  end
+  object FloatSpinEdit2: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'The Monod constant  in'#13#10'the logistic equation'
+    Top = 84
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.1
+    MinValue = 0.01
+    OnChange = FloatSpinEdit2Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 3
+    Value = 5
+  end
+  object Edit1: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The resource needed for'#13#10'the division of one cell.'#13#10'Input real number or number'#13#10'in scientific format e.g. 2.00-E6.'#13#10'Range is 1.00E-8 - 1.00E-4.'
+    Top = 108
+    Width = 80
+    OnChange = Edit1Change
+    OnEditingDone = Edit1EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 4
+    Text = '2.00E-06'
+  end
+  object FloatSpinEdit3: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'The decay rate per hour'#13#10'is the "natural" decay rate'#13#10'of uninfected bacteria, an'#13#10'integer between 0 and 1. '
+    Top = 132
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.05
+    MaxValue = 1
+    OnChange = FloatSpinEdit3Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
+  end
+  object Edit2: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The mutation rate is the'#13#10'frequency of mutated cells'#13#10'per gene per division. Input'#13#10'real number or number in'#13#10'scientific format e.g. 1.00-E7.'#13#10'Range is 0 - 1.00E-2.'
+    Top = 156
+    Width = 80
+    OnChange = Edit2Change
+    OnEditingDone = Edit2EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 6
+    Text = '1.00E-07'
+  end
+  object Edit3: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The mutation rate is the'#13#10'frequency of mutated cells'#13#10'per gene per division. Input'#13#10'real number or number in'#13#10'scientific format e.g. 1.00-E7.'#13#10'Range is 0 - 1.00E-2.'
+    Top = 180
+    Width = 80
+    OnChange = Edit3Change
+    OnEditingDone = Edit3EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 7
+    Text = '1.00E-07'
+  end
+  object Edit4: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The frequency of cells resistant'#13#10'to phage A and present from start.'#13#10'Input real number or number in'#13#10'scientific format e.g. 1.00-E7.'#13#10'Range is 0 - 1.00E-3.'
+    Top = 204
+    Width = 80
+    OnChange = Edit4Change
+    OnEditingDone = Edit4EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 8
+    Text = '1.00E-07'
+  end
+  object Edit5: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The frequency of cells resistant'#13#10'to phage B and present from start.'#13#10'Input real number or number in'#13#10'scientific format e.g. 1.00-E7.'#13#10'Range is 0 - 1.00E-3.'
+    Top = 228
+    Width = 80
+    OnChange = Edit5Change
+    OnEditingDone = Edit5EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 9
+    Text = '1.00E-07'
+  end
+  object SpinEdit1: TSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'The nutrient concentration'#13#10'in micrograms per millilitre'#13#10'in the flask at the start.'
+    Top = 444
+    Width = 80
+    MaxValue = 1000
+    OnChange = SpinEdit1Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 53
+    Value = 100
+  end
+  object SpinEdit2: TSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'The nutrient concentration'#13#10'in micrograms per millilitre of'#13#10'the media flowing into the flask.'
+    Top = 468
+    Width = 80
+    MaxValue = 1000
+    OnChange = SpinEdit2Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 54
+    Value = 100
+  end
+  object FloatSpinEdit4: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'The resource turnover per hour.'
+    Top = 492
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.05
+    OnChange = FloatSpinEdit4Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 55
+    Value = 0.2
+  end
+  object Label15: TLabel
+    Left = 352
+    Height = 21
+    Top = 16
+    Width = 50
+    Caption = 'Phages'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Bevel3: TBevel
+    Left = 352
+    Height = 8
+    Top = 40
+    Width = 335
+    Shape = bsTopLine
+  end
+  object Label16: TLabel
+    Left = 504
+    Height = 21
+    Top = 56
+    Width = 57
+    Caption = 'Phage A'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label17: TLabel
+    Left = 352
+    Height = 15
+    Top = 88
+    Width = 128
+    Caption = 'Adsorption rate, ml/min'
+    ParentColor = False
+  end
+  object Label18: TLabel
+    Left = 352
+    Height = 15
+    Top = 112
+    Width = 97
+    Caption = 'Latent period, min'
+    ParentColor = False
+  end
+  object Label19: TLabel
+    Left = 352
+    Height = 15
+    Top = 136
+    Width = 99
+    Caption = 'Burst size, PFU/cell'
+    ParentColor = False
+  end
+  object Label20: TLabel
+    Left = 352
+    Height = 15
+    Top = 160
+    Width = 108
+    Caption = 'Phage decay rate, /h'
+    ParentColor = False
+  end
+  object SpinEdit4: TSpinEdit
+    Left = 496
+    Height = 23
+    Hint = 'The average time from infecting'#13#10'the bacterium to lysis. Range is'#13#10'an integer 1 - 60.'
+    Top = 108
+    Width = 80
+    MaxValue = 60
+    MinValue = 1
+    OnChange = SpinEdit4Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 17
+    Value = 30
+  end
+  object SpinEdit5: TSpinEdit
+    Left = 496
+    Height = 23
+    Hint = 'The average number of'#13#10'phage particles produced'#13#10'per lysed bacterium. '
+    Top = 132
+    Width = 80
+    MaxValue = 1000
+    OnChange = SpinEdit5Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 19
+    Value = 100
+  end
+  object Label21: TLabel
+    Left = 352
+    Height = 15
+    Top = 208
+    Width = 96
+    Caption = 'First addition, min'
+    ParentColor = False
+  end
+  object Label22: TLabel
+    Left = 352
+    Height = 15
+    Top = 232
+    Width = 113
+    Caption = 'Second addition, min'
+    ParentColor = False
+  end
+  object Label23: TLabel
+    Left = 352
+    Height = 15
+    Top = 256
+    Width = 101
+    Caption = 'Third addition, min'
+    ParentColor = False
+  end
+  object SpinEdit7: TSpinEdit
+    Left = 496
+    Height = 23
+    Hint = 'Timepoint from the start'#13#10'when phages are added.'#13#10'The value has to be less'#13#10'than the running time.'
+    Top = 204
+    Width = 80
+    MaxValue = 1000
+    OnChange = SpinEdit7Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 25
+  end
+  object SpinEdit8: TSpinEdit
+    Left = 496
+    Height = 23
+    Hint = 'Second timepoint from the start'#13#10'when phages are added. Note'#13#10'that this must be later than the'#13#10'first addition and less than the '#13#10'running time.'
+    Top = 228
+    Width = 80
+    MaxValue = 2000
+    OnChange = SpinEdit8Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 27
+  end
+  object SpinEdit9: TSpinEdit
+    Left = 496
+    Height = 23
+    Hint = 'Timepoint from the start when'#13#10'phages are added. Note that'#13#10'this must be later than the first'#13#10'and second addition less than the '#13#10'running time.'
+    Top = 252
+    Width = 80
+    MaxValue = 3000
+    OnChange = SpinEdit9Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 29
+  end
+  object SpinEdit10: TSpinEdit
+    Left = 607
+    Height = 23
+    Hint = 'The average time from infecting'#13#10'the bacterium to lysis. Range is'#13#10'an integer 1 - 60.'
+    Top = 108
+    Width = 80
+    MaxValue = 60
+    MinValue = 1
+    OnChange = SpinEdit10Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 18
+    Value = 20
+  end
+  object SpinEdit11: TSpinEdit
+    Left = 607
+    Height = 23
+    Hint = 'The average number of'#13#10'phage particles produced'#13#10'per lysed bacterium.'
+    Top = 132
+    Width = 80
+    MaxValue = 1000
+    OnChange = SpinEdit11Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 20
+    Value = 100
+  end
+  object SpinEdit13: TSpinEdit
+    Left = 607
+    Height = 23
+    Hint = 'Timepoint from the start'#13#10'when phages are added.'#13#10'The value has to be less'#13#10'than the running time.'
+    Top = 204
+    Width = 80
+    MaxValue = 2000
+    OnChange = SpinEdit13Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 26
+  end
+  object SpinEdit14: TSpinEdit
+    Left = 607
+    Height = 23
+    Hint = 'Second timepoint from the start'#13#10'when phages are added. Note'#13#10'that this must be later than the'#13#10'first addition and less than the '#13#10'running time.'
+    Top = 228
+    Width = 80
+    MaxValue = 3000
+    OnChange = SpinEdit14Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 28
+  end
+  object Label24: TLabel
+    Left = 352
+    Height = 15
+    Top = 184
+    Width = 139
+    Caption = 'Phage added titre, PFU/ml'
+    ParentColor = False
+  end
+  object Edit6: TEdit
+    Left = 496
+    Height = 23
+    Hint = 'The number of phages per'#13#10'millilitre added to the bacteria.'#13#10'Input integer number or number'#13#10'in scientific format e.g. 1.00+E8.'#13#10'Range is 0 - 1.00E+13.'
+    Top = 180
+    Width = 80
+    OnChange = Edit6Change
+    OnEditingDone = Edit6EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 23
+    Text = '1.00E+08'
+  end
+  object Edit7: TEdit
+    Left = 607
+    Height = 23
+    Hint = 'The number of phages per'#13#10'millilitre added to the bacteria.'#13#10'Input integer number or number'#13#10'in scientific format e.g. 1.00+E8.'#13#10'Range is 0 - 1.00E+13.'
+    Top = 180
+    Width = 80
+    OnChange = Edit7Change
+    OnEditingDone = Edit7EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 24
+    Text = '1.00E+08'
+  end
+  object SpinEdit15: TSpinEdit
+    Left = 607
+    Height = 23
+    Hint = 'Timepoint from the start when'#13#10'phages are added. Note that'#13#10'this must be later than the first'#13#10'and second addition less than the '#13#10'running time.'
+    Top = 252
+    Width = 80
+    MaxValue = 1000
+    OnChange = SpinEdit15Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 30
+  end
+  object Label25: TLabel
+    Left = 615
+    Height = 21
+    Top = 56
+    Width = 56
+    Caption = 'Phage B'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label26: TLabel
+    Left = 18
+    Height = 15
+    Top = 352
+    Width = 142
+    Caption = 'Bacterial start titre, CFU/ml'
+    ParentColor = False
+  end
+  object Edit8: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The number of bacteria  at'#13#10'the start per millilitre of media.'#13#10'Input integer number or number'#13#10'in scientific format e.g. 1.00+E8.'#13#10'Range is 10 - 1.00E+12.'
+    Top = 348
+    Width = 80
+    OnChange = Edit8Change
+    OnEditingDone = Edit8EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 14
+    Text = '1.00E+05'
+  end
+  object Label14: TLabel
+    Left = 18
+    Height = 15
+    Top = 496
+    Width = 66
+    Caption = 'Flow rate, /h'
+    ParentColor = False
+  end
+  object Bevel4: TBevel
+    Left = 752
+    Height = 7
+    Top = 468
+    Width = 224
+    Shape = bsTopLine
+  end
+  object Label13: TLabel
+    Left = 18
+    Height = 15
+    Top = 280
+    Width = 163
+    Caption = 'Max growth rate A resistant, /h'
+    ParentColor = False
+  end
+  object Label27: TLabel
+    Left = 18
+    Height = 15
+    Top = 304
+    Width = 162
+    Caption = 'Max growth rate B resistant, /h'
+    ParentColor = False
+  end
+  object Label28: TLabel
+    Left = 18
+    Height = 15
+    Top = 328
+    Width = 170
+    Caption = 'Max growth rate AB resistant, /h'
+    ParentColor = False
+  end
+  object FloatSpinEdit7: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'Resistant bacteria may be'#13#10'less fit and grow at a lower'#13#10'rate. Allowed range is 0 - 1.5'
+    Top = 276
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.05
+    MaxValue = 1.5
+    OnChange = FloatSpinEdit7Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 11
+    Value = 0.7
+  end
+  object FloatSpinEdit8: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'Resistant bacteria may be'#13#10'less fit and grow at a lower'#13#10'rate. Allowed range is 0 - 1.5'
+    Top = 300
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.05
+    MaxValue = 1.5
+    OnChange = FloatSpinEdit8Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 12
+    Value = 0.7
+  end
+  object FloatSpinEdit9: TFloatSpinEdit
+    Left = 200
+    Height = 23
+    Hint = 'Resistant bacteria may be'#13#10'less fit and grow at a lower'#13#10'rate. Allowed range is 0 - 1.5'
+    Top = 324
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.05
+    MaxValue = 1.5
+    OnChange = FloatSpinEdit9Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 13
+    Value = 0.7
+  end
+  object Label29: TLabel
+    Left = 752
+    Height = 21
+    Top = 444
+    Width = 94
+    Caption = 'Running time'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label30: TLabel
+    Left = 752
+    Height = 15
+    Top = 492
+    Width = 32
+    Caption = 'Hours'
+    ParentColor = False
+  end
+  object Label31: TLabel
+    Left = 752
+    Height = 15
+    Top = 516
+    Width = 43
+    Caption = 'Minutes'
+    ParentColor = False
+  end
+  object SpinEdit3: TSpinEdit
+    Left = 896
+    Height = 23
+    Hint = 'The maximum number of'#13#10'hours is 240 = 10 days.'
+    Top = 484
+    Width = 80
+    MaxValue = 240
+    OnChange = SpinEdit3Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 56
+    Value = 24
+  end
+  object SpinEdit16: TSpinEdit
+    Left = 896
+    Height = 23
+    Top = 508
+    Width = 80
+    MaxValue = 1
+    MinValue = 1
+    OnChange = SpinEdit16Change
+    TabOrder = 57
+  end
+  object Bevel5: TBevel
+    Left = 752
+    Height = 7
+    Top = 40
+    Width = 224
+    Shape = bsTopLine
+  end
+  object Label32: TLabel
+    Left = 752
+    Height = 21
+    Top = 16
+    Width = 49
+    Caption = 'Output'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object SensitiveOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 64
+    Width = 157
+    Caption = '1: Uninfected cell titre /ml'
+    Checked = True
+    State = cbChecked
+    TabOrder = 31
+  end
+  object InfectedAOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 160
+    Width = 169
+    Caption = '5: Infected by A cell titre /ml'
+    TabOrder = 35
+  end
+  object ResistantAOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 88
+    Width = 189
+    Caption = '2: Titre of cells resistant to A /ml'
+    TabOrder = 32
+  end
+  object ResistantBOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 112
+    Width = 188
+    Caption = '3: Titre of cells resistant to B /ml'
+    TabOrder = 33
+  end
+  object ResistantABOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 136
+    Width = 222
+    Caption = '4: Titre of cells resistant to A and B /ml'
+    TabOrder = 34
+  end
+  object ResourceCOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 352
+    Width = 202
+    Caption = '13: Resource concentration, ug/ml'
+    TabOrder = 43
+  end
+  object PhageAOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 304
+    Width = 128
+    Caption = '11: Phage A titre /ml'
+    TabOrder = 41
+  end
+  object PhageBOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 328
+    Width = 127
+    Caption = '12: Phage B titre /ml'
+    TabOrder = 42
+  end
+  object Edit9: TEdit
+    Left = 496
+    Height = 23
+    Hint = 'The average efficiency of'#13#10'the phage to find its receptor.'#13#10'Input real number or number'#13#10'in scientific format e.g. 1.00-E9.'#13#10'Range is 1.00E-14 - 1.00E-7.'
+    Top = 84
+    Width = 80
+    OnChange = Edit9Change
+    OnEditingDone = Edit9EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 15
+    Text = '1.00E-10'
+  end
+  object Edit10: TEdit
+    Left = 607
+    Height = 23
+    Hint = 'The average efficiency of'#13#10'the phage to find its receptor.'#13#10'Input real number or number'#13#10'in scientific format e.g. 1.00-E9.'#13#10'Range is 1.00E-14 - 1.00E-7.'
+    Top = 84
+    Width = 80
+    OnChange = Edit10Change
+    OnEditingDone = Edit10EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 16
+    Text = '1.00E-10'
+  end
+  object Label33: TLabel
+    Left = 18
+    Height = 15
+    Top = 256
+    Width = 144
+    Caption = 'AB resistant start freq.  /cell'
+    ParentColor = False
+  end
+  object Edit11: TEdit
+    Left = 200
+    Height = 23
+    Hint = 'The frequency of cells resistant'#13#10'to phage AB and present from start.'#13#10'Input real number or number in'#13#10'scientific format e.g. 1.00-E14.'#13#10'Range is 0 - 1.00E-6.'
+    Top = 252
+    Width = 80
+    OnChange = Edit11Change
+    OnEditingDone = Edit11EditingDone
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 10
+    Text = '1.00E-14'
+  end
+  object LogScale: TCheckBox
+    Left = 752
+    Height = 19
+    Hint = 'Show CFUs and PFUs on a log10 scale'
+    Top = 384
+    Width = 148
+    Caption = '14: log10 CFU, PFU scale'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 44
+  end
+  object Bevel6: TBevel
+    Left = 352
+    Height = 8
+    Top = 324
+    Width = 335
+    Shape = bsTopLine
+  end
+  object Label34: TLabel
+    Left = 352
+    Height = 21
+    Top = 300
+    Width = 102
+    Caption = 'Model settings'
+    Font.Height = -16
+    ParentColor = False
+    ParentFont = False
+  end
+  object FloatSpinEdit5: TFloatSpinEdit
+    Left = 496
+    Height = 23
+    Hint = 'The natural decomposition of phages'#13#10'due to e.g. immunological activities.'
+    Top = 156
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.005
+    MaxValue = 1
+    OnChange = FloatSpinEdit5Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 21
+  end
+  object FloatSpinEdit6: TFloatSpinEdit
+    Left = 607
+    Height = 23
+    Hint = 'The natural decomposition of phages'#13#10'due to e.g. immunological activities.'
+    Top = 156
+    Width = 80
+    DecimalPlaces = 3
+    Increment = 0.005
+    MaxValue = 1
+    OnChange = FloatSpinEdit6Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 22
+  end
+  object rgMutationMod: TRadioGroup
+    Left = 344
+    Height = 40
+    Hint = 'The "Deterministic" model is the'#13#10'mutation frequency * number of'#13#10'newly divided non mutated bacteria.'#13#10'The "Stochastic" model calculates the'#13#10'probability of n number of mutants'#13#10'per cell division according to the'#13#10'Poisson or Normal (l >10) distribution.'
+    Top = 396
+    Width = 200
+    AutoFill = True
+    Caption = 'Resistance mutations'
+    ChildSizing.LeftRightSpacing = 5
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 3
+    ClientHeight = 20
+    ClientWidth = 196
+    Columns = 3
+    Constraints.MinWidth = 176
+    ItemIndex = 0
+    Items.Strings = (
+      'Deterministic'
+      'Stochastic'
+    )
+    OnClick = rgMutationModClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 46
+  end
+  object rgInfectionMod: TRadioGroup
+    Left = 344
+    Height = 39
+    Hint = 'The "Standard" model is infection'#13#10'as in ODE models where one '#13#10'bacterium can be infected by '#13#10'one phage at a time only.'#13#10'The "Poisson" model builds upon'#13#10'the probability for a phage to'#13#10'infect a bacterium, and a bacterium'#13#10'can be infected by more than one'#13#10'phage per unit time.'
+    Top = 344
+    Width = 160
+    AutoFill = True
+    Caption = 'Primary adsorption'
+    ChildSizing.LeftRightSpacing = 5
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 3
+    ClientHeight = 19
+    ClientWidth = 156
+    Columns = 3
+    ItemIndex = 0
+    Items.Strings = (
+      'Standard'
+      'Poisson'
+    )
+    OnClick = rgInfectionModClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 47
+  end
+  object InfectedBOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 184
+    Width = 168
+    Caption = '6: Infected by B cell titre /ml'
+    TabOrder = 36
+  end
+  object InfectedABOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 208
+    Width = 202
+    Caption = '7: Infected by A and B cell titre /ml'
+    TabOrder = 37
+  end
+  object AResInfbyBOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 232
+    Width = 226
+    Caption = '8: A resistant infected by B cell titre /ml'
+    TabOrder = 38
+  end
+  object BResInfbyAOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 256
+    Width = 226
+    Caption = '9: B resistant infected by A cell titre /ml'
+    TabOrder = 39
+  end
+  object Button3: TButton
+    Left = 656
+    Height = 25
+    Hint = 'Read variables from an input file.'#13#10'The file should be a text file were'#13#10'the format of input values must'#13#10'match the format of a saved output'#13#10'file.'
+    Top = 560
+    Width = 80
+    Caption = 'Load file'
+    OnClick = Button3Click
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 58
+  end
+  object rgTimeStep: TRadioGroup
+    Left = 344
+    Height = 39
+    Hint = 'Time between iterations. 5 seconds = slow,'#13#10'more accurate. 1 minute = fast, less accurate'
+    Top = 521
+    Width = 220
+    AutoFill = True
+    Caption = 'Time step size'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 4
+    ClientHeight = 19
+    ClientWidth = 216
+    Columns = 4
+    ItemIndex = 3
+    Items.Strings = (
+      '5 s'
+      '15 s'
+      '30 s'
+      '1 min'
+    )
+    OnClick = rgTimeStepClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 52
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 597
+    Width = 1000
+    Font.Style = [fsBold]
+    Panels = <>
+    ParentFont = False
+  end
+  object Label36: TLabel
+    Left = 445
+    Height = 15
+    Top = 457
+    Width = 65
+    Caption = 'Rate in /min'
+    ParentColor = False
+  end
+  object Label37: TLabel
+    Left = 533
+    Height = 15
+    Top = 457
+    Width = 73
+    Caption = 'Rate out /min'
+    ParentColor = False
+  end
+  object rgRefugeCells: TRadioGroup
+    Left = 344
+    Height = 58
+    Hint = 'Cells can evade infection in'#13#10'a refuge which can be either'#13#10'unstructured or structured in'#13#10'layers. The release of cells'#13#10'from the latter is from the top'#13#10'layer, last in first out.'
+    Top = 449
+    Width = 280
+    AutoFill = True
+    Caption = 'Refuge cells'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 38
+    ClientWidth = 276
+    ItemIndex = 0
+    Items.Strings = (
+      'Planktonic'
+      'LIFO'
+    )
+    OnClick = rgRefugeCellsClick
+    TabOrder = 49
+    TabStop = True
+  end
+  object RoundOff: TCheckBox
+    Left = 752
+    Height = 19
+    Hint = 'Round off CFUs and PFUs'#13#10'if these are < 1 could be an'#13#10'option if the volume is small'#13#10'e.g. 1 ml.'
+    Top = 408
+    Width = 108
+    Caption = '15: Round off <1'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 45
+  end
+  object FloatSpinEdit10: TFloatSpinEdit
+    Left = 443
+    Height = 23
+    Hint = 'The rate of cells per minute entering '#13#10'metabolic dormancy. If Rate in or'#13#10'Rate out is set to 0, Refuge cells are'#13#10'not produced. Rate in is a real number'#13#10'between 0 and 0.01.'
+    Top = 475
+    Width = 80
+    DecimalPlaces = 4
+    Increment = 0.0001
+    MaxValue = 0.01
+    OnChange = FloatSpinEdit10Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 50
+  end
+  object FloatSpinEdit11: TFloatSpinEdit
+    Left = 533
+    Height = 23
+    Hint = 'The rate of cells per minute leaving '#13#10'metabolic dormancy. If Rate in or'#13#10'Rate out is set to 0, Refuge cells are'#13#10'not produced. Rate out is a real '#13#10'number between 0 and 0.01.'
+    Top = 475
+    Width = 80
+    DecimalPlaces = 4
+    Increment = 0.0001
+    MaxValue = 0.01
+    OnChange = FloatSpinEdit11Change
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 51
+  end
+  object Button4: TButton
+    Left = 18
+    Height = 25
+    Hint = 'Opens  the help file'
+    Top = 560
+    Width = 80
+    Caption = 'Info'
+    OnClick = Button4Click
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 59
+  end
+  object RefugeOut: TCheckBox
+    Left = 752
+    Height = 19
+    Top = 280
+    Width = 147
+    Caption = '10: Refuge cells titre /ml'
+    TabOrder = 40
+  end
+  object rgAdsorptionMod: TRadioGroup
+    Left = 512
+    Height = 39
+    Hint = 'A phage can adsorb either to '#13#10'cells it has not infected "Uninfected"'#13#10'or to a cell already infected by the '#13#10'same phage. In the latter case,  the'#13#10'infection will have no effect on the '#13#10'bacterium, but it will reduce the '#13#10'number of free phages.'
+    Top = 344
+    Width = 190
+    AutoFill = True
+    Caption = 'Secondary adsorption'
+    ChildSizing.LeftRightSpacing = 5
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 3
+    ClientHeight = 19
+    ClientWidth = 186
+    Columns = 3
+    ItemIndex = 0
+    Items.Strings = (
+      'Uninfected'
+      'Susceptible'
+    )
+    OnClick = rgAdsorptionModClick
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 48
+  end
+  object OpenDialog1: TOpenDialog
+    Title = 'Open Cocktail input file'
+    Filter = 'Cocktail input file|*.ctl|Text file|*.txt'
+    Left = 688
+    Top = 392
+  end
+end
