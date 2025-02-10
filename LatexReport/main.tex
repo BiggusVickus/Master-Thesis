@@ -1,16 +1,19 @@
 % LTeX: enabled=false
 \documentclass[titlepage]{article}
 \usepackage{illcmolthesis}
+\PassOptionsToPackage{hyphens}{url}
 \usepackage{hyperref}
 \usepackage{array}
 \usepackage{amsmath}
 \usepackage{cleveref}
-\usepackage{biblatex} 
 \usepackage{textcomp}
+
+\usepackage{biblatex}
+% to update the bibliogrpahy after importing from the .bib file, run the following command in the terminal: biber main
 \usepackage[font=small,labelfont=bf]{caption}
 \hypersetup{colorlinks, citecolor=black, filecolor=black, linkcolor=black, urlcolor=black}
 \addbibresource{references.bib} %Import the bibliography file
-
+\bibliography{references}
 \begin{document}
 
 
