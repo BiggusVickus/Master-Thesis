@@ -1,22 +1,22 @@
 \subsection{Methods of Modelling Phages and Bacteria}
 There are numerous ways to model the interactions between phages and bacteria.
- Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods.
- On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs).
- DDEs are similar to ODEs, except where when ODEs are calculating the values of the equations at time $t$ using time $t-1$, DDEs can, but don't have to, use the value of the equation at time $t-\tau$, where $1 \leq \tau \leq t$. \newline 
+Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods.
+On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs).
+DDEs are similar to ODEs, except where when ODEs are calculating the values of the equations at time $t$ using time $t-1$, DDEs can, but don't have to, use the value of the equation at time $t-\tau$, where $1 \leq \tau \leq t$. \newline 
 
 Each type of system has its pros and cons.
- With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is in general much more complex.
- However, more information can be gained from the simulations and can guide research in creating phages for a certain type of bacteria.
- The ODE method is simpler and easier to set up, however it can only capture large population dynamics.
- Certain assumptions about the community interactions have to be made.
- For example, $\omega$ percent of the bacteria population is washed out.
- The model can be made more complicated, by modelling each stage of the phage replication and lysis process, or instead of assuming exponential growth, there is a maximum carrying capacity of the population.
- The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data.
- Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
+With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is in general much more complex.
+However, more information can be gained from the simulations and can guide research in creating phages for a certain type of bacteria.
+The ODE method is simpler and easier to set up, however it can only capture large population dynamics.
+Certain assumptions about the community interactions have to be made.
+For example, $\omega$ percent of the bacteria population is washed out.
+The model can be made more complicated, by modelling each stage of the phage replication and lysis process, or instead of assuming exponential growth, there is a maximum carrying capacity of the population.
+The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data.
+Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
 
 \subsubsection{Generalized Lotka-Voltera Model}
 The Lotka-Voltera model, a first-order non-linear differential model, is a model that captures the dynamics between predators and prey, with phages being the predator and bacteria being the prey.
- Any population can be modelled as such:
+Any population can be modelled as such:
 \[ 
     \frac{d{B}_i}{dt} = {B}_i \left(\left(r_i + \sum_{j}^{N} \alpha_{ij}{B}_j \right) - m_i\right)
 \]
@@ -40,17 +40,17 @@ where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_
 
 \subsubsection{Agent-Based Models}
 Agent-based Models (ABM) model the system through space and time.
- An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes.
- Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
- Resources are diffused through the system using a PDE solver for a Boundary Value Problem (BVP).
- Agents are allowed to move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as nutrient density, microbe density, or stochastic chance. \newline 
+An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes.
+Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
+Resources are diffused through the system using a PDE solver for a Boundary Value Problem (BVP).
+Agents are allowed to move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as nutrient density, microbe density, or stochastic chance. \newline 
 ABMs are useful when simulating many individual elements interacting in a system.
- Chaotic or emergent behavior can arise from these interactions.
- Chaotic behavior refers to the irregular and unpredictable evolution of a system's behavior due to nonlinear equations, exhibiting sensitive dependence on initial conditions \cite{encyclopedia_of_physical_science_and_technology}. \newline 
+Chaotic or emergent behavior can arise from these interactions.
+Chaotic behavior refers to the irregular and unpredictable evolution of a system's behavior due to nonlinear equations, exhibiting sensitive dependence on initial conditions \cite{encyclopedia_of_physical_science_and_technology}. \newline 
 Emergent behavior is behavior that arises from the interactions of various agents in a system, that was not explicitly programmed into the system.
- The behavior can be beneficial, neutral, or harmful, but it can not be predicted until it arises, \textit{if} it arises.
- Agents can have simple rules, but when interacting with other agents, behavior that hasn't been programmed can arise.
- Sometimes, people consider systems with emergent behaviors more complex than the sum of their parts. \newline
+The behavior can be beneficial, neutral, or harmful, but it can not be predicted until it arises, \textit{if} it arises.
+Agents can have simple rules, but when interacting with other agents, behavior that hasn't been programmed can arise.
+Sometimes, people consider systems with emergent behaviors more complex than the sum of their parts. \newline
 \begin{align} 
     \frac{\delta R_\alpha(r, t)}{\delta t} = \nabla \left[D \left( R_\alpha, r\right) \nabla R_\alpha \left( r, t \right) \right], r = \left(x, y\right)
 \end{align}, where $r$ is a function of cell position $(x, y)$, and $t$ represents time. 
