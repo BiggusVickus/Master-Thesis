@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 from scipy.integrate import solve_ivp
+np.seterr(divide='ignore')
 
 class Analysis():
     def __init__(self, graph_location):
