@@ -262,21 +262,22 @@ class GraphMaker:
             nx.write_pajek(self.graph, file_name)
 
     def import_graph_from_file(self, file_name:str=None):
+        print(file_name)
         if file_name == None:
             return self.error_message("No file name provided")
+        if not file_name.endswith(('.gexf', '.gml', '.graphml', '.net')):
+            return self.error_message("File must be of type .gexf, .gml, .graphml, or .net")
         try:
-            if not file_name.endswith(('.gexf', '.gml', '.graphml', '.net')):
-                return self.error_message("File must be of type .gexf, .gml, .graphml, or .net")
             if (file_name.endswith('.gexf')):
-                nx.read_gexf(self.graph, file_name)
+                self.graph = nx.read_gexf(file_name)
             elif (file_name.endswith('.gml')):
-                nx.read_gml(self.graph, file_name)
+                self.graph = nx.read_gml(file_name)
             elif (file_name.endswith('.graphml')):
-                nx.read_graphml(self.graph, file_name)
+                self.graph = nx.read_graphml(file_name)
             elif (file_name.endswith('.net')):
-                nx.read_pajek(self.graph, file_name)
-        except:
-            return self.error_message("File not found")
+                self.graph = nx.read_pajek(file_name)
+        except Exception as e:
+            return self.error_message(str(e))
 
     def edit_node_attributes(self, node_name:str, node_data):
         if node_name is None or node_name == "" or node_data is None:
@@ -305,6 +306,8 @@ class GraphMaker:
                 print(message)
                 return
 
-    def get_graph(self):
+    def get_graph_object(self):
         return self.graph
+
+    def set_graph_object(self, graph):
         self.graph = graph
