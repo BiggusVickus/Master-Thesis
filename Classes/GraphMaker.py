@@ -214,37 +214,37 @@ class GraphMaker:
     def verify_edge_connections(self, node1, node2, type1, type2):
         return (self.graph.nodes[node1]['node_type'] == type1 and self.graph.nodes[node2]['node_type'] == type2) or (self.graph.nodes[node1]['node_type'] == type2 and self.graph.nodes[node2]['node_type'] == type1)
     
-    def mass_create_edges(self, edge_connections):
-        # Function to handle the "Submit" button click
+    def mass_create_edges(self, tuple_of_edges:tuple, edge_data = None):
         error_text = ""
-        for edge in edge_connections:
-            node1 = edge[0].strip()
-            node2 = edge[1].strip()
-            if (len(node1) == 3):
-                node_data = edge[2]
-            else:
-                if self.verify_edge_connections(node1, node2, "P", "P"):
-                    node_data = "Default edge data"
-                elif self.verify_edge_connections(node1, node2, "P", "B"):
-                    node_data = self.default_p_b_data()
-                elif self.verify_edge_connections(node1, node2, "P", "R"):
-                    node_data = "Default edge data"
-                elif self.verify_edge_connections(node1, node2, "B", "B"):
-                    node_data = "Default edge data"
-                elif self.verify_edge_connections(node1, node2, "B", "R"):
-                    node_data = self.default_b_r_data()
-                elif self.verify_edge_connections(node1, node2, "R", "R"):
-                    node_data = "Default edge data"
+        for i, target in enumerate(tuple_of_edges):
+            if len(target) != 2:
+                error_text += "Each tuple must have 2 elements, skipping edge\n"
+                continue
+            node1 = target[0].strip()
+            node2 = target[1].strip()
+            if (edge_data is not None):
+                if len(edge_data) == 1 or isinstance(edge_data, str):
+                    if isinstance(edge_data, str):
+                        edge_data = edge_data
+                    else: 
+                        edge_data = edge_data[0]
+                elif len(tuple_of_edges) != len(edge_data):
+                    return self.error_message("Number of target nodes must match number of edge data")
                 else:
-                    node_data = "Default edge data"
+                    edge_data = edge_data[i]
             if node1 == None or node2 == None:
                 error_text += f"Node name {node1} and/or {node2} cannot be empty"
+                continue
             if (self.verify_edge_connections(node1, node2, "E", "E")):
-                    error_text += "Cannot connect any node to an E node\n"
+                error_text += "Cannot connect any node to an E node\n"
+                continue
             if node1 not in self.graph or node2 not in self.graph:
                 error_text += f"{node1} or {node2} not found in graph\n"
-            self.graph.add_edge(node1, node2)
-            self.graph.edges[node1, node2]['data'] = node_data
+                continue
+            if self.graph.has_edge(node1, node2):
+                error_text += f"Edge between {node1} and {node2} already exists, skipping\n"
+                continue
+            self.add_edge(node1, node2, edge_data)
         return error_text
 
     def export_graph_to_file(self, file_name:str =None):

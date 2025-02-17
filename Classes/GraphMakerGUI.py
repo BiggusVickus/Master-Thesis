@@ -1,11 +1,7 @@
 from tkinter import * 
-from matplotlib.figure import Figure 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 import networkx as nx
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
 import numpy as np
 from Classes.GraphMaker import GraphMaker 
 np.random.seed(69)
@@ -102,13 +98,16 @@ class GraphMakerGUI(GraphMaker):
             edge_tuples = []
             lines = submitted_text.split("\n")
             for line in lines:
-                node_list = line.split()
-                if len(node_list) != 2:
+                if line == "":
                     continue
-                node1 = node_list[0].strip()
-                node2 = node_list[1].strip()
-                if node1 in self.graph.nodes and node2 in self.graph.nodes:
-                    edge_tuples.append((node1, node2))
+                edge = line.split(" ")
+                if len(edge) < 2:
+                    error_text += "There arent at least 2 lines in line: " + line + ", skipping\n"
+                    continue
+                for i in range(1, len(edge)):
+                    if edge[i].strip() == "" :
+                        continue
+                    edge_tuples.append((edge[0], edge[i]))
             error_text = GraphMaker.mass_create_edges(self, edge_tuples)
             self.plot()
             if error_text != "":
