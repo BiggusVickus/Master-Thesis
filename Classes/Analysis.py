@@ -16,7 +16,6 @@ class Analysis():
         """
         self.graph_location = graph_location 
         self.graph = nx.read_gexf(graph_location)
-        self.max_length = 0
         self.attribute_additions = []
         self.Simulation_Length = 10
         self.Time_Step = 0.1
@@ -35,8 +34,6 @@ class Analysis():
             for d, v in self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data']).items():
                 setattr(self, d, float(v))
         else:
-            if len(list_data) > self.max_length:
-                self.max_length = len(list_data)
             self.attribute_additions.append(node_type + '_node_names')
         setattr(self, node_type + '_node_names', list_data)
         return list_data
@@ -134,7 +131,7 @@ class Analysis():
         Returns:
             np.array: _description_
         """
-        matrix = np.zeros((self.max_length, self.max_length))
+        matrix = np.zeros((len(node_list1), len(node_list2)))
         for node1 in node_list1:
             for node2 in node_list2:
                 if self.graph.has_edge(node1, node2):
@@ -143,7 +140,7 @@ class Analysis():
         return matrix
     
     def initialize_new_parameter_from_node(self, node_list1, attribute_name, data_type = float):
-        matrix = np.zeros(self.max_length)
+        matrix = np.zeros(len(node_list1))
         for node1 in node_list1:
                 data = self.turn_string_to_dictionary(self.graph.nodes[node1]['data'])
                 matrix[node_list1.index(node1)] = data_type(data[attribute_name])
