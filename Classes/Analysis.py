@@ -63,27 +63,6 @@ class Analysis():
             if len(row) == 2:
                 dictionary[row[0]] = row[1]
         return dictionary
-    
-    def get_initial_pop_conc_of_nodes(self, node_list, attribute_name):
-        """Given a list of nodes, this method will return a list of the initial populations or concentrations of the nodes
-
-        Args:
-            node_list (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
-        initial_populations = []
-        for nodes in node_list:
-            if (len(nodes) > self.max_length):
-                self.max_length = len(nodes)
-        for nodes in node_list:
-            initial_count = np.zeros(self.max_length)
-            for i, node in enumerate(node_list):
-                data = self.turn_string_to_dictionary(self.graph.nodes[node]['data'])
-                initial_count[i] = float(data[attribute_name])
-            initial_populations.append(initial_count)
-        return initial_count
 
     def add_environment_data(self, name:str, data) -> None:
         """Adds the environment data to the class as an attribute
@@ -93,28 +72,6 @@ class Analysis():
             data (any): Data to be added to the attribute. Datatype can be of any type desired
         """
         setattr(self, name, data)
-
-    def initialize_initial_count(self, node_list:list, attribute_name:str) -> np.array:
-        """Initializes the initial population or concentration of the nodes in the node list given the attribute name. The data is stored in a vector.
-
-        Args:
-            node_list (list): _description_
-            attribute_name (str): _description_
-
-        Returns:
-            np.array: _description_
-        """
-        initial_populations = np.zeros(self.max_length)
-        for i, node in enumerate(node_list):
-            data = self.turn_string_to_dictionary(self.graph.nodes[node]['data'])
-            initial_populations[i] = float(data[attribute_name])
-        return initial_populations
-    
-    def initialize_initial_population(self, node_list, attribute_name="Initial Population"):
-        return self.initialize_initial_count(node_list, attribute_name)
-    
-    def initialize_initial_concentration(self, node_list, attribute_name="Initial Concentration"):
-        return self.initialize_initial_count(node_list, attribute_name)
     
     def initialize_new_matrix(self, rows, columns):
         return np.zeros((int(rows), int(columns)))
