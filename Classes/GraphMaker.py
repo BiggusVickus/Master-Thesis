@@ -51,6 +51,7 @@ class GraphMaker:
         string += f"Simulation_Length: {self.randomize_parameter_value(100)}\n"
         string += f"Time_Step: {self.randomize_parameter_value(0.1)}\n"
         string += f"Cutoff: {self.randomize_parameter_value(0.000001)}\n"
+        string += f"M: 4\n"
         return string
 
     def default_phage_data(self):
@@ -70,6 +71,7 @@ class GraphMaker:
         string += f"Minimal_pH: {self.randomize_parameter_value(6)}\n"
         string += f"Optimal_pH: {self.randomize_parameter_value(7)}\n"
         string += f"Maximal_pH: {self.randomize_parameter_value(8)}\n"
+        string += f"tau: {self.randomize_parameter_value(0.5)}\n"
         return string
 
     def default_resource_data(self):
@@ -77,11 +79,15 @@ class GraphMaker:
         string += f"Initial_Concentration: {self.randomize_parameter_value(100)}\n"
         string += f"Decay_Rate: {self.randomize_parameter_value(0.1)}\n"
         string += f"Replenishment_Rate: {self.randomize_parameter_value(0.1)}\n"
+        string += f"e: {self.randomize_parameter_value(0.1)}\n"
         return string
+    
+    def default_node_data(self):
+        return ""
 
-    def randomize_parameter_value(self, main_value, sigma = 1):
-        return np.random.normal(main_value, sigma)
-
+    def default_p_p_data(self):
+        return ""
+    
     def default_p_b_data(self):
         string = ""
         string += f"Burst_Size: {self.randomize_parameter_value(100)}\n"
@@ -90,17 +96,30 @@ class GraphMaker:
         string += f"Lysis_Rate: {self.randomize_parameter_value(0.1)}\n"
         string += f"Carying_Capacity: {self.randomize_parameter_value(100)}\n"
         string += f"r: {self.randomize_parameter_value(0.1)}\n"
-        string += f"tau: {self.randomize_parameter_value(0.5)}\n"
         return string
+
+    def default_p_r_data(self):
+        return ""
+
+    def default_b_b_data(self):
+        return ""
 
     def default_b_r_data(self):
         string = ""
         string += f"Uptake_Rate: {self.randomize_parameter_value(0.1)}\n"
         string += f"Release_Rate: {self.randomize_parameter_value(0.1)}\n"
-        string += f"e: {self.randomize_parameter_value(0.1)}\n"
         string += f"v: {self.randomize_parameter_value(0.1)}\n"
         string += f"K: {self.randomize_parameter_value(100)}\n"
         return string
+    
+    def default_r_r_data(self):
+        return ""
+
+    def default_edge_data(self):
+        return ""
+    
+    def randomize_parameter_value(self, main_value, sigma = 1):
+        return np.random.normal(main_value, sigma)
 
     def add_node(self, node_type, node_name, node_data = None):
         if node_type == None and node_name == None:
@@ -141,21 +160,23 @@ class GraphMaker:
             return self.error_message("Cannot connect E node to any other node")
         if node1 not in self.graph or node2 not in self.graph:
             return self.error_message("One or both nodes not found")
+        if self.graph.has_edge(node1, node2):
+            return self.error_message("Edge already exists")
         self.graph.add_edge(node1, node2)
         if self.verify_edge_connections(node1, node2, "P", "P"):
-            node_data = "Default edge data"
+            node_data = self.default_p_p_data()
         elif self.verify_edge_connections(node1, node2, "P", "B"):
             node_data = self.default_p_b_data()
         elif self.verify_edge_connections(node1, node2, "P", "R"):
-            node_data = "Default edge data"
+            node_data = self.default_p_r_data()
         elif self.verify_edge_connections(node1, node2, "B", "B"):
-            node_data = "Default edge data"
+            node_data = self.default_b_b_data()
         elif self.verify_edge_connections(node1, node2, "B", "R"):
             node_data = self.default_b_r_data()
         elif self.verify_edge_connections(node1, node2, "R", "R"):
-            node_data = "Default edge data"
+            node_data = self.default_r_r_data()
         else:
-            node_data = "Default edge data"
+            node_data = self.default_edge_data()
         self.graph.edges[node1, node2]['data'] = node_data
 
     def remove_edge(self, node1 = None, node2 = None):
