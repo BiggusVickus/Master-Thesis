@@ -128,9 +128,13 @@ class Analysis():
             result = []
             index = 0
             for l in length:
-                result.append(vector[index:index+l])
-                index += l
-            return np.array(result)
+                if type(l) == int:
+                    result.append(vector[index:index+l])
+                    index += l
+                elif type(l) == tuple:
+                    result.append(np.array(vector[index:index+int(np.prod(l))]).reshape(l))
+                    index += int(np.prod(l))
+            return result
         else:
             raise ValueError("Length must be an int or a list of ints")
 
