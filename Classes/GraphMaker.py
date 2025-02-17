@@ -307,3 +307,4 @@ class GraphMaker:
 
     def get_graph(self):
         return self.graph
+        self.graph = graph

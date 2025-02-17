@@ -15,7 +15,12 @@ class GraphMakerGUI(GraphMaker):
         super().__init__(True)
         self.graph = nx.Graph()
         self.window = Tk() 
+        self.setup_E_node()
+
         self.initialize_GUI()
+    
+    def setup_E_node(self):
+        super().add_node("E", "E", self.default_environment_data())
     
     def initialize_GUI(self):
         self.window.title('GUI Tool For Creating Network Topography') 
@@ -46,7 +51,7 @@ class GraphMakerGUI(GraphMaker):
         updateAttributesOfEdges.pack()
         export_graph_button.pack()
         import_graph_button.pack()
-
+        self.plot()
         self.window.mainloop() 
 
     def create_button(self, command, text, row = 0, column = 0):
@@ -68,10 +73,12 @@ class GraphMakerGUI(GraphMaker):
         super().remove_node(node_name)
         self.plot()
 
-    def add_edge(self):
-        node1 = simpledialog.askstring("Add Edge", "Enter node 1:")
-        node2 = simpledialog.askstring("Add Edge", "Enter node 2:")
-        super().add_edge(node1, node2)
+    def add_edge(self, node1=None, node2=None, edge_data=None):
+        if node1 is None:
+            node1 = simpledialog.askstring("Add Edge", "Enter node 1:")
+        if node2 is None:
+            node2 = simpledialog.askstring("Add Edge", "Enter node 2:")
+        super().add_edge(node1, node2, edge_data)
         self.plot()
 
     def remove_edge(self):
@@ -171,5 +178,14 @@ class GraphMakerGUI(GraphMaker):
         submit_button = tk.Button(new_window, text="Submit", command=submit)
         submit_button.pack()
     
-    def get_graph(self):
-        return super().get_graph()
+    def get_graph_object(self):
+        return super().get_graph_object()
+
+    def set_graph_object(self, graph):
+        return super().set_graph_object(graph)
+
+    def export_graph(self, file_name):
+        return super().export_graph_to_file(file_name)
+    
+    def import_graph(self, file_name):
+        return super().import_graph_from_file(file_name)

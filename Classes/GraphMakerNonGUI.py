@@ -3,6 +3,10 @@ from Classes.GraphMaker import GraphMaker
 class GraphMakerNonGUI(GraphMaker):
     def __init__(self):
         super().__init__(True)
+        self.setup_E_node()
+    
+    def setup_E_node(self):
+        self.add_node("E", "E", self.default_environment_data())
     
     def add_node(self, node_type, node_name, node_data = None):
         super().add_node(node_type, node_name, node_data)
@@ -19,8 +23,8 @@ class GraphMakerNonGUI(GraphMaker):
     def mass_create_nodes(self, P=0, B=0, R=0):
         return super().mass_create_nodes(P, B, R)
     
-    def mass_create_edges(self, edge_connections):
-        return super().mass_create_edges(edge_connections)
+    def mass_create_edges(self, edges_tuple_list, edge_data=None):
+        return super().mass_create_edges(edges_tuple_list, edge_data)
 
     def export_graph_to_file(self, file_name="graph.gexf"):
         return super().export_graph_to_file(file_name)
@@ -34,5 +38,8 @@ class GraphMakerNonGUI(GraphMaker):
     def edit_edge_attributes(self, node1, node2, user_input):
         return super().edit_edge_attributes(node1, node2, user_input)
     
-    def get_graph(self):
-        return super().get_graph()
+    def get_graph_object(self):
+        return super().get_graph_object()
+    
+    def set_graph_object(self, graph):
+        return super().set_graph_object(graph)
