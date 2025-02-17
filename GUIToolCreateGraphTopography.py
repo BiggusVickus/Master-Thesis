@@ -131,7 +131,6 @@ def add_node():
             graph.nodes[node_name]['node_type'] = "R"
             graph.nodes[node_name]['data'] = default_resource_data()
         plot()
-    print("add_node")
     
 def remove_node():
     node = simpledialog.askstring("Input", "Enter node name to remove:")
@@ -165,9 +164,6 @@ def add_edge():
         plot()
     else:
         messagebox.showerror("Error", "One or both nodes not found")
-    print("add_edge")
-    print(graph.nodes[node1])
-    print(graph.edges[node1, node2])
 
 
 def remove_edge():
@@ -213,7 +209,6 @@ def mass_create_edges():
     # Function to handle the "Submit" button click
     def submit():
         user_input = text_widget.get("1.0", tk.END) # Get all text from the widget
-        print("User entered:\n", user_input)
         lines = user_input.split("\n")
         for line in lines:
             if line:
@@ -238,7 +233,6 @@ def mass_create_edges():
                     messagebox.showerror("Error", "One or both nodes not found")
 
         plot()
-        print(graph.edges)
         new_window.destroy() # Close the new window
 
     # Create the "Submit" button
@@ -273,8 +267,6 @@ def edit_node_attributes():
     # Function to handle the "Submit" button click
     def submit():
         user_input = text_widget.get("1.0", tk.END) # Get all text from the widget
-        print("User entered:\n", user_input)
-        print(graph.nodes[node_id])
         graph.nodes[node_id]['data'] = user_input
         new_window.destroy() # Close the new window
 
@@ -289,7 +281,6 @@ def edit_edge_attributes():
         messagebox.showerror("Error", "Node not found")
         return
     data = graph.edges[node1, node2]['data']
-    print(data)
     """Opens a new window with an editable text field."""
     new_window = tk.Toplevel(window)
     new_window.title("New Window")
@@ -305,7 +296,6 @@ def edit_edge_attributes():
     # Function to handle the "Submit" button click
     def submit():
         user_input = text_widget.get("1.0", tk.END) # Get all text from the widget
-        print("User entered:\n", user_input)
         graph.edges[node1, node2]['data'] = user_input
         new_window.destroy() # Close the new window
 
