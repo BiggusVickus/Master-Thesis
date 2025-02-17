@@ -124,10 +124,12 @@ class GraphMaker:
     def add_node(self, node_type, node_name, node_data = None):
         if node_type == None and node_name == None:
             return self.error_message("Node name and type cannot be empty")
+        if node_type == "E":
+            for node, attr in self.graph.nodes(data=True):
+                if attr["node_type"] == "E":
+                    return self.error_message("Node of type 'E' (Environment node) already exists")
         node_type = node_type.strip()
         node_name = node_name.strip()
-        if node_type not in ["P", "B", "R"]:
-            return self.error_message("Node type must be P, B, or R")
         for node in self.graph.nodes:
             if node_name == node:
                 return self.error_message("Node name already exists")
