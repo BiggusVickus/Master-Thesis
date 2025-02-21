@@ -94,8 +94,8 @@ class System(Analysis):
 # graph = GraphMakerGUI()
 # graph.export_graph('simple_test.gexf')
 
-# graph = System('simple_test.gexf')
-graph = System('example.gexf')
+graph = System('simple_test.gexf')
+# graph = System('example.gexf')
 phage_nodes = graph.get_nodes_of_type('P')
 bacteria_nodes = graph.get_nodes_of_type('B')
 resource_nodes = graph.get_nodes_of_type('R')
@@ -113,130 +113,101 @@ r_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes
 tau_vector = graph.initialize_new_parameter_from_node(bacteria_nodes, 'tau')
 B_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes, 'Burst_Size')
 
-# graph_data = {"R0": pd.DataFrame(R0, columns=["R0 0"]), "U0": pd.DataFrame(U0, columns=["U0 0"]), "I0": pd.DataFrame(I0, columns=["I0 0", "I0 1", "I0 2", "I0 3"]), "P0": pd.DataFrame(P0, columns=["P0 0"])}
-# non_graph_data_vector = {"e_vector": pd.DataFrame(e_vector, columns=["e_vector 0"]), "tau_vector": pd.DataFrame(tau_vector, columns=["tau_vector 0"])}
-# non_graph_data_matrix = {"v_matrix": pd.DataFrame(v_matrix, columns=["v_matrix 0"]), "K_matrix": pd.DataFrame(K_matrix, columns=["K_matrix 0"]), "r_matrix": pd.DataFrame(r_matrix, columns=["r_matrix 0"]), "B_matrix": pd.DataFrame(B_matrix, columns=["B_matrix 0"])}
-
-graph_data = {"R0": pd.DataFrame(R0, columns=["R0 0"]), 
-    "U0": pd.DataFrame(U0, columns=["U0 0"]), "I0": 
-              pd.DataFrame(I0, columns=["I0 0", "I0 1", "I0 2", "I0 3"]), 
-              "P0": pd.DataFrame(P0, columns=["P0 0"])}
+graph_data = {"R0": pd.DataFrame(R0, columns=["R0 0"]), "U0": pd.DataFrame(U0, columns=["U0 0"]), "I0": pd.DataFrame(I0, columns=["I0 0", "I0 1", "I0 2", "I0 3"]), "P0": pd.DataFrame(P0, columns=["P0 0"])}
 non_graph_data_vector = {"e_vector": pd.DataFrame(e_vector, columns=["e_vector 0"]), "tau_vector": pd.DataFrame(tau_vector, columns=["tau_vector 0"])}
-non_graph_data_matrix = {"v_matrix": pd.DataFrame(v_matrix, columns=["v_matrix 0", "v_matrix 1", "v_matrix 2"]), 
-                         "K_matrix": pd.DataFrame(K_matrix, columns=["K_matrix 0", "K_matrix 1", "K_matrix 2"]), 
-                         "r_matrix": pd.DataFrame(r_matrix, columns=["r_matrix 0", "r_matrix 1", "r_matrix 2"]), 
-                         "B_matrix": pd.DataFrame(B_matrix, columns=["B_matrix 0", "B_matrix 1", "B_matrix 2"])}
+non_graph_data_matrix = {"v_matrix": pd.DataFrame(v_matrix, columns=["v_matrix 0"]), "K_matrix": pd.DataFrame(K_matrix, columns=["K_matrix 0"]), "r_matrix": pd.DataFrame(r_matrix, columns=["r_matrix 0"]), "B_matrix": pd.DataFrame(B_matrix, columns=["B_matrix 0"])}
+
+# graph_data = {"R0": pd.DataFrame(R0, columns=["R0 0"]), 
+#     "U0": pd.DataFrame(U0, columns=["U0 0"]), "I0": 
+#               pd.DataFrame(I0, columns=["I0 0", "I0 1", "I0 2", "I0 3"]), 
+#               "P0": pd.DataFrame(P0, columns=["P0 0"])}
+# non_graph_data_vector = {"e_vector": pd.DataFrame(e_vector, columns=["e_vector 0"]), "tau_vector": pd.DataFrame(tau_vector, columns=["tau_vector 0"])}
+# non_graph_data_matrix = {"v_matrix": pd.DataFrame(v_matrix, columns=["v_matrix 0", "v_matrix 1", "v_matrix 2"]), 
+#                          "K_matrix": pd.DataFrame(K_matrix, columns=["K_matrix 0", "K_matrix 1", "K_matrix 2"]), 
+#                          "r_matrix": pd.DataFrame(r_matrix, columns=["r_matrix 0", "r_matrix 1", "r_matrix 2"]), 
+#                          "B_matrix": pd.DataFrame(B_matrix, columns=["B_matrix 0", "B_matrix 1", "B_matrix 2"])}
 
 app = Dash()
-app.layout = html.Div([
-    html.H1("Line Chart of new_U"),
-    dcc.Graph(
-        id='line-chart-new-N',
-        figure={
-            'data': [
-                {
-                    'x': list(range(len(new_N[i]))),
-                    'y': new_N[i],
-                    'type': 'line',
-                    'name': 'new_N'
-                } for i in range(len(new_N))
-            ],
-            'layout': {
-                'title': 'Line Chart of new_N'
-            }
-        }
-    ),
-    dcc.Graph(
-        id='line-chart-new-U',
-        figure={
-            'data': [
-                {
-                    'x': list(range(len(new_U[i]))),
-                    'y': new_U[i],
-                    'type': 'line',
-                    'name': 'new_U'
-                } for i in range(len(new_U))
-            ],
-            'layout': {
-                'title': 'Line Chart of new_U'
-            }
-        }
-    ),
-    dcc.Graph(
-        id='line-chart-new-I',
-        figure={
-            'data': [
-                {
-                    'x': list(range(len(new_I[i]))),
-                    'y': new_I[i],
-                    'type': 'line',
-                    'name': 'new_I'
-                } for i in range(len(new_I))
-            ],
-            'layout': {
-                'title': 'Line Chart of new_I'
-            }
-        }
-    ),
-    dcc.Graph(
-        id='line-chart-new-P',
-        figure={
-            'data': [
-                {
-                    'x': list(range(len(new_P[i]))),
-                    'y': new_P[i],
-                    'type': 'line',
-                    'name': 'new_P'
-                } for i in range(len(new_P))
-            ],
-            'layout': {
-                'title': 'Line Chart of new_P'
-            }
-        }
-    ),
+app.layout = [
+    html.H1("Line Chart of N, U, I, and P"),
+    html.Button('Save and rerun model', id='submit-matrices'),
+    *[
+        dcc.Graph(id={"type": "plotting-graph-data", "index": "R"}),
+        dcc.Graph(id={"type": "plotting-graph-data", "index": "U"}),
+        dcc.Graph(id={"type": "plotting-graph-data", "index": "I"}),
+        dcc.Graph(id={"type": "plotting-graph-data", "index": "P"}),
+    ],
+    html.H1("Graphing Data"),
     *[
         html.Div([
             html.H2(f"DataTable for {name}"),
             dash_table.DataTable(
                 table.to_dict('records'),
-                id={"type":'editing-matrix-data', 'index': name},
-                editable=True, 
-                style_data={"maxWidth": "100px", "overflow": "hidden", "textOverflow": "ellipsis"},
+                id={"type":'edit-graphing-data', 'index': name},
+                columns=[{'name': f"{col}", 'id': col} for col in table.columns],
+                editable=True
             ),
-            html.Div(id=f'editing-prune-data-output-{name}')
-        ]) for name, table in zip(list_name, list_tables)
+        ]) for name, table in graph_data.items()
     ], 
-    html.Button('Submit', id='submit-matrices'),
-])
-
-
-@callback([
-    Input('submit-matrices', 'n_clicks'),
-    Input({'type': 'editing-matrix-data', 'index': ALL}, 'data')
+    html.H1("Non Graphing Data: Vectors"),
+    *[
+        html.Div([
+            html.H2(f"DataTable for {name}"),
+            dash_table.DataTable(
+                table.to_dict('records'),
+                id={"type":'edit-non-graphing-data-vectors', 'index': name},
+                columns=[{'name': f"{col}", 'id': col} for col in table.columns],
+                editable=True
+            ),
+        ]) for name, table in non_graph_data_vector.items()
+    ], 
+    html.H1("Non Graphing Data: Matrices"),
+    *[
+        html.Div([
+            html.H2(f"DataTable for {name}"),
+            dash_table.DataTable(
+                table.to_dict('records'),
+                id={"type":'edit-non-graphing-data-matrices', 'index': name},
+                columns=[{'name': f"{col}", 'id': col} for col in table.columns],
+                editable=True
+            ),
+        ]) for name, table in non_graph_data_matrix.items()
+    ], 
+    dcc.Graph(id={"type": "line-chart", "index": 1}),  # Dynamic ID
 ]
+
+
+@callback(
+    [Output({"type": "plotting-graph-data", "index": "R"}, "figure"),
+    Output({"type": "plotting-graph-data", "index": "U"}, "figure"),
+    Output({"type": "plotting-graph-data", "index": "I"}, "figure"),
+    Output({"type": "plotting-graph-data", "index": "P"}, "figure")],
+    Input('submit-matrices', 'n_clicks'),
+    State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
+    State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
+    State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'), prevent_initial_call=True
 )
-def rerun_matrices(n_clicks, data):
-    list_of_new_matrices = [np.array([[value for value in row.values()] for row in data_values]) for data_values in data]
-    print(list_of_new_matrices)
-    new_R0 = list_of_new_matrices[0]
-    new_U0 = list_of_new_matrices[1]
-    new_I0 = list_of_new_matrices[2]
-    new_P0 = list_of_new_matrices[3]
-    flattened = System.flatten_lists_and_matrices(new_N, new_U, new_I, new_P)
-    rest = list_of_new_matrices[4:]
-    print(flattened)
-    data = graph.solve_system(graph.new_system2, flattened, *rest, int(graph.M), graph.max_length)
-    print(data.y)
+def rerun_matrices(n_clicks, graphing_data, graphing_data_vectors, graphing_data_matrices):
+    new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
+    flattened = graph.flatten_lists_and_matrices(*new_graphing_data)
+    new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy().T[0] for data_values in graphing_data_vectors]
+    new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
+    new_updated_data = graph.solve_system(graph.new_system2, flattened, graph, phage_nodes, bacteria_nodes, resource_nodes, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, int(graph.M))
+    solved_y = new_updated_data.y
+    new_N, new_U, new_I, new_P = graph.unflatten_initial_matrix(solved_y, [len(R0), len(U0), 4, len(P0)])
+    new_I = [new_I[0] + new_I[1] + new_I[2] + new_I[3]]
+    fig1 = go.Figure()
+    for i in range(len(new_N)):
+        fig1.add_trace(go.Scatter(x=new_updated_data.t, y=new_N[i], mode="lines", name="Updated Line"))
+    fig2 = go.Figure()
+    for i in range(len(new_U)):
+        fig2.add_trace(go.Scatter(x=new_updated_data.t, y=new_U[i], mode="lines", name="Updated Line"))
+    fig3 = go.Figure()
+    for i in range(len(new_I)):
+        fig3.add_trace(go.Scatter(x=new_updated_data.t, y=new_I[i], mode="lines", name="Updated Line"))
+    fig4 = go.Figure()
+    for i in range(len(new_P)):
+        fig4.add_trace(go.Scatter(x=new_updated_data.t, y=new_P[i], mode="lines", name="Updated Line"))
+    return [fig1, fig2, fig3, fig4]
+
 app.run(debug=True, use_reloader=True)
-
-from dash import Dash, dash_table
-import pandas as pd
-
-df = pd.read_csv('test.csv')
-
-app = Dash()
-
-app.layout = dash_table.DataTable(df.to_dict('records'))
-print(df.to_dict('records'))
-if __name__ == '__main__':
-    app.run(debug=True)
