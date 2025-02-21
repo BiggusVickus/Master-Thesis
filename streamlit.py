@@ -2,8 +2,9 @@ import numpy as np
 from Classes.Analysis import Analysis
 from Classes.GraphMakerGUI import GraphMakerGUI
 import pandas as pd
-from dash import Dash, dash_table, html, Input, Output, callback, ALL
+from dash import Dash, dash_table, html, Input, Output, callback, ALL, State, MATCH
 from dash import dcc
+import plotly.graph_objs as go
 # from Classes.StreamlitVisualization import StreamlitVisualization
 
 class System(Analysis):
@@ -15,14 +16,13 @@ class System(Analysis):
         #TODO: look at biology side, try to replicate graphs
         #TODO: explore the model(s)
         # start simple, bacteria-resource, see how the bacteria and reosurces grow/shrink, bacteria should hit carrying capacity, nutrient should reach 0, not negative, etc
-        graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, e_vector, v_matrix, K_matrix, r_matrix, tau_vector, B_matrix, M = params
+        graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix, M = params
         graph = graph_object.graph
         def g(N, v, K):
             return (N * v) / (N + K)
         Y = self.check_cutoff(Y, 0.000001)
         
         N, U, I, P = self.unflatten_initial_matrix(Y, [len(nutrient_nodes), len(bacteria_nodes), (len(bacteria_nodes), M), len(phage_nodes)])
-
         new_N = np.zeros_like(N)
         new_U = np.zeros_like(U)
         new_I = np.zeros_like(I)
@@ -92,8 +92,9 @@ class System(Analysis):
         return flattened_y1
 
 # graph = GraphMakerGUI()
-# graph.export_graph('example.gexf')
+# graph.export_graph('simple_test.gexf')
 
+# graph = System('simple_test.gexf')
 graph = System('example.gexf')
 phage_nodes = graph.get_nodes_of_type('P')
 bacteria_nodes = graph.get_nodes_of_type('B')
@@ -112,20 +113,20 @@ r_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes
 tau_vector = graph.initialize_new_parameter_from_node(bacteria_nodes, 'tau')
 B_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes, 'Burst_Size')
 
-y0_flattened = graph.flatten_lists_and_matrices(R0, U0, I0, P0)
+# graph_data = {"R0": pd.DataFrame(R0, columns=["R0 0"]), "U0": pd.DataFrame(U0, columns=["U0 0"]), "I0": pd.DataFrame(I0, columns=["I0 0", "I0 1", "I0 2", "I0 3"]), "P0": pd.DataFrame(P0, columns=["P0 0"])}
+# non_graph_data_vector = {"e_vector": pd.DataFrame(e_vector, columns=["e_vector 0"]), "tau_vector": pd.DataFrame(tau_vector, columns=["tau_vector 0"])}
+# non_graph_data_matrix = {"v_matrix": pd.DataFrame(v_matrix, columns=["v_matrix 0"]), "K_matrix": pd.DataFrame(K_matrix, columns=["K_matrix 0"]), "r_matrix": pd.DataFrame(r_matrix, columns=["r_matrix 0"]), "B_matrix": pd.DataFrame(B_matrix, columns=["B_matrix 0"])}
 
-solved_system = graph.solve_system(graph.new_system2, y0_flattened, graph, phage_nodes, bacteria_nodes, resource_nodes, e_vector, v_matrix, K_matrix, r_matrix, tau_vector, B_matrix, int(graph.M))
+graph_data = {"R0": pd.DataFrame(R0, columns=["R0 0"]), 
+    "U0": pd.DataFrame(U0, columns=["U0 0"]), "I0": 
+              pd.DataFrame(I0, columns=["I0 0", "I0 1", "I0 2", "I0 3"]), 
+              "P0": pd.DataFrame(P0, columns=["P0 0"])}
+non_graph_data_vector = {"e_vector": pd.DataFrame(e_vector, columns=["e_vector 0"]), "tau_vector": pd.DataFrame(tau_vector, columns=["tau_vector 0"])}
+non_graph_data_matrix = {"v_matrix": pd.DataFrame(v_matrix, columns=["v_matrix 0", "v_matrix 1", "v_matrix 2"]), 
+                         "K_matrix": pd.DataFrame(K_matrix, columns=["K_matrix 0", "K_matrix 1", "K_matrix 2"]), 
+                         "r_matrix": pd.DataFrame(r_matrix, columns=["r_matrix 0", "r_matrix 1", "r_matrix 2"]), 
+                         "B_matrix": pd.DataFrame(B_matrix, columns=["B_matrix 0", "B_matrix 1", "B_matrix 2"])}
 
-solved_y = solved_system.y
-print(R0, U0, I0, P0)
-new_N, new_U, new_I, new_P = graph.unflatten_initial_matrix(solved_y, [len(R0), len(U0), 12, len(P0)])
-newI1 = new_I[0] + new_I[1] + new_I[2] + new_I[3]
-new_I2 = new_I[4] + new_I[5] + new_I[6] + new_I[7] 
-new_I3 = new_I[8] + new_I[9] + new_I[10] + new_I[11]
-new_I = [newI1, new_I2, new_I3]
-
-list_tables = [pd.DataFrame(R0), pd.DataFrame(U0), pd.DataFrame(I0), pd.DataFrame(P0), pd.DataFrame(e_vector), pd.DataFrame(v_matrix), pd.DataFrame(K_matrix), pd.DataFrame(r_matrix), pd.DataFrame(tau_vector), pd.DataFrame(B_matrix)]
-list_name = ["R0", "U0", "I0", "P0", "e_matrix", "v_matrix", "K_matrix", "r_matrix", "tau_matrix", "B_matrix"]
 app = Dash()
 app.layout = html.Div([
     html.H1("Line Chart of new_U"),
