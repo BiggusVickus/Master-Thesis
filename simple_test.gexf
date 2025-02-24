@@ -15,7 +15,7 @@
       <node id="E" label="E">
         <attvalues>
           <attvalue for="0" value="E" />
-          <attvalue for="1" value="Simulation_Length: 1&#10;Time_Step: 0.5&#10;Cutoff: 0.000001&#10;M: 4&#10;" />
+          <attvalue for="1" value="Simulation_Length: 100&#10;Time_Step: 0.5&#10;Cutoff: 0.000001&#10;M: 4&#10;" />
         </attvalues>
       </node>
       <node id="P0" label="P0">
@@ -27,7 +27,7 @@
       <node id="B0" label="B0">
         <attvalues>
           <attvalue for="0" value="B" />
-          <attvalue for="1" value="Initial_Population: 500&#10;tau: 1&#10;" />
+          <attvalue for="1" value="Initial_Population: 500&#10;tau: 25.5&#10;" />
         </attvalues>
       </node>
       <node id="R0" label="R0">
@@ -40,12 +40,12 @@
     <edges>
       <edge source="P0" target="B0" id="0">
         <attvalues>
-          <attvalue for="2" value="Burst_Size: 18&#10;r: 1&#10;" />
+          <attvalue for="2" value="Burst_Size: 207&#10;r: 1&#10;" />
         </attvalues>
       </edge>
       <edge source="B0" target="R0" id="1">
         <attvalues>
-          <attvalue for="2" value="v: 2.3&#10;K: 150&#10;" />
+          <attvalue for="2" value="v: 1.5&#10;K: 150&#10;" />
         </attvalues>
       </edge>
     </edges>
