@@ -10,6 +10,8 @@ class GraphMakerGUI(GraphMaker):
     def __init__(self):
         super().__init__(True)
         self.window = Tk() 
+        self.window.geometry("1000x1000")
+        self.window.wm_title("GUI Tool For Creating Network Topography")
         self.setup_E_node()
 
         self.initialize_GUI()

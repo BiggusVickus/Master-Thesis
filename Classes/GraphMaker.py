@@ -50,10 +50,10 @@ class GraphMaker:
         
         canvas = FigureCanvasTkAgg(fig, master=self.window)
         canvas.draw()
-        canvas.get_tk_widget().pack()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         toolbar = NavigationToolbar2Tk(canvas, self.window)
         toolbar.update()
-        canvas.get_tk_widget().pack()
+        canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
     def default_environment_data(self):
         string = ""
