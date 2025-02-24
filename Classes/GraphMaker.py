@@ -12,7 +12,7 @@ np.random.seed(69)
 class GraphMaker:
     def __init__(self, GUI):
         self.GUI = GUI
-        self.graph = nx.Graph()
+        self.graph = nx.MultiGraph()
 
     def plot(self): 
         if not self.GUI:
@@ -20,7 +20,7 @@ class GraphMaker:
         for widget in self.window.winfo_children():
             if not isinstance(widget, Button):
                 widget.destroy()
-        fig = Figure(figsize=(5, 5), dpi=100)
+        fig = Figure(figsize=(8, 8), dpi=100)
         ax = fig.add_subplot(111)
         ax.clear()
         pos = nx.multipartite_layout(self.graph)
@@ -35,8 +35,19 @@ class GraphMaker:
             elif attr["node_type"] == "B":
                 color_map.append('orange')
             else:
-                continue
-        nx.draw(self.graph, pos, node_color=color_map, ax=ax, with_labels=True)
+                color_map.append('blue')
+        nx.draw_networkx_nodes(self.graph, pos, node_color=color_map, ax=ax)
+        straight_edges = []
+        curved_edges = []
+        for u, v, key in self.graph.edges(keys=True):
+            if (self.graph.nodes[u]["subset"] == self.graph.nodes[v]["subset"]):
+                curved_edges.append((u, v))
+            else: 
+                straight_edges.append((u, v))
+        nx.draw_networkx_edges(self.graph, pos, edgelist=straight_edges, edge_color='black', ax=ax)
+        nx.draw_networkx_edges(self.graph, pos, edgelist=curved_edges, edge_color='red', connectionstyle="arc3,rad=0.6", ax=ax)
+        nx.draw_networkx_labels(self.graph, pos, ax=ax)
+        
         canvas = FigureCanvasTkAgg(fig, master=self.window)
         canvas.draw()
         canvas.get_tk_widget().pack()
@@ -121,7 +132,7 @@ class GraphMaker:
     def randomize_parameter_value(self, main_value, sigma = 1):
         return np.random.normal(main_value, sigma)
 
-    def add_node(self, node_type, node_name, node_data = None):
+    def add_node_to_graph(self, node_type, node_name, node_data = None):
         if node_type == None and node_name == None:
             return self.error_message("Node name and type cannot be empty")
         if node_type == "E":
@@ -187,7 +198,7 @@ class GraphMaker:
             node_data = self.default_r_r_data()
         else:
             node_data = self.default_edge_data()
-        self.graph.edges[node1, node2]['data'] = node_data
+        self.graph.edges[node1, node2, 0]['data'] = node_data
 
     def remove_edge(self, node1 = None, node2 = None):
         if node1 == None or node2 == None:
@@ -207,20 +218,11 @@ class GraphMaker:
                 return self.error_message("Number of nodes must be greater than or equal to 0")
             return self.error_message("Number of nodes must be an integer")
         for i in range(P):
-            self.graph.add_node("P" + str(i))
-            self.graph.nodes["P" + str(i)]['node_type'] = "P"
-            self.graph.nodes["P" + str(i)]['data'] = self.default_phage_data()
-            self.graph.nodes["P" + str(i)]['subset'] = "0"
+            self.add_node_to_graph("P", "P" + str(i))
         for i in range(B):
-            self.graph.add_node("B" + str(i))
-            self.graph.nodes["B" + str(i)]['node_type'] = "B"
-            self.graph.nodes["B" + str(i)]['data'] = self.default_bacteria_data()
-            self.graph.nodes["B" + str(i)]['subset'] = "1"
+            self.add_node_to_graph("B", "B" + str(i))
         for i in range(R):
-            self.graph.add_node("R" + str(i))
-            self.graph.nodes["R" + str(i)]['node_type'] = "R"
-            self.graph.nodes["R" + str(i)]['data'] = self.default_resource_data()
-            self.graph.nodes["R" + str(i)]['subset'] = "2"
+            self.add_node_to_graph("R", "R" + str(i))
 
     def verify_edge_connections(self, node1, node2, type1, type2):
         return (self.graph.nodes[node1]['node_type'] == type1 and self.graph.nodes[node2]['node_type'] == type2) or (self.graph.nodes[node1]['node_type'] == type2 and self.graph.nodes[node2]['node_type'] == type1)
@@ -273,7 +275,6 @@ class GraphMaker:
             nx.write_pajek(self.graph, file_name)
 
     def import_graph_from_file(self, file_name:str=None):
-        print(file_name)
         if file_name == None:
             return self.error_message("No file name provided")
         if not file_name.endswith(('.gexf', '.gml', '.graphml', '.net')):
