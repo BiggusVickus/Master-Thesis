@@ -23,7 +23,7 @@ class GraphMaker:
         fig = Figure(figsize=(5, 5), dpi=100)
         ax = fig.add_subplot(111)
         ax.clear()
-        pos = nx.spring_layout(self.graph, seed=69)
+        pos = nx.multipartite_layout(self.graph)
         color_map = []
         for node, attr in self.graph.nodes(data=True):
             if attr["node_type"] == "P":
@@ -36,7 +36,7 @@ class GraphMaker:
                 color_map.append('orange')
             else:
                 continue
-        nx.draw(self.graph, node_color=color_map, ax=ax, with_labels=True)
+        nx.draw(self.graph, pos, node_color=color_map, ax=ax, with_labels=True)
         canvas = FigureCanvasTkAgg(fig, master=self.window)
         canvas.draw()
         canvas.get_tk_widget().pack()
@@ -143,6 +143,14 @@ class GraphMaker:
             "B": self.default_bacteria_data,
             "R": self.default_resource_data
             }.get(node_type, lambda: None)()
+        if node_type == "P":
+            self.graph.nodes[node_name]['subset'] = "0"
+        if node_type == "B":
+            self.graph.nodes[node_name]['subset'] = "1"
+        if node_type == "R":
+            self.graph.nodes[node_name]['subset'] = "2"
+        if node_type == "E":
+            self.graph.nodes[node_name]['subset'] = "3"
 
         self.graph.nodes[node_name]['data'] = node_data
         
@@ -202,14 +210,17 @@ class GraphMaker:
             self.graph.add_node("P" + str(i))
             self.graph.nodes["P" + str(i)]['node_type'] = "P"
             self.graph.nodes["P" + str(i)]['data'] = self.default_phage_data()
+            self.graph.nodes["P" + str(i)]['subset'] = "0"
         for i in range(B):
             self.graph.add_node("B" + str(i))
             self.graph.nodes["B" + str(i)]['node_type'] = "B"
             self.graph.nodes["B" + str(i)]['data'] = self.default_bacteria_data()
+            self.graph.nodes["B" + str(i)]['subset'] = "1"
         for i in range(R):
             self.graph.add_node("R" + str(i))
             self.graph.nodes["R" + str(i)]['node_type'] = "R"
             self.graph.nodes["R" + str(i)]['data'] = self.default_resource_data()
+            self.graph.nodes["R" + str(i)]['subset'] = "2"
 
     def verify_edge_connections(self, node1, node2, type1, type2):
         return (self.graph.nodes[node1]['node_type'] == type1 and self.graph.nodes[node2]['node_type'] == type2) or (self.graph.nodes[node1]['node_type'] == type2 and self.graph.nodes[node2]['node_type'] == type1)
