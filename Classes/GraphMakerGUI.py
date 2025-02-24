@@ -9,14 +9,13 @@ np.random.seed(69)
 class GraphMakerGUI(GraphMaker):
     def __init__(self):
         super().__init__(True)
-        self.graph = nx.Graph()
         self.window = Tk() 
         self.setup_E_node()
 
         self.initialize_GUI()
     
     def setup_E_node(self):
-        super().add_node("E", "E", self.default_environment_data())
+        super().add_node_to_graph("E", "E", self.default_environment_data())
     
     def initialize_GUI(self):
         self.window.title('GUI Tool For Creating Network Topography') 
@@ -61,7 +60,7 @@ class GraphMakerGUI(GraphMaker):
     def add_node(self):
         node_type = simpledialog.askstring("Add Node: Node Type", "Enter exactly P, B, R for type of node type to input:")
         node_name = simpledialog.askstring("Add Node: Node Name", "Enter node name:")
-        super().add_node(node_type, node_name)
+        super().add_node_to_graph(node_type, node_name)
         self.plot()
 
     def remove_node(self):

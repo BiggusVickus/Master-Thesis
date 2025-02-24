@@ -6,10 +6,10 @@ class GraphMakerNonGUI(GraphMaker):
         self.setup_E_node()
     
     def setup_E_node(self):
-        self.add_node("E", "E", self.default_environment_data())
+        super().add_node_to_graph("E", "E", self.default_environment_data())
     
     def add_node(self, node_type, node_name, node_data = None):
-        super().add_node(node_type, node_name, node_data)
+        super().add_node_to_graph(node_type, node_name, node_data)
     
     def remove_node(self, node_name=None):
         return super().remove_node(node_name)
