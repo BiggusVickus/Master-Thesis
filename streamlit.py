@@ -172,8 +172,7 @@ app.layout = [
                 editable=True
             ),
         ]) for name, table in non_graph_data_matrix.items()
-    ], 
-    dcc.Graph(id={"type": "line-chart", "index": 1}),  # Dynamic ID
+    ]
 ]
 
 
@@ -196,16 +195,16 @@ def rerun_matrices(n_clicks, graphing_data, graphing_data_vectors, graphing_data
     solved_y = new_updated_data.y
     new_N, new_U, new_I, new_P = graph.unflatten_initial_matrix(solved_y, [len(R0), len(U0), 4, len(P0)])
     new_I = [new_I[0] + new_I[1] + new_I[2] + new_I[3]]
-    fig1 = go.Figure()
+    fig1 = go.Figure(dict(text="Nutrients"))
     for i in range(len(new_N)):
         fig1.add_trace(go.Scatter(x=new_updated_data.t, y=new_N[i], mode="lines", name="Updated Line"))
-    fig2 = go.Figure()
+    fig2 = go.Figure(dict(text="Uninfected Bacteria"))
     for i in range(len(new_U)):
         fig2.add_trace(go.Scatter(x=new_updated_data.t, y=new_U[i], mode="lines", name="Updated Line"))
-    fig3 = go.Figure()
+    fig3 = go.Figure(dict(text="Infected Bacteria"))
     for i in range(len(new_I)):
         fig3.add_trace(go.Scatter(x=new_updated_data.t, y=new_I[i], mode="lines", name="Updated Line"))
-    fig4 = go.Figure()
+    fig4 = go.Figure(dict(text="Phages"))
     for i in range(len(new_P)):
         fig4.add_trace(go.Scatter(x=new_updated_data.t, y=new_P[i], mode="lines", name="Updated Line"))
     return [fig1, fig2, fig3, fig4]
