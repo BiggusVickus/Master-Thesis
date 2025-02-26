@@ -43,8 +43,8 @@ where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_
 Agent-based Models (ABM) model the system through space and time.
 An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes.
 Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
-Resources are diffused through the system using a PDE solver for a Boundary Value Problem (BVP).
-Agents are allowed to move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as nutrient density, microbe density, or stochastic chance. \newline 
+Resources diffuse through the system using a PDE solver for a Boundary Value Problem (BVP).
+Agents can move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as nutrient density, microbe density, or stochastic chance. \newline 
 ABMs are useful when simulating many individual elements interacting in a system.
 Chaotic or emergent behavior can arise from these interactions.
 Chaotic behavior refers to the irregular and unpredictable evolution of a system's behavior due to nonlinear equations, exhibiting sensitive dependence on initial conditions \cite{encyclopedia_of_physical_science_and_technology}. \newline 
@@ -86,9 +86,10 @@ The phage parts build together to make a full part.
 Eventually the cell wall bursts releasing the phages into the environment ready to infect more bacteria. 
 
 \paragraph{Infection Stage}
-Infection Stage
+The infection stage is characterized as the searching for a bacterium, detection, and subsequent attachment and injection of DNA into the bacteria. 
 \subparagraph{Attachment}
-Attachment of phage to wall. 
+
+
 \subparagraph{Entry of Phage Into Bacteria}
 Injection of DNA into bacteria. 
 
