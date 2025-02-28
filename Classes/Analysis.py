@@ -20,6 +20,18 @@ class Analysis():
         self.Simulation_Length = 10
         self.Time_Step = 0.1
     
+    def odesystem(self, t, y, *args):
+        """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
+
+        The easiest way to do this is to implement the function in a dummy class that inherits from this class, and then implement the ODE system function in that class. The user can also then use and/or override the defualt flatten and unflatten methods to do the calculations to help fit the dimensions of the matrices and vectors. The user can also provide any extra parameters to the solve_ivp function, like the method to use, the number of steps, or any other parameters that the solve_ivp function can take in.
+
+        Args:
+            t (float): time at iteration
+            y (array): the current state of the system, unflattened array of data wanting to be calculated
+            args (any): can be any parameters or varaibles used to calculate (or help assist in calcualting) the ODE system. The user can pass in any number of parameters or variables to be used in the ODE system calculations. These would commonly be a graph object for checking if edges exist between nodes, parameter vectors and matrices, etc. The user must make sure that the parameters are unpacked correctly from the *args in the ODE_system_function to do the calculations using the parameters.
+        """
+        pass
+    
     def get_nodes_of_type(self, node_type:str):
         """Given a particular node type, for example of phage P, bacteria B, or resource R, this method will return a list of all the node names of that type in the graph. It will also store the names of the nodes as an attribute of the class. If the node type is an environment node, it will store the parameters of the environment as attributes of the class.
 
