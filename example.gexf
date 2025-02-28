@@ -15,7 +15,7 @@
       <node id="E" label="E">
         <attvalues>
           <attvalue for="0" value="E" />
-          <attvalue for="1" value="Temperature: 25.915507098548094&#10;pH: 6.396458027272012&#10;Simulation_Length: 10&#10;Time_Step: 0.5&#10;Cutoff: 0.000001&#10;M: 4&#10;" />
+          <attvalue for="1" value="Temperature: 25.915507098548094&#10;pH: 6.396458027272012&#10;Simulation_Length: 10&#10;Max_Step: 0.5&#10;Cutoff_Value: 0.000001&#10;M: 4&#10;" />
         </attvalues>
       </node>
       <node id="P0" label="P0">
@@ -51,19 +51,19 @@
       <node id="R0" label="R0">
         <attvalues>
           <attvalue for="0" value="R" />
-          <attvalue for="1" value="Initial_Concentration: 99.33726477815591&#10;Decay_Rate: -0.17412048233046915&#10;Replenishment_Rate: 1.4757662361032826&#10;e: -0.345565630852564&#10;" />
+          <attvalue for="1" value="Initial_Concentration: 99.33726477815591&#10;Decay_Rate: -0.17412048233046915&#10;Replenishment_Rate: 1.4757662361032826&#10;e: 1&#10;" />
         </attvalues>
       </node>
       <node id="R1" label="R1">
         <attvalues>
           <attvalue for="0" value="R" />
-          <attvalue for="1" value="Initial_Concentration: 99.80976687074312&#10;Decay_Rate: -0.05756883387549119&#10;Replenishment_Rate: -1.280935454138983&#10;e: -0.345565630852564&#10;" />
+          <attvalue for="1" value="Initial_Concentration: 99.80976687074312&#10;Decay_Rate: -0.05756883387549119&#10;Replenishment_Rate: -1.280935454138983&#10;e: 2&#10;" />
         </attvalues>
       </node>
       <node id="R2" label="R2">
         <attvalues>
           <attvalue for="0" value="R" />
-          <attvalue for="1" value="Initial_Concentration: 99.81532707701629&#10;Decay_Rate: -0.00417044671166944&#10;Replenishment_Rate: 0.18445266697675383&#10;e: -0.345565630852564&#10;" />
+          <attvalue for="1" value="Initial_Concentration: 99.81532707701629&#10;Decay_Rate: -0.00417044671166944&#10;Replenishment_Rate: 0.18445266697675383&#10;e: 3&#10;" />
         </attvalues>
       </node>
     </nodes>
@@ -90,32 +90,32 @@
       </edge>
       <edge source="B0" target="R0" id="4">
         <attvalues>
-          <attvalue for="2" value="Uptake_Rate: -0.1877970980018064&#10;Release_Rate: -2.2397295245852176&#10;e: 0.21483971727730977&#10;v: 1.8733919430020294&#10;K: 98.74042406702883&#10;" />
+          <attvalue for="2" value="Uptake_Rate: -0.1877970980018064&#10;Release_Rate: -2.2397295245852176&#10;e: 0.21483971727730977&#10;v: 1&#10;K: 98.74042406702883&#10;" />
         </attvalues>
       </edge>
       <edge source="B0" target="R1" id="5">
         <attvalues>
-          <attvalue for="2" value="Uptake_Rate: 0.7589375300957684&#10;Release_Rate: 0.405315278236441&#10;e: 1.09436180620128&#10;v: 0.8111832008498229&#10;K: 101.00004166324022&#10;" />
+          <attvalue for="2" value="Uptake_Rate: 0.7589375300957684&#10;Release_Rate: 0.405315278236441&#10;e: 1.09436180620128&#10;v: 2&#10;K: 101.00004166324022&#10;" />
         </attvalues>
       </edge>
       <edge source="B0" target="R2" id="6">
         <attvalues>
-          <attvalue for="2" value="Uptake_Rate: 0.8558840428293145&#10;Release_Rate: 1.5249658998428623&#10;e: 0.8965269248780752&#10;v: 3.038285390714967&#10;K: 101.0920161436663&#10;" />
+          <attvalue for="2" value="Uptake_Rate: 0.8558840428293145&#10;Release_Rate: 1.5249658998428623&#10;e: 0.8965269248780752&#10;v: 3&#10;K: 101.0920161436663&#10;" />
         </attvalues>
       </edge>
       <edge source="B1" target="R2" id="7">
         <attvalues>
-          <attvalue for="2" value="Uptake_Rate: 0.4801621438210588&#10;Release_Rate: 0.08086744844509078&#10;e: 0.04810429060724161&#10;v: 0.4930330729029857&#10;K: 102.11872113793892&#10;" />
+          <attvalue for="2" value="Uptake_Rate: 0.4801621438210588&#10;Release_Rate: 0.08086744844509078&#10;e: 0.04810429060724161&#10;v: 4&#10;K: 102.11872113793892&#10;" />
         </attvalues>
       </edge>
       <edge source="B1" target="R1" id="8">
         <attvalues>
-          <attvalue for="2" value="Uptake_Rate: 1.1737621331352734&#10;Release_Rate: 0.2745539992450535&#10;e: 0.5699505890721527&#10;v: 0.357059820535376&#10;K: 100.4375773671193&#10;" />
+          <attvalue for="2" value="Uptake_Rate: 1.1737621331352734&#10;Release_Rate: 0.2745539992450535&#10;e: 0.5699505890721527&#10;v: 5&#10;K: 100.4375773671193&#10;" />
         </attvalues>
       </edge>
       <edge source="B2" target="R0" id="9">
         <attvalues>
-          <attvalue for="2" value="Uptake_Rate: -2.0961355762073346&#10;Release_Rate: 0.7987920140340468&#10;e: 0.345565630852564&#10;v: 1.4431389528298735&#10;K: 99.51386126517595&#10;" />
+          <attvalue for="2" value="Uptake_Rate: -2.0961355762073346&#10;Release_Rate: 0.7987920140340468&#10;e: 0.345565630852564&#10;v: 6&#10;K: 99.51386126517595&#10;" />
         </attvalues>
       </edge>
     </edges>
