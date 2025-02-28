@@ -13,7 +13,6 @@ class GraphMakerGUI(GraphMaker):
         self.window.geometry("1000x1000")
         self.window.wm_title("GUI Tool For Creating Network Topography")
         self.setup_E_node()
-
         self.initialize_GUI()
     
     def setup_E_node(self):
