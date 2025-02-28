@@ -1,26 +1,22 @@
 import numpy as np
 from Classes.Analysis import Analysis
 from Classes.GraphMakerGUI import GraphMakerGUI
-import pandas as pd
-from dash import Dash, dash_table, html, Input, Output, callback, ALL, State, MATCH
-from dash import dcc
-import plotly.graph_objs as go
-# from Classes.StreamlitVisualization import StreamlitVisualization
+from Classes.Visualizer import Visualizer
 
 class System(Analysis):
     def __init__(self, graph_location):
         super().__init__(graph_location)
 
-    def new_system2(self, t, Y, *params):
-        # TODO: rewrite this into for loops
+    def odesystem(self, t, Y, *params):
         #TODO: look at biology side, try to replicate graphs
         #TODO: explore the model(s)
         # start simple, bacteria-resource, see how the bacteria and reosurces grow/shrink, bacteria should hit carrying capacity, nutrient should reach 0, not negative, etc
-        graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix, M = params
+        graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, M, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix = params
         graph = graph_object.graph
         def g(N, v, K):
             return (N * v) / (N + K)
-        Y = self.check_cutoff(Y, 0.000001)
+
+        Y = self.check_cutoff(Y)
         
         N, U, I, P = self.unflatten_initial_matrix(Y, [len(nutrient_nodes), len(bacteria_nodes), (len(bacteria_nodes), M), len(phage_nodes)])
         new_N = np.zeros_like(N)
