@@ -166,7 +166,7 @@ class Analysis():
         max_step = extra_parameters.get('max_step', self.Time_Step)
         return solve_ivp(ODE_system_function, (0, self.Simulation_Length), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step)
     
-    def check_cutoff(self, flat_array:np.array, cutoff_value:float = 0.000001):
+    def check_cutoff(self, flat_array:np.array, cutoff_value:float = None):
         """Given a flat array, this method will check for any values below the cutoff value and set them to 0. This is for use in the user provided ODE system function to set any values below a certain threshold to 0, just before returning the vector. This is to prevent any numerical errors for values reaching really small values from propagating through the system.
 
         Args:
@@ -176,9 +176,11 @@ class Analysis():
         Returns:
             _type_: _description_
         """
-        if hasattr(self, 'cutoff_value'):
-            cutoff_value = self.cutoff_value
+        if cutoff_value is not None:
+            cutoff = cutoff_value
+        else:
+            cutoff = self.Cutoff_Value
         for index, value in enumerate(flat_array):
-            if value <= cutoff_value:
+            if value <= float(cutoff):
                 flat_array[index] = 0
         return flat_array
