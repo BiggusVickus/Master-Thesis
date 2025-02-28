@@ -18,7 +18,8 @@ class Analysis():
         self.graph = nx.read_gexf(graph_location)
         self.attribute_additions = []
         self.Simulation_Length = 10
-        self.Time_Step = 0.1
+        self.Max_Step = 0.1
+        self.Cutoff_Value = 0.000001
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -43,6 +44,7 @@ class Analysis():
         """
         list_data =  [n for n in self.graph.nodes if self.graph.nodes[n]['node_type'] == node_type]
         if node_type == "E":
+            self.environment_node_data = self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data'])
             for d, v in self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data']).items():
                 setattr(self, d, float(v))
         else:
@@ -76,17 +78,20 @@ class Analysis():
                 dictionary[row[0]] = row[1]
         return dictionary
 
-    def add_environment_data(self, name:str, data) -> None:
+    def add_environment_data(self, dictionary:dict) -> None:
         """Adds the environment data to the class as an attribute
 
         Args:
             name (str): Name of the attribute to be added
             data (any): Data to be added to the attribute. Datatype can be of any type desired
         """
-        setattr(self, name, data)
+        for key, value in dictionary.items():
+            setattr(self, key, value)
     
     def initialize_new_matrix(self, rows, columns):
         return np.zeros((int(rows), int(columns)))
+    def initialize_new_vector(self, rows):
+        return np.zeros(int(rows))
     
     def initialize_new_parameter_from_edges(self, node_list1:list, node_list2:list, attribute_name:str, data_type = float) -> np.array:
         """Returns a new matrix consisting of the data from the edges between the nodes in node_list1 and node_list2 for a listed attribute name. The data is stored in the matrix as the data_type given, in case the data is not a float. The data is extracted from the attribute_name given.
