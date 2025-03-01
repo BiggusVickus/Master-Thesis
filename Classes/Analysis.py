@@ -155,7 +155,7 @@ class Analysis():
         else:
             raise ValueError("Length must be an int or a list of ints")
 
-    def solve_system(self, ODE_system_function, y0_flattened:np.array, *ODE_system_parameters, **extra_parameters) -> np.array:
+    def solve_system(self, ODE_system_function, y0_flattened:np.array, *ODE_system_parameters, t_start = None, t_end = None, **extra_parameters) -> np.array:
         """Solves the system of ODEs given the ODE system function, initial conditions, and parameters
 
         Args:
@@ -168,8 +168,11 @@ class Analysis():
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
         # check if max_step is in the extra parameters, if not, set it to the time step
-        max_step = extra_parameters.get('max_step', self.Time_Step)
-        return solve_ivp(ODE_system_function, (0, self.Simulation_Length), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step)
+        if t_start is None:
+            t_start = 0
+        if t_end is None:
+            t_end = self.Simulation_Length
+        return solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step))
     
     def check_cutoff(self, flat_array:np.array, cutoff_value:float = None):
         """Given a flat array, this method will check for any values below the cutoff value and set them to 0. This is for use in the user provided ODE system function to set any values below a certain threshold to 0, just before returning the vector. This is to prevent any numerical errors for values reaching really small values from propagating through the system.
