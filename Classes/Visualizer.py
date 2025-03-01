@@ -88,7 +88,14 @@ class Visualizer():
                     ])
                 ])
             ]),
-            html.Div(style={'margin': '200px'})
+            html.Div(style={'margin': '60px'}),
+            html.H2(["Serial Transfer"]),
+            dcc.Input(
+                id="serial_transfer_value", type="number", placeholder="input with range",
+                min=1, max=1_000_000, step=0.01, value=10
+            ),
+            html.Button("Run Serial Transfer", id="run_serial_transfer"),
+            html.Div(style={'margin': '60px'}),
         ])
 
         @callback(
