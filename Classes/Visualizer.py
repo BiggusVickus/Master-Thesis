@@ -5,15 +5,18 @@ import pandas as pd
 from dash import Dash, dash_table, html, Input, Output, callback, ALL, State, MATCH
 from dash import dcc
 import plotly.graph_objs as go
+from collections import OrderedDict
+from copy import deepcopy
 
 class Visualizer():
     def __init__(self, graph):
         self.app = Dash()
-        self.graph = graph
-        self.graph_data = {}
-        self.non_graph_data_vector = {}
-        self.non_graph_data_matrix = {}
+        self.graph:Analysis = graph
+        self.graph_data = OrderedDict()
+        self.non_graph_data_vector = OrderedDict()
+        self.non_graph_data_matrix = OrderedDict()
         self.other_parameters_to_pass = []
+        self.copy_of_simulation_output = None
 
     def add_graph_data(self, name, data, column_names, row_names = None, add_columns = False):
         self.graph_data[name] = {"data":data, "column_names":column_names, "row_names":row_names, "add_columns":add_columns}
