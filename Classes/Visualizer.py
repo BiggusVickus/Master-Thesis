@@ -180,7 +180,7 @@ class Visualizer():
             print('----')
             print(row_of_values)
 
-            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start = original_final_time, t_end=self.graph.Simulation_Length)
+            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start = original_final_time, t_end=float(original_final_time)+float(self.graph.Simulation_Length))
             
             solved_y = new_updated_data.y
             print(original_time)
