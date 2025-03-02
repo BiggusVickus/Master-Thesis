@@ -161,6 +161,7 @@ class Visualizer():
             new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
             new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
             self.graph.add_environment_data(environment_data[0])
+
             original_time = self.copy_of_simulation_output.t
             original_final_time = self.copy_of_simulation_output.t[-1]
             original_simulation_output = self.copy_of_simulation_output.y
@@ -176,25 +177,20 @@ class Visualizer():
                     row_of_values.append(flat + final/serial_transfer) 
                 else:
                     row_of_values.append(final/serial_transfer)
-            print(original_final_simulation_output)
-            print('----')
-            print(row_of_values)
 
-            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start = original_final_time, t_end=float(original_final_time)+float(self.graph.Simulation_Length))
+            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start = float(original_final_time), t_end=float(original_final_time)+float(self.graph.Simulation_Length))
             
             solved_y = new_updated_data.y
-            print(original_time)
-            print('----')
-            print(new_updated_data.t)
-            print('----')
             new_overall_t = np.concatenate((original_time, new_updated_data.t))
-            print(new_overall_t)
-            unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+            new_overall_y = np.concatenate((original_simulation_output, solved_y), axis=1)
+            self.copy_of_simulation_output.t = new_overall_t
+            self.copy_of_simulation_output.y = new_overall_y
+            unflattened_data = self.graph.unflatten_initial_matrix(new_overall_y, [length["data"].size for length in self.graph_data.values()])
             new_unflattened_data = []
             for dic, unflattened in zip(self.graph_data.items(), unflattened_data):
                 key, value = dic
                 # Append the new unflattened data to the existing data
-                self.graph_data[key]["y_data"] = np.concatenate((self.graph_data[key]["y_data"], unflattened), axis=1)
+                self.graph_data[key]["y_data"] = unflattened
                 self.graph_data[key]["t_data"] = new_overall_t
                 if value["add_columns"] not in [None, False]:
                     unflattened_temp = []
