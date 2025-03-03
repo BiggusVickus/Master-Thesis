@@ -20,6 +20,7 @@ class Analysis():
         self.Simulation_Length = 10
         self.Max_Step = 0.1
         self.Cutoff_Value = 0.000001
+        self.Min_Step = 0.01
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -172,7 +173,9 @@ class Analysis():
             t_start = 0
         if t_end is None:
             t_end = self.Simulation_Length
-        return solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step))
+        print(self.Min_Step)
+        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step), min_step=float(self.Min_Step))
+        return solved
     
     def check_cutoff(self, flat_array:np.array, cutoff_value:float = None):
         """Given a flat array, this method will check for any values below the cutoff value and set them to 0. This is for use in the user provided ODE system function to set any values below a certain threshold to 0, just before returning the vector. This is to prevent any numerical errors for values reaching really small values from propagating through the system.

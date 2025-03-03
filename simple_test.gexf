@@ -15,7 +15,7 @@
       <node id="E" label="E">
         <attvalues>
           <attvalue for="0" value="E" />
-          <attvalue for="1" value="Simulation_Length: 100&#10;Max_Step: 0.5&#10;Cutoff_Value: 0.000001&#10;M: 4&#10;" />
+          <attvalue for="1" value="Simulation_Length: 4&#10;Max_Step: 0.5&#10;Cutoff_Value: 0.000001&#10;M: 4&#10;Min_Step:0.01" />
         </attvalues>
       </node>
       <node id="P0" label="P0">
