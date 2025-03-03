@@ -81,13 +81,14 @@ class Visualizer():
                 ]),
                 dcc.Tab(label='Environment Parameters', children=[
                     html.Div([
-                    html.H2(f"DataTable for Environment Parameters"),
-                    dash_table.DataTable(
-                        pd.DataFrame([self.graph.environment_node_data]).to_dict('records'),
-                        id={"type": 'environment variables', 'index': "environment variables"},
-                        columns=[{"name": col, "id": col} for col in self.graph.environment_node_data.keys()],
-                        editable=True
-                    ),
+                        html.H2(f"DataTable for Environment Parameters"),
+                        html.H4(f"Note: Some prameters wont influence the simulation. For example, changing M wont affect the number of steps in the lysis process, but overall should ahve an immediate effect on the simulation."),
+                        dash_table.DataTable(
+                            pd.DataFrame([self.graph.environment_node_data]).to_dict('records'),
+                            id={"type": 'environment variables', 'index': "environment variables"},
+                            columns=[{"name": col, "id": col} for col in self.graph.environment_node_data.keys()],
+                            editable=True
+                        ),
                     ])
                 ])
             ]),
@@ -128,7 +129,7 @@ class Visualizer():
             solved_y = new_updated_data.y
             self.copy_of_simulation_output = new_updated_data
             unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-            
+
             new_unflattened_data = []
             for dic, unflattened in zip(self.graph_data.items(), unflattened_data):
                 key, value = dic
@@ -190,7 +191,7 @@ class Visualizer():
                         row_of_values.append(flat + final / serial_transfer)
                     else:
                         row_of_values.append(final / serial_transfer)
-                        
+
             new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(original_final_time), t_end=float(original_final_time) + float(self.graph.Simulation_Length))
 
             solved_y = new_updated_data.y
@@ -218,8 +219,9 @@ class Visualizer():
                 name, dic = dictionary
                 fig = go.Figure(dict(text=name))
                 for j in range(len(unflattened_data[i])):
+                    print(len(new_overall_t))
                     fig.add_trace(go.Scatter(x=new_overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
                 list_of_figs.append(fig)
             return list_of_figs
-        
+
         self.app.run_server(debug=True)
