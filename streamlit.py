@@ -38,7 +38,7 @@ class System(Analysis):
                     sum_g += g(N[n_index], v, K)
                     sum_u += U[b_index]
                     sum_i += np.sum(I[b_index])
-            new_N[n_index] = (e_value * sum_g) * (sum_u + sum_i)
+            new_N[n_index] = -(e_value * sum_g) * (sum_u + sum_i)
         
         # update U vector, i, and j are flipped relative to what is seen in update N vector for v, K, and r matrices because of how the row and columns are defined in the graph
         # dont sum U in left and right, because we are looking at an individual bacteria
