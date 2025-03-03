@@ -93,9 +93,17 @@ class Visualizer():
             ]),
             html.Div(style={'margin': '60px'}),
             html.H2(["Serial Transfer"]),
+            html.H4(["Note: Using the serial transfer function will take the final iteration values of the current simulation as shown above and divide it by the value shown below. So if the final value for a bacteria is 100 and the serial transfer value is 10, the new simulation will start with a bacteria value of 10. There is a special case for nutrients where the new value is added to the value associated in the Graphing Data (Initial Conditions) section. So for nutrients, if the final value is 100 and the serial transfer value is 10, and the \"Initial\" Condition is 50, the new simulation will start with a nutrient value of 100/10 + 50 = 60. If the checkbox is selected, the unique process will also apply to the phages and bacteria. If the checkbox is not selected, the unique process will only apply to the resources/nutrients. Change the value below to 1 if oyu want to simply add phages/bacteria/resources without removing substances. "]),
             dcc.Input(
                 id="serial_transfer_value", type="number", placeholder="input with range",
                 min=1, max=1_000_000, step=0.01, value=10
+            ),
+            dcc.Checklist(
+                options=[
+                    {'label': 'Add Phages and Bacteria', 'value': 'option1'},
+                ],
+                value=['option1'],
+                id='serial_tranfer_option'
             ),
             html.Button("Run Serial Transfer", id="run_serial_transfer"),
             html.Div(style={'margin': '60px'}),
@@ -149,13 +157,14 @@ class Visualizer():
             [Output({'type': 'plotting-graph-data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
             Input('run_serial_transfer', 'n_clicks'),
             State('serial_transfer_value', 'value'),
+            State('serial_tranfer_option', 'value'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
-            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'), 
+            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
             State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
             prevent_initial_call=True
         )
-        def serial_transfer(n_clicks, serial_transfer, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+        def serial_transfer(n_clicks, serial_transfer, serial_tranfer_option, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
             new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
             flattened = self.graph.flatten_lists_and_matrices(*new_graphing_data)
             new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
@@ -171,13 +180,17 @@ class Visualizer():
             row_of_values = []
             for key, value in self.graph_data.items():
                 row_of_names += [key] * value["data"].size
+            print(serial_tranfer_option)
 
             for final, name, flat in zip(original_final_simulation_output, row_of_names, flattened):
-                if (name.lower() in ["resources", "resource", "r", "res", "r0", "nutrient", "nutrients", "n", "nut", "n0"]):
+                if (len(serial_tranfer_option) > 0):
                     row_of_values.append(flat + final / serial_transfer)
                 else:
-                    row_of_values.append(final / serial_transfer)
-
+                    if (name.lower() in ["resources", "resource", "r", "res", "r0", "nutrient", "nutrients", "n", "nut", "n0"]):
+                        row_of_values.append(flat + final / serial_transfer)
+                    else:
+                        row_of_values.append(final / serial_transfer)
+                        
             new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(original_final_time), t_end=float(original_final_time) + float(self.graph.Simulation_Length))
 
             solved_y = new_updated_data.y
