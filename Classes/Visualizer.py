@@ -102,13 +102,13 @@ class Visualizer():
         ])
 
         @callback(
-            # [Output({'type': 'plotting-graph-data', 'index': name}, 'figure') for name in self.graph_data.keys()],
+            [Output({'type': 'plotting-graph-data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
             Input('submit-matrices', 'n_clicks'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
-            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'), 
+            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
             State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
-            prevent_initial_call=False
+            prevent_initial_call=True
         )
         def rerun_matrices(n_clicks, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
             new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
@@ -143,10 +143,10 @@ class Visualizer():
                     fig.update_layout(title=f"{name} vs Time", xaxis_title="Time", yaxis_title=name)
                 list_of_figs.append(fig)
                 i += 1
-            # return list_of_figs
+            return list_of_figs
         
         @callback(
-            [Output({'type': 'plotting-graph-data', 'index': name}, 'figure') for name in self.graph_data.keys()],
+            [Output({'type': 'plotting-graph-data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
             Input('run_serial_transfer', 'n_clicks'),
             State('serial_transfer_value', 'value'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
