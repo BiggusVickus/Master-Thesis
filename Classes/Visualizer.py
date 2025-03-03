@@ -11,21 +11,21 @@ from copy import deepcopy
 class Visualizer():
     def __init__(self, graph):
         self.app = Dash()
-        self.graph:Analysis = graph
+        self.graph: Analysis = graph
         self.graph_data = OrderedDict()
         self.non_graph_data_vector = OrderedDict()
         self.non_graph_data_matrix = OrderedDict()
         self.other_parameters_to_pass = []
         self.copy_of_simulation_output = None
 
-    def add_graph_data(self, name, data, column_names, row_names = None, add_columns = False):
-        self.graph_data[name] = {"data":data, "column_names":column_names, "row_names":row_names, "add_columns":add_columns}
-    
+    def add_graph_data(self, name, data, column_names, row_names=None, add_columns=False):
+        self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_columns": add_columns}
+
     def add_non_graph_data_vector(self, name, data, column_names):
-        self.non_graph_data_vector[name] = {"data":data, "column_names":column_names}
-    
+        self.non_graph_data_vector[name] = {"data": data, "column_names": column_names}
+
     def add_non_graph_data_matrix(self, name, data, row_names, column_names):
-        self.non_graph_data_matrix[name] = {"data":data, "row_names":row_names, "column_names":column_names}
+        self.non_graph_data_matrix[name] = {"data": data, "row_names": row_names, "column_names": column_names}
 
     def add_other_parameters(self, *args):
         self.other_parameters_to_pass += args
@@ -34,49 +34,49 @@ class Visualizer():
         self.app.layout = html.Div([
             html.H1("Line Chart"),
             *[
-            dcc.Graph(id={"type": "plotting-graph-data", "index": name}) for name in self.graph_data.keys()
+                dcc.Graph(id={"type": "plotting-graph-data", "index": name}) for name in self.graph_data.keys()
             ],
             html.Button('Save and rerun model', id='submit-matrices'),
             dcc.Tabs([
                 dcc.Tab(label='Graphing Data (Initial Conditions)', children=[
                     *[
-                    html.Div([
-                        html.H2(f"DataTable for {name}"),
-                        html.H3(f"Row names {dic['row_names']}") if dic["row_names"] is not None else None,
-                        dash_table.DataTable(
-                        pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records') if dic["row_names"] is None else pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
-                        id={"type":'edit-graphing-data', 'index': name},
-                        columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
-                        editable=True
-                        ),
-                    ]) for name, dic in self.graph_data.items()
+                        html.Div([
+                            html.H2(f"DataTable for {name}"),
+                            html.H3(f"Row names {dic['row_names']}") if dic["row_names"] is not None else None,
+                            dash_table.DataTable(
+                                pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records') if dic["row_names"] is None else pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
+                                id={"type": 'edit-graphing-data', 'index': name},
+                                columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
+                                editable=True
+                            ),
+                        ]) for name, dic in self.graph_data.items()
                     ]
                 ]),
                 dcc.Tab(label='Non Graphing Data (Parameter Values): Vectors', children=[
                     *[
-                    html.Div([
-                        html.H2(f"DataTable for {name}"),
-                        dash_table.DataTable(
-                        pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records'),
-                        id={"type":'edit-non-graphing-data-vectors', 'index': name},
-                        columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
-                        editable=True
-                        ),
-                    ]) for name, dic in self.non_graph_data_vector.items()
+                        html.Div([
+                            html.H2(f"DataTable for {name}"),
+                            dash_table.DataTable(
+                                pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records'),
+                                id={"type": 'edit-non-graphing-data-vectors', 'index': name},
+                                columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
+                                editable=True
+                            ),
+                        ]) for name, dic in self.non_graph_data_vector.items()
                     ]
                 ]),
                 dcc.Tab(label='Non Graphing Data (Parameter Values): Matrices', children=[
                     *[
-                    html.Div([
-                        html.H2(f"DataTable for {name}"),
-                        html.H3(f"Row Names: {dic['row_names']}"),
-                        dash_table.DataTable(
-                        pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
-                        id={"type":'edit-non-graphing-data-matrices', 'index': name},
-                        columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
-                        editable=True
-                        ),
-                    ]) for name, dic in self.non_graph_data_matrix.items()
+                        html.Div([
+                            html.H2(f"DataTable for {name}"),
+                            html.H3(f"Row Names: {dic['row_names']}"),
+                            dash_table.DataTable(
+                                pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
+                                id={"type": 'edit-non-graphing-data-matrices', 'index': name},
+                                columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
+                                editable=True
+                            ),
+                        ]) for name, dic in self.non_graph_data_matrix.items()
                     ]
                 ]),
                 dcc.Tab(label='Environment Parameters', children=[
@@ -129,7 +129,7 @@ class Visualizer():
                 if value["add_columns"] not in [None, False]:
                     unflattened_temp = []
                     for i in range(0, len(unflattened), value["add_columns"]):
-                        unflattened_temp.append(np.sum(unflattened[i:i+value["add_columns"]], axis=0))
+                        unflattened_temp.append(np.sum(unflattened[i:i + value["add_columns"]], axis=0))
                     new_unflattened_data.append(unflattened_temp)
                 else:
                     new_unflattened_data.append(unflattened)
@@ -165,7 +165,7 @@ class Visualizer():
             original_time = self.copy_of_simulation_output.t
             original_final_time = self.copy_of_simulation_output.t[-1]
             original_simulation_output = self.copy_of_simulation_output.y
-            original_final_simulation_output = self.copy_of_simulation_output.y[:,-1]
+            original_final_simulation_output = self.copy_of_simulation_output.y[:, -1]
 
             row_of_names = []
             row_of_values = []
@@ -174,12 +174,12 @@ class Visualizer():
 
             for final, name, flat in zip(original_final_simulation_output, row_of_names, flattened):
                 if (name.lower() in ["resources", "resource", "r", "res", "r0", "nutrient", "nutrients", "n", "nut", "n0"]):
-                    row_of_values.append(flat + final/serial_transfer) 
+                    row_of_values.append(flat + final / serial_transfer)
                 else:
-                    row_of_values.append(final/serial_transfer)
+                    row_of_values.append(final / serial_transfer)
 
-            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start = float(original_final_time), t_end=float(original_final_time)+float(self.graph.Simulation_Length))
-            
+            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(original_final_time), t_end=float(original_final_time) + float(self.graph.Simulation_Length))
+
             solved_y = new_updated_data.y
             new_overall_t = np.concatenate((original_time, new_updated_data.t))
             new_overall_y = np.concatenate((original_simulation_output, solved_y), axis=1)
@@ -195,7 +195,7 @@ class Visualizer():
                 if value["add_columns"] not in [None, False]:
                     unflattened_temp = []
                     for i in range(0, len(self.graph_data[key]["y_data"]), value["add_columns"]):
-                        unflattened_temp.append(np.sum(self.graph_data[key]["y_data"][i:i+value["add_columns"]], axis=0))
+                        unflattened_temp.append(np.sum(self.graph_data[key]["y_data"][i:i + value["add_columns"]], axis=0))
                     new_unflattened_data.append(unflattened_temp)
                 else:
                     new_unflattened_data.append(self.graph_data[key]["y_data"])
