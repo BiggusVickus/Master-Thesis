@@ -87,23 +87,23 @@ class Visualizer():
             df, 
             labels={'x': y_labels, 'y': x_labels}, 
             text_auto=True, 
-            # aspect="equal" # Ensures square cells
+            aspect="equal" 
         )
         fig.update_layout(
             title=title,
             xaxis=dict(
-                scaleanchor="x",
+                # scaleanchor="x",
                 tickmode="array",
-                tickvals=list(range(len(y_axis_data))),  # Ensure equal spacing
+                tickvals=list(range(len(y_axis_data))), 
                 ticktext=y_axis_data, 
-                categoryarray=y_axis_data,  # Forces equal category spacing       
+                categoryarray=y_axis_data,      
             ),
             yaxis=dict(
-                scaleanchor="y",
+                # scaleanchor="y",
                 tickmode="array",
-                tickvals=list(range(len(x_axis_data))),  # Ensure equal spacing
+                tickvals=list(range(len(x_axis_data))), 
                 ticktext=x_axis_data,
-                categoryarray=x_axis_data,  # Forces equal category spacing
+                categoryarray=x_axis_data,
             ), 
         )
         fig.update_traces(
