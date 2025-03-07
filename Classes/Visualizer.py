@@ -156,38 +156,14 @@ class Visualizer():
             prevent_initial_call=True
         )
         def rerun_matrices(n_clicks, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
-            new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
-            flattened = self.graph.flatten_lists_and_matrices(*new_graphing_data)
-            new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
-            new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
             new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
             solved_y = new_updated_data.y
             self.copy_of_simulation_output = new_updated_data
             unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-
-            new_unflattened_data = []
-            for dic, unflattened in zip(self.graph_data.items(), unflattened_data):
-                key, value = dic
-                self.graph_data[key]["y_data"] = unflattened
-                self.graph_data[key]["t_data"] = new_updated_data.t
-                if value["add_columns"] not in [None, False]:
-                    unflattened_temp = []
-                    for i in range(0, len(unflattened), value["add_columns"]):
-                        unflattened_temp.append(np.sum(unflattened[i:i + value["add_columns"]], axis=0))
-                    new_unflattened_data.append(unflattened_temp)
-                else:
-                    new_unflattened_data.append(unflattened)
-            unflattened_data = new_unflattened_data.copy()
-            list_of_figs = []
-            for i, dictionary in enumerate(self.graph_data.items()):
-                name, dic = dictionary
-                fig = go.Figure(dict(text=name))
-                for j in range(len(unflattened_data[i])):
-                    fig.add_trace(go.Scatter(x=new_updated_data.t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
-                    fig.update_layout(title=f"{name} vs Time", xaxis_title="Time", yaxis_title=name)
-                list_of_figs.append(fig)
-                i += 1
+            unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+            list_of_figs = self.create_figures(unflattened_data, new_updated_data.t)
             return list_of_figs
         
         @callback(
@@ -202,10 +178,7 @@ class Visualizer():
             prevent_initial_call=True
         )
         def serial_transfer(n_clicks, serial_transfer, serial_tranfer_option, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
-            new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
-            flattened = self.graph.flatten_lists_and_matrices(*new_graphing_data)
-            new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
-            new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
 
             original_time = self.copy_of_simulation_output.t
@@ -213,22 +186,8 @@ class Visualizer():
             original_simulation_output = self.copy_of_simulation_output.y
             original_final_simulation_output = self.copy_of_simulation_output.y[:, -1]
 
-            row_of_names = []
-            row_of_values = []
-            for key, value in self.graph_data.items():
-                row_of_names += [key] * value["data"].size
-            print(serial_tranfer_option)
-
-            for final, name, flat in zip(original_final_simulation_output, row_of_names, flattened):
-                if (len(serial_tranfer_option) > 0):
-                    row_of_values.append(flat + final / serial_transfer)
-                else:
-                    if (name.lower() in ["resources", "resource", "r", "res", "r0", "nutrient", "nutrients", "n", "nut", "n0"]):
-                        row_of_values.append(flat + final / serial_transfer)
-                    else:
-                        row_of_values.append(final / serial_transfer)
-
-            new_updated_data = self.graph.solve_system(self.graph.odesystem, row_of_values, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(original_final_time), t_end=float(original_final_time) + float(self.graph.Simulation_Length))
+            serial_transfer_flattened = self.serial_transfer_calculation(original_final_simulation_output, serial_transfer, serial_tranfer_option, flattened)
+            new_updated_data = self.graph.solve_system(self.graph.odesystem, serial_transfer_flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(original_final_time), t_end=float(original_final_time) + float(self.graph.Simulation_Length))
 
             solved_y = new_updated_data.y
             new_overall_t = np.concatenate((original_time, new_updated_data.t))
@@ -236,28 +195,9 @@ class Visualizer():
             self.copy_of_simulation_output.t = new_overall_t
             self.copy_of_simulation_output.y = new_overall_y
             unflattened_data = self.graph.unflatten_initial_matrix(new_overall_y, [length["data"].size for length in self.graph_data.values()])
-            new_unflattened_data = []
-            for dic, unflattened in zip(self.graph_data.items(), unflattened_data):
-                key, value = dic
-                # Append the new unflattened data to the existing data
-                self.graph_data[key]["y_data"] = unflattened
-                self.graph_data[key]["t_data"] = new_overall_t
-                if value["add_columns"] not in [None, False]:
-                    unflattened_temp = []
-                    for i in range(0, len(self.graph_data[key]["y_data"]), value["add_columns"]):
-                        unflattened_temp.append(np.sum(self.graph_data[key]["y_data"][i:i + value["add_columns"]], axis=0))
-                    new_unflattened_data.append(unflattened_temp)
-                else:
-                    new_unflattened_data.append(self.graph_data[key]["y_data"])
-            unflattened_data = new_unflattened_data.copy()
-            list_of_figs = []
-            for i, dictionary in enumerate(self.graph_data.items()):
-                name, dic = dictionary
-                fig = go.Figure(dict(text=name))
-                for j in range(len(unflattened_data[i])):
-                    print(len(new_overall_t))
-                    fig.add_trace(go.Scatter(x=new_overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
-                list_of_figs.append(fig)
+
+            unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+            list_of_figs = self.create_figures(unflattened_data, new_updated_data.t)
             return list_of_figs
 
         self.app.run_server(debug=True)
