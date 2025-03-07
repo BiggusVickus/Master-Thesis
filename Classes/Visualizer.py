@@ -1,6 +1,7 @@
 import numpy as np
 from Classes.Analysis import Analysis
 from Classes.GraphMakerGUI import GraphMakerGUI
+import plotly.express as px
 import pandas as pd
 from dash import Dash, dash_table, html, Input, Output, callback, ALL, State, MATCH
 from dash import dcc
@@ -79,8 +80,41 @@ class Visualizer():
                 self.graph_data[key]["t_data"] = time
             new_unflattened_data.append(self.sum_up_columns(unflattened, value["add_columns"]))
         return new_unflattened_data
-
+    
+    def create_heatmap(self, data, x_axis_data, y_axis_data, x_labels, y_labels, title):
+        df = pd.DataFrame(data, columns=y_axis_data, index=x_axis_data)
+        fig = px.imshow(
+            df, 
+            labels={'x': y_labels, 'y': x_labels}, 
+            text_auto=True, 
+            # aspect="equal" # Ensures square cells
+        )
+        fig.update_layout(
+            title=title,
+            xaxis=dict(
+                scaleanchor="x",
+                tickmode="array",
+                tickvals=list(range(len(y_axis_data))),  # Ensure equal spacing
+                ticktext=y_axis_data, 
+                categoryarray=y_axis_data,  # Forces equal category spacing       
+            ),
+            yaxis=dict(
+                scaleanchor="y",
+                tickmode="array",
+                tickvals=list(range(len(x_axis_data))),  # Ensure equal spacing
+                ticktext=x_axis_data,
+                categoryarray=x_axis_data,  # Forces equal category spacing
+            ), 
+        )
+        fig.update_traces(
+            hovertemplate=f"{y_labels}: %{{x}}<br>{x_labels}: %{{y}}<br>End Value: %{{z}}<extra></extra>"
+        )
+        fig.update_xaxes(type='category')
+        fig.update_yaxes(type='category')
+        return fig
+        
     def run(self):
+        params = [name for name in OrderedDict(list(self.non_graph_data_vector.items()) + list(self.non_graph_data_matrix.items()))]
         self.app.layout = html.Div([
             html.H1("Line Chart"),
             *[
@@ -147,18 +181,43 @@ class Visualizer():
                 dcc.Tab(label='Serial Transfer', children=[
                     html.H4(["Note: Using the serial transfer function will take the final iteration values of the current simulation as shown above and divide it by the value shown below. So if the final value for a bacteria is 100 and the serial transfer value is 10, the new simulation will start with a bacteria value of 10. There is a special case for nutrients where the new value is added to the value associated in the Graphing Data (Initial Conditions) section. So for nutrients, if the final value is 100 and the serial transfer value is 10, and the \"Initial\" Condition is 50, the new simulation will start with a nutrient value of 100/10 + 50 = 60. If the checkbox is selected, the unique process will also apply to the phages and bacteria. If the checkbox is not selected, the unique process will only apply to the resources/nutrients. Change the value below to 1 if oyu want to simply add phages/bacteria/resources without removing substances. "]),
                     dcc.Input(
-                id="serial_transfer_value", type="number", placeholder="input with range",
-                min=1, max=1_000_000, step=0.01, value=10
-            ),
-            dcc.Checklist(
-                options=[
-                    {'label': 'Add Phages and Bacteria', 'value': 'option1'},
-                ],
-                value=['option1'],
-                id='serial_tranfer_option'
-            ),
-            html.Button("Run Serial Transfer", id="run_serial_transfer"),
-            html.Div(style={'margin': '60px'}),
+                        id="serial_transfer_value", type="number", placeholder="input with range",
+                        min=1, max=1_000_000, step=0.01, value=10
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Add Phages and Bacteria', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='serial_tranfer_option'
+                    ),
+                    html.Button("Run Serial Transfer", id="run_serial_transfer"),
+                    html.Div(style={'margin': '60px'}),
+                ]),
+                dcc.Tab(label='Parameter Analysis', children=[
+                    html.H2(["Parameter Analysis"]),
+                    html.H4(["Note: Choose 2 parameters of choice. Input the values you want to test separated by commas. The program will run the simulation for each combination of the two parameters and display the results in a heatmap. The heatmap represents the end value of the simulation for each combination of the two parameters. Make sure you choose an appropriate range of values to test and end simulation lenght before everything drops to 0!"]),
+                    dcc.Dropdown(params, id='parameter_analysis_dropdown_1', value = params[0] if len(params) > 0 else None),
+                    dcc.Dropdown(params, id='parameter_analysis_dropdown_2', value = params[1] if len(params) > 1 else None),
+                    dcc.Input(
+                        id="parameter_1_input", 
+                        type="text",
+                        placeholder="Parameter 1 values to test",
+                        value="0.01, 0.1, 1, 5"
+                    ),
+                    dcc.Input(
+                        id="parameter_2_input", 
+                        type="text",
+                        placeholder="Parameter 2 values to test",
+                        value="0.02, 0.2, 2, 6, 10, 20"
+                    ),
+                    html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
+                    html.Div(style={'margin': '60px'}),
+                    *[
+                        dcc.Graph(id={"type": "plotting-parameter-analysis-data", "index": name}) for name in self.graph_data.keys()
+                    ],
+                ]),
+            ]),
         ])
 
         @callback(
@@ -214,5 +273,49 @@ class Visualizer():
             unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
             list_of_figs = self.create_figures(unflattened_data, new_updated_data.t)
             return list_of_figs
+        
+        @callback(
+            [Output({'type': 'plotting-parameter-analysis-data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            Input('run_parameter_analysis', 'n_clicks'),
+            State('parameter_analysis_dropdown_1', 'value'),
+            State('parameter_analysis_dropdown_2', 'value'),
+            State('parameter_1_input', 'value'),
+            State('parameter_2_input', 'value'),
+            State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
+            State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
+            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
+            State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
+            prevent_initial_call=True
+        )
+        def parameter_analysis(n_clicks, parameter_1_name, parameter_2_name, parameter_1_input, parameter_2_input, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
+            self.graph.add_environment_data(environment_data[0])
+
+            parameter_1_values = [float(value.strip()) for value in parameter_1_input.split(",")]
+            parameter_2_values = [float(value.strip()) for value in parameter_2_input.split(",")]
+            matrix_output = np.zeros((len(parameter_1_values), len(parameter_2_values), len(self.graph_data)))
+
+            for parameter_1_value in parameter_1_values:
+                for parameter_2_value in parameter_2_values:
+                    if parameter_1_name in self.non_graph_data_vector:
+                        new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(parameter_1_name)][0] = parameter_1_value
+                    else:
+                        new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(parameter_1_name)][0][0] = parameter_1_value
+                    if parameter_2_name in self.non_graph_data_vector:
+                        new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(parameter_2_name)][0] = parameter_2_value
+                    else:
+                        new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(parameter_2_name)][0][0] = parameter_2_value
+
+                    new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+                    solved_y = new_updated_data.y
+                    unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+                    unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+                    for i, data in enumerate(unflattened_data):
+                        matrix_output[parameter_1_values.index(parameter_1_value), parameter_2_values.index(parameter_2_value), i] = data[0][-1]
+            list_of_fig_heatmaps = []
+            for i, name in zip(range(matrix_output.shape[2]), self.graph_data.keys()):
+                list_of_fig_heatmaps.append(self.create_heatmap(matrix_output[:, :, i], parameter_1_values, parameter_2_values, parameter_1_name, parameter_2_name, f"Parameter {parameter_1_name} vs {parameter_2_name} Analysis for {name}"))
+            return list_of_fig_heatmaps
+
 
         self.app.run_server(debug=True)
