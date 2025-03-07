@@ -173,7 +173,6 @@ class Analysis():
             t_start = 0
         if t_end is None:
             t_end = self.Simulation_Length
-        print(self.Min_Step)
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step), min_step=float(self.Min_Step))
         return solved
     
