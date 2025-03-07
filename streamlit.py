@@ -92,7 +92,8 @@ class System(Analysis):
 # graph.export_graph('simple_test.gexf')
 # graph = System('simple_test.gexf')
 
-graph = System('example.gexf')
+# graph = System('example.gexf')
+graph = System('simple_test.gexf')
 phage_nodes = graph.get_nodes_of_type('P')
 bacteria_nodes = graph.get_nodes_of_type('B')
 resource_nodes = graph.get_nodes_of_type('R')
