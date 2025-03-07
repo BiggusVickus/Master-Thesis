@@ -120,6 +120,9 @@ class Visualizer():
             *[
                 dcc.Graph(id={"type": "plotting-graph-data", "index": name}) for name in self.graph_data.keys()
             ],
+            html.Div(style={'margin': '60px'}),
+            html.Hr(),
+            html.Div(style={'margin': '60px'}),
             html.Button('Save and rerun model', id='submit-matrices'),
             dcc.Tabs([
                 dcc.Tab(label='Graphing Data (Initial Conditions)', children=[
@@ -176,6 +179,8 @@ class Visualizer():
                     ])
                 ])
             ]),
+            html.Div(style={'margin': '60px'}),
+            html.Hr(),
             html.Div(style={'margin': '60px'}),
             dcc.Tabs([
                 dcc.Tab(label='Serial Transfer', children=[
