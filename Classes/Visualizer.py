@@ -47,6 +47,20 @@ class Visualizer():
         new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
         return new_graphing_data, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices
     
+    def serial_transfer_calculation(self, original_final_simulation_output, serial_transfer_value, serial_tranfer_option, flattened):
+        row_of_names = []
+        row_of_values = []
+        for key, value in self.graph_data.items():
+            row_of_names += [key] * value["data"].size
+
+        if (len(serial_tranfer_option) > 0):
+            return flattened + original_final_simulation_output / serial_transfer_value
+        for final, name, flat in zip(original_final_simulation_output, row_of_names, flattened):
+            if (name.lower() in ["resources", "resource", "r", "res", "r0", "nutrient", "nutrients", "n", "nut", "n0"]):
+                row_of_values.append(flat + final / serial_transfer_value)
+            else:
+                row_of_values.append(final / serial_transfer_value)
+    
     def sum_up_columns(self, unflattened_data, value_add_column):
         if value_add_column not in [None, False]:
             unflattened_temp = []
@@ -129,9 +143,10 @@ class Visualizer():
                 ])
             ]),
             html.Div(style={'margin': '60px'}),
-            html.H2(["Serial Transfer"]),
-            html.H4(["Note: Using the serial transfer function will take the final iteration values of the current simulation as shown above and divide it by the value shown below. So if the final value for a bacteria is 100 and the serial transfer value is 10, the new simulation will start with a bacteria value of 10. There is a special case for nutrients where the new value is added to the value associated in the Graphing Data (Initial Conditions) section. So for nutrients, if the final value is 100 and the serial transfer value is 10, and the \"Initial\" Condition is 50, the new simulation will start with a nutrient value of 100/10 + 50 = 60. If the checkbox is selected, the unique process will also apply to the phages and bacteria. If the checkbox is not selected, the unique process will only apply to the resources/nutrients. Change the value below to 1 if oyu want to simply add phages/bacteria/resources without removing substances. "]),
-            dcc.Input(
+            dcc.Tabs([
+                dcc.Tab(label='Serial Transfer', children=[
+                    html.H4(["Note: Using the serial transfer function will take the final iteration values of the current simulation as shown above and divide it by the value shown below. So if the final value for a bacteria is 100 and the serial transfer value is 10, the new simulation will start with a bacteria value of 10. There is a special case for nutrients where the new value is added to the value associated in the Graphing Data (Initial Conditions) section. So for nutrients, if the final value is 100 and the serial transfer value is 10, and the \"Initial\" Condition is 50, the new simulation will start with a nutrient value of 100/10 + 50 = 60. If the checkbox is selected, the unique process will also apply to the phages and bacteria. If the checkbox is not selected, the unique process will only apply to the resources/nutrients. Change the value below to 1 if oyu want to simply add phages/bacteria/resources without removing substances. "]),
+                    dcc.Input(
                 id="serial_transfer_value", type="number", placeholder="input with range",
                 min=1, max=1_000_000, step=0.01, value=10
             ),
