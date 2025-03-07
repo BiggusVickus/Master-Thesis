@@ -29,6 +29,42 @@ class Visualizer():
 
     def add_other_parameters(self, *args):
         self.other_parameters_to_pass += args
+    
+    def create_figures(self, unflattened_data, new_overall_t):
+        list_of_figs = []
+        for i, dictionary in enumerate(self.graph_data.items()):
+            name, dic = dictionary
+            fig = go.Figure(dict(text=name))
+            for j in range(len(unflattened_data[i])):
+                fig.add_trace(go.Scatter(x=new_overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
+            list_of_figs.append(fig)
+        return list_of_figs
+        
+    def create_numpy_lists(self, graphing_data, graphing_data_vectors, graphing_data_matrices):
+        new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
+        flattened = self.graph.flatten_lists_and_matrices(*new_graphing_data)
+        new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
+        new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
+        return new_graphing_data, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices
+    
+    def sum_up_columns(self, unflattened_data, value_add_column):
+        if value_add_column not in [None, False]:
+            unflattened_temp = []
+            for i in range(0, len(unflattened_data), value_add_column):
+                unflattened_temp.append(np.sum(unflattened_data[i:i + value_add_column], axis=0))
+            return unflattened_temp
+        else:
+            return unflattened_data
+        
+    def save_data(self, unflattened_data, time, save_data=True):
+        new_unflattened_data = []
+        for dic, unflattened in zip(self.graph_data.items(), unflattened_data):
+            key, value = dic
+            if save_data:
+                self.graph_data[key]["y_data"] = unflattened
+                self.graph_data[key]["t_data"] = time
+            new_unflattened_data.append(self.sum_up_columns(unflattened, value["add_columns"]))
+        return new_unflattened_data
 
     def run(self):
         self.app.layout = html.Div([
