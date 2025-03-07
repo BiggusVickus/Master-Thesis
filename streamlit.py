@@ -25,7 +25,7 @@ class System(Analysis):
         new_P = np.zeros_like(P)
         #update N vector
         for nutrient in nutrient_nodes:
-            n_index = resource_nodes.index(nutrient)
+            n_index = nutrient_nodes.index(nutrient)
             e_value = e_vector[n_index] 
             sum_g = 0
             sum_u = 0
@@ -47,7 +47,7 @@ class System(Analysis):
             g_sum = 0
             right = 0
             for nutrient in nutrient_nodes:
-                n_index = resource_nodes.index(nutrient)
+                n_index = nutrient_nodes.index(nutrient)
                 if graph.has_edge(uninfected, nutrient):
                     g_sum += g(N[n_index], v_matrix[u_index, n_index], K_matrix[u_index, n_index])
             for phage in phage_nodes:
