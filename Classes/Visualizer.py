@@ -19,8 +19,8 @@ class Visualizer():
         self.other_parameters_to_pass = []
         self.copy_of_simulation_output = None
 
-    def add_graph_data(self, name, data, column_names, row_names=None, add_columns=False):
-        self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_columns": add_columns}
+    def add_graph_data(self, name, data, column_names, row_names=None, add_rows=False):
+        self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_rows": add_rows}
 
     def add_non_graph_data_vector(self, name, data, column_names):
         self.non_graph_data_vector[name] = {"data": data, "column_names": column_names}
@@ -78,7 +78,7 @@ class Visualizer():
             if save_data:
                 self.graph_data[key]["y_data"] = unflattened
                 self.graph_data[key]["t_data"] = time
-            new_unflattened_data.append(self.sum_up_columns(unflattened, value["add_columns"]))
+            new_unflattened_data.append(self.sum_up_columns(unflattened, value["add_rows"]))
         return new_unflattened_data
     
     def create_heatmap(self, data, x_axis_data, y_axis_data, x_labels, y_labels, title):
