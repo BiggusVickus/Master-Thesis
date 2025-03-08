@@ -114,7 +114,9 @@ class Visualizer():
         return fig
         
     def run(self):
+        param_initial = [name for name in self.graph_data.keys()]
         params = [name for name in OrderedDict(list(self.non_graph_data_vector.items()) + list(self.non_graph_data_matrix.items()))]
+        both_params = param_initial + params
         self.app.layout = html.Div([
             html.H1("Line Chart"),
             *[
@@ -200,10 +202,18 @@ class Visualizer():
                     html.Div(style={'margin': '60px'}),
                 ]),
                 dcc.Tab(label='Parameter Analysis', children=[
-                    html.H2(["Parameter Analysis"]),
                     html.H4(["Note: Choose 2 parameters of choice. Input the values you want to test separated by commas. The program will run the simulation for each combination of the two parameters and display the results in a heatmap. The heatmap represents the end value of the simulation for each combination of the two parameters. Make sure you choose an appropriate range of values to test and end simulation lenght before everything drops to 0!"]),
-                    dcc.Dropdown(params, id='parameter_analysis_dropdown_1', value = params[0] if len(params) > 0 else None),
-                    dcc.Dropdown(params, id='parameter_analysis_dropdown_2', value = params[1] if len(params) > 1 else None),
+                    html.H4(["Choose two parameters to analyze"]),
+                    dcc.Dropdown(both_params, id='parameter_analysis_dropdown_1', value = both_params[0] if len(both_params) > 0 else None),
+                    dcc.Dropdown(both_params, id='parameter_analysis_dropdown_2', value = both_params[1] if len(both_params) > 1 else None),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='parameter_analysis_option'
+                    ),
+                    html.H4(["Option 1: Input the values you want to test separated by commas"]),
                     dcc.Input(
                         id="parameter_1_input", 
                         type="text",
@@ -216,6 +226,31 @@ class Visualizer():
                         placeholder="Parameter 2 values to test",
                         value="0.02, 0.2, 2, 6, 10, 20"
                     ),
+                    html.Br(),
+                    html.H4(["Option 2: Choose a start value and end value for each parameter separated by a '-' sign"]),
+                    dcc.Input(
+                        id="uniform_input_range_1",
+                        type="text",
+                        placeholder="0.01-0.8",
+                    ), 
+                    dcc.Input(
+                        id="uniform_input_range_2",
+                        type="text",
+                        placeholder="0.01-0.8",
+                    ), 
+                    html.Br(),
+                    html.H4(["And choose the values to test between the two values for a uniform distribution (including the end values)"]),
+                    dcc.Input(
+                        id="uniform_number_steps_1",
+                        type="number",
+                        placeholder="10",
+                    ),
+                    dcc.Input(
+                        id="uniform_number_steps_2",
+                        type="number",
+                        placeholder="10",
+                    ),
+                    html.Br(),
                     html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
                     html.Div(style={'margin': '60px'}),
                     *[
@@ -292,23 +327,38 @@ class Visualizer():
             State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
             prevent_initial_call=True
         )
-        def parameter_analysis(n_clicks, parameter_1_name, parameter_2_name, parameter_1_input, parameter_2_input, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+        def parameter_analysis(n_clicks, parameter_1_name, parameter_2_name, parameter_option, parameter_1_input, parameter_2_input, uniform_range_1, uniform_range_2, uniform_steps_1, uniform_steps_2, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
             _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
 
-            parameter_1_values = [float(value.strip()) for value in parameter_1_input.split(",")]
-            parameter_2_values = [float(value.strip()) for value in parameter_2_input.split(",")]
+            if len(parameter_option) > 0:
+                parameter_1_values = [float(value.strip()) for value in parameter_1_input.split(",")]
+                parameter_2_values = [float(value.strip()) for value in parameter_2_input.split(",")]
+            else:
+                start_1, end_1 = [float(value.strip()) for value in uniform_range_1.split("-")]
+                start_2, end_2 = [float(value.strip()) for value in uniform_range_2.split("-")]
+                parameter_1_values = np.linspace(start_1, end_1, int(uniform_steps_1)).tolist()
+                parameter_2_values = np.linspace(start_2, end_2, int(uniform_steps_2)).tolist()
             matrix_output = np.zeros((len(parameter_1_values), len(parameter_2_values), len(self.graph_data)))
+            items_of_name = []
+            for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
 
             for parameter_1_value in parameter_1_values:
                 for parameter_2_value in parameter_2_values:
-                    if parameter_1_name in self.non_graph_data_vector:
+                    if parameter_1_name in self.graph_data:
+                        index = items_of_name.index(parameter_1_name)
+                        flattened[index] = parameter_1_value
+                    elif parameter_1_name in self.non_graph_data_vector:
                         new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(parameter_1_name)][0] = parameter_1_value
                     else:
                         new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(parameter_1_name)][0][0] = parameter_1_value
-                    if parameter_2_name in self.non_graph_data_vector:
+                    if parameter_2_name in self.graph_data:
+                        index = items_of_name.index(parameter_2_name)
+                        flattened[index] = parameter_2_value
+                    elif parameter_2_name in self.non_graph_data_vector:
                         new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(parameter_2_name)][0] = parameter_2_value
-                    else:
+                    elif parameter_2_name in self.non_graph_data_matrix:
                         new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(parameter_2_name)][0][0] = parameter_2_value
 
                     new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
