@@ -257,6 +257,43 @@ class Visualizer():
                         dcc.Graph(id={"type": "plotting-parameter-analysis-data", "index": name}) for name in self.graph_data.keys()
                     ],
                 ]),
+                dcc.Tab(label='Initial Value Analysis', children=[
+                    html.H4(["Note: Choose a parameter of choice. Input the values you want to test separated by commas, or use a uniform seperated list. The program will run the simulation for each initial value and display the results on a graph."]),
+                    dcc.Dropdown(both_params, id='initial_value_analysis_dropdown', value = both_params[0] if len(both_params) > 0 else None),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='initial_value_option'
+                    ),
+                    html.H4(["Option 1: Input the values you want to test separated by commas"]),
+                    dcc.Input(
+                        id="initial_value_input", 
+                        type="text",
+                        placeholder="Initial values to test",
+                        value="1, 10, 100, 1000"
+                    ),
+                    html.Br(),
+                    html.H4(["Option 2: Choose a start value and end value for each parameter separated by a '-' sign"]),
+                    dcc.Input(
+                        id="uniform_initial_input_range",
+                        type="text",
+                        placeholder="1-100",
+                    ),
+                    html.Br(),
+                    html.H4(["And choose the values to test between the two values for a uniform distribution (including the end values)"]),
+                    dcc.Input(
+                        id="uniform_initial_number_steps",
+                        type="number",
+                        placeholder="10",
+                    ),
+                    html.Button("Run Initial Value Analysis", id="run_initial_value_analysis"),
+                    html.Div(style={'margin': '60px'}),
+                    *[
+                        dcc.Graph(id={"type": "plotting-initial-value-analysis-data", "index": name}) for name in self.graph_data.keys()
+                    ],
+                ]),
             ]),
         ])
 
@@ -372,5 +409,59 @@ class Visualizer():
                 list_of_fig_heatmaps.append(self.create_heatmap(matrix_output[:, :, i], parameter_1_values, parameter_2_values, parameter_1_name, parameter_2_name, f"Parameter {parameter_1_name} vs {parameter_2_name} Analysis for {name}"))
             return list_of_fig_heatmaps
 
+        @callback(
+            [Output({'type': 'plotting-initial-value-analysis-data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            Input('run_initial_value_analysis', 'n_clicks'),
+            State('initial_value_analysis_dropdown', 'value'),
+            State('initial_value_option', 'value'),
+            State('initial_value_input', 'value'),
+            State('uniform_initial_input_range', 'value'),
+            State('uniform_initial_number_steps', 'value'),
+            State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
+            State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
+            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
+            State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
+            prevent_initial_call=True
+        )
+        def starting_analysis(n_clicks, initial_name, initial_option, initial_input, initial_input_range, initial_number_steps, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
+            self.graph.add_environment_data(environment_data[0])
+
+            if len(initial_option) > 0:
+                parameter_1_values = [float(value.strip()) for value in initial_input.split(",")]
+            else:
+                start_1, end_1 = [float(value.strip()) for value in initial_input_range.split("-")]
+                parameter_1_values = np.linspace(start_1, end_1, int(initial_number_steps)).tolist()
+            items_of_name = []
+            for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
+            simulation_output = []
+            time_output = []
+            for parameter_1_value in parameter_1_values:
+                if initial_name in self.graph_data:
+                    index = items_of_name.index(initial_name)
+                    flattened[index] = parameter_1_value
+                elif initial_name in self.non_graph_data_vector:
+                    new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(initial_name)][0] = parameter_1_value
+                elif initial_name in self.non_graph_data_matrix:
+                    new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(initial_name)][0] = parameter_1_value
+                new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+                solved_y = new_updated_data.y
+                unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+                unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+                simulation_output.append(unflattened_data)
+                time_output.append(new_updated_data.t)
+            list_of_figs = []
+            for i, name in zip(range(len(self.graph_data.keys())), self.graph_data.keys()):
+                fig = go.Figure(dict(text=name))
+                for j in range(len(simulation_output)):
+                    fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{initial_name} {parameter_1_values[j]}"))
+                    fig.update_layout(
+                        title=f"Initial Value Analysis for {name}",
+                        xaxis=dict(title="Time"),
+                        yaxis=dict(title="Value")
+                    )
+                list_of_figs.append(fig)
+            return list_of_figs
 
         self.app.run_server(debug=True)
