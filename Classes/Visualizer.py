@@ -299,6 +299,14 @@ class Visualizer():
                         dcc.Graph(id={"type": "plotting-initial-value-analysis-data", "index": name}) for name in self.graph_data.keys()
                     ],
                 ]),
+                dcc.Tab(label='Phase Portrait', children=[
+                    html.H4(["Note: Choose 2 parameters of choice. The program will run a simulation and plot a phase portrait of the two parameters. The phase portrait will show the relationship between the two parameters over time."]),
+                    dcc.Dropdown(graph_data_name_list, id='phase_portrait_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
+                    dcc.Dropdown(graph_data_name_list, id='phase_portrait_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
+                    html.Button("Run Phase Portrait", id="run_phase_portrait"),
+                    html.Div(style={'margin': '60px'}),
+                    dcc.Graph(id="phase_portrait")
+                ]),
             ]),
         ])
 
@@ -473,5 +481,40 @@ class Visualizer():
                     )
                 list_of_figs.append(fig)
             return list_of_figs
+        
+        @callback(
+            Output('phase_portrait', 'figure', allow_duplicate=True),
+            Input('run_phase_portrait', 'n_clicks'),
+            State('phase_portrait_1', 'value'),
+            State('phase_portrait_2', 'value'),
+            State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
+            State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
+            State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
+            State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
+            prevent_initial_call=True
+        )
+        def phase_portrait(n_clicks, option_1_name, option_2_name, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
+            self.graph.add_environment_data(environment_data[0])
+            new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+            solved_y = new_updated_data.y
+            self.copy_of_simulation_output = new_updated_data
+            unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+            unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+            items_of_name = []
+            for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
+            if len(option_1_name) > 0 and len(option_2_name) > 0:
+                value1 = unflattened_data[items_of_name.index(option_1_name)][0]
+                value2 = unflattened_data[items_of_name.index(option_2_name)][0]
+                print(value1, value2)
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=value1, y=value2, mode="lines", name=f"{option_1_name} vs {option_2_name}"))
+            fig.update_layout(
+                title=f"Phase Portrait for {option_1_name} vs {option_2_name}",
+                xaxis=dict(title=option_1_name),
+                yaxis=dict(title=option_2_name)
+            )
+            return fig
 
         self.app.run_server(debug=True)
