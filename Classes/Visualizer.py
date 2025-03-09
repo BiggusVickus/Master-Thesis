@@ -555,15 +555,19 @@ class Visualizer():
             M = np.hypot(DX, DY)
             DX, DY = DX / M, DY / M  # Normalize to unit vectors
             fig = ff.create_quiver(X, Y, DX, DY, 
-                scale=1,
-                arrow_scale=1,
+                scale=0.3,
+                arrow_scale=0.3,
                 name='quiver',
-                line_width=3
+                line_width=3, 
+                angle=0.1,
+                hovertemplate=f"{option_1_name}: %{{x}}<br>{option_2_name}: %{{y}}", 
             )
             fig.update_layout(
                 title=f"Phase Portrait for {option_1_name} vs {option_2_name}",
                 xaxis=dict(title=option_1_name),
-                yaxis=dict(title=option_2_name)
+                yaxis=dict(title=option_2_name),
+                width=1200, 
+                height=800
             )
             _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
@@ -572,9 +576,12 @@ class Visualizer():
             self.copy_of_simulation_output = new_updated_data
             unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
             unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
-            value1 = unflattened_data[items_of_name_2.index(option_1_name)]
-            value2 = unflattened_data[items_of_name_2.index(option_2_name)]
-            fig.add_trace(go.Scatter(x=value1, y=value2, mode="lines", name=f"{option_1_name}"))
+            value1 = unflattened_data[items_of_name_2.index(option_1_name)][0]
+            value2 = unflattened_data[items_of_name_2.index(option_2_name)][0]
+            fig.add_trace(
+                go.Scatter(x=value1, y=value2, mode="lines", name=f"{option_1_name} vs {option_2_name}", hovertemplate=f"{option_1_name}: %{{x}}<br>{option_2_name}: %{{y}}<br>time: %{{meta}}<extra></extra>",
+                meta=new_updated_data.t)
+            )
             return fig
 
         self.app.run_server(debug=True)
