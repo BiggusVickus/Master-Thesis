@@ -303,6 +303,30 @@ class Visualizer():
                     html.H4(["Note: Choose 2 parameters of choice. The program will run a simulation and plot a phase portrait of the two parameters. The phase portrait will show the relationship between the two parameters over time."]),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
+                    dcc.Input(
+                        id="phase_portrait_input_values_1", 
+                        type="text",
+                        placeholder="Start and end values for parameter 1 separated by a '-' sign",
+                        value="10-100"
+                    ),
+                    dcc.Input(
+                        id="phase_portrait_number_values_1", 
+                        type="number",
+                        placeholder="Number of steps for parameter 1",
+                        value="10"
+                    ),
+                    dcc.Input(
+                        id="phase_portrait_input_values_2", 
+                        type="text",
+                        placeholder="Start and end values for parameter 2 separated by a '-' sign",
+                        value="10-100"
+                    ),
+                    dcc.Input(
+                        id="phase_portrait_number_values_2", 
+                        type="number",
+                        placeholder="Number of steps for parameter 2",
+                        value="10"
+                    ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
                     dcc.Graph(id="phase_portrait")
@@ -487,13 +511,59 @@ class Visualizer():
             Input('run_phase_portrait', 'n_clicks'),
             State('phase_portrait_1', 'value'),
             State('phase_portrait_2', 'value'),
+            State('phase_portrait_input_values_1', 'value'),
+            State('phase_portrait_number_values_1', 'value'),
+            State('phase_portrait_input_values_2', 'value'),
+            State('phase_portrait_number_values_2', 'value'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
             State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
             prevent_initial_call=True
         )
-        def phase_portrait(n_clicks, option_1_name, option_2_name, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+        def phase_portrait(n_clicks, option_1_name, option_2_name, input_value_1, input_steps_1, input_value_2, input_steps_2, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
+            self.graph.add_environment_data(environment_data[0])
+
+            input_value_1_low, input_value_1_high = input_value_1.split("-")
+            input_value_2_low, input_value_2_high = input_value_2.split("-")
+            x_vals = np.linspace(float(input_value_1_low), float(input_value_1_high), int(input_steps_1))
+            y_vals = np.linspace(float(input_value_2_low), float(input_value_2_high), int(input_steps_2))
+            X, Y = np.meshgrid(x_vals, y_vals)
+
+            # Compute derivatives at each point
+            DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
+            items_of_name = []
+            items_of_name_2 = []
+            for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
+                items_of_name_2 += [key]
+            print(items_of_name)
+            print(items_of_name_2)
+            
+            for i in range(X.shape[0]):
+                for j in range(X.shape[1]):
+                    flattened[items_of_name.index(option_1_name)] = X[i, j]
+                    flattened[items_of_name.index(option_2_name)] = Y[i, j]
+                    new_updated_data = self.graph.odesystem(0, flattened, *[self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices])
+                    value1 = new_updated_data[items_of_name.index(option_1_name)]
+                    value2 = new_updated_data[items_of_name.index(option_2_name)]
+                    DX[i, j], DY[i, j] = value1, value2
+
+            # Normalize arrows for better visualization
+            M = np.hypot(DX, DY)
+            DX, DY = DX / M, DY / M  # Normalize to unit vectors
+            fig = ff.create_quiver(X, Y, DX, DY, 
+                scale=1,
+                arrow_scale=1,
+                name='quiver',
+                line_width=3
+            )
+            fig.update_layout(
+                title=f"Phase Portrait for {option_1_name} vs {option_2_name}",
+                xaxis=dict(title=option_1_name),
+                yaxis=dict(title=option_2_name)
+            )
             _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
             new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
@@ -501,20 +571,9 @@ class Visualizer():
             self.copy_of_simulation_output = new_updated_data
             unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
             unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
-            items_of_name = []
-            for key, value in self.graph_data.items():
-                items_of_name += [key] * value["data"].size
-            if len(option_1_name) > 0 and len(option_2_name) > 0:
-                value1 = unflattened_data[items_of_name.index(option_1_name)][0]
-                value2 = unflattened_data[items_of_name.index(option_2_name)][0]
-                print(value1, value2)
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(x=value1, y=value2, mode="lines", name=f"{option_1_name} vs {option_2_name}"))
-            fig.update_layout(
-                title=f"Phase Portrait for {option_1_name} vs {option_2_name}",
-                xaxis=dict(title=option_1_name),
-                yaxis=dict(title=option_2_name)
-            )
+            value1 = unflattened_data[items_of_name_2.index(option_1_name)]
+            value2 = unflattened_data[items_of_name_2.index(option_2_name)]
+            fig.add_trace(go.Scatter(x=value1, y=value2, mode="lines", name=f"{option_1_name}"))
             return fig
 
         self.app.run_server(debug=True)
