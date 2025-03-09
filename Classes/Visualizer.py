@@ -119,9 +119,9 @@ class Visualizer():
         return fig
         
     def run(self):
-        param_initial = [name for name in self.graph_data.keys()]
-        params = [name for name in OrderedDict(list(self.non_graph_data_vector.items()) + list(self.non_graph_data_matrix.items()))]
-        both_params = param_initial + params
+        graph_data_name_list = [name for name in self.graph_data.keys()]
+        non_graph_data_name_list = [name for name in OrderedDict(list(self.non_graph_data_vector.items()) + list(self.non_graph_data_matrix.items()))]
+        both_params = graph_data_name_list + non_graph_data_name_list
         self.app.layout = html.Div([
             html.H1("Line Chart"),
             *[
