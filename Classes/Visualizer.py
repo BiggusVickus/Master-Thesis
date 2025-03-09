@@ -38,6 +38,11 @@ class Visualizer():
             fig = go.Figure(dict(text=name))
             for j in range(len(unflattened_data[i])):
                 fig.add_trace(go.Scatter(x=new_overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
+                fig.update_layout(
+                    title=f"Graph for {name}",
+                    xaxis=dict(title="Time"),
+                    yaxis=dict(title="Value")
+                )
             list_of_figs.append(fig)
         return list_of_figs
         
