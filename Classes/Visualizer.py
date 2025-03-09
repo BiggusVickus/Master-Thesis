@@ -303,29 +303,30 @@ class Visualizer():
                     html.H4(["Note: Choose 2 parameters of choice. The program will run a simulation and plot a phase portrait of the two parameters. The phase portrait will show the relationship between the two parameters over time."]),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
+                    # TODO: remove the value from the input after testing
                     dcc.Input(
                         id="phase_portrait_input_values_1", 
                         type="text",
                         placeholder="Start and end values for parameter 1 separated by a '-' sign",
-                        value="10-100"
+                        value="48-50"
                     ),
                     dcc.Input(
                         id="phase_portrait_number_values_1", 
                         type="number",
                         placeholder="Number of steps for parameter 1",
-                        value="10"
+                        value="15"
                     ),
                     dcc.Input(
                         id="phase_portrait_input_values_2", 
                         type="text",
                         placeholder="Start and end values for parameter 2 separated by a '-' sign",
-                        value="10-100"
+                        value="0.01-60"
                     ),
                     dcc.Input(
                         id="phase_portrait_number_values_2", 
                         type="number",
                         placeholder="Number of steps for parameter 2",
-                        value="10"
+                        value="15"
                     ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
