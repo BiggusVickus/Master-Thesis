@@ -3,11 +3,11 @@ from Classes.Analysis import Analysis
 from Classes.GraphMakerGUI import GraphMakerGUI
 import plotly.express as px
 import pandas as pd
-from dash import Dash, dash_table, html, Input, Output, callback, ALL, State, MATCH
+from dash import Dash, dash_table, html, Input, Output, callback, ALL, State
 from dash import dcc
 import plotly.graph_objs as go
 from collections import OrderedDict
-from copy import deepcopy
+import plotly.figure_factory as ff
 
 class Visualizer():
     def __init__(self, graph):
