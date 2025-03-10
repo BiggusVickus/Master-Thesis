@@ -27,7 +27,7 @@
       <node id="B0" label="B0">
         <attvalues>
           <attvalue for="0" value="B" />
-          <attvalue for="1" value="Initial_Population: 50&#10;tau: 25.5&#10;" />
+          <attvalue for="1" value="Initial_Population: 50&#10;tau: 0.425&#10;" />
         </attvalues>
       </node>
       <node id="R0" label="R0">
@@ -45,7 +45,7 @@
       </edge>
       <edge source="B0" target="R0" id="1">
         <attvalues>
-          <attvalue for="2" value="v: 0.3&#10;K: 150&#10;" />
+          <attvalue for="2" value="v: 2&#10;K: 0.1&#10;" />
         </attvalues>
       </edge>
     </edges>
