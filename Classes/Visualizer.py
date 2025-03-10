@@ -407,11 +407,14 @@ class Visualizer():
         def serial_transfer(n_clicks, serial_transfer, serial_tranfer_option, serial_transfer_frequency, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
             _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
+            new_overall_t = self.copy_of_simulation_output.t
+            new_overall_y = self.copy_of_simulation_output.y
+            print(serial_transfer_frequency)
             for i in range(int(serial_transfer_frequency)):
-                original_time = self.copy_of_simulation_output.t
-                original_final_time = self.copy_of_simulation_output.t[-1]
-                original_simulation_output = self.copy_of_simulation_output.y
-                original_final_simulation_output = self.copy_of_simulation_output.y[:, -1]
+                original_time = new_overall_t
+                original_final_time = new_overall_t[-1]
+                original_simulation_output = new_overall_y
+                original_final_simulation_output = new_overall_y[:, -1]
 
                 serial_transfer_flattened = self.serial_transfer_calculation(original_final_simulation_output, serial_transfer, serial_tranfer_option, flattened)
                 new_updated_data = self.graph.solve_system(self.graph.odesystem, serial_transfer_flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(original_final_time), t_end=float(original_final_time) + float(self.graph.Simulation_Length))
@@ -419,11 +422,11 @@ class Visualizer():
                 solved_y = new_updated_data.y
                 new_overall_t = np.concatenate((original_time, new_updated_data.t))
                 new_overall_y = np.concatenate((original_simulation_output, solved_y), axis=1)
-                self.copy_of_simulation_output.t = new_overall_t
-                self.copy_of_simulation_output.y = new_overall_y
                 unflattened_data = self.graph.unflatten_initial_matrix(new_overall_y, [length["data"].size for length in self.graph_data.values()])
-                unflattened_data = self.save_data(unflattened_data, self.copy_of_simulation_output.t)
-            list_of_figs = self.create_figures(unflattened_data, self.copy_of_simulation_output.t)
+                unflattened_data = self.save_data(unflattened_data, new_overall_t, save_data=False)
+            self.copy_of_simulation_output.t = new_overall_t
+            self.copy_of_simulation_output.y = new_overall_y
+            list_of_figs = self.create_figures(unflattened_data, new_overall_t)
             return list_of_figs
         
         @callback(
