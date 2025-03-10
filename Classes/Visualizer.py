@@ -193,6 +193,7 @@ class Visualizer():
             dcc.Tabs([
                 dcc.Tab(label='Serial Transfer', children=[
                     html.H4(["Note: Using the serial transfer function will take the final iteration values of the current simulation as shown above and divide it by the value shown below. So if the final value for a bacteria is 100 and the serial transfer value is 10, the new simulation will start with a bacteria value of 10. There is a special case for nutrients where the new value is added to the value associated in the Graphing Data (Initial Conditions) section. So for nutrients, if the final value is 100 and the serial transfer value is 10, and the \"Initial\" Condition is 50, the new simulation will start with a nutrient value of 100/10 + 50 = 60. If the checkbox is selected, the unique process will also apply to the phages and bacteria. If the checkbox is not selected, the unique process will only apply to the resources/nutrients. Change the value below to 1 if oyu want to simply add phages/bacteria/resources without removing substances. "]),
+                    html.H4(["Note 2: These settings are also used in Parameter Analysis, Initial Value, and Phase Portrait if the associated checkbox is selected"]),
                     html.H4(["Serial Transfer Dilution rate: "]),
                     dcc.Input(
                         id="serial_transfer_value", type="number", placeholder="input with range",
@@ -269,6 +270,13 @@ class Visualizer():
                         placeholder="10",
                     ),
                     html.Br(),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Use Serial Transfer', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='use_serial_transfer_parameter_analysis'
+                    ),
                     html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
                     html.Div(style={'margin': '60px'}),
                     *[
@@ -306,6 +314,14 @@ class Visualizer():
                         type="number",
                         placeholder="10",
                     ),
+                    html.Br(),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Use Serial Transfer', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='use_serial_transfer_initial_value_analysis'
+                    ),
                     html.Button("Run Initial Value Analysis", id="run_initial_value_analysis"),
                     html.Div(style={'margin': '60px'}),
                     *[
@@ -340,6 +356,14 @@ class Visualizer():
                         type="number",
                         placeholder="Number of steps for parameter 2",
                         value="15"
+                    ),
+                    html.Br(),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Use Serial Transfer', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='use_serial_transfer_phase_portrait'
                     ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
@@ -398,7 +422,6 @@ class Visualizer():
                 self.copy_of_simulation_output.t = new_overall_t
                 self.copy_of_simulation_output.y = new_overall_y
                 unflattened_data = self.graph.unflatten_initial_matrix(new_overall_y, [length["data"].size for length in self.graph_data.values()])
-
                 unflattened_data = self.save_data(unflattened_data, self.copy_of_simulation_output.t)
             list_of_figs = self.create_figures(unflattened_data, self.copy_of_simulation_output.t)
             return list_of_figs
@@ -415,13 +438,17 @@ class Visualizer():
             State('uniform_input_range_2', 'value'),
             State('uniform_number_steps_1', 'value'),
             State('uniform_number_steps_2', 'value'),
+            State('use_serial_transfer_parameter_analysis', 'value'),
+            State('serial_transfer_value', 'value'),
+            State('serial_tranfer_option', 'value'),
+            State('number_serial_transfers_to_run_serial_transfer', 'value'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
             State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
             prevent_initial_call=True
         )
-        def parameter_analysis(n_clicks, parameter_1_name, parameter_2_name, parameter_option, parameter_1_input, parameter_2_input, uniform_range_1, uniform_range_2, uniform_steps_1, uniform_steps_2, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+        def parameter_analysis(n_clicks, parameter_1_name, parameter_2_name, parameter_option, parameter_1_input, parameter_2_input, uniform_range_1, uniform_range_2, uniform_steps_1, uniform_steps_2, use_serial_transfer, serial_transfer_division, serial_transfer_option, serial_transfer_frequency, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
             _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
 
@@ -455,7 +482,16 @@ class Visualizer():
                     elif parameter_2_name in self.non_graph_data_matrix:
                         new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(parameter_2_name)][0][0] = parameter_2_value
 
-                    new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+                    if use_serial_transfer:
+                        for _ in range(int(serial_transfer_frequency)):
+                            original_final_simulation_output = self.copy_of_simulation_output.y[:, -1]
+                            flattened = self.serial_transfer_calculation(original_final_simulation_output, serial_transfer_division, serial_transfer_option, flattened)
+                            new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+                            solved_y = new_updated_data.y
+                            self.copy_of_simulation_output = new_updated_data
+                    else:
+                        new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+
                     solved_y = new_updated_data.y
                     unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
                     unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
@@ -474,6 +510,10 @@ class Visualizer():
             State('initial_value_input', 'value'),
             State('uniform_initial_input_range', 'value'),
             State('uniform_initial_number_steps', 'value'),
+            State('use_serial_transfer_initial_value_analysis', 'value'),
+            State('serial_transfer_value', 'value'),
+            State('serial_tranfer_option', 'value'),
+            State('number_serial_transfers_to_run_serial_transfer', 'value'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
@@ -530,6 +570,10 @@ class Visualizer():
             State('phase_portrait_number_values_1', 'value'),
             State('phase_portrait_input_values_2', 'value'),
             State('phase_portrait_number_values_2', 'value'),
+            State('use_serial_transfer_phase_portrait', 'value'),
+            State('serial_transfer_value', 'value'),
+            State('serial_tranfer_option', 'value'),
+            State('number_serial_transfers_to_run_serial_transfer', 'value'),
             State({'type': 'edit-graphing-data', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-vectors', 'index': ALL}, 'data'),
             State({'type': 'edit-non-graphing-data-matrices', 'index': ALL}, 'data'),
@@ -545,16 +589,14 @@ class Visualizer():
             x_vals = np.linspace(float(input_value_1_low), float(input_value_1_high), int(input_steps_1))
             y_vals = np.linspace(float(input_value_2_low), float(input_value_2_high), int(input_steps_2))
             X, Y = np.meshgrid(x_vals, y_vals)
+            print(X, Y)
 
-            # Compute derivatives at each point
             DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
             items_of_name = []
             items_of_name_2 = []
             for key, value in self.graph_data.items():
                 items_of_name += [key] * value["data"].size
                 items_of_name_2 += [key]
-            print(items_of_name)
-            print(items_of_name_2)
             
             for i in range(X.shape[0]):
                 for j in range(X.shape[1]):
