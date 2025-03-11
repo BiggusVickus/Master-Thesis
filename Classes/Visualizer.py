@@ -488,13 +488,14 @@ class Visualizer():
                     solved_t = new_updated_data.t
                     last_values = solved_y[:, -1]
                     if use_serial_transfer:
-                        flattened_copy = flattened.copy()
                         for _ in range(int(serial_transfer_frequency)):
+                            flattened_copy = flattened.copy()
                             flattened_copy = self.serial_transfer_calculation(last_values, serial_transfer_division, serial_transfer_option, flattened_copy)
                             new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened_copy, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
                             unflattened_data = self.graph.unflatten_initial_matrix(new_updated_data.y, [length["data"].size for length in self.graph_data.values()])
                             solved_y = np.concatenate((solved_y, new_updated_data.y), axis=1)
                             solved_t = np.concatenate((solved_t, new_updated_data.t))
+                            last_values = new_updated_data.y[:, -1]
                     unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
                     unflattened_data = self.save_data(unflattened_data, solved_t, save_data=False)
                     for i, data in enumerate(unflattened_data):
