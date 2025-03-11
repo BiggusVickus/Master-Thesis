@@ -237,13 +237,13 @@ class Visualizer():
                         id="parameter_1_input", 
                         type="text",
                         placeholder="Parameter 1 values to test",
-                        value="0.01, 0.1, 1, 5"
+                        value="0.01, 0.1, 1, 5, 50"
                     ),
                     dcc.Input(
                         id="parameter_2_input", 
                         type="text",
                         placeholder="Parameter 2 values to test",
-                        value="0.02, 0.2, 2, 6, 10, 20"
+                        value="0.02, 0.2, 2, 6, 10, 20, 50"
                     ),
                     html.Br(),
                     html.H4(["Option 2: Choose a start value and end value for each parameter separated by a '-' sign"]),
