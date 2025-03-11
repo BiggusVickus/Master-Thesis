@@ -58,7 +58,6 @@ class Visualizer():
         row_of_values = []
         for key, value in self.graph_data.items():
             row_of_names += [key] * value["data"].size
-
         if (len(serial_tranfer_option) > 0):
             return flattened + original_final_simulation_output / serial_transfer_value
         for final, name, flat in zip(original_final_simulation_output, row_of_names, flattened):
@@ -409,7 +408,6 @@ class Visualizer():
             self.graph.add_environment_data(environment_data[0])
             new_overall_t = self.copy_of_simulation_output.t
             new_overall_y = self.copy_of_simulation_output.y
-            print(serial_transfer_frequency)
             for i in range(int(serial_transfer_frequency)):
                 original_time = new_overall_t
                 original_final_time = new_overall_t[-1]
@@ -592,7 +590,6 @@ class Visualizer():
             x_vals = np.linspace(float(input_value_1_low), float(input_value_1_high), int(input_steps_1))
             y_vals = np.linspace(float(input_value_2_low), float(input_value_2_high), int(input_steps_2))
             X, Y = np.meshgrid(x_vals, y_vals)
-            print(X, Y)
 
             DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
             items_of_name = []
