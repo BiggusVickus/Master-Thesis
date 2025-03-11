@@ -2,6 +2,7 @@ from dash import Dash, dash_table, html, Input, Output, callback, ALL, State
 from dash import dcc
 from collections import OrderedDict
 import pandas as pd
+
 def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
     graph_data_name_list = [name for name in graph_data.keys()]
     non_graph_data_name_list = [name for name in OrderedDict(list(non_graph_data_vector.items()) + list(non_graph_data_matrix.items()))]
