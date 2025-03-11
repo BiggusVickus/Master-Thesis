@@ -215,9 +215,9 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def parameter_analysis(n_clicks, param_1_name, param_2_name, use_opt_1_or_opt_2, param_1_input, param_2_input, param_range_1, param_range_2, param_steps_1, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
-            self.graph.add_environment_data(environment_data[0])
+        def parameter_analysis(n_clicks, param_1_name, param_2_name, use_opt_1_or_opt_2, param_1_input, param_2_input, param_range_1, param_range_2, param_steps_1, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.graph.update_environment_data(environment_data[0])
 
             if use_opt_1_or_opt_2:
                 parameter_1_values = [float(value.strip()) for value in param_1_input.split(",")]
@@ -288,9 +288,9 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
-            self.graph.add_environment_data(environment_data[0])
+        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.graph.update_environment_data(environment_data[0])
 
             if len(use_opt_1_or_opt_2) > 0:
                 parameter_1_values = [float(value.strip()) for value in param_input.split(",")]
@@ -359,9 +359,9 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
-            self.graph.add_environment_data(environment_data[0])
+        def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.graph.update_environment_data(environment_data[0])
 
             input_value_1_low, input_value_1_high = param_range_1.split("-")
             input_value_2_low, input_value_2_high = param_range_2.split("-")
@@ -403,8 +403,8 @@ class Visualizer():
                 width=1200, 
                 height=800
             )
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
-            self.graph.add_environment_data(environment_data[0])
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.graph.update_environment_data(environment_data[0])
             new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
             solved_y = new_updated_data.y
             self.copy_of_simulation_output = new_updated_data
