@@ -131,15 +131,21 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def rerun_matrices(n_clicks, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
-            self.graph.add_environment_data(environment_data[0])
-            new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
-            solved_y = new_updated_data.y
-            self.copy_of_simulation_output = new_updated_data
-            unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-            unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
-            list_of_figs = self.create_figures(unflattened_data, new_updated_data.t)
+        def plot_main_plots(n_clicks, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
+            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.graph.update_environment_data(environment_data[0])
+
+            # solves sytem of ODEs, saves y and t data results
+            solved_system = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+            solved_y = solved_system.y
+            solved_t = solved_system.t
+            self.copy_of_simulation_output = solved_system
+
+            # unflattens the data, saves the data to the graph_data dictionary, and sums up the columns if necessary
+            unflattened_y = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+            unflattened_y = self.save_data(unflattened_y, solved_t)
+            list_of_figs = self.create_figures(unflattened_y, solved_t)
             return list_of_figs
         
         @callback(
