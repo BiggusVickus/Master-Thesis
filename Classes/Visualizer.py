@@ -482,20 +482,21 @@ class Visualizer():
                         new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(parameter_2_name)][0] = parameter_2_value
                     elif parameter_2_name in self.non_graph_data_matrix:
                         new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(parameter_2_name)][0][0] = parameter_2_value
-
-                    if use_serial_transfer:
-                        for _ in range(int(serial_transfer_frequency)):
-                            original_final_simulation_output = self.copy_of_simulation_output.y[:, -1]
-                            flattened = self.serial_transfer_calculation(original_final_simulation_output, serial_transfer_division, serial_transfer_option, flattened)
-                            new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
-                            solved_y = new_updated_data.y
-                            self.copy_of_simulation_output = new_updated_data
-                    else:
-                        new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
-
+                    
+                    new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
                     solved_y = new_updated_data.y
+                    solved_t = new_updated_data.t
+                    last_values = solved_y[:, -1]
+                    if use_serial_transfer:
+                        flattened_copy = flattened.copy()
+                        for _ in range(int(serial_transfer_frequency)):
+                            flattened_copy = self.serial_transfer_calculation(last_values, serial_transfer_division, serial_transfer_option, flattened_copy)
+                            new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened_copy, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
+                            unflattened_data = self.graph.unflatten_initial_matrix(new_updated_data.y, [length["data"].size for length in self.graph_data.values()])
+                            solved_y = np.concatenate((solved_y, new_updated_data.y), axis=1)
+                            solved_t = np.concatenate((solved_t, new_updated_data.t))
                     unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-                    unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+                    unflattened_data = self.save_data(unflattened_data, solved_t, save_data=False)
                     for i, data in enumerate(unflattened_data):
                         matrix_output[parameter_1_values.index(parameter_1_value), parameter_2_values.index(parameter_2_value), i] = data[0][-1]
             list_of_fig_heatmaps = []
