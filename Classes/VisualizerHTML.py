@@ -10,12 +10,12 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
     return html.Div([
             html.H1("Line Chart"),
             *[
-                dcc.Graph(id={"type": "plotting-graph-data", "index": name}) for name in graph_data.keys()
+                dcc.Graph(id={"type": "plot_basic_graph_data", "index": name}) for name in graph_data.keys()
             ],
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),
-            html.Button('Save and rerun model', id='submit-matrices'),
+            html.Button('Save and rerun model', id='run_basic_model'),
             dcc.Tabs([
                 dcc.Tab(label='Graphing Data (Initial Conditions)', children=[
                     *[
@@ -24,7 +24,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             html.H3(f"Row names {dic['row_names']}") if dic["row_names"] is not None else None,
                             dash_table.DataTable(
                                 pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records') if dic["row_names"] is None else pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
-                                id={"type": 'edit-graphing-data', 'index': name},
+                                id={"type": 'edit_graphing_data', 'index': name},
                                 columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
                                 editable=True
                             ),
@@ -37,7 +37,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             html.H2(f"DataTable for {name}"),
                             dash_table.DataTable(
                                 pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records'),
-                                id={"type": 'edit-non-graphing-data-vectors', 'index': name},
+                                id={"type": 'edit_non_graphing_data_vectors', 'index': name},
                                 columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
                                 editable=True
                             ),
@@ -51,7 +51,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             html.H3(f"Row Names: {dic['row_names']}"),
                             dash_table.DataTable(
                                 pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
-                                id={"type": 'edit-non-graphing-data-matrices', 'index': name},
+                                id={"type": 'edit_non_graphing_data_matrices', 'index': name},
                                 columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
                                 editable=True
                             ),
@@ -64,7 +64,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         html.H4(f"Note: Some prameters wont influence the simulation. For example, changing M wont affect the number of steps in the lysis process, but overall should ahve an immediate effect on the simulation."),
                         dash_table.DataTable(
                             pd.DataFrame([graph.environment_node_data]).to_dict('records'),
-                            id={"type": 'environment variables', 'index': "environment variables"},
+                            id="environment_data",
                             columns=[{"name": col, "id": col} for col in graph.environment_node_data.keys()],
                             editable=True
                         ),
@@ -90,12 +90,12 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             {'label': 'Add Phages and Bacteria', 'value': 'option1'},
                         ],
                         value=[],
-                        id='serial_tranfer_option'
+                        id='serial_tranfer_bp_option'
                     ),
                     html.Br(),
                     html.H4(["Number of times to automatically run serial transfer"]),
                     dcc.Input(
-                        id="number_serial_transfers_to_run_serial_transfer",
+                        id="serial_transfer_frequency",
                         type="number",
                         placeholder="1",
                         value="1"
@@ -104,11 +104,12 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     html.Button("Run Serial Transfer", id="run_serial_transfer"),
                     html.Div(style={'margin': '60px'}),
                 ]),
+
                 dcc.Tab(label='Parameter Analysis', children=[
                     html.H4(["Note: Choose 2 parameters of choice. Input the values you want to test separated by commas. The program will run the simulation for each combination of the two parameters and display the results in a heatmap. The heatmap represents the end value of the simulation for each combination of the two parameters. Make sure you choose an appropriate range of values to test and end simulation lenght before everything drops to 0!"]),
                     html.H4(["Choose two parameters to analyze"]),
-                    dcc.Dropdown(both_params, id='parameter_analysis_dropdown_1', value = both_params[0] if len(both_params) > 0 else None),
-                    dcc.Dropdown(both_params, id='parameter_analysis_dropdown_2', value = both_params[1] if len(both_params) > 1 else None),
+                    dcc.Dropdown(both_params, id='parameter_analysis_param_name_1', value = both_params[0] if len(both_params) > 0 else None),
+                    dcc.Dropdown(both_params, id='parameter_analysis_param_name_2', value = both_params[1] if len(both_params) > 1 else None),
                     dcc.Checklist(
                         options=[
                             {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
@@ -118,13 +119,13 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     ),
                     html.H4(["Option 1: Input the values you want to test separated by commas"]),
                     dcc.Input(
-                        id="parameter_1_input", 
+                        id="parameter_analysis_input_1", 
                         type="text",
                         placeholder="Parameter 1 values to test",
                         value="0.01, 0.1, 1, 5, 50"
                     ),
                     dcc.Input(
-                        id="parameter_2_input", 
+                        id="parameter_analysis_input_2", 
                         type="text",
                         placeholder="Parameter 2 values to test",
                         value="0.02, 0.2, 2, 6, 10, 20, 50"
@@ -132,24 +133,24 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     html.Br(),
                     html.H4(["Option 2: Choose a start value and end value for each parameter separated by a '-' sign"]),
                     dcc.Input(
-                        id="uniform_input_range_1",
+                        id="parameter_analysis_range_1",
                         type="text",
                         placeholder="0.01-0.8",
                     ), 
                     dcc.Input(
-                        id="uniform_input_range_2",
+                        id="parameter_analysis_range_2",
                         type="text",
                         placeholder="0.01-0.8",
                     ), 
                     html.Br(),
-                    html.H4(["And choose the values to test between the two values for a uniform distribution (including the end values)"]),
+                    html.H4(["And choose the values to test between the two values for uniform spaced intervals (including the end values)"]),
                     dcc.Input(
-                        id="uniform_number_steps_1",
+                        id="parameter_analysis_steps_1",
                         type="number",
                         placeholder="10",
                     ),
                     dcc.Input(
-                        id="uniform_number_steps_2",
+                        id="parameter_analysis_steps_2",
                         type="number",
                         placeholder="10",
                     ),
@@ -159,27 +160,28 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             {'label': 'Use Serial Transfer', 'value': 'option1'},
                         ],
                         value=[],
-                        id='use_serial_transfer_parameter_analysis'
+                        id='parameter_analysis_use_serial_transfer'
                     ),
                     html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
                     html.Div(style={'margin': '60px'}),
                     *[
-                        dcc.Graph(id={"type": "plotting-parameter-analysis-data", "index": name}) for name in graph_data.keys()
+                        dcc.Graph(id={"type": "plot_parameter_analysis", "index": name}) for name in graph_data.keys()
                     ],
                 ]),
+
                 dcc.Tab(label='Initial Value Analysis', children=[
                     html.H4(["Note: Choose a parameter of choice. Input the values you want to test separated by commas, or use a uniform seperated list. The program will run the simulation for each initial value and display the results on a graph."]),
-                    dcc.Dropdown(both_params, id='initial_value_analysis_dropdown', value = both_params[0] if len(both_params) > 0 else None),
+                    dcc.Dropdown(both_params, id='initial_value_analysis_param_name', value = both_params[0] if len(both_params) > 0 else None),
                     dcc.Checklist(
                         options=[
                             {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
                         ],
                         value=['option1'],
-                        id='initial_value_option'
+                        id='initial_value_analysis_option'
                     ),
                     html.H4(["Option 1: Input the values you want to test separated by commas"]),
                     dcc.Input(
-                        id="initial_value_input", 
+                        id="initial_value_analysis_input", 
                         type="text",
                         placeholder="Initial values to test",
                         value="1, 10, 100, 1000"
@@ -187,14 +189,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     html.Br(),
                     html.H4(["Option 2: Choose a start value and end value for each parameter separated by a '-' sign"]),
                     dcc.Input(
-                        id="uniform_initial_input_range",
+                        id="initial_value_analysis_range",
                         type="text",
                         placeholder="1-100",
                     ),
                     html.Br(),
                     html.H4(["And choose the values to test between the two values for a uniform distribution (including the end values)"]),
                     dcc.Input(
-                        id="uniform_initial_number_steps",
+                        id="initial_value_analysis_steps",
                         type="number",
                         placeholder="10",
                     ),
@@ -204,39 +206,40 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             {'label': 'Use Serial Transfer', 'value': 'option1'},
                         ],
                         value=[],
-                        id='use_serial_transfer_initial_value_analysis'
+                        id='initial_value_analysis_use_serial_transfer'
                     ),
                     html.Button("Run Initial Value Analysis", id="run_initial_value_analysis"),
                     html.Div(style={'margin': '60px'}),
                     *[
-                        dcc.Graph(id={"type": "plotting-initial-value-analysis-data", "index": name}) for name in graph_data.keys()
+                        dcc.Graph(id={"type": "plot_initial_value_analysis", "index": name}) for name in graph_data.keys()
                     ],
                 ]),
+
                 dcc.Tab(label='Phase Portrait', children=[
                     html.H4(["Note: Choose 2 parameters of choice. The program will run a simulation and plot a phase portrait of the two parameters. The phase portrait will show the relationship between the two parameters over time."]),
-                    dcc.Dropdown(graph_data_name_list, id='phase_portrait_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
-                    dcc.Dropdown(graph_data_name_list, id='phase_portrait_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
+                    dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
+                    dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
                     # TODO: remove the value from the input after testing
                     dcc.Input(
-                        id="phase_portrait_input_values_1", 
+                        id="phase_portrait_range_1", 
                         type="text",
                         placeholder="Start and end values for parameter 1 separated by a '-' sign",
                         value="48-50"
                     ),
                     dcc.Input(
-                        id="phase_portrait_number_values_1", 
+                        id="phase_portrait_steps_1", 
                         type="number",
                         placeholder="Number of steps for parameter 1",
                         value="15"
                     ),
                     dcc.Input(
-                        id="phase_portrait_input_values_2", 
+                        id="phase_portrait_range_2", 
                         type="text",
                         placeholder="Start and end values for parameter 2 separated by a '-' sign",
                         value="0.01-60"
                     ),
                     dcc.Input(
-                        id="phase_portrait_number_values_2", 
+                        id="phase_portrait_steps_2", 
                         type="number",
                         placeholder="Number of steps for parameter 2",
                         value="15"
@@ -247,11 +250,11 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             {'label': 'Use Serial Transfer', 'value': 'option1'},
                         ],
                         value=[],
-                        id='use_serial_transfer_phase_portrait'
+                        id='phase_portrait_use_serial_transfer'
                     ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
-                    dcc.Graph(id="phase_portrait")
+                    dcc.Graph(id="plot_phase_portrait")
                 ]),
             ]),
         ])
