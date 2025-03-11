@@ -274,7 +274,7 @@ class Visualizer():
             State({'type': 'environment variables', 'index': "environment variables"}, 'data'),
             prevent_initial_call=True
         )
-        def starting_analysis(n_clicks, initial_name, initial_option, initial_input, initial_input_range, initial_number_steps, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
+        def starting_analysis(n_clicks, initial_name, initial_option, initial_input, initial_input_range, initial_number_steps, use_serial_transfer, serial_transfer_division, serial_transfer_option, serial_transfer_frequency, graphing_data, graphing_data_vectors, graphing_data_matrices, environment_data):
             _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, graphing_data_vectors, graphing_data_matrices)
             self.graph.add_environment_data(environment_data[0])
 
@@ -298,10 +298,21 @@ class Visualizer():
                     new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(initial_name)][0] = parameter_1_value
                 new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
                 solved_y = new_updated_data.y
+                solved_t = new_updated_data.t
                 unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-                unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+                last_values = solved_y[:, -1]
+                if use_serial_transfer:
+                    for _ in range(int(serial_transfer_frequency)):
+                        flattened_copy = flattened.copy()
+                        flattened_copy = self.serial_transfer_calculation(last_values, serial_transfer_division, serial_transfer_option, flattened_copy)
+                        new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened_copy, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(solved_t[-1]), t_end=float(solved_t[-1]) + float(self.graph.Simulation_Length))
+                        solved_y = np.concatenate((solved_y, new_updated_data.y), axis=1)
+                        solved_t = np.concatenate((solved_t, new_updated_data.t))
+                        last_values = new_updated_data.y[:, -1]
+                unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+                unflattened_data = self.save_data(unflattened_data, solved_t, save_data=False)
                 simulation_output.append(unflattened_data)
-                time_output.append(new_updated_data.t)
+                time_output.append(solved_t)
             list_of_figs = []
             for i, name in zip(range(len(self.graph_data.keys())), self.graph_data.keys()):
                 fig = go.Figure(dict(text=name))
