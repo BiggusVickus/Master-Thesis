@@ -79,7 +79,7 @@ class Analysis():
                 dictionary[row[0]] = row[1]
         return dictionary
 
-    def add_environment_data(self, dictionary:dict) -> None:
+    def update_environment_data(self, dictionary:dict) -> None:
         """Adds the environment data to the class as an attribute
 
         Args:
