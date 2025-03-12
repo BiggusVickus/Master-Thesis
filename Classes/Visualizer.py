@@ -46,7 +46,21 @@ class Visualizer():
                 )
             list_of_figs.append(fig)
         return list_of_figs
-        
+    
+    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values):
+        list_of_figs = []
+        for i, name in zip(range(len(self.graph_data.keys())), self.graph_data.keys()):
+            fig = go.Figure(dict(text=name))
+            for j in range(len(simulation_output)):
+                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}"))
+                fig.update_layout(
+                    title=f"Initial Value Analysis for {name}",
+                    xaxis=dict(title="Time"),
+                    yaxis=dict(title="Value")
+                )
+            list_of_figs.append(fig)
+        return list_of_figs
+    
     def create_numpy_lists(self, graphing_data, graphing_data_vectors, graphing_data_matrices):
         new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
         flattened = self.graph.flatten_lists_and_matrices(*new_graphing_data)
