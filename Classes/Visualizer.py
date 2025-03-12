@@ -204,27 +204,16 @@ class Visualizer():
             overall_y = self.copy_of_simulation_output.y
             
             # for the required number of runs of serial transfer
-            for _ in range(int(serial_transfer_frequency)):
-                # get the final time and values from the previous simulation
-                final_time = overall_t[-1]
-                final_values = overall_y[:, -1]
-
-                #calculate the new values for the next simulation, if serial_tranfer_bp_option is true, then the values are added to the previous values, otherwise only for nutrients. 
-                # if serial_transfer_bp_option is false, then the values are divided by the serial_transfer_value except for nutrients, which are added to the previous values. If serial transfer is true, then all values are divided by the serial_transfer_value and added to the previous values
-                serial_transfer_flattened = self.serial_transfer_calculation(final_values, serial_transfer_value, serial_tranfer_bp_option, initial_condition)
-                new_updated_data = self.graph.solve_system(self.graph.odesystem, serial_transfer_flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.graph.Simulation_Length))
-                # get the new values and time from the simulation run
-                solved_y = new_updated_data.y
-                solved_t = new_updated_data.t
-                overall_t = np.concatenate((overall_t, solved_t))
-                overall_y = np.concatenate((overall_y, solved_y), axis=1)
-            overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
-            overall_y = self.save_data(overall_y, overall_t, save_data=False)
-
-            # save the values to self.copy_of_simulation_output.y/t respectively, in case for future serial transfers, and create the figures
+            overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_tranfer_bp_option, new_non_graphing_data_vectors, new_non_graphing_data_matrices)
+            
+            # save the values to self.copy_of_simulation_output.y/t respectively, in case for future serial transfers
             self.copy_of_simulation_output.t = overall_t
             self.copy_of_simulation_output.y = overall_y
-            list_of_figs = self.create_figures(overall_y, overall_t)
+
+            # unflatten the data, save the data to the graph_data dictionary, and sum up the columns if necessary, then create the figures
+            overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
+            overall_y = self.save_data(overall_y, overall_t, save_data=False)
+            list_of_figs = self.create_main_figures(overall_y, overall_t)
             return list_of_figs
         
         @callback(
