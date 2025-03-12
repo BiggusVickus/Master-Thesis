@@ -311,16 +311,23 @@ class Visualizer():
             prevent_initial_call=True
         )
         def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
 
+            # if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
             param_1_values = self.split_comma_minus(param_input, param_range, param_steps, use_opt_1_or_opt_2)
+            # create a list of the names of the parameters, to be used to find the index of the parameter in the flattened array
             items_of_name = []
             for key, value in self.graph_data.items():
                 items_of_name += [key] * value["data"].size
+
+            # create a list of the simulation output, and the time output
             simulation_output = []
             time_output = []
+            # loop through each parameter value, and solve the system of ODEs, and save the final time point value for each parameter value
             for param_1_value in param_1_values:
+                # if the parameter 1 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
                 if param_name in self.graph_data:
                     index = items_of_name.index(param_name)
                     initial_condition[index] = param_1_value
@@ -328,13 +335,12 @@ class Visualizer():
                     non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_1_value
                 elif param_name in self.non_graph_data_matrix:
                     non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = param_1_value
+                # solve the system of ODEs, and save the final value and time value
                 updated_data = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
                 overall_y = updated_data.y
                 overall_t = updated_data.t
-                final_values = overall_y[:, -1]
-                final_time = overall_t[-1]
                 if use_serial_transfer:
-                    overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, overall_y[:, -1], overall_t[-1], serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
+                    overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                 overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                 overall_y = self.save_data(overall_y, overall_t, save_data=False)
                 simulation_output.append(overall_y)
