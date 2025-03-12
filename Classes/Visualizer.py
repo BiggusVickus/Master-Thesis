@@ -9,6 +9,8 @@ import plotly.graph_objs as go
 from collections import OrderedDict
 import plotly.figure_factory as ff
 from Classes.VisualizerHTML import html_code
+#TODO: give option to append a serial transfer to parameter analysis and initial value analysis
+#TODO: in parameter analysis use a slider to move the matrices through time, and show the values of the matrix at that time
 
 class Visualizer():
     def __init__(self, graph):
@@ -281,7 +283,6 @@ class Visualizer():
                         non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_2)][0] = param_2_value
                     elif param_name_2 in self.non_graph_data_matrix:
                         non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_2)][0][0] = param_2_value
-                    initial_condition, 
                     
                     # solve the system of ODEs, and save the final value and time value
                     solved_system = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
@@ -372,6 +373,8 @@ class Visualizer():
             prevent_initial_call=True
         )
         def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            #TODO: give option for auto setting arrow x and y value, give option to scale the arrow values
+            #TODO: fix the issue with the arrows not pointing in the correct direction
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
 
