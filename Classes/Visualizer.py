@@ -322,56 +322,35 @@ class Visualizer():
             prevent_initial_call=True
         )
         def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
 
-            if len(use_opt_1_or_opt_2) > 0:
-                parameter_1_values = [float(value.strip()) for value in param_input.split(",")]
-            else:
-                start_1, end_1 = [float(value.strip()) for value in param_range.split("-")]
-                parameter_1_values = np.linspace(start_1, end_1, int(param_steps)).tolist()
+            param_1_values = self.split_comma_minus(param_input, param_range, param_steps, use_opt_1_or_opt_2)
             items_of_name = []
             for key, value in self.graph_data.items():
                 items_of_name += [key] * value["data"].size
             simulation_output = []
             time_output = []
-            for parameter_1_value in parameter_1_values:
+            for param_1_value in param_1_values:
                 if param_name in self.graph_data:
                     index = items_of_name.index(param_name)
-                    flattened[index] = parameter_1_value
+                    initial_condition[index] = param_1_value
                 elif param_name in self.non_graph_data_vector:
-                    new_non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = parameter_1_value
+                    non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_1_value
                 elif param_name in self.non_graph_data_matrix:
-                    new_non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = parameter_1_value
-                new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
-                solved_y = new_updated_data.y
-                solved_t = new_updated_data.t
-                unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-                last_values = solved_y[:, -1]
+                    non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = param_1_value
+                updated_data = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+                overall_y = updated_data.y
+                overall_t = updated_data.t
+                final_values = overall_y[:, -1]
+                final_time = overall_t[-1]
                 if use_serial_transfer:
-                    for _ in range(int(serial_transfer_frequency)):
-                        flattened_copy = flattened.copy()
-                        flattened_copy = self.serial_transfer_calculation(last_values, serial_transfer_value, serial_transfer_bp_option, flattened_copy)
-                        new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened_copy, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices, t_start=float(solved_t[-1]), t_end=float(solved_t[-1]) + float(self.graph.Simulation_Length))
-                        solved_y = np.concatenate((solved_y, new_updated_data.y), axis=1)
-                        solved_t = np.concatenate((solved_t, new_updated_data.t))
-                        last_values = new_updated_data.y[:, -1]
-                unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-                unflattened_data = self.save_data(unflattened_data, solved_t, save_data=False)
-                simulation_output.append(unflattened_data)
-                time_output.append(solved_t)
-            list_of_figs = []
-            for i, name in zip(range(len(self.graph_data.keys())), self.graph_data.keys()):
-                fig = go.Figure(dict(text=name))
-                for j in range(len(simulation_output)):
-                    fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {parameter_1_values[j]}"))
-                    fig.update_layout(
-                        title=f"Initial Value Analysis for {name}",
-                        xaxis=dict(title="Time"),
-                        yaxis=dict(title="Value")
-                    )
-                list_of_figs.append(fig)
-            return list_of_figs
+                    overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, overall_y[:, -1], overall_t[-1], serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
+                overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
+                overall_y = self.save_data(overall_y, overall_t, save_data=False)
+                simulation_output.append(overall_y)
+                time_output.append(overall_t)
+            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values)
         
         @callback(
             Output('plot_phase_portrait', 'figure', allow_duplicate=True),
