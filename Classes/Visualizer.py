@@ -372,7 +372,7 @@ class Visualizer():
             prevent_initial_call=True
         )
         def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
 
             input_value_1_low, input_value_1_high = param_range_1.split("-")
@@ -390,11 +390,11 @@ class Visualizer():
             
             for i in range(X.shape[0]):
                 for j in range(X.shape[1]):
-                    flattened[items_of_name_1.index(param_1_name)] = X[i, j]
-                    flattened[items_of_name_1.index(param_2_name)] = Y[i, j]
-                    new_updated_data = self.graph.odesystem(0, flattened, *[self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices])
-                    value1 = new_updated_data[items_of_name_1.index(param_1_name)]
-                    value2 = new_updated_data[items_of_name_1.index(param_2_name)]
+                    initial_condition[items_of_name_1.index(param_1_name)] = X[i, j]
+                    initial_condition[items_of_name_1.index(param_2_name)] = Y[i, j]
+                    updated_data = self.graph.odesystem(0, initial_condition, *[self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices])
+                    value1 = updated_data[items_of_name_1.index(param_1_name)]
+                    value2 = updated_data[items_of_name_1.index(param_2_name)]
                     DX[i, j], DY[i, j] = value1, value2
 
             # Normalize arrows for better visualization
@@ -415,18 +415,18 @@ class Visualizer():
                 width=1200, 
                 height=800
             )
-            _, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
-            new_updated_data = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *new_non_graphing_data_vectors, *new_non_graphing_data_matrices)
-            solved_y = new_updated_data.y
-            self.copy_of_simulation_output = new_updated_data
+            updated_data = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+            solved_y = updated_data.y
+            self.copy_of_simulation_output = updated_data
             unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-            unflattened_data = self.save_data(unflattened_data, new_updated_data.t)
+            unflattened_data = self.save_data(unflattened_data, updated_data.t)
             value1 = unflattened_data[items_of_name_1.index(param_1_name)][0]
             value2 = unflattened_data[items_of_name_2.index(param_2_name)][0]
             fig.add_trace(
                 go.Scatter(x=value1, y=value2, mode="lines", name=f"{param_1_name} vs {param_2_name}", hovertemplate=f"{param_1_name}: %{{x}}<br>{param_2_name}: %{{y}}<br>time: %{{meta}}<extra></extra>",
-                meta=new_updated_data.t)
+                meta=updated_data.t)
             )
             return fig
 
