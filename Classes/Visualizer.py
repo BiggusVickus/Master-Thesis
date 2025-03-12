@@ -91,15 +91,15 @@ class Visualizer():
         else:
             return unflattened_data
         
-    def save_data(self, unflattened_data, time, save_data=True):
-        new_unflattened_data = []
-        for dic, unflattened in zip(self.graph_data.items(), unflattened_data):
+    def save_data(self, array, time, save_data=True):
+        unflattened_data = []
+        for dic, data_item in zip(self.graph_data.items(), array):
             key, value = dic
             if save_data:
-                self.graph_data[key]["y_data"] = unflattened
+                self.graph_data[key]["y_data"] = data_item
                 self.graph_data[key]["t_data"] = time
-            new_unflattened_data.append(self.sum_up_columns(unflattened, value["add_rows"]))
-        return new_unflattened_data
+            unflattened_data.append(self.sum_up_columns(data_item, value["add_rows"]))
+        return unflattened_data
     
     def create_heatmap(self, data, x_axis_data, y_axis_data, x_labels, y_labels, title):
         df = pd.DataFrame(data, columns=y_axis_data, index=x_axis_data)
