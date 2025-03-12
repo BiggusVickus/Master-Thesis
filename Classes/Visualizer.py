@@ -11,6 +11,7 @@ import plotly.figure_factory as ff
 from Classes.VisualizerHTML import html_code
 #TODO: give option to append a serial transfer to parameter analysis and initial value analysis
 #TODO: in parameter analysis use a slider to move the matrices through time, and show the values of the matrix at that time
+#TODO: in initial value problem, collect peaks of the data, and show the time at which the peak occurs, and the value of the peak and graph it
 
 class Visualizer():
     def __init__(self, graph):
