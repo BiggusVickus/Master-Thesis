@@ -32,13 +32,13 @@ class Visualizer():
     def add_other_parameters(self, *args):
         self.other_parameters_to_pass += args
     
-    def create_figures(self, unflattened_data, new_overall_t):
+    def create_main_figures(self, unflattened_data, overall_t):
         list_of_figs = []
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             fig = go.Figure(dict(text=name))
             for j in range(len(unflattened_data[i])):
-                fig.add_trace(go.Scatter(x=new_overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
                 fig.update_layout(
                     title=f"Graph for {name}",
                     xaxis=dict(title="Time"),
