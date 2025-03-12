@@ -136,7 +136,9 @@ class Visualizer():
             list_of_figs.append(fig)
         return list_of_figs
         
-    def run_serial_transfer_iterations(self, overall_y, overall_t, final_values, final_time, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices):
+    def run_serial_transfer_iterations(self, overall_y, overall_t, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices):
+        final_values = overall_y[:, -1]
+        final_time = overall_t[-1]
         for _ in range(int(serial_transfer_frequency)):
             flattened = self.serial_transfer_calculation(final_values, serial_transfer_value, serial_transfer_bp_option, flattened)
             solved_system = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.graph.Simulation_Length))
