@@ -101,38 +101,56 @@ class Visualizer():
             unflattened_data.append(self.sum_up_columns(data_item, value["add_rows"]))
         return unflattened_data
     
-    def create_heatmap(self, data, x_axis_data, y_axis_data, x_labels, y_labels, title):
-        df = pd.DataFrame(data, columns=y_axis_data, index=x_axis_data)
-        fig = px.imshow(
-            df, 
-            labels={'x': y_labels, 'y': x_labels}, 
-            text_auto=True, 
-            aspect="equal" 
-        )
-        fig.update_layout(
-            title=title,
-            xaxis=dict(
-                # scaleanchor="x",
-                tickmode="array",
-                tickvals=list(range(len(y_axis_data))), 
-                ticktext=y_axis_data, 
-                categoryarray=y_axis_data,      
-            ),
-            yaxis=dict(
-                # scaleanchor="y",
-                tickmode="array",
-                tickvals=list(range(len(x_axis_data))), 
-                ticktext=x_axis_data,
-                categoryarray=x_axis_data,
-            ), 
-        )
-        fig.update_traces(
-            hovertemplate=f"{y_labels}: %{{x}}<br>{x_labels}: %{{y}}<br>End Value: %{{z}}<extra></extra>"
-        )
-        fig.update_xaxes(type='category')
-        fig.update_yaxes(type='category')
-        return fig
+    def create_heatmap_figures(self, matrix_data, x_axis_data, y_axis_data, x_labels, y_labels):
+        list_of_figs = []
+        for i, name in zip(range(matrix_data.shape[2]), self.graph_data.keys()):
+            df = pd.DataFrame(matrix_data[:, :, i], columns=y_axis_data, index=x_axis_data)
+            fig = px.imshow(
+                df, 
+                labels={'x': y_labels, 'y': x_labels}, 
+                text_auto=True, 
+                aspect="equal" 
+            )
+            fig.update_layout(
+                title=f"Parameter {x_labels} vs {y_labels} Analysis for {name}",
+                xaxis=dict(
+                    tickmode="array",
+                    tickvals=list(range(len(y_axis_data))), 
+                    ticktext=y_axis_data, 
+                    categoryarray=y_axis_data,      
+                ),
+                yaxis=dict(
+                    tickmode="array",
+                    tickvals=list(range(len(x_axis_data))), 
+                    ticktext=x_axis_data,
+                    categoryarray=x_axis_data,
+                ), 
+            )
+            fig.update_traces(
+                hovertemplate=f"{y_labels}: %{{x}}<br>{x_labels}: %{{y}}<br>End Value: %{{z}}<extra></extra>"
+            )
+            fig.update_xaxes(type='category')
+            fig.update_yaxes(type='category')
+            list_of_figs.append(fig)
+        return list_of_figs
         
+    def run_serial_transfer_iterations(self, overall_y, overall_t, final_values, final_time, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices):
+        for _ in range(int(serial_transfer_frequency)):
+            flattened = self.serial_transfer_calculation(final_values, serial_transfer_value, serial_transfer_bp_option, flattened)
+            solved_system = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.graph.Simulation_Length))
+            overall_y = np.concatenate((overall_y, solved_system.y), axis=1)
+            overall_t = np.concatenate((overall_t, solved_system.t))
+            final_values = solved_system.y[:, -1]
+            final_time = solved_system.t[-1]
+        return overall_y, overall_t
+    
+    def split_comma_minus(self, input, range, steps, use_opt_1_or_opt_2):
+        if use_opt_1_or_opt_2:
+            return [float(value.strip()) for value in input.split(",")]
+        else:
+            start_1, end_1 = [float(value.strip()) for value in range.split("-")]
+            return np.linspace(start_1, end_1, int(steps)).tolist()
+    
     def run(self):
         self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph)
 
