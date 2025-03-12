@@ -62,11 +62,11 @@ class Visualizer():
         return list_of_figs
     
     def create_numpy_lists(self, graphing_data, graphing_data_vectors, graphing_data_matrices):
-        new_graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
-        flattened = self.graph.flatten_lists_and_matrices(*new_graphing_data)
-        new_non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
-        new_non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
-        return new_graphing_data, flattened, new_non_graphing_data_vectors, new_non_graphing_data_matrices
+        graphing_data = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data]
+        flattened = self.graph.flatten_lists_and_matrices(*graphing_data)
+        non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
+        non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
+        return graphing_data, flattened, non_graphing_data_vectors, non_graphing_data_matrices
     
     def serial_transfer_calculation(self, original_final_simulation_output, serial_transfer_value, serial_tranfer_option, flattened):
         row_of_names = []
