@@ -282,7 +282,7 @@ class Visualizer():
                     
                     # if serial transfer is selected, then the system is run for the number of iterations specified, and the final values are saved
                     if use_serial_transfer:
-                        overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, overall_y[:, -1], overall_t[-1], serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
+                        overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                     overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                     overall_y = self.save_data(overall_y, overall_t, save_data=False)
                     # save the final value to the matrix
@@ -291,9 +291,6 @@ class Visualizer():
             
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
             return self.create_heatmap_figures(matrix_output, param_1_values, param_2_values, param_name_1, param_name_2)
-            for i, name in zip(range(matrix_output.shape[2]), self.graph_data.keys()):
-                list_of_fig_heatmaps.append(self.create_heatmap_figures(matrix_output[:, :, i], param_1_values, param_2_values, param_name_1, param_name_2, f"Parameter {param_name_1} vs {param_name_2} Analysis for {name}"))
-            return list_of_fig_heatmaps
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
