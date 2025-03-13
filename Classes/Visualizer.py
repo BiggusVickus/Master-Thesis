@@ -304,9 +304,59 @@ class Visualizer():
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
             return *self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2), overall_t[-1], slider_marks, overall_t[-1]
 
+        @callback(
+            [Output({'type': 'plot_parameter_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            # Input('parameter_analysis_slider', 'drag_value'),
+            Input('parameter_analysis_slider', 'value'),
+            Input('parameter_analysis_extrapolate', 'value'),
+            prevent_initial_call=True
+        )
+        def parameter_analysis_slider_update(slider_value, extrapolate):
+            # when first launching the app and opening the Parameter Analysis tab, error is thrown by dash for self.copy_of_parameter_analysis_output being None/empty, so return empty figures to avoid/fix/alleviate this error
+            # collect all the stored data from the parameter analysis, and create a heatmap of the final values for each parameter value
+            try:
+                param_values_1 = self.copy_of_parameter_analysis_output["x_axis_data"]
+            except:
+                return [go.Figure() for _ in self.graph_data.keys()]
+            param_values_2 = self.copy_of_parameter_analysis_output["y_axis_data"]
+            param_name_1 = self.copy_of_parameter_analysis_output["x_labels"]
+            param_name_2 = self.copy_of_parameter_analysis_output["y_labels"]
+            overall_t = self.copy_of_parameter_analysis_output["overall_t"]
+            overall_y = self.copy_of_parameter_analysis_output["overall_y"]
+
+            # create a matrix to store the values of the final time point for each parameter value tested
+            matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)))
             
+            # loop through each set of parameter values, for the x, y point in the parameter analysis, and find the value at the time point closest to the slider value
+            for param_value_1 in param_values_1:
+                for param_value_2 in param_values_2:
+                    # get the data for the parameter values from the overall_y and overall_t dictionaries for the parameter values
+                    temp_y = overall_y[(param_value_1, param_value_2)]
+                    temp_t = overall_t[(param_value_1, param_value_2)]
+                    # loop thorugh each parameter value, and find the value at the time point closest to the slider value
+                    for i, data in enumerate(temp_y):
+                        # if extrapolate is selected, then the value is found by linearly interpolating between the two closest time points. Otherwise, the value is found by finding the left closest time point
+                        if (extrapolate):
+                            index_1 = np.searchsorted(temp_t, slider_value, side="left") - 1
+                            index_2 = index_1 + 1
+                            time_1, time_2 = temp_t[index_1], temp_t[index_2]
+                            value_1, value_2 = data[0][index_1], data[0][index_2]
+                            value = value_1 + (value_2 - value_1) * (slider_value - time_1) / (time_2 - time_1)
+                        else:
+                            # if the slider value is in the time points, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the left closest time point
+                            if slider_value in temp_t:
+                                index_1 = np.where(temp_t == slider_value)[0][0]
+                            else:
+                                index_1 = np.searchsorted(temp_t, slider_value, side="left") - 1
+                            value = data[0][index_1]
+                        # save the value to the matrix
+                        matrix_output[param_values_1.index(param_value_1), param_values_2.index(param_value_2), i] = value
+
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
-            return self.create_heatmap_figures(matrix_output, param_1_values, param_2_values, param_name_1, param_name_2)
+            return self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2)
+        # 0.07222012281417847 for drag_value + clicking @ 100 clicks
+        # 0.12108221735273089 for drag_value + dragging @ 140 drags
+        # 0.06944610595703125s for vlaue + clicking @ 100 clicks
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
