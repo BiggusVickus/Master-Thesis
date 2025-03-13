@@ -105,7 +105,7 @@ class Visualizer():
             unflattened_data.append(self.sum_up_columns(data_item, value["add_rows"]))
         return unflattened_data
     
-    def create_heatmap_figures(self, matrix_data, x_axis_data, y_axis_data, x_labels, y_labels):
+    def create_heatmap_figures(self, matrix_data, x_axis_data=None, y_axis_data=None, x_labels=None, y_labels=None):
         list_of_figs = []
         for i, name in zip(range(matrix_data.shape[2]), self.graph_data.keys()):
             df = pd.DataFrame(matrix_data[:, :, i], columns=y_axis_data, index=x_axis_data)
@@ -117,6 +117,7 @@ class Visualizer():
             )
             fig.update_layout(
                 title=f"Parameter {x_labels} vs {y_labels} Analysis for {name}",
+                uirevision='constant',
                 xaxis=dict(
                     tickmode="array",
                     tickvals=list(range(len(y_axis_data))), 
@@ -129,6 +130,9 @@ class Visualizer():
                     ticktext=x_axis_data,
                     categoryarray=x_axis_data,
                 ), 
+                autosize=False,
+                width=1000,
+                height=1000
             )
             fig.update_traces(
                 hovertemplate=f"{y_labels}: %{{x}}<br>{x_labels}: %{{y}}<br>End Value: %{{z}}<extra></extra>"
