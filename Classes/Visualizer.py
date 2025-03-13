@@ -22,6 +22,7 @@ class Visualizer():
         self.non_graph_data_matrix = OrderedDict()
         self.other_parameters_to_pass = []
         self.copy_of_simulation_output = None
+        self.copy_of_parameter_analysis_output = None
 
     def add_graph_data(self, name, data, column_names, row_names=None, add_rows=False):
         self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_rows": add_rows}
@@ -218,7 +219,10 @@ class Visualizer():
             return list_of_figs
         
         @callback(
-            [Output({'type': 'plot_parameter_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            [Output({'type': 'plot_parameter_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()], 
+            Output('parameter_analysis_slider', 'max'), 
+            Output('parameter_analysis_slider', 'marks'),
+            Output('parameter_analysis_slider', 'value'),
             Input('run_parameter_analysis', 'n_clicks'),
             State('parameter_analysis_param_name_1', 'value'),
             State('parameter_analysis_param_name_2', 'value'),
@@ -245,36 +249,39 @@ class Visualizer():
             self.graph.update_environment_data(environment_data[0])
 
             #if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
-            param_1_values = self.split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
-            param_2_values = self.split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
+            param_values_1 = self.split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
+            param_values_2 = self.split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
 
             # create a matrix to store the values of the final time point for each parameter value tested
-            matrix_output = np.zeros((len(param_1_values), len(param_2_values), len(self.graph_data)))
+            matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)))
             # create a list of the names of the parameters, to be used to find the index of the parameter in the flattened array
             items_of_name = []
             for key, value in self.graph_data.items():
                 items_of_name += [key] * value["data"].size
+            
+            y_values_to_save = OrderedDict()
+            t_values_to_save = OrderedDict()
 
             # loop through each parameter value, and solve the system of ODEs, and save the final time point value for each parameter value
-            for param_1_value in param_1_values:
-                for param_2_value in param_2_values:
+            for param_value_1 in param_values_1:
+                for param_value_2 in param_values_2:
                     # if the parameter 1 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
                     if param_name_1 in self.graph_data:
                         index = items_of_name.index(param_name_1)
-                        initial_condition[index] = param_1_value
+                        initial_condition[index] = param_value_1
                     elif param_name_1 in self.non_graph_data_vector:
-                        non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_1)][0] = param_1_value
+                        non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_1)][0] = param_value_1
                     else:
-                        non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_1)][0][0] = param_1_value
+                        non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_1)][0][0] = param_value_1
                     
                     # if the parameter 2 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
                     if param_name_2 in self.graph_data:
                         index = items_of_name.index(param_name_2)
-                        initial_condition[index] = param_2_value
+                        initial_condition[index] = param_value_2
                     elif param_name_2 in self.non_graph_data_vector:
-                        non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_2)][0] = param_2_value
+                        non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_2)][0] = param_value_2
                     elif param_name_2 in self.non_graph_data_matrix:
-                        non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_2)][0][0] = param_2_value
+                        non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_2)][0][0] = param_value_2
                     
                     # solve the system of ODEs, and save the final value and time value
                     solved_system = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
@@ -286,9 +293,17 @@ class Visualizer():
                         overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                     overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                     overall_y = self.save_data(overall_y, overall_t, save_data=False)
+                    y_values_to_save[(param_value_1, param_value_2)] = overall_y
+                    t_values_to_save[(param_value_1, param_value_2)] = overall_t
                     # save the final value to the matrix
                     for i, data in enumerate(overall_y):
-                        matrix_output[param_1_values.index(param_1_value), param_2_values.index(param_2_value), i] = data[0][-1]
+                        matrix_output[param_values_1.index(param_value_1), param_values_2.index(param_value_2), i] = data[0][-1]
+            self.copy_of_parameter_analysis_output = {"overall_y": y_values_to_save, "overall_t": t_values_to_save, "x_axis_data": param_values_1, "y_axis_data": param_values_2, "x_labels": param_name_1, "y_labels": param_name_2}
+            # Update slider value range to new values 0 to overall_t[-1]
+            slider_marks = {i: f"{i:.2f}" for i in np.linspace(0, overall_t[-1], 40)}
+            # create a list of figures, where each figure is a heatmap of the final values for each parameter value
+            return *self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2), overall_t[-1], slider_marks, overall_t[-1]
+
             
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
             return self.create_heatmap_figures(matrix_output, param_1_values, param_2_values, param_name_1, param_name_2)
