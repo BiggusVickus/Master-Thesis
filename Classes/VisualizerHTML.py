@@ -163,10 +163,26 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         id='parameter_analysis_use_serial_transfer'
                     ),
                     html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
-                    html.Div(style={'margin': '60px'}),
-                    *[
-                        dcc.Graph(id={"type": "plot_parameter_analysis", "index": name}) for name in graph_data.keys()
-                    ],
+                    dcc.Slider(
+                        min=0,
+                        max=0,
+                        value=0,
+                        step=0.001,
+                        id='parameter_analysis_slider',
+                        tooltip={"placement": "bottom", "always_visible": True}
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Extrapolate value in case slider value is in between 2 calculated time intervals', 'value': 'option1'},
+                        ],
+                        value=[],
+                        id='parameter_analysis_extrapolate'
+                    ),
+                    html.Div(children = [
+                        *[
+                            dcc.Graph(id={"type": "plot_parameter_analysis", "index": name}, style={'display': 'inline-block'}) for name in graph_data.keys()
+                        ]
+                    ],style={'margin': '60px'}), 
                 ]),
 
                 dcc.Tab(label='Initial Value Analysis', children=[
