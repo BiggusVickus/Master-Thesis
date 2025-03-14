@@ -3,10 +3,12 @@ from Classes.GraphMaker import GraphMaker
 class GraphMakerNonGUI(GraphMaker):
     def __init__(self):
         super().__init__(True)
-        self.setup_E_node()
+        self.setup_E_S_nodes()
     
-    def setup_E_node(self):
+    def setup_E_S_nodes(self):
         super().add_node_to_graph("E", "E", self.default_environment_data())
+        super().add_node_to_graph("S", "S", self.default_settings_data())
+    
     
     def add_node(self, node_type, node_name, node_data = None):
         super().add_node_to_graph(node_type, node_name, node_data)

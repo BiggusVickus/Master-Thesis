@@ -496,5 +496,12 @@ class Visualizer():
                 meta=updated_data.t)
             )
             return fig
+        
+        @callback(
+            Input('save_settings', 'n_clicks'),
+            Input({'type': 'settings', 'index': ALL}, 'value'),
+        )
+        def save_settings(n_clicks, settings):
+            print(settings)
 
         self.app.run_server(debug=True)

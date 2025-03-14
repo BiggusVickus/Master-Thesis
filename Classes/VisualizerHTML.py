@@ -70,6 +70,117 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         ),
                     ])
                 ])
+                dcc.Tab(label='Settings', children=[
+                    html.H4(["These settings affect various parts of the simulation. For example the solver type (RK23 or RK45 or DOP853), or to use the defualt selected options by the solver or a linspace of selected options."]),
+                    html.Div([
+                        html.H4(["Solver Type"]),
+                        dcc.Dropdown(
+                            options=[
+                                {'label': 'RK45', 'value': 'RK45'},
+                                {'label': 'RK23', 'value': 'RK23'},
+                                {'label': 'DOP853', 'value': 'DOP853'}, 
+                                {'label': 'Radau', 'value': 'Radau'}, 
+                                {'label': 'BDF', 'value': 'BDF'},
+                                {'label': 'LSODA', 'value': 'LSODA'},
+                            ],
+                            value='RK45',
+                            id={'type': 'settings', 'index': 'solver_type'},
+                        ),
+                        html.H4(["t_eval option"]),
+                        dcc.Checklist(
+                            options=[
+                                {'label': 'Use solver suggested t_values (checked) or your own t_eval (unchecked) which uses the simulation length and ', 'value': 'option1'},
+                            ],
+                            value=['option1'],
+                            id={'type': 'settings', 'index': 't_eval_option'}
+                        ),
+                        html.H4(["Minimum Step Size"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'min_step'}, 
+                            type="number",
+                            placeholder="Minimum Step",
+                            value=1e-2,
+                            required=True, 
+                            min=0.00001, 
+                            max=1
+                        ),
+                        html.H4(["Max Step Size"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'max_step'}, 
+                            type="number",
+                            placeholder="Maximum Step",
+                            value=0.1,
+                            required=True, 
+                            min=0.00001,
+                            max=1
+                        ),
+                        html.H4(["Cutoff value for small numbers"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'cutoff_value'}, 
+                            type="number",
+                            placeholder="Cutoff Value for small numbers",
+                            value=0.000001,
+                            required=True
+                        ),
+                        html.H4(["Dense Output"]),
+                        dcc.Checklist(
+                            options=[
+                                {'label': 'Use Dense Output', 'value': 'dense_output'},
+                            ],
+                            value=[],
+                            id={'type': 'settings', 'index': 'dense_output'}
+                        ),
+                        html.H4(["Relative and Absolute Tolerance"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'rtol'}, 
+                            type="number",
+                            placeholder="Relative Tolerance",
+                            value=1e-3, 
+                            required=True
+                        ),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'atol'}, 
+                            type="number",
+                            placeholder="Absolute Tolerance",
+                            value=1e-6, 
+                            required=True
+                        ),
+
+                        html.H4(["Phase Portrait Settings (Quiver Plot)"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'arrow_scale'}, 
+                            type="number",
+                            placeholder="Scale",
+                            value=0.1, 
+                            required=True
+                        ),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'arrow_scale_scale'}, 
+                            type="number",
+                            placeholder="Arrow Scale",
+                            value=0.3, 
+                            required=True
+                        ),
+                        html.H4(["Arrow Head Angle (radians)"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'arrow_radians'}, 
+                            type="number",
+                            placeholder="Arrow Heah Angle (radians)",
+                            value=0.3490, 
+                            required=True
+                        ),
+                        html.H4(["Simulation Length Time"]),
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 'simulation_length'}, 
+                            type="number",
+                            placeholder="Simulation Length in time",
+                            value=30, 
+                            required=True
+                        ),
+                        html.Button("Save Settings", id="save_settings"),
+                        
+                    ])
+                ]),
             ]),
             html.Div(style={'margin': '60px'}),
             html.Hr(),

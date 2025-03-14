@@ -57,12 +57,25 @@ class GraphMaker:
 
     def default_environment_data(self):
         string = ""
-        # string += f"Temperature: {self.randomize_parameter_value(25)}\n"
-        # string += f"pH: {self.randomize_parameter_value(7)}\n"
-        string += f"Simulation_Length: 100\n"
-        string += f"Time_Step: 0.5\n"
-        string += f"Cutoff: 0.000001\n"
+        string += f"Temperature: 25\n"
+        string += f"pH: 7\n"
         string += f"M: 4\n"
+        return string
+    
+    def default_settings_data(self):
+        string = ""
+        string += f"Solver_Type: RK45\n"
+        string += f"T_Eval_Option: True\n"
+        string += f"Min_Step: 0.01\n"
+        string += f"Max_Step: 0.1\n"
+        string += f"Cutoff_Value: 0.000001\n"
+        string += f"Dense_Output: False\n"
+        string += f"R_Tol: 0.001\n"
+        string += f"A_Tol: 0.000001\n"
+        string += f"Arrow_Scale_1: 0.1\n"
+        string += f"Arrow_Scale_2: 0.3\n"
+        string += f"Arrow_Radians: 0.3490\n"
+        string += f"Simulation_Length: 30\n"
         return string
 
     def default_phage_data(self):
@@ -133,12 +146,16 @@ class GraphMaker:
         return np.random.normal(main_value, sigma)
 
     def add_node_to_graph(self, node_type, node_name, node_data = None):
-        if node_type == None and node_name == None:
+        if node_type == None or node_name == None or node_type == "" or node_name == "":
             return self.error_message("Node name and type cannot be empty")
         if node_type == "E":
             for node, attr in self.graph.nodes(data=True):
                 if attr["node_type"] == "E":
                     return self.error_message("Node of type 'E' (Environment node) already exists")
+        if node_type == "S":
+            for node, attr in self.graph.nodes(data=True):
+                if attr["node_type"] == "S":
+                    return self.error_message("Node of type 'S' (Settings node) already exists")
         node_type = node_type.strip()
         node_name = node_name.strip()
         for node in self.graph.nodes:
@@ -150,6 +167,7 @@ class GraphMaker:
         if node_data is None:
             node_data = {
             "E": self.default_environment_data,
+            "S": self.default_settings_data,
             "P": self.default_phage_data,
             "B": self.default_bacteria_data,
             "R": self.default_resource_data
@@ -161,6 +179,8 @@ class GraphMaker:
         if node_type == "R":
             self.graph.nodes[node_name]['subset'] = "2"
         if node_type == "E":
+            self.graph.nodes[node_name]['subset'] = "3"
+        if node_type == "S":
             self.graph.nodes[node_name]['subset'] = "3"
 
         self.graph.nodes[node_name]['data'] = node_data
@@ -177,8 +197,8 @@ class GraphMaker:
             return self.error_message("Node names cannot be empty")
         node1 = node1.strip()
         node2 = node2.strip()
-        if self.verify_edge_connections(node1, node2, "E", "E"):
-            return self.error_message("Cannot connect E node to any other node")
+        if node1 == "E" or node2 == "E" or node1 == "S" or node2 == "S":
+            return self.error_message("Cannot connect E or S node to any other node")
         if node1 not in self.graph or node2 not in self.graph:
             return self.error_message("One or both nodes not found")
         if self.graph.has_edge(node1, node2):
@@ -225,6 +245,14 @@ class GraphMaker:
             self.add_node_to_graph("R", "R" + str(i))
 
     def verify_edge_connections(self, node1, node2, type1, type2):
+        if type1 == None or type2 == None:
+            return False
+        if node1 == None or node2 == None:
+            return False
+        if node1 not in self.graph or node2 not in self.graph:
+            return False
+        if type1 == "E" or type2 == "E" or type1 == "S" or type2 == "S":
+            return False
         return (self.graph.nodes[node1]['node_type'] == type1 and self.graph.nodes[node2]['node_type'] == type2) or (self.graph.nodes[node1]['node_type'] == type2 and self.graph.nodes[node2]['node_type'] == type1)
     
     def mass_create_edges(self, tuple_of_edges:tuple, edge_data = None):
