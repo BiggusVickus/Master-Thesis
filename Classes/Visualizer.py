@@ -424,6 +424,7 @@ class Visualizer():
             State('phase_portrait_range_2', 'value'),
             State('phase_portrait_steps_2', 'value'),
             State('phase_portrait_use_serial_transfer', 'value'),
+            State('phase_portrait_auto_calculate_range', 'value'),
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
@@ -433,16 +434,31 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, auto_calculate_range, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             #TODO: give option for auto setting arrow x and y value, give option to scale the arrow values
             #TODO: fix the issue with the arrows not pointing in the correct direction
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
-
-            input_value_1_low, input_value_1_high = param_range_1.split("-")
-            input_value_2_low, input_value_2_high = param_range_2.split("-")
-            x_vals = np.linspace(float(input_value_1_low), float(input_value_1_high), int(param_steps_1))
-            y_vals = np.linspace(float(input_value_2_low), float(input_value_2_high), int(param_steps_1))
+            updated_data = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+            solved_y = updated_data.y
+            self.copy_of_simulation_output = updated_data
+            unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
+            unflattened_data = self.save_data(unflattened_data, updated_data.t)
+            items_of_name_1 = []
+            items_of_name_2 = []
+            for key, value in self.graph_data.items():
+                items_of_name_1 += [key] * value["data"].size
+                items_of_name_2 += [key]
+            value1 = unflattened_data[items_of_name_1.index(param_1_name)][0]
+            value2 = unflattened_data[items_of_name_2.index(param_2_name)][0]
+            if (auto_calculate_range):
+                min_x, max_x = min(value1), max(value1)
+                min_y, max_y = min(value2), max(value2)
+            else:
+                min_x, max_x = [float(value.strip()) for value in param_range_1.split("-")]
+                min_y, max_y = [float(value.strip()) for value in param_range_2.split("-")]
+            x_vals = np.linspace(float(min_x), float(max_x), int(param_steps_1))
+            y_vals = np.linspace(float(min_y), float(max_y), int(param_steps_2))
             X, Y = np.meshgrid(x_vals, y_vals)
 
             DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
@@ -479,15 +495,6 @@ class Visualizer():
                 width=1200, 
                 height=800
             )
-            _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
-            self.graph.update_environment_data(environment_data[0])
-            updated_data = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
-            solved_y = updated_data.y
-            self.copy_of_simulation_output = updated_data
-            unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-            unflattened_data = self.save_data(unflattened_data, updated_data.t)
-            value1 = unflattened_data[items_of_name_1.index(param_1_name)][0]
-            value2 = unflattened_data[items_of_name_2.index(param_2_name)][0]
             fig.add_trace(
                 go.Scatter(x=value1, y=value2, mode="lines", name=f"{param_1_name} vs {param_2_name}", hovertemplate=f"{param_1_name}: %{{x}}<br>{param_2_name}: %{{y}}<br>time: %{{meta}}<extra></extra>",
                 meta=updated_data.t)
@@ -499,6 +506,9 @@ class Visualizer():
             Input({'type': 'settings', 'index': ALL}, 'value'),
         )
         def save_settings(n_clicks, settings):
-            print(settings)
+            parsed = parse_contents(settings)
+            self.settings = parsed
+            print(self.settings)
+
 
         self.app.run_server(debug=True)

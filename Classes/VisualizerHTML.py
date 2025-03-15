@@ -411,6 +411,13 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         value=[],
                         id='phase_portrait_use_serial_transfer'
                     ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Auto Calculate Quiver Range', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='phase_portrait_auto_calculate_range'
+                    ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
                     dcc.Graph(id="plot_phase_portrait")
