@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2025-03-14">
+    <creator>NetworkX 3.3</creator>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="3" title="data" type="string" />
+      <attribute id="4" title="networkx_key" type="long" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="node_type" type="string" />
+      <attribute id="1" title="subset" type="string" />
+      <attribute id="2" title="data" type="string" />
+    </attributes>
+    <nodes>
+      <node id="E" label="E">
+        <attvalues>
+          <attvalue for="0" value="E" />
+          <attvalue for="1" value="3" />
+          <attvalue for="2" value="Temperature: 25&#10;pH: 7&#10;M: 4&#10;" />
+        </attvalues>
+      </node>
+      <node id="S" label="S">
+        <attvalues>
+          <attvalue for="0" value="S" />
+          <attvalue for="1" value="3" />
+          <attvalue for="2" value="Solver_Type: RK45&#10;T_Eval_Option: True&#10;Min_Step: 0.01&#10;Max_Step: 0.1&#10;Cutoff_Value: 0.000001&#10;Dense_Output: False&#10;R_Tol: 0.001&#10;A_Tol: 0.000001&#10;Arrow_Scale_1: 0.1&#10;Arrow_Scale_2: 0.3&#10;Arrow_Radians: 0.3490&#10;Simulation_Length: 30&#10;" />
+        </attvalues>
+      </node>
+      <node id="P0" label="P0">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 16&#10;" />
+        </attvalues>
+      </node>
+      <node id="B0" label="B0">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 99&#10;tau: 0.15958239089716414&#10;" />
+        </attvalues>
+      </node>
+      <node id="R0" label="R0">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 97&#10;e: 0.17894092564308928&#10;" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="P0" target="B0" id="0">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 16&#10;r: 0.11430532951175343&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B0" target="R0" id="1">
+        <attvalues>
+          <attvalue for="3" value="v: 0.1281322293765672&#10;K: 0.1664281212228989&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
