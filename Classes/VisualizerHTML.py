@@ -3,10 +3,40 @@ from dash import dcc
 from collections import OrderedDict
 import pandas as pd
 
+def parse_contents(contents):
+    dictionary = {}
+    for line in contents.splitlines():
+        if line.strip():
+            content_type, content = line.split(":")
+            content = content.strip()
+            if content == "True":
+                content = True
+            elif content == "False":
+                content = False
+            elif "[" in content:
+                content = content.replace('[', '').replace(']', '').replace(' ', '')
+                content = content.split(',')
+                content = [int(element) if element.isnumeric() else float(element) for element in content]
+            elif "." in content:
+                content = float(content)
+            elif content.isnumeric():
+                content = int(content)
+            elif content == "None":
+                content = None
+            elif content == "":
+                content = None
+            else:
+                content = content
+            dictionary[content_type] = content
+        dictionary[content_type] = content
+    return dictionary
+
 def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
     graph_data_name_list = [name for name in graph_data.keys()]
     non_graph_data_name_list = [name for name in OrderedDict(list(non_graph_data_vector.items()) + list(non_graph_data_matrix.items()))]
     both_params = graph_data_name_list + non_graph_data_name_list
+    settings = parse_contents(graph.graph.nodes["S"]["data"])
+
     return html.Div([
             html.H1("Line Chart"),
             *[
@@ -69,7 +99,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             editable=True
                         ),
                     ])
-                ])
+                ]), 
                 dcc.Tab(label='Settings', children=[
                     html.H4(["These settings affect various parts of the simulation. For example the solver type (RK23 or RK45 or DOP853), or to use the defualt selected options by the solver or a linspace of selected options."]),
                     html.Div([
@@ -83,7 +113,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                                 {'label': 'BDF', 'value': 'BDF'},
                                 {'label': 'LSODA', 'value': 'LSODA'},
                             ],
-                            value='RK45',
+                            value=settings['Solver_Type'],
                             id={'type': 'settings', 'index': 'solver_type'},
                         ),
                         html.H4(["t_eval option"]),
@@ -99,7 +129,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'min_step'}, 
                             type="number",
                             placeholder="Minimum Step",
-                            value=1e-2,
+                            value=settings['Min_Step'],
                             required=True, 
                             min=0.00001, 
                             max=1
@@ -109,7 +139,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'max_step'}, 
                             type="number",
                             placeholder="Maximum Step",
-                            value=0.1,
+                            value=settings['Max_Step'],
                             required=True, 
                             min=0.00001,
                             max=1
@@ -119,7 +149,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'cutoff_value'}, 
                             type="number",
                             placeholder="Cutoff Value for small numbers",
-                            value=0.000001,
+                            value=settings['Cutoff_Value'],
                             required=True
                         ),
                         html.H4(["Dense Output"]),
@@ -135,14 +165,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'rtol'}, 
                             type="number",
                             placeholder="Relative Tolerance",
-                            value=1e-3, 
+                            value=settings['R_Tol'], 
                             required=True
                         ),
                         dcc.Input(
                             id={'type': 'settings', 'index': 'atol'}, 
                             type="number",
                             placeholder="Absolute Tolerance",
-                            value=1e-6, 
+                            value=settings['A_Tol'], 
                             required=True
                         ),
 
@@ -151,14 +181,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'arrow_scale'}, 
                             type="number",
                             placeholder="Scale",
-                            value=0.1, 
+                            value=settings['Arrow_Scale_1'], 
                             required=True
                         ),
                         dcc.Input(
                             id={'type': 'settings', 'index': 'arrow_scale_scale'}, 
                             type="number",
                             placeholder="Arrow Scale",
-                            value=0.3, 
+                            value=settings['Arrow_Scale_2'], 
                             required=True
                         ),
                         html.H4(["Arrow Head Angle (radians)"]),
@@ -166,7 +196,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'arrow_radians'}, 
                             type="number",
                             placeholder="Arrow Heah Angle (radians)",
-                            value=0.3490, 
+                            value=settings['Arrow_Radians'], 
                             required=True
                         ),
                         html.H4(["Simulation Length Time"]),
@@ -174,7 +204,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                             id={'type': 'settings', 'index': 'simulation_length'}, 
                             type="number",
                             placeholder="Simulation Length in time",
-                            value=30, 
+                            value=settings['Simulation_Length'], 
                             required=True
                         ),
                         html.Button("Save Settings", id="save_settings"),

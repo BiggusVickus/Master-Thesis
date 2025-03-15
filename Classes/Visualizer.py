@@ -1,18 +1,14 @@
 import numpy as np
 from Classes.Analysis import Analysis
-from Classes.GraphMakerGUI import GraphMakerGUI
 import plotly.express as px
 import pandas as pd
-from dash import Dash, dash_table, html, Input, Output, callback, ALL, State
-from dash import dcc
+from dash import Dash, Input, Output, callback, ALL, State
 import plotly.graph_objs as go
 from collections import OrderedDict
 import plotly.figure_factory as ff
-from Classes.VisualizerHTML import html_code
+from Classes.VisualizerHTML import html_code, parse_contents
+from plotly.subplots import make_subplots
 #TODO: give option to append a serial transfer to parameter analysis and initial value analysis
-#TODO: in parameter analysis use a slider to move the matrices through time, and show the values of the matrix at that time
-#TODO: in initial value problem, collect peaks of the data, and show the time at which the peak occurs, and the value of the peak and graph it
-
 class Visualizer():
     def __init__(self, graph):
         self.app = Dash()
@@ -23,6 +19,7 @@ class Visualizer():
         self.other_parameters_to_pass = []
         self.copy_of_simulation_output = None
         self.copy_of_parameter_analysis_output = None
+        self.settings = {}
 
     def add_graph_data(self, name, data, column_names, row_names=None, add_rows=False):
         self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_rows": add_rows}
