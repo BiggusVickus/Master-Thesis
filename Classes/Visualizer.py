@@ -450,24 +450,23 @@ class Visualizer():
         def phase_portrait(n_clicks, param_name_1, param_name_2, param_range_1, param_steps_1, param_range_2, param_steps_2, starting_x, starting_y, auto_calculate_range, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             #TODO: give option for auto setting arrow x and y value, give option to scale the arrow values
             #TODO: fix the issue with the arrows not pointing in the correct direction
-            print(auto_calculate_range)
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
             starting_x = [float(value.strip()) for value in starting_x.split(",")]
             starting_y = [float(value.strip()) for value in starting_y.split(",")]
-            items_of_name_1 = []
-            items_of_name_2 = []
+            items_of_name_full = []
+            items_of_name_short = []
             for key, value in self.graph_data.items():
-                items_of_name_1 += [key] * value["data"].size
-                items_of_name_2 += [key]
+                items_of_name_full += [key] * value["data"].size
+                items_of_name_short.append(key)
             min_x_overall, max_x_overall = None, None
             min_y_overall, max_y_overall = None, None
             list_of_solved = []
             for i in range(len(starting_x)):
                 for j in range(len(starting_y)):
-                    index = items_of_name_1.index(param_name_1)
+                    index = items_of_name_full.index(param_name_1)
                     initial_condition[index] = starting_x[i]
-                    index = items_of_name_2.index(param_name_2)
+                    index = items_of_name_full.index(param_name_2)
                     initial_condition[index] = starting_y[j]
                     solved_system = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
                     overall_y = solved_system.y
@@ -477,8 +476,9 @@ class Visualizer():
                     self.copy_of_simulation_output = solved_system
                     unflattened_data = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                     unflattened_data = self.save_data(unflattened_data, overall_t)
-                    solved_x_values = unflattened_data[items_of_name_1.index(param_name_1)][0]
-                    solved_y_values = unflattened_data[items_of_name_2.index(param_name_2)][0]
+                    print(items_of_name_full, items_of_name_short, param_name_1, param_name_2)
+                    solved_x_values = unflattened_data[items_of_name_short.index(param_name_1)][0]
+                    solved_y_values = unflattened_data[items_of_name_short.index(param_name_2)][0]
                     list_of_solved.append((solved_x_values, solved_y_values, overall_t, starting_x[i], starting_y[j]))
                     if (auto_calculate_range):
                         min_x, max_x = min(solved_x_values), max(solved_x_values)
@@ -499,20 +499,14 @@ class Visualizer():
             X, Y = np.meshgrid(x_vals, y_vals)
 
             DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
-            items_of_name_1 = []
-            items_of_name_2 = []
-            for key, value in self.graph_data.items():
-                items_of_name_1 += [key] * value["data"].size
-                items_of_name_2 += [key]
-            
             for i in range(X.shape[0]):
                 for j in range(X.shape[1]):
                     initial_condition_copy = initial_condition.copy()
-                    initial_condition_copy[items_of_name_1.index(param_name_1)] = X[i, j]
-                    initial_condition_copy[items_of_name_1.index(param_name_2)] = Y[i, j]
+                    initial_condition_copy[items_of_name_full.index(param_name_1)] = X[i, j]
+                    initial_condition_copy[items_of_name_full.index(param_name_2)] = Y[i, j]
                     updated_data = self.graph.odesystem(0, initial_condition_copy, *[self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices])
-                    value1 = updated_data[items_of_name_1.index(param_name_1)]
-                    value2 = updated_data[items_of_name_1.index(param_name_2)]
+                    value1 = updated_data[items_of_name_full.index(param_name_1)]
+                    value2 = updated_data[items_of_name_full.index(param_name_2)]
                     DX[i, j], DY[i, j] = value1, value2
 
             # Normalize arrows for better visualization
