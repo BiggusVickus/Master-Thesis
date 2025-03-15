@@ -251,13 +251,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     html.H4(["Choose two parameters to analyze"]),
                     dcc.Dropdown(both_params, id='parameter_analysis_param_name_1', value = both_params[0] if len(both_params) > 0 else None),
                     dcc.Dropdown(both_params, id='parameter_analysis_param_name_2', value = both_params[1] if len(both_params) > 1 else None),
-                    dcc.Checklist(
-                        options=[
-                            {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
-                        ],
-                        value=['option1'],
-                        id='parameter_analysis_option'
-                    ),
                     html.H4(["Option 1: Input the values you want to test separated by commas"]),
                     dcc.Input(
                         id="parameter_analysis_input_1", 
@@ -296,6 +289,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         placeholder="10",
                     ),
                     html.Br(),
+                    html.Div(style={'margin': '60px'}),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='parameter_analysis_option'
+                    ),
                     dcc.Checklist(
                         options=[
                             {'label': 'Use Serial Transfer', 'value': 'option1'},
@@ -329,13 +330,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                 dcc.Tab(label='Initial Value Analysis', children=[
                     html.H4(["Note: Choose a parameter of choice. Input the values you want to test separated by commas, or use a uniform seperated list. The program will run the simulation for each initial value and display the results on a graph."]),
                     dcc.Dropdown(both_params, id='initial_value_analysis_param_name', value = both_params[0] if len(both_params) > 0 else None),
-                    dcc.Checklist(
-                        options=[
-                            {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
-                        ],
-                        value=['option1'],
-                        id='initial_value_analysis_option'
-                    ),
                     html.H4(["Option 1: Input the values you want to test separated by commas"]),
                     dcc.Input(
                         id="initial_value_analysis_input", 
@@ -358,6 +352,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         placeholder="10",
                     ),
                     html.Br(),
+                    html.Div(style={'margin': '60px'}),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Checked for running Option 1, unchecked for Option 2', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='initial_value_analysis_option'
+                    ),
                     dcc.Checklist(
                         options=[
                             {'label': 'Use Serial Transfer', 'value': 'option1'},
