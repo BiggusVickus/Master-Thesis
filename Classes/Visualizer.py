@@ -434,8 +434,10 @@ class Visualizer():
             State('phase_portrait_steps_1', 'value'),
             State('phase_portrait_range_2', 'value'),
             State('phase_portrait_steps_2', 'value'),
-            State('phase_portrait_use_serial_transfer', 'value'),
+            State('phase_portrait_starting_x', 'value'),
+            State('phase_portrait_starting_y', 'value'),
             State('phase_portrait_auto_calculate_range', 'value'),
+            State('phase_portrait_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
@@ -445,31 +447,55 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def phase_portrait(n_clicks, param_1_name, param_2_name, param_range_1, param_steps_1, param_range_2, param_steps_2, auto_calculate_range, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def phase_portrait(n_clicks, param_name_1, param_name_2, param_range_1, param_steps_1, param_range_2, param_steps_2, starting_x, starting_y, auto_calculate_range, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             #TODO: give option for auto setting arrow x and y value, give option to scale the arrow values
             #TODO: fix the issue with the arrows not pointing in the correct direction
+            print(auto_calculate_range)
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
-            updated_data = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
-            solved_y = updated_data.y
-            self.copy_of_simulation_output = updated_data
-            unflattened_data = self.graph.unflatten_initial_matrix(solved_y, [length["data"].size for length in self.graph_data.values()])
-            unflattened_data = self.save_data(unflattened_data, updated_data.t)
+            starting_x = [float(value.strip()) for value in starting_x.split(",")]
+            starting_y = [float(value.strip()) for value in starting_y.split(",")]
             items_of_name_1 = []
             items_of_name_2 = []
             for key, value in self.graph_data.items():
                 items_of_name_1 += [key] * value["data"].size
                 items_of_name_2 += [key]
-            value1 = unflattened_data[items_of_name_1.index(param_1_name)][0]
-            value2 = unflattened_data[items_of_name_2.index(param_2_name)][0]
-            if (auto_calculate_range):
-                min_x, max_x = min(value1), max(value1)
-                min_y, max_y = min(value2), max(value2)
-            else:
-                min_x, max_x = [float(value.strip()) for value in param_range_1.split("-")]
-                min_y, max_y = [float(value.strip()) for value in param_range_2.split("-")]
-            x_vals = np.linspace(float(min_x), float(max_x), int(param_steps_1))
-            y_vals = np.linspace(float(min_y), float(max_y), int(param_steps_2))
+            min_x_overall, max_x_overall = None, None
+            min_y_overall, max_y_overall = None, None
+            list_of_solved = []
+            for i in range(len(starting_x)):
+                for j in range(len(starting_y)):
+                    index = items_of_name_1.index(param_name_1)
+                    initial_condition[index] = starting_x[i]
+                    index = items_of_name_2.index(param_name_2)
+                    initial_condition[index] = starting_y[j]
+                    solved_system = self.graph.solve_system(self.graph.odesystem, initial_condition, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+                    overall_y = solved_system.y
+                    overall_t = solved_system.t
+                    if use_serial_transfer:
+                        overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
+                    self.copy_of_simulation_output = solved_system
+                    unflattened_data = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
+                    unflattened_data = self.save_data(unflattened_data, overall_t)
+                    solved_x_values = unflattened_data[items_of_name_1.index(param_name_1)][0]
+                    solved_y_values = unflattened_data[items_of_name_2.index(param_name_2)][0]
+                    list_of_solved.append((solved_x_values, solved_y_values, overall_t, starting_x[i], starting_y[j]))
+                    if (auto_calculate_range):
+                        min_x, max_x = min(solved_x_values), max(solved_x_values)
+                        min_y, max_y = min(solved_y_values), max(solved_y_values)
+                    else:
+                        min_x, max_x = [float(value.strip()) for value in param_range_1.split("-")]
+                        min_y, max_y = [float(value.strip()) for value in param_range_2.split("-")]
+                    if (min_x_overall is None or min_x < min_x_overall):
+                        min_x_overall = min_x
+                    if (max_x_overall is None or max_x > max_x_overall):
+                        max_x_overall = max_x
+                    if (min_y_overall is None or min_y < min_y_overall):
+                        min_y_overall = min_y
+                    if (max_y_overall is None or max_y > max_y_overall):
+                        max_y_overall = max_y
+            x_vals = np.linspace(float(min_x_overall), float(max_x_overall), int(param_steps_1))
+            y_vals = np.linspace(float(min_y_overall), float(max_y_overall), int(param_steps_2))
             X, Y = np.meshgrid(x_vals, y_vals)
 
             DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
@@ -481,34 +507,53 @@ class Visualizer():
             
             for i in range(X.shape[0]):
                 for j in range(X.shape[1]):
-                    initial_condition[items_of_name_1.index(param_1_name)] = X[i, j]
-                    initial_condition[items_of_name_1.index(param_2_name)] = Y[i, j]
-                    updated_data = self.graph.odesystem(0, initial_condition, *[self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices])
-                    value1 = updated_data[items_of_name_1.index(param_1_name)]
-                    value2 = updated_data[items_of_name_1.index(param_2_name)]
+                    initial_condition_copy = initial_condition.copy()
+                    initial_condition_copy[items_of_name_1.index(param_name_1)] = X[i, j]
+                    initial_condition_copy[items_of_name_1.index(param_name_2)] = Y[i, j]
+                    updated_data = self.graph.odesystem(0, initial_condition_copy, *[self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices])
+                    value1 = updated_data[items_of_name_1.index(param_name_1)]
+                    value2 = updated_data[items_of_name_1.index(param_name_2)]
                     DX[i, j], DY[i, j] = value1, value2
 
             # Normalize arrows for better visualization
             M = np.hypot(DX, DY)
             DX, DY = DX / M, DY / M  # Normalize to unit vectors
-            fig = ff.create_quiver(X, Y, DX, DY, 
-                scale=0.3,
-                arrow_scale=0.3,
-                name='quiver',
-                line_width=3, 
-                angle=0.1,
-                hovertemplate=f"{param_1_name}: %{{x}}<br>{param_2_name}: %{{y}}", 
-            )
+            magnitude = np.sqrt(DX**2 + DY**2)
+            direction = np.arctan2(DY, DX) * 180 / np.pi
+            # fig = ff.create_quiver(X, Y, DX, DY, 
+            #     scale=0.5,
+            #     arrow_scale=0.2,
+            #     name='quiver',
+            #     line_width=2, 
+            #     angle=0.1,
+            # )
+            fig = go.Figure()
             fig.update_layout(
-                title=f"Phase Portrait for {param_1_name} vs {param_2_name}",
-                xaxis=dict(title=param_1_name),
-                yaxis=dict(title=param_2_name),
+                title=f"Phase Portrait for {param_name_1} vs {param_name_2}",
+                xaxis=dict(title=param_name_1),
+                yaxis=dict(title=param_name_2),
                 width=1200, 
                 height=800
             )
+            list_x = []
+            list_y = []
+            for solved in list_of_solved:
+                fig.add_trace(
+                    go.Scatter(
+                        x=solved[0], y=solved[1], mode="lines", 
+                        name=f"Starting Point: ({solved[3]}, {solved[4]})", 
+                        hovertemplate=f"{param_name_1}: %{{x}}<br>{param_name_2}: %{{y}}<br>time: %{{meta}}<br>Initial Condition: ({solved[3]}, {solved[4]})<extra></extra>",      
+                        meta=solved[2]
+                    )
+                )
+                list_x.append(solved[3])
+                list_y.append(solved[4])
             fig.add_trace(
-                go.Scatter(x=value1, y=value2, mode="lines", name=f"{param_1_name} vs {param_2_name}", hovertemplate=f"{param_1_name}: %{{x}}<br>{param_2_name}: %{{y}}<br>time: %{{meta}}<extra></extra>",
-                meta=updated_data.t)
+                go.Scatter(
+                    x=list_x, y=list_y, mode="markers", 
+                    showlegend=False,
+                    hovertemplate=f"{param_name_1}: %{{x}}<br>{param_name_2}: %{{y}}<extra></extra>",      
+                )
             )
             return fig
         

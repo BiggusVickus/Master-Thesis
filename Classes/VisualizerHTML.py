@@ -380,6 +380,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
                     # TODO: remove the value from the input after testing
+                    html.H4(["Choose a start value and end value for each parameter separated by a '-' sign and the number of steps for each parameter for uniformly spaced values (including the start/end values) for parameter 1 and 2"]),
                     dcc.Input(
                         id="phase_portrait_range_1", 
                         type="text",
@@ -392,6 +393,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         placeholder="Number of steps for parameter 1",
                         value="15"
                     ),
+                    html.Br(),
                     dcc.Input(
                         id="phase_portrait_range_2", 
                         type="text",
@@ -404,20 +406,33 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                         placeholder="Number of steps for parameter 2",
                         value="15"
                     ),
-                    html.Br(),
-                    dcc.Checklist(
-                        options=[
-                            {'label': 'Use Serial Transfer', 'value': 'option1'},
-                        ],
-                        value=[],
-                        id='phase_portrait_use_serial_transfer'
+                    html.Br(), 
+                    dcc.Input(
+                        id="phase_portrait_starting_x", 
+                        type="text",
+                        placeholder="List of x starting values separated by commas",
+                        value="48, 49, 50"
                     ),
+                    dcc.Input(
+                        id="phase_portrait_starting_y", 
+                        type="text",
+                        placeholder="List of y starting values separated by comma",
+                        value="10, 50, 100"
+                    ),
+                    html.Br(),
                     dcc.Checklist(
                         options=[
                             {'label': 'Auto Calculate Quiver Range', 'value': 'option1'},
                         ],
                         value=['option1'],
                         id='phase_portrait_auto_calculate_range'
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Use Serial Transfer', 'value': 'option1'},
+                        ],
+                        value=[],
+                        id='phase_portrait_use_serial_transfer'
                     ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
