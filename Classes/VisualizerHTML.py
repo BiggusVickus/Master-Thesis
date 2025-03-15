@@ -243,6 +243,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph):
                     ),
                     html.Br(),
                     html.Button("Run Serial Transfer", id="run_serial_transfer"),
+                    html.H4(["The plots above in the Line Chart section will update with the new values after the serial transfer is complete, ensure that a model ahs already been run before running the serial transfer"]),
                     html.Div(style={'margin': '60px'}),
                 ]),
 

@@ -208,7 +208,13 @@ class Visualizer():
             self.graph.update_environment_data(environment_data[0])
 
             #use previously saved data to start the simulation from the last time point
-            overall_t = self.copy_of_simulation_output.t
+            try:
+                overall_t = self.copy_of_simulation_output.t
+            except:
+                list_figures = [go.Figure() for _ in self.graph_data.keys()]
+                list_figures[0].update_layout(title="No graph to serial transfer, please run the simulation first usign the 'Save and Rerun model' button below")
+                return list_figures
+
             overall_y = self.copy_of_simulation_output.y
             
             # for the required number of runs of serial transfer
