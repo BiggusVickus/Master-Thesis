@@ -1,4 +1,7 @@
-\subsection{Network Topography of Interactions}
+\chapter{Methods}
+\label{Methods}
+
+\section{Network Topography of Interactions}
 In a microbial environment, there are numerous interactions between agents, but not every agent can and will interact with one another.
 Based on which agents interact with which agents, a network topography can be created, capturing the dynamics of the interactions.
 Each agent can be represented as a node.
@@ -19,7 +22,7 @@ The attributes of the agents, interactions, and environment can easily be edited
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Chapters/Screenshots/initial_startup_GUI_tool.png}
+    \includegraphics[width=0.5\linewidth]{Screenshots/initial_startup_GUI_tool.png}
     \caption{The GUI tool when you start it up. There are numerous tools that you can use to edit the graph. By default, an environment node holding parameters such as pH and temperature is added. A settings node is added as well, holding settings data to be used for the solver like the type of solver (RK23 or RK45) as well as plotting settings like size of the arrows in the quiver plot. }
     \label{fig:ss:initial_startup_GUI_tool}
 \end{figure}
@@ -37,7 +40,7 @@ Finally, the user can import an already saved graph file, or export the graph fi
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\linewidth]{Chapters/Screenshots/example_network.png}
+    \includegraphics[width=0.5\linewidth]{Screenshots/example_network.png}
     \caption{An arbitrary $3\times2\times3$ network. Phage 0 (P0) interacts/infects bacteria 0 (B0) (and likewise B0 interacts with P0 in some way). P1 infects B0 and B1, etc. Finally, resource 0 (R0) interacts with R1 (an example of this would be a complex sugar degrading into a simple sugar over time). The nature of the interaction needs to be defined and captured in the parameter names, values, and ODE equations. Note: nothing can interact with the environment node.}
     \label{fig:ss:example_network}
 \end{figure}
