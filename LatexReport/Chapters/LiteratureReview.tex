@@ -1,4 +1,7 @@
-\subsection{Methods of Modelling Phages and Bacteria}
+\chapter{Literature review}
+\label{LR}
+
+\section{Methods of Modelling Phages and Bacteria}
 There are numerous ways to model the interactions between phages and bacteria.
 Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods.
 On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs).
@@ -15,7 +18,7 @@ The model can be made more complicated, by modelling each stage of the phage rep
 The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data.
 Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
 
-\subsubsection{Generalized Lotka-Voltera Model}
+\subsection{Generalized Lotka-Voltera Model}
 The Lotka-Voltera model, a first-order non-linear differential model, is a model that captures the dynamics between predators and prey, with phages being the predator and bacteria being the prey.
 Any population can be modelled as such:
 \[ 
@@ -23,7 +26,7 @@ Any population can be modelled as such:
 \]
 where $\cdots$.
  
-\subsubsection{Generalized Consumer-Resource Model}
+\subsection{Generalized Consumer-Resource Model}
 The generalized Consumer-Resource Model models the growth of a population and resource dynamics between a population of bacteria ${B}_i$ and a resource ${R}_i$. 
 \begin{align}
     \frac{d{B}_i}{dt} &= r_i{B}_i \left(\sum_{\alpha} \Delta w_{i \alpha}C_{i \alpha}R_{\alpha}\right) - m_i {B}_i \\
@@ -31,7 +34,7 @@ The generalized Consumer-Resource Model models the growth of a population and re
     \Delta w_{i\alpha} &= \sum_{\beta}D_{\beta \alpha}^{i}w_{\beta}
 \end{align}
 
-\subsubsection{Trait-Based Model}
+\subsection{Trait-Based Model}
 The Trait-Based Model is a model that takes into account external factors such as the temperature or pH of the system and can be modeled as follows:  
 \begin{align}
     \frac{dB_i}{dt} &= \left(r_i - m_i\right) B_i \\
@@ -39,7 +42,7 @@ The Trait-Based Model is a model that takes into account external factors such a
 \end{align}
 where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
 
-\subsubsection{Agent-Based Models}
+\subsection{Agent-Based Models}
 Agent-based Models (ABM) model the system through space and time.
 An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes.
 Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
@@ -65,10 +68,10 @@ The system consumes resources and converts them into new sub-resource types with
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
 \end{align}. 
 
-\subsection{Biology of Phages}
-\subsubsection{What Are Phages?}
+\section{Biology of Phages}
+\subsection{What Are Phages?}
 
-\subsubsection{How Does the Phage Cycle Work?}
+\subsection{How Does the Phage Cycle Work?}
 There are 3 main parts to the phage-bacteria host cycle, the Infection stage, the Lysogenic cycle, and the Lytic cycle. 
 In the infection stage, a phage floating through the environment detects and attaches to the surface of a bacteria cell. 
 Once injected, the phage can control of the cell directly goes into the Lysogenic cycle or into the Lytic cycle. 
@@ -85,39 +88,39 @@ The phage DNA hijacks the replication, transcription, and replication process of
 The phage parts build together to make a full part. 
 Eventually the cell wall bursts releasing the phages into the environment ready to infect more bacteria. 
 
-\paragraph{Infection Stage}
+\subsubsection{Infection Stage}
 The infection stage is characterized as the searching for a bacterium, detection, and subsequent attachment and injection of DNA into the bacteria. 
-\subparagraph{Attachment}
+\paragraph{Attachment}
 
 
-\subparagraph{Entry of Phage Into Bacteria}
+\paragraph{Entry of Phage Into Bacteria}
 Injection of DNA into bacteria. 
 
-\paragraph{Lysogenic Cycle}
+\subsubsection{Lysogenic Cycle}
 \subparagraph{Repression of DNA}
 Represses DNA. 
-\subparagraph{Integration of Phage DNA Into Bacteria DNA}
+\paragraph{Integration of Phage DNA Into Bacteria DNA}
 Integrate DNA. 
-\subparagraph{Cellular Replication}
+\paragraph{Cellular Replication}
 Cellular replication of the bacteria
 \subparagraph{Induction of Phage}
 Phage DNA leaved bacteria DNA. 
 
-\paragraph{Lytic Cycle}
-\subparagraph{Replication, Transcription, and Translation of the Phage DNA}
+\subsubsection{Lytic Cycle}
+\paragraph{Replication, Transcription, and Translation of the Phage DNA}
 Replication of phage DNA. 
-\subparagraph{Assembly of Phage Parts}
+\paragraph{Assembly of Phage Parts}
 Assembly into a phage. 
-\subparagraph{Lysis of the Bacterial Cell}
+\paragraph{Lysis of the Bacterial Cell}
 The lysis of the bacterial cell wall. 
 
 
-\subsection{Bacterial Defense Against Phages} 
+\section{Bacterial Defense Against Phages} 
 There is a constant battle between phages and bacteria. 
 The bacteria don't want to be killed by the phages, so they adapt defenses such as thickening of the cell wall, or once the viral DNA has integrated with the bacteria's DNA, the bacteria will cut the viral DNA out of their DNA using CRISPR. 
 \cite{iglerPhenotypicFluxRole2022}
 
-\subsubsection{Mutations in Bacterial DNA (Genetic (Co-)Evolution)}
+\subsection{Mutations in Bacterial DNA (Genetic (Co-)Evolution)}
 As bacteria cells grow and divide, random point mutations can occur in the DNA. 
 These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to infect the bacteria cell. 
 Mutations might not always work, however. 
@@ -140,28 +143,28 @@ The old bacterial DNA will proceed to integrate with the new host cells DNA \cit
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\linewidth]{Chapters/Figures/horizontal_gene_transfer.png}
+    \includegraphics[width=0.7\linewidth]{Figures/horizontal_gene_transfer.png}
     \caption{The three main ways that a (dead) bacterium can transfer DNA over to another bacterium \cite{tamangHorizontalGeneTransfer2023}.}
     \label{fig:horizontal_gene_transfer}
 \end{figure}
 
-\subsubsection{Phage Inactivation and Decoys}
+\subsection{Phage Inactivation and Decoys}
 Bacteria can further protect themselves by producing decoys that the phage will attach to instead of themselves, inactivating the phage. 
 Freshly lysed bacteria can still contain biomarkers that phages use to detect the bacteria, but upon injection, nothing happens as the cell doesn't function anymore. 
 Bacteria can also produce proteolytic enzymes that will damage the proteins found in a phage \cite{tanQuorumSensingDetermines2015}. 
 Some bacteria can produce outer membrane vesicles that phages can absorb to, and later detach the vesicle with the phage \cite{rabinovitchBacterialDebrisEcological2003}. 
 The vesicle will proceed to float away with the phage attached/injected inside, posing no risk to the source bacteria or to other bacteria. 
-The impact of these vesicles acting as a sink is suspected to be minor \cite{bullPhageBacterialDynamicsSpatial2018}, but helpful nonetheless. 
+It is suspected that the impact of these vesicles acting as a sink is  minor \cite{bullPhageBacterialDynamicsSpatial2018}, but helpful nonetheless. 
 
-\subsubsection{CRISPR-Cas Methods}
+\subsection{CRISPR-Cas Methods}
 CRISPR is a gene editing tool that cells can use to cut out specified/unwanted parts of a DNA strand. 
 Researchers are commonly using CRISPR to genetically engineer plants and animals to have specific features. 
 Strands of DNA can be selectively added or removed from a DNA strand to achieve a better, more desired DNA strand. 
 Specialized defenses in the bacteria can detect unwanted strands and remove the strand, acting as a line of defense against phages. 
 
-\subsubsection{Phenotype Resistance}
+\subsection{Phenotype Resistance}
 
-\subsubsection{Spatial Refuge/Biofilms} 
+\subsection{Spatial Refuge/Biofilms} 
 Usually bacteria and phages coexist in well mixed environments such as the ocean, however some environments offer natural structure for bacteria to hide in. 
 These structures can range from physical structure, like reeds in a lake, where the water is stagnant and harder for the phages to diffuse through, to biochemical structures like biofilms, where phages can't diffuse through the biofilm. \newline
 Circular bacterial colonies on an agar plate protect the inner bacteria from external phage infections \cite{eriksenGrowingMicrocolonyCan2018}. 
@@ -174,41 +177,51 @@ The thick mucus, microbes, and other spatial effects help protect the bacteria i
 
 \subsection{Phage Counter Defense Against Bacteria}
 With some of the defenses that bacteria have developed, phages are always mutating to counter their defenses. 
-If phages dont adapt to the ever changing bacterial defenses, the phages will experience an extinction event due to their inability to infect and grow their population count. 
+If phages don't adapt to the ever-changing bacterial defenses, the phages will experience an extinction event due to their inability to infect and grow their population count. 
 It essentially becomes a race to the bottom, seeing who can out-adapt the other. 
 However, if the phages out-adapt the bacteria too much, the bacteria die out, then eventually the phages die out due to not having any bacteria left to infect. 
 This can be avoided if the phages can adapt to target a second strain of bacteria, but this is unlikely. 
 On the other hand, if bacteria out-adapt the phages, that is no problem for the bacteria because they don't need the phages to survive, and can keep on growing, limited only by the available space and nutrients. 
 
 This is a problem intrinsic to predator-prey systems, namely that the predators are dependent on the prey. 
-Once the prey dissapears, the predators also dissapear. 
-If the prey population goes down, and as a result the predator populatoin goes down and extincts itself, the prey can come back without the threat of predators. 
+Once the prey disappear, the predators also disappear. 
+If the prey population goes down, and as a result the predator population goes down and extincts itself, the prey can come back without the threat of predators. 
 
 Phages face this exact same problem: the complete removal of either the bacteria or phages will lead to the removal of the phages from the system unless reintroduced. 
 
-\subsubsection{Genetic mutations}
+\subsection{Genetic mutations}
 
-\subsubsection{Viral recombination}
+\subsection{Viral recombination}
 https://www.sciencedirect.com/science/article/pii/S1931312821004170
 https://pmc.ncbi.nlm.nih.gov/articles/PMC3185693/
-Multiple phages can infect a cell and replicate itself using the cells internal replcation process. 
+Multiple phages can infect a cell and replicate itself using the cells internal replication process. 
 Each phage has its own building blocks. 
-Phage 1 could have long legs, a long neck, and a small head, while phage 2 can have long legs, a long neck, and a medium sized head. 
+Phage 1 could have long legs, a long neck, and a small head, while phage 2 can have long legs, a long neck, and a medium-sized head. 
 When the phages are building copies of themselves, they could accidentally use the body parts of other phages. 
-The primary method for proteins to bond with other proteins and moelcules is via hydrogen bonds. 
+The primary method for proteins to bond with other proteins and molecules is via hydrogen bonds. 
 These attractive forces hold proteins and other molecules in defined positions, and a change in molecule shape will change the bonds, which will force the other molecule to undergo changes in shape. 
-If the proteins that build he subparts of each phage have similar chemical properties, they can be swapped between phages. 
-THis will allow for biological diversity to spread throughout a phage population. 
-Each phage body part cna have unique characteristics such as better attachment rate, larger DNA storage capsule, or better probability of injection. 
+If the proteins that build the subparts of each phage have similar chemical properties, they can be swapped between phages. 
+This allows for biological diversity to spread throughout a phage population. 
+Each phage body part can have unique characteristics such as better attachment rate, larger DNA storage capsule, or better probability of injection. 
 
 
 
 
-Coexistence between phages and bacteria via genetic corevolution seems unlikely due to trade-offs imposed by the new mutations \cite{bullOptimalityModelsPhage2006}. 
+Coexistence between phages and bacteria via genetic co-evolution seems unlikely due to trade-offs imposed by the new mutations \cite{bullOptimalityModelsPhage2006}. 
 
 
-\subsection{Phage Defense Against Phages}
+\section{Phage Defense Against Phages}
+Some phages can employ defenses against other phages from infecting the bacterial cell. 
+This is called superinfection exclusion (SIE), where a phage that has integrated with the bacterial DNA, called a prophage, prevents a secondary infection from a similar or closely related phage \cite{patelAntiphageDefenceInhibition2024}. 
+There are various methods of preventing further infections. 
+The phage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. 
+Other phages like the T4 phage can use proteins like the Spackle protien. 
+The protein inhibits the lysozome activity used in the process of DNA injection by other phages \cite{bucherPhageMachineSIEence2024, kanamaruStructureFunctionT42020}. 
+Finally, prophages can encode proteins that will interfere with the replication process of other phages. 
+For example, the SieA protien encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. 
 
+\subsection{Implications of Phage Against Phage Defense}
+SIE can affect the 
 
 \subsection{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 
