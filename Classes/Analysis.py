@@ -21,6 +21,7 @@ class Analysis():
         self.Max_Step = 0.1
         self.Cutoff_Value = 0.000001
         self.Min_Step = 0.01
+        self.settings = {}
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -169,10 +170,14 @@ class Analysis():
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
         # check if max_step is in the extra parameters, if not, set it to the time step
+        print(self.settings)
         if t_start is None:
             t_start = 0
         if t_end is None:
-            t_end = self.Simulation_Length
+            t_end = self.settings['Simulation_Length']
+            
+        print("Solving ODE system")
+        print(t_end)
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step), min_step=float(self.Min_Step))
         return solved
     

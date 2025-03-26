@@ -19,8 +19,14 @@ class Visualizer():
         self.other_parameters_to_pass = []
         self.copy_of_simulation_output = None
         self.copy_of_parameter_analysis_output = None
-        self.settings = {}
+        self.settings = self.initialize_settings()
 
+    def initialize_settings(self):
+        data = self.graph.graph.nodes["S"]["data"]
+        data = parse_contents(data)
+        self.graph.graph.settings = data
+        return data
+    
     def add_graph_data(self, name, data, column_names, row_names=None, add_rows=False):
         self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_rows": add_rows}
 
@@ -164,7 +170,7 @@ class Visualizer():
             return np.linspace(start_1, end_1, int(steps)).tolist()
     
     def run(self):
-        self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph)
+        self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph, self.settings)
 
         @callback(
             [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
@@ -476,7 +482,6 @@ class Visualizer():
                     self.copy_of_simulation_output = solved_system
                     unflattened_data = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                     unflattened_data = self.save_data(unflattened_data, overall_t)
-                    print(items_of_name_full, items_of_name_short, param_name_1, param_name_2)
                     solved_x_values = unflattened_data[items_of_name_short.index(param_name_1)][0]
                     solved_y_values = unflattened_data[items_of_name_short.index(param_name_2)][0]
                     list_of_solved.append((solved_x_values, solved_y_values, overall_t, starting_x[i], starting_y[j]))
@@ -557,8 +562,7 @@ class Visualizer():
         )
         def save_settings(n_clicks, settings):
             parsed = parse_contents(settings)
+            self.graph.settings = parsed
             self.settings = parsed
-            print(self.settings)
-
 
         self.app.run_server(debug=True)
