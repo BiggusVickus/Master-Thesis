@@ -101,6 +101,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                 ]), 
                 dcc.Tab(label='Settings', children=[
                     html.H4(["These settings affect various parts of the simulation. For example the solver type (RK23 or RK45 or DOP853), or to use the defualt selected options by the solver or a linspace of selected options."]),
+                    html.Button("Save Settings", id="save_settings"),
                     html.Div([
                         html.H4(["Solver Type"]),
                         dcc.Dropdown(
@@ -206,8 +207,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             value=initial_settings['Simulation_Length'], 
                             required=True
                         ),
-                        html.Button("Save Settings", id="save_settings"),
-                        
                     ])
                 ]),
             ]),
