@@ -8,7 +8,7 @@ class Analysis():
         """Given a graph file, this class will read in the graph file and store the graph as an attribute. It will also store the location of the graph file as an attribute. The class contains methods to extract the data from nodes and return it as a vector. It also contains methods to initialize matrices and vectors from the graph file and store the parameters of that data in the matrix to do vector-matrix calculations in the ODE system. The class also contains a method to solve the ODE system given the ODE system function, initial conditions, and parameters, an dhas a method to check for cutoff values to set to 0. Given an evironment node, it will store the parameters of the environment as attributes of the class, like temeprature, pH, time step, and simulation length, or any other given parameters.
 
         The user needs to provide their own implementation of the ODE system function, and the class will take care of the rest of the calculations and data extraction from the graph file. The user needs to ensure that the flattened vector is unflattened to the associated arrays and matrices to do the calculations, and then reflattened to return the derivative of the system. The user needs to provide the extra parameters to use when calling solve_system() for use in the method. The user needs to unpack the *args vlaues correctly to use those parameters. The user can optionally check for cutoff values by calling check_cutoff() to set small values to 0. The user needs to repack the ODE data into a single vector to then be calculated. 
-        To do this, the user can implement a dummy class that inherits from this class, and then implement the ODE system function in that class. The user cna also then override the defualt flatten and unflatten methods to do the calculations.
+        To do this, the user can implement a dummy class that inherits from this class, and then implement the ODE system function in that class. The user cna also then override the default flatten and unflatten methods to do the calculations.
         The user can also provide any extra parameters to the solve_ivp function, like the method to use, the number of steps, or any other parameters that the solve_ivp function can take in. 
 
         Args:
@@ -21,7 +21,6 @@ class Analysis():
         self.Max_Step = 0.1
         self.Cutoff_Value = 0.000001
         self.Min_Step = 0.01
-        self.settings = {}
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -170,11 +169,11 @@ class Analysis():
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
         # check if max_step is in the extra parameters, if not, set it to the time step
-        print(self.settings)
+        print(self.graph.settings)
         if t_start is None:
             t_start = 0
         if t_end is None:
-            t_end = self.settings['Simulation_Length']
+            t_end = self.graph.settings['Simulation_Length']
             
         print("Solving ODE system")
         print(t_end)
