@@ -57,19 +57,29 @@ class Visualizer():
     def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values):
         list_of_figs = []
         for i, name in zip(range(len(self.graph_data.keys())), self.graph_data.keys()):
-            fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Initial Value Analysis for {name}", f"Time of Peak/Max Value for {name}"))
+            fig = make_subplots(rows=1, cols=3, subplot_titles=(f"Initial Value Analysis for {name}", f"Initial starting value vs Time of Peak/Max Value for {name}", f"Initial starting value of {param_name} vs max value reached"))
             list_max_x = []
+            list_max_y = []
             for j in range(len(simulation_output)):
                 fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}"), row=1, col=1)
                 max_x = time_output[j][np.argmax(simulation_output[j][i][0])]
                 list_max_x.append(max_x)
+                max_y = np.max(simulation_output[j][i][0])
+                list_max_y.append(max_y)
             scatter_fig = px.scatter(x=param_values, y=list_max_x, labels={"x": "Starting Value", "y": "Time of Peak"}, trendline="ols")
+            scatter_fig_2 = px.scatter(x=param_values, y=list_max_y, labels={"x": "Starting Value", "y": "Time of Peak"}, trendline="ols")
+            # scatter_fig_3 = px.scatter(x=param_values, y=list_max_x, labels={"x": "Starting Value", "y": "Time of Peak"}, trendline="ols")
             fig.add_trace(scatter_fig.data[0], row=1, col=2)
             fig.add_trace(scatter_fig.data[1], row=1, col=2)
+            fig.add_trace(scatter_fig_2.data[0], row=1, col=3)
+            fig.add_trace(scatter_fig_2.data[1], row=1, col=3)
+
             fig.update_xaxes(title_text="Time", row=1, col=1)
             fig.update_yaxes(title_text="Value", row=1, col=1)
             fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)
             fig.update_yaxes(title_text="Time until collapse/max value reached", row=1, col=2)
+            fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=3)
+            fig.update_yaxes(title_text="Max Value Reached", row=1, col=3)
             list_of_figs.append(fig)
         return list_of_figs
     
