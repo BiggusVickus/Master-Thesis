@@ -18,6 +18,13 @@
           <attvalue for="1" value="Temperature: 25.915507098548094&#10;pH: 6.396458027272012&#10;Simulation_Length: 10&#10;Max_Step: 0.5&#10;Cutoff_Value: 0.000001&#10;M: 4&#10;" />
         </attvalues>
       </node>
+      <node id="S" label="S">
+        <attvalues>
+          <attvalue for="0" value="S" />
+          <attvalue for="1" value="3" />
+          <attvalue for="2" value="Solver_Type: RK45&#10;T_Eval_Option: True&#10;Min_Step: 0.01&#10;Max_Step: 0.1&#10;Cutoff_Value: 0.000001&#10;Dense_Output: False&#10;R_Tol: 0.001&#10;A_Tol: 0.000001&#10;Arrow_Scale_1: 0.1&#10;Arrow_Scale_2: 0.3&#10;Arrow_Radians: 0.3490&#10;Simulation_Length: 30&#10;" />
+        </attvalues>
+      </node>
       <node id="P0" label="P0">
         <attvalues>
           <attvalue for="0" value="P" />

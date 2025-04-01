@@ -20,6 +20,7 @@ class Visualizer():
         self.copy_of_simulation_output = None
         self.copy_of_parameter_analysis_output = None
         self.settings = self.initialize_settings()
+        self.parameter_analysis_plot = {}
 
     def initialize_settings(self):
         data = self.graph.graph.nodes["S"]["data"]
@@ -178,6 +179,16 @@ class Visualizer():
         else:
             start_1, end_1 = [float(value.strip()) for value in range.split("-")]
             return np.linspace(start_1, end_1, int(steps)).tolist()
+        
+    def optical_density(self, array, list_of_names):
+        optical_list = []
+        counter = 0
+        for i, group in enumerate(array):
+            for j, item in enumerate(group):
+                if list_of_names[counter].lower() in ["uninfected", "infected", "bacteria", "b", "u", "i", "b0", "u0", "i0", "infect", "uninf", "inf", "uninfect"]:
+                    optical_list.append(item)
+                counter += 1
+        return np.sum(optical_list, axis=0)
     
     def run(self):
         self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph, self.settings)
@@ -382,9 +393,6 @@ class Visualizer():
 
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
             return self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2)
-        # 0.07222012281417847 for drag_value + clicking @ 100 clicks
-        # 0.12108221735273089 for drag_value + dragging @ 140 drags
-        # 0.06944610595703125s for vlaue + clicking @ 100 clicks
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
