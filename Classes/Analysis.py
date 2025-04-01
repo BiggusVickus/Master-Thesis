@@ -169,14 +169,10 @@ class Analysis():
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
         # check if max_step is in the extra parameters, if not, set it to the time step
-        print(self.graph.settings)
         if t_start is None:
             t_start = 0
         if t_end is None:
             t_end = self.graph.settings['Simulation_Length']
-            
-        print("Solving ODE system")
-        print(t_end)
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step), min_step=float(self.Min_Step))
         return solved
     
