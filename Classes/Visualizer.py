@@ -55,7 +55,20 @@ class Visualizer():
             list_of_figs.append(fig)
         return list_of_figs
     
-    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values):
+    # Define models
+    def log_func(self, x, a, c):
+        return a * np.log(x) + c
+
+    def exp_func(self, x, a, c):
+        return np.exp(a * x + c)
+
+    def power_func(self, x, a, c):
+        return c * x**a
+    
+    def lin_func(self, x, a, c):
+        return a * x + c
+
+    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale):
         list_of_figs = []
         for i, name in zip(range(len(self.graph_data.keys())), self.graph_data.keys()):
             fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"ISV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
@@ -67,35 +80,91 @@ class Visualizer():
                 list_max_x.append(max_x)
                 max_y = np.max(simulation_output[j][i][0])
                 list_max_y.append(max_y)
-            scatter_fig_2 = px.scatter(x=param_values, y=list_max_x, labels={"x": "Starting Value", "y": "Time at Peak"}, trendline="ols")
-            model_2 = px.get_trendline_results(scatter_fig_2).iloc[0]["px_fit_results"]
 
-            if name not in self.initial_value_plot:
-                self.initial_value_plot[name] = {'iterations' : ["run 1"], 'data': [[model_2.params[1], model_2.params[0], model_2.rsquared]]}
-            else:
-                dict_name = self.initial_value_plot[name]
-                dict_name['iterations'] += [f"run {len(dict_name['iterations']) + 1}"]
-                dict_name['data'] += [[model_2.params[1], model_2.params[0], model_2.rsquared]]
-                self.initial_value_plot[name] = dict_name
+            if param_name in self.graph_data:
+                index = list(self.graph_data.keys()).index(param_name)
+                initial_value = self.graph_data[param_name]["data"]
 
-            fig.add_trace(scatter_fig_2.data[0], row=1, col=2)
-            fig.add_trace(scatter_fig_2.data[1], row=1, col=2)
+
+            if graph_axis_scale == "linear-linear (linear)": # linear
+                popt, _ = curve_fit(self.lin_func, param_values, list_max_x)
+                predictions = [self.lin_func(x, *popt) for x in param_values]
+                parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
+
+            elif graph_axis_scale == "linear-log (exponential)": # exponential
+                valid_indices = np.isfinite(np.log(list_max_x))  # Filter out invalid values
+                filtered_param_values = np.array(param_values)[valid_indices]
+                filtered_list_max_x = np.array(list_max_x)[valid_indices]
+                if filtered_list_max_x.size == 0:
+                    popt = [np.nan, np.nan]
+                else:
+                    print(param_values, list_max_x)
+                    popt, _ = curve_fit(lambda x, a, b: a * x + b, filtered_param_values, np.log(filtered_list_max_x))
+                    popt[1] = np.exp(popt[1])
+                predictions = [self.exp_func(x, *popt) for x in param_values]
+                parameter_string = f"Equation: y=a*e^(x+c)<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
+                fig.update_yaxes(type="log", row=1, col=2)
+
+            elif graph_axis_scale == "log-linear (log)":  #log
+                print(param_values, list_max_x)
+                popt, _ = curve_fit(self.log_func, param_values, list_max_x)
+                predictions = [self.log_func(x, *popt) for x in param_values]
+                parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
+                fig.update_xaxes(type="log", row=1, col=2)
+
+            elif graph_axis_scale == "log-log (power law)": # powerlog       
+                valid_indices = np.isfinite(np.log(list_max_x))  # Filter out invalid values
+                filtered_param_values = np.array(param_values)[valid_indices]
+                filtered_list_max_x = np.array(list_max_x)[valid_indices]
+                if filtered_list_max_x.size == 0:
+                    popt = [np.nan, np.nan]
+                else:
+                    print("output", np.log(param_values), np.log(list_max_x))
+                    popt, _ = curve_fit(lambda x, a, b: a * np.log(x) + b, np.log(filtered_param_values), np.log(filtered_list_max_x))
+                    popt[1] = np.exp(popt[1])  # Convert b back to c
+                predictions = [self.power_func(x, *popt) for x in param_values]
+                parameter_string = f"Equation: y=c*x^a<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
+                fig.update_xaxes(type="log", row=1, col=2)
+                fig.update_yaxes(type="log", row=1, col=2)
+
+            corr_matrix = np.corrcoef(list_max_x, predictions)
+            corr = corr_matrix[0,1]
+            r_squared = corr**2
+            fig.add_trace(
+                go.Scatter(
+                    x=param_values, 
+                    y=predictions, 
+                    mode="lines", 
+                    name="Fitted Curve",
+                    hovertemplate=f"Parameter Value: %{{x}}<br>Fitted Value: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}<extra></extra>"
+                ), 
+                row=1, col=2
+            )
+            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Data"), row=1, col=2)
             fig.update_xaxes(title_text="Time", row=1, col=1)
             fig.update_yaxes(title_text="Value", row=1, col=1)
             fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)
             fig.update_yaxes(title_text="Time max value reached", row=1, col=2)
+            if name not in self.initial_value_plot:
+                self.initial_value_plot[name] = {
+                    'data': [[popt[0], popt[1], r_squared]],
+                    'iterations': ["Run " + str(1)],
+                }
+            else:
+                self.initial_value_plot[name]['data'] += [[popt[0], popt[1], r_squared]]
+                self.initial_value_plot[name]['iterations'] += ["Run " + str(len(self.initial_value_plot[name]['iterations']) + 1)]
 
             for j in range(len(self.initial_value_plot[name]['data'])):
                 for k, value in enumerate(self.initial_value_plot[name]['data'][j]):
                     self.initial_value_plot[name]['data'][j][k] = round(value, 9)
                 fig.add_trace(
                     go.Bar(
-                        y=["Slope", "Intercept", "R^2"], 
-                        x=self.initial_value_plot[name]['data'][j], 
+                        x=["a", "c", "R^2"], 
+                        y=self.initial_value_plot[name]['data'][j], 
                         name=self.initial_value_plot[name]['iterations'][j], 
                         text=self.initial_value_plot[name]['data'][j],
-                        textposition=["outside" if value < 0.1 else "auto" for value in self.initial_value_plot[name]['data'][j]],
-                        orientation="h"
+                        textposition=["outside" if value >= 0 else "outside" for value in self.initial_value_plot[name]['data'][j]],
+                        textangle=-90  # Set text orientation to vertical
                     ), 
                     row=1, col=3
                 )
