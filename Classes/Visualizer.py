@@ -424,13 +424,14 @@ class Visualizer():
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
+            State('initial_value_analysis_graph_scale', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graph_axis_scale, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
@@ -465,7 +466,7 @@ class Visualizer():
                 overall_y = self.save_data(overall_y, overall_t, save_data=False)
                 simulation_output.append(overall_y)
                 time_output.append(overall_t)
-            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values)
+            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale)
         
         @callback(
             Output('plot_phase_portrait', 'figure', allow_duplicate=True),
@@ -600,5 +601,17 @@ class Visualizer():
             parsed = parse_contents(settings)
             self.graph.settings = parsed
             self.settings = parsed
+
+        @callback(
+            [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure') for name in self.graph_data.keys()],
+            Input('clear_bar_chart', 'n_clicks'),
+        )
+        def clear_bar_chart(n_clicks):
+            self.initial_value_plot = {}
+            plots = []
+            for name in self.graph_data.keys():
+                plots.append(go.Figure())
+            return plots
+            
 
         self.app.run_server(debug=True)

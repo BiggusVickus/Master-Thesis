@@ -366,7 +366,9 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                         value=[],
                         id='initial_value_analysis_use_serial_transfer'
                     ),
+                    dcc.Dropdown(['linear-linear (linear)', 'linear-log (exponential)', 'log-linear (log)', 'log-log (power law)'], id='initial_value_analysis_graph_scale', value = 'log-linear (log)'),
                     html.Button("Run Initial Value Analysis", id="run_initial_value_analysis"),
+                    html.Button("Clear Bar Chart", id="clear_bar_chart"),
                     html.Div(style={'margin': '60px'}),
                     *[
                         dcc.Graph(id={"type": "plot_initial_value_analysis", "index": name}) for name in graph_data.keys()
