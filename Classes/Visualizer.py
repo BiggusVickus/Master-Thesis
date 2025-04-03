@@ -8,6 +8,10 @@ from collections import OrderedDict
 from Classes.VisualizerHTML import html_code, parse_contents
 from plotly.subplots import make_subplots
 from scipy.optimize import curve_fit
+import warnings
+
+warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
+warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 np.random.seed(0)  # Set the random seed for reproducibility
 #TODO: give option to append a serial transfer to parameter analysis and initial value analysis
 class Visualizer():
@@ -86,7 +90,6 @@ class Visualizer():
                 predictions = [self.lin_func(x, *popt) for x in param_values]
                 parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
             elif graph_axis_scale == "log-linear (log)":  #log
-                print(param_values, list_max_x)
                 popt, _ = curve_fit(self.log_func, param_values, list_max_x)
                 predictions = [self.log_func(x, *popt) for x in param_values]
                 parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
