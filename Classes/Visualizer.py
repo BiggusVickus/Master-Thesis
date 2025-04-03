@@ -5,9 +5,10 @@ import pandas as pd
 from dash import Dash, Input, Output, callback, ALL, State
 import plotly.graph_objs as go
 from collections import OrderedDict
-import plotly.figure_factory as ff
 from Classes.VisualizerHTML import html_code, parse_contents
 from plotly.subplots import make_subplots
+from scipy.optimize import curve_fit
+np.random.seed(0)  # Set the random seed for reproducibility
 #TODO: give option to append a serial transfer to parameter analysis and initial value analysis
 class Visualizer():
     def __init__(self, graph):
@@ -59,12 +60,6 @@ class Visualizer():
     def log_func(self, x, a, c):
         return a * np.log(x) + c
 
-    def exp_func(self, x, a, c):
-        return np.exp(a * x + c)
-
-    def power_func(self, x, a, c):
-        return c * x**a
-    
     def lin_func(self, x, a, c):
         return a * x + c
 
@@ -90,42 +85,12 @@ class Visualizer():
                 popt, _ = curve_fit(self.lin_func, param_values, list_max_x)
                 predictions = [self.lin_func(x, *popt) for x in param_values]
                 parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
-
-            elif graph_axis_scale == "linear-log (exponential)": # exponential
-                valid_indices = np.isfinite(np.log(list_max_x))  # Filter out invalid values
-                filtered_param_values = np.array(param_values)[valid_indices]
-                filtered_list_max_x = np.array(list_max_x)[valid_indices]
-                if filtered_list_max_x.size == 0:
-                    popt = [np.nan, np.nan]
-                else:
-                    print(param_values, list_max_x)
-                    popt, _ = curve_fit(lambda x, a, b: a * x + b, filtered_param_values, np.log(filtered_list_max_x))
-                    popt[1] = np.exp(popt[1])
-                predictions = [self.exp_func(x, *popt) for x in param_values]
-                parameter_string = f"Equation: y=a*e^(x+c)<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
-                fig.update_yaxes(type="log", row=1, col=2)
-
             elif graph_axis_scale == "log-linear (log)":  #log
                 print(param_values, list_max_x)
                 popt, _ = curve_fit(self.log_func, param_values, list_max_x)
                 predictions = [self.log_func(x, *popt) for x in param_values]
                 parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
                 fig.update_xaxes(type="log", row=1, col=2)
-
-            elif graph_axis_scale == "log-log (power law)": # powerlog       
-                valid_indices = np.isfinite(np.log(list_max_x))  # Filter out invalid values
-                filtered_param_values = np.array(param_values)[valid_indices]
-                filtered_list_max_x = np.array(list_max_x)[valid_indices]
-                if filtered_list_max_x.size == 0:
-                    popt = [np.nan, np.nan]
-                else:
-                    print("output", np.log(param_values), np.log(list_max_x))
-                    popt, _ = curve_fit(lambda x, a, b: a * np.log(x) + b, np.log(filtered_param_values), np.log(filtered_list_max_x))
-                    popt[1] = np.exp(popt[1])  # Convert b back to c
-                predictions = [self.power_func(x, *popt) for x in param_values]
-                parameter_string = f"Equation: y=c*x^a<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
-                fig.update_xaxes(type="log", row=1, col=2)
-                fig.update_yaxes(type="log", row=1, col=2)
 
             corr_matrix = np.corrcoef(list_max_x, predictions)
             corr = corr_matrix[0,1]
