@@ -9,6 +9,7 @@ from Classes.VisualizerHTML import html_code, parse_contents
 from plotly.subplots import make_subplots
 from scipy.optimize import curve_fit
 import warnings
+from copy import deepcopy
 
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
@@ -58,7 +59,7 @@ class Visualizer():
                     yaxis=dict(title="Value")
                 )
             list_of_figs.append(fig)
-        data_bacteria = self.optical_density(unflattened_data, list(self.graph_data.keys()))
+        data_bacteria = self.optical_density(deepcopy(unflattened_data), list(self.graph_data.keys()))
         fig_bacteria = go.Figure(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Sum of all Bacteria (Optical Density)"))
         fig_bacteria.update_layout(
             title="Sum of all Bacteria (Optical Density)",
