@@ -58,8 +58,31 @@ class Visualizer():
                     yaxis=dict(title="Value")
                 )
             list_of_figs.append(fig)
+        data_bacteria = self.optical_density(unflattened_data, list(self.graph_data.keys()))
+        fig_bacteria = go.Figure(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Sum of all Bacteria (Optical Density)"))
+        fig_bacteria.update_layout(
+            title="Sum of all Bacteria (Optical Density)",
+            xaxis=dict(title="Time"),
+            yaxis=dict(title="Value")
+        )
+        list_of_figs.append(fig_bacteria)
         return list_of_figs
     
+    def optical_density(self, array, list_of_names):
+        optical_list = []
+        counter = 0
+        for j, item in enumerate(array):
+            if list_of_names[counter].lower() in ["uninfected", "infected", "bacteria", "b", "u", "i", "b0", "u0", "i0", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect", "bacteria u", "bacteria i", "bacteria u0", "bacteria i0", "bacteria infect", "bacteria uninfected"]:
+                optical_list.append(item)
+            counter += 1
+        initial_sum = optical_list[0][0]
+        for i in range(len(optical_list)):
+            for j in range(len(optical_list[i])):
+                if i == 0 and j == 0:
+                    continue
+                initial_sum += optical_list[i][j]
+        return initial_sum
+
     # Define models
     def log_func(self, x, a, c):
         return a * np.log(x) + c
@@ -234,22 +257,13 @@ class Visualizer():
         else:
             start_1, end_1 = [float(value.strip()) for value in range.split("-")]
             return np.linspace(start_1, end_1, int(steps)).tolist()
-        
-    def optical_density(self, array, list_of_names):
-        optical_list = []
-        counter = 0
-        for i, group in enumerate(array):
-            for j, item in enumerate(group):
-                if list_of_names[counter].lower() in ["uninfected", "infected", "bacteria", "b", "u", "i", "b0", "u0", "i0", "infect", "uninf", "inf", "uninfect"]:
-                    optical_list.append(item)
-                counter += 1
-        return np.sum(optical_list, axis=0)
     
     def run(self):
         self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph, self.settings)
 
         @callback(
             [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum"}, 'figure', allow_duplicate=True),
             Input('run_basic_model', 'n_clicks'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -274,6 +288,7 @@ class Visualizer():
         
         @callback(
             [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum"}, 'figure'),
             Input('run_serial_transfer', 'n_clicks'),
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
@@ -314,6 +329,7 @@ class Visualizer():
         
         @callback(
             [Output({'type': 'plot_parameter_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()], 
+            Output({'type': 'plot_parameter_analysis', 'index': "plot_parameter_analysis_bacteria_sum"}, 'figure', allow_duplicate=True),
             Output('parameter_analysis_slider', 'max'), 
             Output('parameter_analysis_slider', 'marks'),
             Output('parameter_analysis_slider', 'value'),
@@ -451,6 +467,7 @@ class Visualizer():
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            Output({'type': 'plot_initial_value_analysis', 'index': "plot_initial_value_analysis_bacteria_sum"}, 'figure', allow_duplicate=True),
             Input('run_initial_value_analysis', 'n_clicks'),
             State('initial_value_analysis_param_name', 'value'),
             State('initial_value_analysis_option', 'value'),
