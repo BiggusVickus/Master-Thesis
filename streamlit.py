@@ -8,8 +8,6 @@ class System(Analysis):
         super().__init__(graph_location)
 
     def odesystem(self, t, Y, *params):
-        #TODO: look at biology side, try to replicate graphs
-        #TODO: explore the model(s)
         # start simple, bacteria-resource, see how the bacteria and reosurces grow/shrink, bacteria should hit carrying capacity, nutrient should reach 0, not negative, etc
         graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, M, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix = params
         graph = graph_object.graph
@@ -93,8 +91,8 @@ class System(Analysis):
 # graph = System('simple_test.gexf')
 
 # graph = System('example.gexf')
-# graph = System('simple_test.gexf')
 graph = System('simple_test_2.gexf')
+# graph = System('example_3.gexf')
 phage_nodes = graph.get_nodes_of_type('P')
 bacteria_nodes = graph.get_nodes_of_type('B')
 resource_nodes = graph.get_nodes_of_type('R')
@@ -115,7 +113,7 @@ B_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes
 visualizer = Visualizer(graph)
 visualizer.add_graph_data("Resources", R0, resource_nodes)
 visualizer.add_graph_data("Uninfected Bacteria", U0, bacteria_nodes)
-visualizer.add_graph_data("Infected Bacteria", I0, row_names=bacteria_nodes, column_names=[f"Step {i}" for i in range(int(graph.M))], add_rows=4)
+visualizer.add_graph_data("Infected Bacteria", I0, row_names=bacteria_nodes, column_names=[f"Bacteria {i}" for i in range(int(graph.M))], add_rows=4)
 visualizer.add_graph_data("Phages", P0 , phage_nodes)
 
 visualizer.add_non_graph_data_vector("e_vector", e_vector, resource_nodes)
