@@ -91,9 +91,9 @@ class Visualizer():
     def lin_func(self, x, a, c):
         return a * x + c
 
-    def create_initial_value_analysis_figures(self, simulation_output, time_output, bacteria_sum_output, param_name, param_values, graph_axis_scale):
+    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale):
         list_of_figs = []
-        for i, name in enumerate(list(self.graph_data.keys())):
+        for i, name in enumerate(list(self.graph_data.keys()) + ["Bacteria Sum"]):
             fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"ISV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
             list_max_x = []
             list_max_y = []
@@ -115,75 +115,6 @@ class Visualizer():
             elif graph_axis_scale == "log-linear (log)":  #log
                 popt, _ = curve_fit(self.log_func, param_values, list_max_x)
                 predictions = [self.log_func(x, *popt) for x in param_values]
-                parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
-                fig.update_xaxes(type="log", row=1, col=2)
-
-            corr_matrix = np.corrcoef(list_max_x, predictions)
-            corr = corr_matrix[0,1]
-            r_squared = corr**2
-            fig.add_trace(
-                go.Scatter(
-                    x=param_values, 
-                    y=predictions, 
-                    mode="lines", 
-                    name="Fitted Curve",
-                    hovertemplate=f"Parameter Value: %{{x}}<br>Fitted Value: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}<extra></extra>"
-                ), 
-                row=1, col=2
-            )
-            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Data"), row=1, col=2)
-            fig.update_xaxes(title_text="Time", row=1, col=1)
-            fig.update_yaxes(title_text="Value", row=1, col=1)
-            fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)
-            fig.update_yaxes(title_text="Time max value reached", row=1, col=2)
-            if name not in self.initial_value_plot:
-                self.initial_value_plot[name] = {
-                    'data': [[popt[0], popt[1], r_squared]],
-                    'iterations': ["Run " + str(1)],
-                }
-            else:
-                self.initial_value_plot[name]['data'] += [[popt[0], popt[1], r_squared]]
-                self.initial_value_plot[name]['iterations'] += ["Run " + str(len(self.initial_value_plot[name]['iterations']) + 1)]
-
-            for j in range(len(self.initial_value_plot[name]['data'])):
-                for k, value in enumerate(self.initial_value_plot[name]['data'][j]):
-                    self.initial_value_plot[name]['data'][j][k] = round(value, 9)
-                fig.add_trace(
-                    go.Bar(
-                        x=["a", "c", "R^2"], 
-                        y=self.initial_value_plot[name]['data'][j], 
-                        name=self.initial_value_plot[name]['iterations'][j], 
-                        text=self.initial_value_plot[name]['data'][j],
-                        textposition=["outside" if value >= 0 else "outside" for value in self.initial_value_plot[name]['data'][j]],
-                        textangle=-90  # Set text orientation to vertical
-                    ), 
-                    row=1, col=3
-                )
-            list_of_figs.append(fig)
-
-        name = "Bacteria Sum"
-        fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for Bacteria Sum (Optical Density)", f"ISV vs Time of Max Value for Bacteria Sum", "Slope and Intercept Comparison"))
-        list_max_x = []
-        list_max_y = []
-        for j in range(len(bacteria_sum_output)):
-            print("printed out:", bacteria_sum_output[j])
-            fig.add_trace(go.Scatter(x=time_output[j], y=bacteria_sum_output[j], mode="lines", name=f"{param_name} {param_values[j]}"), row=1, col=1)
-            max_x = time_output[j][np.argmax(bacteria_sum_output[j])]
-            list_max_x.append(max_x)
-            max_y = np.max(bacteria_sum_output[j])
-            list_max_y.append(max_y)
-
-        if param_name in self.graph_data:
-            index = list(self.graph_data.keys()).index(param_name)
-            initial_value = self.graph_data[param_name]["data"]
-
-        if graph_axis_scale == "linear-linear (linear)": # linear
-            popt, _ = curve_fit(self.lin_func, param_values, list_max_x)
-            predictions = [self.lin_func(x, *popt) for x in param_values]
-            parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
-        elif graph_axis_scale == "log-linear (log)":  #log
-            popt, _ = curve_fit(self.log_func, param_values, list_max_x)
-            predictions = [self.log_func(x, *popt) for x in param_values]
                 parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
                 fig.update_xaxes(type="log", row=1, col=2)
 
@@ -587,6 +518,7 @@ class Visualizer():
                     overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                 overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                 overall_y = self.save_data(overall_y, overall_t, save_data=False)
+                overall_y.append([self.optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                 simulation_output.append(overall_y)
                 time_output.append(overall_t)
             return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale)
