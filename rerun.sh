@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FILE="streamlit.py"
+RUN_CMD="/usr/local/bin/python3 /Users/vicpi/Documents/GitHub/Master_Thesis/streamlit.py"
+
+echo "📡 Watching $FILE. Will rerun on crash and change..."
+
+while true; do
+    $RUN_CMD
+    echo "⚠️  $FILE crashed or exited. Waiting for changes before rerun..."
+
+    # fswatch blocks until file is changed
+    # fswatch -1 "$FILE"
+done
