@@ -60,9 +60,9 @@ class Visualizer():
                 )
             list_of_figs.append(fig)
         data_bacteria = self.optical_density(deepcopy(unflattened_data), list(self.graph_data.keys()))
-        fig_bacteria = go.Figure(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Sum of all Bacteria (Optical Density)"))
+        fig_bacteria = go.Figure(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (Optical Density)"))
         fig_bacteria.update_layout(
-            title="Sum of all Bacteria (Optical Density)",
+            title="Bacteria Sum (Optical Density)",
             xaxis=dict(title="Time"),
             yaxis=dict(title="Value")
         )
@@ -204,7 +204,7 @@ class Visualizer():
     
     def create_heatmap_figures(self, matrix_data, x_axis_data=None, y_axis_data=None, x_labels=None, y_labels=None):
         list_of_figs = []
-        for i, name in zip(range(matrix_data.shape[2]), self.graph_data.keys()):
+        for i, name in zip(range(matrix_data.shape[2]), list(self.graph_data.keys()) + ["Bacteria Sum"]):
             df = pd.DataFrame(matrix_data[:, :, i], columns=y_axis_data, index=x_axis_data)
             fig = px.imshow(
                 df, 
@@ -363,7 +363,7 @@ class Visualizer():
             param_values_2 = self.split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
 
             # create a matrix to store the values of the final time point for each parameter value tested
-            matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)))
+            matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)+1))
             # create a list of the names of the parameters, to be used to find the index of the parameter in the flattened array
             items_of_name = []
             for key, value in self.graph_data.items():
@@ -403,6 +403,7 @@ class Visualizer():
                         overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                     overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                     overall_y = self.save_data(overall_y, overall_t, save_data=False)
+                    overall_y.append([self.optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                     y_values_to_save[(param_value_1, param_value_2)] = overall_y
                     t_values_to_save[(param_value_1, param_value_2)] = overall_t
                     # save the final value to the matrix
@@ -416,6 +417,7 @@ class Visualizer():
 
         @callback(
             [Output({'type': 'plot_parameter_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
+            Output({'type': 'plot_parameter_analysis', 'index': "plot_parameter_analysis_bacteria_sum"}, 'figure', allow_duplicate=True),
             # Input('parameter_analysis_slider', 'drag_value'),
             Input('parameter_analysis_slider', 'value'),
             Input('parameter_analysis_extrapolate', 'value'),
@@ -427,7 +429,7 @@ class Visualizer():
             try:
                 param_values_1 = self.copy_of_parameter_analysis_output["x_axis_data"]
             except:
-                return [go.Figure() for _ in self.graph_data.keys()]
+                return [go.Figure() for _ in self.graph_data.keys()] + [go.Figure()]
             param_values_2 = self.copy_of_parameter_analysis_output["y_axis_data"]
             param_name_1 = self.copy_of_parameter_analysis_output["x_labels"]
             param_name_2 = self.copy_of_parameter_analysis_output["y_labels"]
@@ -435,7 +437,7 @@ class Visualizer():
             overall_y = self.copy_of_parameter_analysis_output["overall_y"]
 
             # create a matrix to store the values of the final time point for each parameter value tested
-            matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)))
+            matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)+1))
             
             # loop through each set of parameter values, for the x, y point in the parameter analysis, and find the value at the time point closest to the slider value
             for param_value_1 in param_values_1:
