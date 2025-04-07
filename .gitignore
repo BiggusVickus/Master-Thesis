@@ -25,3 +25,4 @@ test.py
 *.run.xml
 /temperature-microbial-communities-main
 test.ipynb
+venv/
