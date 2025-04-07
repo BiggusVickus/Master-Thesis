@@ -661,14 +661,15 @@ class Visualizer():
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure') for name in self.graph_data.keys()],
+            Output({'type': 'plot_initial_value_analysis', 'index': 'plot_initial_value_analysis_bacteria_sum'}, 'figure'),
             Input('clear_bar_chart', 'n_clicks'),
         )
         def clear_bar_chart(n_clicks):
             self.initial_value_plot = {}
             plots = []
-            for name in self.graph_data.keys():
+            for i in range(len(self.graph_data.keys())+1):
                 plots.append(go.Figure())
             return plots
             
 
-        self.app.run_server(debug=True)
+        self.app.run(debug=True)
