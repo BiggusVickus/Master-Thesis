@@ -41,6 +41,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
             *[
                 dcc.Graph(id={"type": "plot_basic_graph_data", "index": name}) for name in graph_data.keys()
             ],
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum"}), 
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),
@@ -322,7 +323,8 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                     html.Div(children = [
                         *[
                             dcc.Graph(id={"type": "plot_parameter_analysis", "index": name}, style={'display': 'inline-block'}) for name in graph_data.keys()
-                        ]
+                        ], 
+                        dcc.Graph(id={"type": "plot_parameter_analysis", "index": "plot_parameter_analysis_bacteria_sum"}, style={'display': 'inline-block'}),
                     ],style={'margin': '60px'}), 
                 ]),
 
@@ -373,6 +375,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                     *[
                         dcc.Graph(id={"type": "plot_initial_value_analysis", "index": name}) for name in graph_data.keys()
                     ],
+                    dcc.Graph(id={"type": "plot_initial_value_analysis", "index": "plot_initial_value_analysis_bacteria_sum"})
                 ]),
 
                 dcc.Tab(label='Phase Portrait', children=[
