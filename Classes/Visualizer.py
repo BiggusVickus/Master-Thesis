@@ -67,6 +67,33 @@ class Visualizer():
             yaxis=dict(title="Value")
         )
         list_of_figs.append(fig_bacteria)
+
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Populaiton Levels", "Relative Population Levels"), row_heights=[1000])
+        for i, dictionary in enumerate(self.graph_data.items()):
+            name, dic = dictionary
+            for j in range(len(unflattened_data[i])):
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
+        fig.update_yaxes(type="log", row=1, col=1)
+        fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
+        fig.update_layout(hovermode="x unified")
+        list_of_figs.append(fig)
+
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels", "Relative Population Levels"), row_heights=[1000])
+        for i, dictionary in enumerate(self.graph_data.items()):
+            name, dic = dictionary
+            for j in range(len(unflattened_data[i])):
+                if name.lower() in ["bacteria", "b", "u", "i", "b0", "u0", "i0", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
+                    continue
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria (optical density, absolute)", stackgroup="one"), row=1, col=1)
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria, (optical density, relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
+        fig.update_yaxes(type="log", row=1, col=1)
+        fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
+        fig.update_layout(hovermode="x unified")
+
+        list_of_figs.append(fig)
         return list_of_figs
     
     def optical_density(self, array, list_of_names):
