@@ -118,7 +118,7 @@ class Visualizer():
     def lin_func(self, x, a, c):
         return a * x + c
 
-    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale):
+    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name):
         list_of_figs = []
         for i, name in enumerate(list(self.graph_data.keys()) + ["Bacteria Sum"]):
             fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"ISV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
@@ -166,11 +166,11 @@ class Visualizer():
             if name not in self.initial_value_plot:
                 self.initial_value_plot[name] = {
                     'data': [[popt[0], popt[1], r_squared]],
-                    'iterations': ["Run " + str(1)],
+                    'iterations': ["Run " + str(1) if run_name == "" else run_name],
                 }
             else:
                 self.initial_value_plot[name]['data'] += [[popt[0], popt[1], r_squared]]
-                self.initial_value_plot[name]['iterations'] += ["Run " + str(len(self.initial_value_plot[name]['iterations']) + 1)]
+                self.initial_value_plot[name]['iterations'] += ["Run " + str(len(self.initial_value_plot[name]['iterations']) + 1) if run_name == "" else run_name]
 
             for j in range(len(self.initial_value_plot[name]['data'])):
                 for k, value in enumerate(self.initial_value_plot[name]['data'][j]):
@@ -291,6 +291,8 @@ class Visualizer():
         @callback(
             [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum"}, 'figure', allow_duplicate=True),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_total_sum"}, 'figure', allow_duplicate=True),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum_graph"}, 'figure', allow_duplicate=True),
             Input('run_basic_model', 'n_clicks'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -316,6 +318,8 @@ class Visualizer():
         @callback(
             [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum"}, 'figure'),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_total_sum"}, 'figure'),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum_graph"}, 'figure', allow_duplicate=True),
             Input('run_serial_transfer', 'n_clicks'),
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
@@ -503,6 +507,7 @@ class Visualizer():
             State('initial_value_analysis_input', 'value'),
             State('initial_value_analysis_range', 'value'),
             State('initial_value_analysis_steps', 'value'),
+            State('initial_value_analysis_run_name', 'value'),
             State('initial_value_analysis_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
@@ -514,7 +519,7 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graph_axis_scale, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, run_name, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graph_axis_scale, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.graph.update_environment_data(environment_data[0])
@@ -550,7 +555,7 @@ class Visualizer():
                 overall_y.append([self.optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                 simulation_output.append(overall_y)
                 time_output.append(overall_t)
-            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale)
+            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale, run_name)
         
         @callback(
             Output('plot_phase_portrait', 'figure', allow_duplicate=True),
