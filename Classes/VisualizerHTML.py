@@ -42,6 +42,8 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                 dcc.Graph(id={"type": "plot_basic_graph_data", "index": name}) for name in graph_data.keys()
             ],
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum"}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_total_sum"}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum_graph"}), 
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),
@@ -368,8 +370,15 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                         value=[],
                         id='initial_value_analysis_use_serial_transfer'
                     ),
+                    html.H4(["Name for the run (optional, default = 'Run [number]):"]),
+                    dcc.Input(
+                        value="",
+                        id='initial_value_analysis_run_name'
+                    ),
+                    html.H4(["Choose a scale for the graph (linear or log graph)"]),
                     dcc.Dropdown(['log-linear (log)', 'linear-linear (linear)'], id='initial_value_analysis_graph_scale', value = 'log-linear (log)'),
                     html.Button("Run Initial Value Analysis", id="run_initial_value_analysis"),
+                    html.H4(["Clear Bar Chart"]),
                     html.Button("Clear Bar Chart", id="clear_bar_chart"),
                     html.Div(style={'margin': '60px'}),
                     *[
