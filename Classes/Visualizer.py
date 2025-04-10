@@ -69,12 +69,11 @@ class Visualizer():
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria not Summed Up)", "Relative Population Levels (Bacteria not Summed Up)"), row_heights=[1000])
-        for i, dictionary in enumerate(self.graph_data.items()):
-            name, dic = dictionary
-            for j in range(len(unflattened_data[i])-1, 0, -1):
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        for i, (name, dic) in enumerate(self.graph_data.items()):
+            for j in range(len(unflattened_data[i])):
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
-            for j in range(len(unflattened_data[i])-1, 0, -1):
+            for j in range(len(unflattened_data[i])):
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
         fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
@@ -82,8 +81,7 @@ class Visualizer():
         list_of_figs.append(fig)
 
         fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
-        for i, dictionary in enumerate(self.graph_data.items()):
-            name, dic = dictionary
+        for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
