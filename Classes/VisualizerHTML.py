@@ -38,12 +38,10 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
 
     return html.Div([
             html.H1("Line Chart"),
-            *[
-                dcc.Graph(id={"type": "plot_basic_graph_data", "index": name}) for name in graph_data.keys()
-            ],
-            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum"}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data"}), 
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_total_sum"}), 
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum_graph"}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_serial_transfer_end_values"}), 
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),

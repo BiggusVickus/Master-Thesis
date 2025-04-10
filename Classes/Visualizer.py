@@ -48,31 +48,31 @@ class Visualizer():
     
     def create_main_figures(self, unflattened_data, overall_t):
         list_of_figs = []
+        num_graphs = len(self.graph_data.keys()) + 1
+        cols = 3
+        rows = (num_graphs // cols) + 1  # Calculate the number of rows needed
+        fig = make_subplots(rows=rows, cols=3, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum (Optical Density)'], row_heights=[5000/rows]*rows)
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
-            fig = go.Figure(dict(text=name))
             for j in range(len(unflattened_data[i])):
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"))
-                fig.update_layout(
-                    title=f"Graph for {name}",
-                    xaxis=dict(title="Time"),
-                    yaxis=dict(title="Value")
-                )
-            list_of_figs.append(fig)
-        data_bacteria = self.optical_density(deepcopy(unflattened_data), list(self.graph_data.keys()))
-        fig_bacteria = go.Figure(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (Optical Density)"))
-        fig_bacteria.update_layout(
-            title="Bacteria Sum (Optical Density)",
-            xaxis=dict(title="Time"),
-            yaxis=dict(title="Value")
-        )
-        list_of_figs.append(fig_bacteria)
+                row = (i // cols) + 1
+                col = (i % cols) + 1
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"), row=row, col=col)
+                fig.update_layout(xaxis=dict(title="Time"), yaxis=dict(title="Value", type="log"))
+        fig.update_layout(title=f"Graph of Each Population", xaxis=dict(title="Time"), yaxis=dict(title="Value"))
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Populaiton Levels", "Relative Population Levels"), row_heights=[1000])
+        data_bacteria = optical_density(deepcopy(unflattened_data), list(self.graph_data.keys()))
+        col_index = (cols*3 + col)%3 + 1
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (Optical Density)"), row=rows, col=col_index)
+        fig.update_layout(hovermode="x unified")
+        list_of_figs.append(fig)
+
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels", "Relative Population Levels"), row_heights=[1000])
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
-            for j in range(len(unflattened_data[i])):
+            for j in range(len(unflattened_data[i])-1, 0, -1):
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
+            for j in range(len(unflattened_data[i])-1, 0, -1):
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
         fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
@@ -289,10 +289,10 @@ class Visualizer():
         self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph, self.settings)
 
         @callback(
-            [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
-            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum"}, 'figure', allow_duplicate=True),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data"}, 'figure', allow_duplicate=True),
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_total_sum"}, 'figure', allow_duplicate=True),
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum_graph"}, 'figure', allow_duplicate=True),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_serial_transfer_end_values"}, 'figure', allow_duplicate=True),
             Input('run_basic_model', 'n_clicks'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -316,10 +316,10 @@ class Visualizer():
             return list_of_figs
         
         @callback(
-            [Output({'type': 'plot_basic_graph_data', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
-            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum"}, 'figure'),
-            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_total_sum"}, 'figure'),
+            Output({'type': 'plot_basic_graph_data', 'index': 'plot_basic_graph_data'}, 'figure', allow_duplicate=True),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_total_sum"}, 'figure', allow_duplicate=True),
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum_graph"}, 'figure', allow_duplicate=True),
+            Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_serial_transfer_end_values"}, 'figure', allow_duplicate=True),
             Input('run_serial_transfer', 'n_clicks'),
             State('serial_transfer_value', 'value'),
             State('serial_tranfer_bp_option', 'value'),
