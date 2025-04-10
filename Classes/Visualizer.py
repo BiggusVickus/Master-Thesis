@@ -10,11 +10,12 @@ from plotly.subplots import make_subplots
 from scipy.optimize import curve_fit
 import warnings
 from copy import deepcopy
-
+from collections import defaultdict
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 np.random.seed(0)  # Set the random seed for reproducibility
-#TODO: give option to append a serial transfer to parameter analysis and initial value analysis
+from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus
+
 class Visualizer():
     def __init__(self, graph):
         self.app = Dash()
@@ -27,6 +28,7 @@ class Visualizer():
         self.copy_of_parameter_analysis_output = None
         self.settings = self.initialize_settings()
         self.initial_value_plot = {}
+        self.ending_values_serial_transfer = OrderedDict()
 
     def initialize_settings(self):
         data = self.graph.graph.nodes["S"]["data"]
@@ -95,28 +97,6 @@ class Visualizer():
 
         list_of_figs.append(fig)
         return list_of_figs
-    
-    def optical_density(self, array, list_of_names):
-        optical_list = []
-        counter = 0
-        for j, item in enumerate(array):
-            if list_of_names[counter].lower() in ["uninfected", "infected", "bacteria", "b", "u", "i", "b0", "u0", "i0", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect", "bacteria u", "bacteria i", "bacteria u0", "bacteria i0", "bacteria infect", "bacteria uninfected"]:
-                optical_list.append(item)
-            counter += 1
-        initial_sum = optical_list[0][0]
-        for i in range(len(optical_list)):
-            for j in range(len(optical_list[i])):
-                if i == 0 and j == 0:
-                    continue
-                initial_sum += optical_list[i][j]
-        return initial_sum
-
-    # Define models
-    def log_func(self, x, a, c):
-        return a * np.log(x) + c
-
-    def lin_func(self, x, a, c):
-        return a * x + c
 
     def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name):
         list_of_figs = []
@@ -195,29 +175,6 @@ class Visualizer():
         non_graphing_data_vectors = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy()[0] for data_values in graphing_data_vectors]
         non_graphing_data_matrices = [pd.DataFrame.from_dict(data_values).astype(float).to_numpy() for data_values in graphing_data_matrices]
         return graphing_data, flattened, non_graphing_data_vectors, non_graphing_data_matrices
-    
-    def serial_transfer_calculation(self, original_final_simulation_output, serial_transfer_value, serial_tranfer_option, flattened):
-        row_of_names = []
-        row_of_values = []
-        for key, value in self.graph_data.items():
-            row_of_names += [key] * value["data"].size
-        if (len(serial_tranfer_option) > 0):
-            return flattened + original_final_simulation_output / serial_transfer_value
-        for final, name, flat in zip(original_final_simulation_output, row_of_names, flattened):
-            if (name.lower() in ["resources", "resource", "r", "res", "r0", "nutrient", "nutrients", "n", "nut", "n0"]):
-                row_of_values.append(flat + final / serial_transfer_value)
-            else:
-                row_of_values.append(final / serial_transfer_value)
-        return row_of_values
-    
-    def sum_up_columns(self, unflattened_data, value_add_column):
-        if value_add_column not in [None, False]:
-            unflattened_temp = []
-            for i in range(0, len(unflattened_data), value_add_column):
-                unflattened_temp.append(np.sum(unflattened_data[i:i + value_add_column], axis=0))
-            return unflattened_temp
-        else:
-            return unflattened_data
         
     def save_data(self, array, time, save_data=True):
         unflattened_data = []
@@ -226,7 +183,7 @@ class Visualizer():
             if save_data:
                 self.graph_data[key]["y_data"] = data_item
                 self.graph_data[key]["t_data"] = time
-            unflattened_data.append(self.sum_up_columns(data_item, value["add_rows"]))
+            unflattened_data.append(sum_up_columns(data_item, value["add_rows"]))
         return unflattened_data
     
     def create_heatmap_figures(self, matrix_data, x_axis_data=None, y_axis_data=None, x_labels=None, y_labels=None):
@@ -277,13 +234,6 @@ class Visualizer():
             final_values = solved_system.y[:, -1]
             final_time = solved_system.t[-1]
         return overall_y, overall_t
-    
-    def split_comma_minus(self, input, range, steps, use_opt_1_or_opt_2):
-        if use_opt_1_or_opt_2:
-            return [float(value.strip()) for value in input.split(",")]
-        else:
-            start_1, end_1 = [float(value.strip()) for value in range.split("-")]
-            return np.linspace(start_1, end_1, int(steps)).tolist()
     
     def run(self):
         self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph, self.settings)
@@ -390,8 +340,8 @@ class Visualizer():
             self.graph.update_environment_data(environment_data[0])
 
             #if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
-            param_values_1 = self.split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
-            param_values_2 = self.split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
+            param_values_1 = split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
+            param_values_2 = split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
 
             # create a matrix to store the values of the final time point for each parameter value tested
             matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)+1))
@@ -434,7 +384,7 @@ class Visualizer():
                         overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                     overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                     overall_y = self.save_data(overall_y, overall_t, save_data=False)
-                    overall_y.append([self.optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
+                    overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                     y_values_to_save[(param_value_1, param_value_2)] = overall_y
                     t_values_to_save[(param_value_1, param_value_2)] = overall_t
                     # save the final value to the matrix
@@ -525,7 +475,7 @@ class Visualizer():
             self.graph.update_environment_data(environment_data[0])
 
             # if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
-            param_1_values = self.split_comma_minus(param_input, param_range, param_steps, use_opt_1_or_opt_2)
+            param_1_values = split_comma_minus(param_input, param_range, param_steps, use_opt_1_or_opt_2)
             # create a list of the names of the parameters, to be used to find the index of the parameter in the flattened array
             items_of_name = []
             for key, value in self.graph_data.items():
@@ -552,7 +502,7 @@ class Visualizer():
                     overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                 overall_y = self.graph.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
                 overall_y = self.save_data(overall_y, overall_t, save_data=False)
-                overall_y.append([self.optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
+                overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                 simulation_output.append(overall_y)
                 time_output.append(overall_t)
             return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale, run_name)
