@@ -69,7 +69,7 @@ class Visualizer():
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels", "Relative Population Levels"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria not Summed Up)", "Relative Population Levels (Bacteria not Summed Up)"), row_heights=[1000])
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             for j in range(len(unflattened_data[i])-1, 0, -1):
@@ -81,7 +81,7 @@ class Visualizer():
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels", "Relative Population Levels"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             for j in range(len(unflattened_data[i])):
@@ -338,6 +338,18 @@ class Visualizer():
             # unflattens the data, saves the data to the graph_data dictionary, and sums up the columns if necessary
             overall_y = self.graph.unflatten_initial_matrix(solved_system.y, [length["data"].size for length in self.graph_data.values()])
             overall_y = self.save_data(overall_y, solved_system.t)
+            column_data = []
+            for i, name in enumerate(list(self.graph_data.keys())):
+                temp_list = []
+                for j in range(len(overall_y[i])):
+                    temp_list.append(overall_y[i][j][-1])
+                column_data.append(temp_list)
+            data_bacteria = optical_density(deepcopy(overall_y), list(self.graph_data.keys()))
+            column_data.append([data_bacteria[-1]])
+            self.ending_values_serial_transfer = {}
+            group_names = [name for name in self.graph_data.keys()] + ["Bacteria Sum"]
+            column_names = [self.graph_data[name]["column_names"] for name in self.graph_data.keys()] + [["Bacteria Sum"]]
+            self.ending_values_serial_transfer["Initial Inoculation"] = {'group_names': group_names, 'column_names': column_names, 'column_data': column_data}
             list_of_figs = self.create_main_figures(overall_y, solved_system.t)
             return list_of_figs
         
@@ -372,7 +384,7 @@ class Visualizer():
             overall_y = self.copy_of_simulation_output.y
             
             # for the required number of runs of serial transfer
-            overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_tranfer_bp_option, new_non_graphing_data_vectors, new_non_graphing_data_matrices)
+            overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_tranfer_bp_option, new_non_graphing_data_vectors, new_non_graphing_data_matrices, save_bar_plot=True)
             
             # save the values to self.copy_of_simulation_output.y/t respectively, in case for future serial transfers
             self.copy_of_simulation_output.t = overall_t
