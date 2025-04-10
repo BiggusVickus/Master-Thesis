@@ -111,17 +111,13 @@ class Visualizer():
                 max_y = np.max(simulation_output[j][i][0])
                 list_max_y.append(max_y)
 
-            if param_name in self.graph_data:
-                index = list(self.graph_data.keys()).index(param_name)
-                initial_value = self.graph_data[param_name]["data"]
-
             if graph_axis_scale == "linear-linear (linear)": # linear
-                popt, _ = curve_fit(self.lin_func, param_values, list_max_x)
-                predictions = [self.lin_func(x, *popt) for x in param_values]
+                popt, _ = curve_fit(lin_func, param_values, list_max_x)
+                predictions = [lin_func(x, *popt) for x in param_values]
                 parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
             elif graph_axis_scale == "log-linear (log)":  #log
-                popt, _ = curve_fit(self.log_func, param_values, list_max_x)
-                predictions = [self.log_func(x, *popt) for x in param_values]
+                popt, _ = curve_fit(lin_func, np.log(param_values), list_max_x)
+                predictions = [lin_func(x, *popt) for x in np.log(param_values)]
                 parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
                 fig.update_xaxes(type="log", row=1, col=2)
 
