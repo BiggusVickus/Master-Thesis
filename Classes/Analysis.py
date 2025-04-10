@@ -89,9 +89,27 @@ class Analysis():
         for key, value in dictionary.items():
             setattr(self, key, value)
     
-    def initialize_new_matrix(self, rows, columns):
+    def initialize_new_matrix(self, rows:int, columns:int):
+        """Initializes a new matrix of zeros with the given number of rows and columns. The matrix is initialized as a numpy array.
+
+        Args:
+            rows (int): Number of rows for the matrix
+            columns (int): Number of columns for the matrix
+
+        Returns:
+            np.array: 2D np array of size rows x columns
+        """
         return np.zeros((int(rows), int(columns)))
+    
     def initialize_new_vector(self, rows):
+        """Initializes a new vector of zeros with the given number of rows. The vector is initialized as a numpy array.
+        
+        Args:
+            rows (int): Number of rows for the vector
+        
+        Returns:
+            np.array: 1D np array of size rows
+        """
         return np.zeros(int(rows))
     
     def initialize_new_parameter_from_edges(self, node_list1:list, node_list2:list, attribute_name:str, data_type = float) -> np.array:
@@ -114,7 +132,17 @@ class Analysis():
                     matrix[node_list1.index(node1), node_list2.index(node2)] = data_type(data[attribute_name])
         return matrix
     
-    def initialize_new_parameter_from_node(self, node_list1, attribute_name, data_type = float):
+    def initialize_new_parameter_from_node(self, node_list1:list, attribute_name:str, data_type = float):
+        """Initializes a new vector with the number of rows given by th elength of node_list1. The vector is initialized as a numpy array. The data is extracted from the attribute_name given from the nodes given in node_list1. The data is stored in the vector as the data_type given, in case the data is not a float. 
+
+        Args:
+            node_list1 (list): List of nodes to be used as the rows of the matrix
+            attribute_name (str): 
+            data_type (type, optional): The datatype needed/wanted. Can be int for example. Defaults to float.
+
+        Returns:
+            np.array: Array of size rows with the attribute data extracted from the nodes given by attribute_name
+        """
         matrix = np.zeros(len(node_list1))
         for node1 in node_list1:
                 data = self.turn_string_to_dictionary(self.graph.nodes[node1]['data'])

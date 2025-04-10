@@ -17,9 +17,17 @@ np.random.seed(0)  # Set the random seed for reproducibility
 from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus
 
 class Visualizer():
-    def __init__(self, graph):
-        self.app = Dash()
-        self.graph: Analysis = graph
+    """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
+    """
+    def __init__(self, analysis: Analysis):
+        """Pass an instance of an Analysis object wit
+
+        Args:
+            analysis (Analysis): _description_
+        """
+
+        self.app = Dash() # the app object that is used to create the web application
+        self.graph: Analysis = analysis # 
         self.graph_data = OrderedDict()
         self.non_graph_data_vector = OrderedDict()
         self.non_graph_data_matrix = OrderedDict()
@@ -31,21 +39,53 @@ class Visualizer():
         self.ending_values_serial_transfer = OrderedDict()
 
     def initialize_settings(self):
+        """Initializes the settings data for the graph object. The settings data stores stuff like simulation length, time step, and other parameters that are used in the simulation. The settings data is stored in the graph object, and is used to run the simulation.
+
+        Returns:
+            _type_: _description_
+        """
         data = self.graph.graph.nodes["S"]["data"]
         data = parse_contents(data)
         self.graph.graph.settings = data
         return data
     
-    def add_graph_data(self, name, data, column_names, row_names=None, add_rows=False):
-        self.graph_data[name] = {"data": data, "column_names": column_names, "row_names": row_names, "add_rows": add_rows}
+    def add_graph_data(self, name:str, initial_values:list, column_names:list, row_names:list=None, add_rows:bool=False):
+        """Add the initial values of the graph data to the graph_data dictionary. The graph_data dictionary stores the initial values of the graph data, and is used to run the simulation. The graph_data dictionary is used to create the figures for the simulation results. 
 
-    def add_non_graph_data_vector(self, name, data, column_names):
+        Args:
+            name (str): The name of the grpah data. For example, it can be 'Resources', 'Uninfected Bacteria', 'Infected Bacteria', 'Phages', etc.
+            initial_values (list): The initial values of the graph data. The initial values are the values that are used to run the simulation. The initial values are stored in a list, and are used to create the figures for the simulation results. It can also be a list of lists, in case you want to model intermediary steps. 
+            column_names (list): Note that column_names are swapped with row_names. When plotted on the dashboard, the rows become columns, and the columns become rows. The column names are the names of the columns in the graph data, for example [B0, B1, ..., Bn] etc. 
+            row_names (list, optional): Swapped with column_names, used to identify rows of multiple data. Defaults to None.
+            add_rows (bool, optional): If you want to add up the rows of initial_values. Defaults to False.
+        """
+        self.graph_data[name] = {"data": initial_values, "column_names": column_names, "row_names": row_names, "add_rows": add_rows}
+
+    def add_non_graph_data_vector(self, name:str, data:np.array, column_names:list):
+        """Adds non-graph data (non-graph referring to data that wont be grpahed, but holds the parameter data in a vector format) to the non_graph_data_vector dictionary. The non_graph_data_vector dictionary stores the non-graph data, and is used to run the simulation. The non_graph_data_vector dictionary is used to create the figures for the simulation results.
+
+        Args:
+            name (str): Name that you want the parameter to have, for example 'tau_vector, or 'k_vector
+            data (np.array): 1D np array of the data representing the parameter variable values. The data is the data that is used to run the simulation. 
+            column_names (list): The column names are the names of the columns in the non-graph data, for example [B0, B1, ..., Bn] etc. The column names are used to identify the columns in the non-graph data.
+        """
         self.non_graph_data_vector[name] = {"data": data, "column_names": column_names}
 
-    def add_non_graph_data_matrix(self, name, data, row_names, column_names):
+    def add_non_graph_data_matrix(self, name:str, data:np.array, row_names:list, column_names:list):
+        """Adds non-graph data (non-graph referring to data that wont be grpahed, but holds the parameter data in a matrix format) to the non_graph_data_matrix dictionary. The non_graph_data_matrixdictionary stores the non-graph data, and is used to run the simulation. The non_graph_data_matrix dictionary is used to create the figures for the simulation results.
+
+        Args:
+            name (str): Name that you want the parameter to have, for example 'e_matrix, or 'b_matrix
+            data (np.array): 2D np array of the data representing the parameter variable values. The data is the data that is used to run the simulation.
+            row_names (list): The row names are the names of the rows in the non-graph data, for example [B0, B1, ..., Bn] etc. The row names are used to identify the rows in the non-graph data.
+            column_names (list): The column names are the names of the columns in the non-graph data, for example [B0, B1, ..., Bn] etc. The column names are used to identify the columns in the non-graph data.
+        """
         self.non_graph_data_matrix[name] = {"data": data, "row_names": row_names, "column_names": column_names}
 
     def add_other_parameters(self, *args):
+        """Adds other parameters to the other_parameters_to_pass list. The other_parameters_to_pass list stores the other parameters that are used to run the simulation. The other_parameters_to_pass list is used to create the figures for the simulation results. 
+        Pass data that you might want to explicitly use in the ODE model. 
+        """
         self.other_parameters_to_pass += args
     
     def create_main_figures(self, unflattened_data, overall_t):
@@ -310,6 +350,8 @@ class Visualizer():
         return overall_y, overall_t
     
     def run(self):
+        """Runs the Dash application. The Dash application is a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data. The Dash application is run on the local host, and can be accessed from the web browser. Needs to ahve the data loaded properly in using the add_graph_data, add_non_graph_data_vector, add_non_graph_data_matrix, and add_other_parameters methods. 
+        """
         self.app.layout = html_code(self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, self.graph, self.settings)
 
         @callback(
