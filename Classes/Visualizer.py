@@ -85,16 +85,82 @@ class Visualizer():
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             for j in range(len(unflattened_data[i])):
-                if name.lower() in ["bacteria", "b", "u", "i", "b0", "u0", "i0", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
+                if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
+            for j in range(len(unflattened_data[i])):
+                if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
+                    continue
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria (optical density, absolute)", stackgroup="one"), row=1, col=1)
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria, (optical density, relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
         fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
+        list_of_figs.append(fig)
 
+
+        # Step 1: Flatten and assign numeric x positions
+        records = []
+        x_pos = 0
+        x_labels = []
+        group_gap = 0.01  # wider spacing between groups
+        intra_group_gap = 0.01  # small spacing between phages and resources
+
+        for group_label, group_data in self.ending_values_serial_transfer.items():
+            group_names = group_data["group_names"]
+            column_names = group_data["column_names"]
+            column_data = group_data["column_data"]
+
+            for i, (group_name, col_names, col_vals) in enumerate(zip(group_names, column_names, column_data)):
+                xpos = x_pos + i * intra_group_gap
+                label = f"{group_label}<br>{group_name}"
+                x_labels.append((xpos, label))
+
+                for name, val in zip(col_names, col_vals):
+                    records.append({
+                        "x": xpos,
+                        "x_label": label,
+                        "stack_label": name,
+                        "value": val
+                    })
+            x_pos += len(group_names) * intra_group_gap + group_gap
+
+        # Step 2: Build plotly bar traces from individual stack segments
+        grouped = defaultdict(list)
+        for r in records:
+            grouped[r["stack_label"]].append(r)
+
+        traces = []
+        x_tick_vals = []
+        x_tick_texts = []
+
+        for stack_label, entries in grouped.items():
+            traces.append(go.Bar(
+                x=[e["x"] for e in entries],
+                y=[e["value"] for e in entries],
+                name=stack_label
+            ))
+
+        # Only unique x-labels
+        for xpos, label in dict(sorted(x_labels)).items():
+            x_tick_vals.append(xpos)
+            x_tick_texts.append(label)
+
+        # Step 3: Plot setup
+        fig = go.Figure(data=traces)
+        fig.update_layout(
+            barmode="stack",
+            title="Grouped + Stacked Bar Plot with Spacing",
+            xaxis=dict(
+                tickmode="array",
+                tickvals=x_tick_vals,
+                ticktext=x_tick_texts,
+                tickangle=90
+            ),
+            yaxis_title="Value", 
+            yaxis=dict(type="log"),
+        )
         list_of_figs.append(fig)
         return list_of_figs
 
