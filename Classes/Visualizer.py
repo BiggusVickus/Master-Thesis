@@ -285,14 +285,28 @@ class Visualizer():
             list_of_figs.append(fig)
         return list_of_figs
         
-    def run_serial_transfer_iterations(self, overall_y, overall_t, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices):
+    def run_serial_transfer_iterations(self, overall_y, overall_t, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices, save_bar_plot=False):
         final_values = overall_y[:, -1]
         final_time = overall_t[-1]
         for _ in range(int(serial_transfer_frequency)):
-            flattened = self.serial_transfer_calculation(final_values, serial_transfer_value, serial_transfer_bp_option, flattened)
+            flattened = serial_transfer_calculation(self.graph_data, final_values, serial_transfer_value, serial_transfer_bp_option, flattened)
             solved_system = self.graph.solve_system(self.graph.odesystem, flattened, self.graph, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.graph.Simulation_Length))
             overall_y = np.concatenate((overall_y, solved_system.y), axis=1)
             overall_t = np.concatenate((overall_t, solved_system.t))
+            if save_bar_plot:
+                overall_y_2 = self.graph.unflatten_initial_matrix(solved_system.y, [length["data"].size for length in self.graph_data.values()])
+                overall_y_2 = self.save_data(overall_y_2, solved_system.t, save_data=False)
+                column_data = []
+                for i, name in enumerate(list(self.graph_data.keys())):
+                    temp_list = []
+                    for j in range(len(overall_y_2[i])):
+                        temp_list.append(overall_y_2[i][j][-1])
+                    column_data.append(temp_list)
+                data_bacteria = optical_density(deepcopy(overall_y_2), list(self.graph_data.keys()))
+                column_data.append([data_bacteria[-1]])
+                group_names = [name for name in self.graph_data.keys()] + ["Bacteria Sum"]
+                column_names = [self.graph_data[name]["column_names"] for name in self.graph_data.keys()] + [["Bacteria Sum"]]
+                self.ending_values_serial_transfer["ST " + str(len(self.ending_values_serial_transfer))] = {'group_names': group_names, 'column_names': column_names, 'column_data': column_data}
             final_values = solved_system.y[:, -1]
             final_time = solved_system.t[-1]
         return overall_y, overall_t
