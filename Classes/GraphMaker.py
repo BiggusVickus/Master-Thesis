@@ -72,7 +72,7 @@ class GraphMaker:
         string += f"dense_output: False\n"
         string += f"rtol: 0.001\n"
         string += f"atol: 0.000001\n"
-        string += f"Simulation_Length: 30\n"
+        string += f"simulation_length: 30\n"
         return string
 
     def default_phage_data(self):

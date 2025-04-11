@@ -21,6 +21,7 @@ class Analysis():
         self.max_step = 0.1
         self.simulation_length = 24
         self.cutoff_value = 0.000001
+        self.solver_type = 'RK45'
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -209,10 +210,11 @@ class Analysis():
         simulation_length = float(self.simulation_length) if 'simulation_length' not in self.settings else float(self.settings['simulation_length'])
         t_start = float(t_start) if t_start is not None else float(self.settings['t_start']) if 't_start' in self.settings else 0
         t_end = float(t_end) if t_end is not None else float(self.settings['t_end']) if 't_end' in self.settings else simulation_length
-        method = 'RK45' if 'method' not in self.settings else self.settings['method']
+        solver_type = self.solver_type if 'solver_type' not in self.settings else self.settings['solver_type']
         dense_output = False if 'dense_output' not in self.settings else self.settings['dense_output']
 
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=method, dense_output=dense_output)
+        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=solver_type, dense_output=dense_output)
         return solved
     
     def add_item_to_class_attribute(self, name:str, data:object) -> None:
