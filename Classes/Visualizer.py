@@ -507,8 +507,11 @@ class Visualizer():
             self.graph.update_environment_data(environment_data[0])
 
             #if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
-            param_values_1 = split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
-            param_values_2 = split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
+            try:
+                param_values_1 = split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
+                param_values_2 = split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
+            except:
+                return *[go.Figure() for _ in self.graph_data.keys()], go.Figure(), 0, {}, 0
 
             # create a matrix to store the values of the final time point for each parameter value tested
             matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)+1))
