@@ -40,7 +40,7 @@ class Analysis():
         """Given a particular node type, for example of phage P, bacteria B, or resource R, this method will return a list of all the node names of that type in the graph. It will also store the names of the nodes as an attribute of the class. If the node type is an environment or setting node, it will store the parameters of the environment as attributes of the class using add_item_to_class_attribute(). The user can then access the data as an attribute of the class by calling YourClassName.name, assuming that YourClassName extends this Analysis class. You can also directly call add_item_to_class_attribute() to add any extra parameters to the class that are not part of the graph, that you might want to later use for whatever reason. 
 
         Args:
-            node_type (str): The type of node to be extracted from the graph, will usually be either 'P', 'B', 'R', 'E' or 'S'. The user can also add their own node types, but they need to make sure that the node type is in the graph file.
+            node_type (str): The type of node to be extracted from the graph, will usually be either 'P', 'B', 'R', or 'E'. The user can also add their own node types, but they need to make sure that the node type is in the graph file.
 
         Returns:
             list: List of all the node names of the given node type
@@ -48,7 +48,7 @@ class Analysis():
         # create the list of nodes of the given type
         list_data =  [n for n in self.graph.nodes if self.graph.nodes[n]['node_type'] == node_type]
         # if the node type is an environment node, get the data from the node and store it as an attribute of the class
-        if node_type == "E" or node_type == "S":
+        if node_type == "E":
             self.environment_node_data = self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data'])
             for d, v in self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data']).items():
                 setattr(self, d, float(v))
@@ -216,7 +216,7 @@ class Analysis():
         solver_type = self.solver_type if 'solver_type' not in self.settings else self.settings['solver_type']
         dense_output = self.dense_output if 'dense_output' not in self.settings else self.settings['dense_output']
 
-        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=solver_type, dense_output=dense_output)
+        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, min_step=min_step, max_step=max_step, method=solver_type, dense_output=dense_output)
         return solved
     
     def add_item_to_class_attribute(self, name:str, data:object) -> None:

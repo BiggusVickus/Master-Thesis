@@ -2,8 +2,25 @@ from dash import Dash, dash_table, html, Input, Output, callback, ALL, State
 from dash import dcc
 from collections import OrderedDict
 import pandas as pd
+from Classes.Analysis import Analysis
 
-def parse_contents(contents):
+def parse_contents(contents:str) -> dict:
+    """Parses the contents of a txt file (passed as a string) and returns a dictionary with the contents.
+    Accepted data:
+    - True/False
+    - int 1
+    - list [1, 2, 3] of either ints or floats
+    - float 1.0
+    - None
+    - string "string"
+    - empty string "" returns None
+
+    Args:
+        contents (str): The contents of the txt file as a string. Represented as a string with each line containing a key-value pair separated by a colon, each line is separated by a newline character '\\n'.
+
+    Returns:
+        dict: Dictionary with the contents of the txt file. The keys are the content types and the values are the content values. Auto detects the correct type of the value, eg True/False, float, int, list, None, string.
+    """
     dictionary = {}
     for line in contents.splitlines():
         if line.strip():
@@ -31,28 +48,43 @@ def parse_contents(contents):
         dictionary[content_type] = content
     return dictionary
 
-def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, initial_settings):
+def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis:Analysis, initial_settings):
+    """Creates the HTML for the dashboard. 
+
+    Args:
+        graph_data (dict): Ordered dictionary with the graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
+        non_graph_data_vector (dict): Ordered dictionary with the non graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
+        non_graph_data_matrix (dict): Odered dictionary with the non graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
+        analysis (Analysis): Instance of the Analysis class. 
+        initial_settings (dict): Dictionary with the initial settings. The keys are the names of the settings and the values are the values of the settings. The settings are solver type, min step size, max step size, cutoff value, dense output, relative tolerance, absolute tolerance, and simulation length.
+    """
     graph_data_name_list = [name for name in graph_data.keys()]
     non_graph_data_name_list = [name for name in OrderedDict(list(non_graph_data_vector.items()) + list(non_graph_data_matrix.items()))]
     both_params = graph_data_name_list + non_graph_data_name_list
 
     return html.Div([
+            # main title and area for main, basic plots. 1 for the basic plot, 1 for the bacteria not sum stacked lineplot, 1 for the bacteria summed up stacked lineplot, and 1 for the serial transfer end values plot
             html.H1("Line Chart"),
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data"}), 
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_total_sum"}), 
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum_graph"}), 
             dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_serial_transfer_end_values"}), 
+            # break, formatting, and button to save and rerun the model
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),
-            html.Button('Save and rerun model', id='run_basic_model'),
+            html.Button('Rerun model', id='run_basic_model'),
+
+            # tabs for the data tables, the initial conditions, parameter values for the simulation, environment parameters, and the settings tab
             dcc.Tabs([
+                # initial conditions: loop through the graph data and create a DataTable for each one to show initial conditions
                 dcc.Tab(label='Graphing Data (Initial Conditions)', children=[
                     *[
                         html.Div([
                             html.H2(f"DataTable for {name}"),
-                            html.H3(f"Row names {dic['row_names']}") if dic["row_names"] is not None else None,
+                            html.H3(f"Row names {dic['row_names']}") if dic["row_names"] is not None else None, # in case the row names are not None
                             dash_table.DataTable(
+                                # first turn into dataframe. there is the [dic["data"]], which is a list of lists, and the column names, which is a list of strings. If the row names are None, then we just use the data as is. This isfor vector or matrix representation respectively. 
                                 pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records') if dic["row_names"] is None else pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
                                 id={"type": 'edit_graphing_data', 'index': name},
                                 columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
@@ -61,11 +93,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                         ]) for name, dic in graph_data.items()
                     ]
                 ]),
+                
+                # non graphing data: loop through the non graphing data and create a DataTable for each one to show parameter values
                 dcc.Tab(label='Non Graphing Data (Parameter Values): Vectors', children=[
                     *[
                         html.Div([
                             html.H2(f"DataTable for {name}"),
                             dash_table.DataTable(
+                                # no need for dic["row_names"] here, since it is a vector
                                 pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records'),
                                 id={"type": 'edit_non_graphing_data_vectors', 'index': name},
                                 columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
@@ -74,12 +109,15 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                         ]) for name, dic in non_graph_data_vector.items()
                     ]
                 ]),
+                
+                # non graphing data: loop through the non graphing data and create a DataTable for each one to show parameter values
                 dcc.Tab(label='Non Graphing Data (Parameter Values): Matrices', children=[
                     *[
                         html.Div([
                             html.H2(f"DataTable for {name}"),
                             html.H3(f"Row Names: {dic['row_names']}"),
                             dash_table.DataTable(
+                                # no need for [dic["row_names"]] here, since it is a matrix
                                 pd.DataFrame(dic["data"], columns=dic["column_names"]).to_dict('records'),
                                 id={"type": 'edit_non_graphing_data_matrices', 'index': name},
                                 columns=[{'name': f"{col}", 'id': col} for col in dic["column_names"]],
@@ -88,23 +126,27 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                         ]) for name, dic in non_graph_data_matrix.items()
                     ]
                 ]),
+
+                # tab for the environment parameters, like pH and Temperature. 
                 dcc.Tab(label='Environment Parameters', children=[
                     html.Div([
                         html.H2(f"DataTable for Environment Parameters"),
                         html.H4(f"Note: Some prameters wont influence the simulation. For example, changing M wont affect the number of steps in the lysis process, but overall should ahve an immediate effect on the simulation."),
                         dash_table.DataTable(
-                            pd.DataFrame([graph.environment_node_data]).to_dict('records'),
+                            pd.DataFrame([analysis.environment_node_data]).to_dict('records'),
                             id="environment_data",
-                            columns=[{"name": col, "id": col} for col in graph.environment_node_data.keys()],
+                            columns=[{"name": col, "id": col} for col in analysis.environment_node_data.keys()],
                             editable=True
                         ),
                     ])
-                ]), 
+              ]), 
+
+                # tab for the settings, like the solver type and the min/max step size.
                 dcc.Tab(label='Settings', children=[
                     html.H4(["These settings affect various parts of the simulation. For example the solver type (RK23 or RK45 or DOP853), or to use the defualt selected options by the solver or a linspace of selected options."]),
                     html.Button("Save Settings", id="save_settings"),
                     html.Div([
-                        html.H4(["Solver Type"]),
+                        html.H4(["Solver Type"]), # dropdown of the solver types
                         dcc.Dropdown(
                             options=[
                                 {'label': 'RK45', 'value': 'RK45'},
@@ -117,7 +159,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             value=initial_settings['solver_type'],
                             id={'type': 'settings', 'index': 'solver_type'},
                         ),
-                        html.H4(["t_eval option"]),
+                        html.H4(["t_eval option"]), # evaluation option
                         dcc.Checklist(
                             options=[
                                 {'label': 'Use solver suggested t_values (checked) or your own t_eval (unchecked) which uses the simulation length and ', 'value': 'option1'},
@@ -125,7 +167,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             value=['option1'],
                             id={'type': 'settings', 'index': 't_eval_option'}
                         ),
-                        html.H4(["Minimum Step Size"]),
+                        html.H4(["Minimum Step Size"]), # minimum step size
                         dcc.Input(
                             id={'type': 'settings', 'index': 'min_step'}, 
                             type="number",
@@ -135,7 +177,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             min=0.000001, 
                             max=1
                         ),
-                        html.H4(["Max Step Size"]),
+                        html.H4(["Max Step Size"]), # maximum step size
                         dcc.Input(
                             id={'type': 'settings', 'index': 'max_step'}, 
                             type="number",
@@ -145,7 +187,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             min=0.000001,
                             max=1
                         ),
-                        html.H4(["Cutoff value for small numbers"]),
+                        html.H4(["Cutoff value for small numbers"]), # cutoff value for small numbers
                         dcc.Input(
                             id={'type': 'settings', 'index': 'cutoff_value'}, 
                             type="number",
@@ -153,7 +195,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             value=initial_settings['cutoff_value'],
                             required=True
                         ),
-                        html.H4(["Dense Output"]),
+                        html.H4(["Dense Output"]), # dense output option
                         dcc.Checklist(
                             options=[
                                 {'label': 'Use Dense Output', 'value': 'dense_output'},
@@ -161,7 +203,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             value=[],
                             id={'type': 'settings', 'index': 'dense_output'}
                         ),
-                        html.H4(["Relative and Absolute Tolerance"]),
+                        html.H4(["Relative and Absolute Tolerance"]), # relative and absolute tolerance
                         dcc.Input(
                             id={'type': 'settings', 'index': 'rtol'}, 
                             type="number",
@@ -176,7 +218,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             value=initial_settings['atol'], 
                             required=True
                         ),
-                        html.H4(["Simulation Length Time"]),
+                        html.H4(["Simulation Length Time"]), # simulation length time
                         dcc.Input(
                             id={'type': 'settings', 'index': 'simulation_length'}, 
                             type="number",
@@ -187,6 +229,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                     ])
                 ]),
             ]),
+
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),
@@ -206,7 +249,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             {'label': 'Add Phages and Bacteria', 'value': 'option1'},
                         ],
                         value=[],
-                        id='serial_tranfer_bp_option'
+                        id='serial_transfer_bp_option'
                     ),
                     html.Br(),
                     html.H4(["Number of times to automatically run serial transfer"]),
@@ -218,7 +261,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                     ),
                     html.Br(),
                     html.Button("Run Serial Transfer", id="run_serial_transfer"),
-                    html.H4(["The plots above in the Line Chart section will update with the new values after the serial transfer is complete, ensure that a model ahs already been run before running the serial transfer. To reset the chart, run the 'Save and rerun model' button above."]),
+                    html.H4(["The plots above in the Line Chart section will update with the new values after the serial transfer is complete, ensure that a model ahs already been run before running the serial transfer. To reset the chart, run the 'Rerun model' button above."]),
                     html.Div(style={'margin': '60px'}),
                 ]),
 
@@ -303,7 +346,8 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                         dcc.Graph(id={"type": "plot_parameter_analysis", "index": "plot_parameter_analysis_bacteria_sum"}, style={'display': 'inline-block'}),
                     ],style={'margin': '60px'}), 
                 ]),
-
+                
+                # tab for the initial value analysis, which is similar to the parameter analysis but for a single parameter
                 dcc.Tab(label='Initial Value Analysis', children=[
                     html.H4(["Note: Choose a parameter of choice. Input the values you want to test separated by commas, or use a uniform seperated list. The program will run the simulation for each initial value and display the results on a graph."]),
                     dcc.Dropdown(both_params, id='initial_value_analysis_param_name', value = both_params[0] if len(both_params) > 0 else None),

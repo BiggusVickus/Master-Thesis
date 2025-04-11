@@ -406,6 +406,19 @@ class Visualizer():
             prevent_initial_call=True
         )
         def plot_main_plots(n_clicks, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            """_summary_
+
+            Args:
+                n_clicks (int): The number of times the save button has been clicked. Used to trigger the callback. 
+                graphing_data (_type_): _description_
+                non_graphing_data_vectors (_type_): _description_
+                non_graphing_data_matrices (_type_): _description_
+                environment_data (_type_): _description_
+
+            Returns:
+                Returns:
+                list: List of figures, list length is equal to length of graph data + 1 for bacteria sum.
+            """
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, flattened, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.update_environment_data(environment_data[0])
@@ -439,7 +452,7 @@ class Visualizer():
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_serial_transfer_end_values"}, 'figure', allow_duplicate=True),
             Input('run_serial_transfer', 'n_clicks'),
             State('serial_transfer_value', 'value'),
-            State('serial_tranfer_bp_option', 'value'),
+            State('serial_transfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -447,7 +460,26 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def serial_transfer(n_clicks, serial_transfer_value, serial_tranfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def serial_transfer(n_clicks, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            """_summary_
+
+            Args:
+                n_clicks (int): The number of times the save button has been clicked. Used to trigger the callback. 
+                serial_transfer_value (float): The value of the serial transfer to divide the population by.
+                serial_transfer_bp_option (list): The option to add phages and bacteria to the serial transfer.
+                serial_transfer_frequency (int): Number of times to automatically run serial transfer
+                graphing_data (list): A list of lists. Inside each list, a dictionary with the graph data in key:value format for the individual sub-resources, phages, etc. 
+                non_graphing_data_vectors (list): A list of lists. Inside each list, a dictionary with the non-graphing-vector data in key:value format. Key name is the column of the table.
+                non_graphing_data_matrices (list): A list of lists. Inside each list, a dictionary with the non-graphing-matrix data in key:value format. Key name is the column of the table. 
+                environment_data (list): A list with a single dictionary holding the environment data in key:value format
+
+            Returns:
+                list: List of figures, list length is equal to length of graph data + 1 for bacteria sum.
+            """
+            print(graphing_data)
+            print(non_graphing_data_vectors)
+            print(non_graphing_data_matrices) 
+            print(environment_data)
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.update_environment_data(environment_data[0])
@@ -457,13 +489,13 @@ class Visualizer():
                 overall_t = self.copy_of_simulation_output.t
             except:
                 list_figures = [go.Figure() for _ in self.graph_data.keys()]
-                list_figures[0].update_layout(title="No graph to serial transfer, please run the simulation first usign the 'Save and Rerun model' button below")
+                list_figures[0].update_layout(title="No graph to serial transfer, please run the simulation first usign the 'Rerun model' button below")
                 return list_figures
 
             overall_y = self.copy_of_simulation_output.y
             
             # for the required number of runs of serial transfer
-            overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_tranfer_bp_option, new_non_graphing_data_vectors, new_non_graphing_data_matrices, save_bar_plot=True)
+            overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, new_non_graphing_data_vectors, new_non_graphing_data_matrices, save_bar_plot=True)
             
             # save the values to self.copy_of_simulation_output.y/t respectively, in case for future serial transfers
             self.copy_of_simulation_output.t = overall_t
@@ -493,7 +525,7 @@ class Visualizer():
             State('parameter_analysis_steps_2', 'value'),
             State('parameter_analysis_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
-            State('serial_tranfer_bp_option', 'value'),
+            State('serial_transfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -502,6 +534,31 @@ class Visualizer():
             prevent_initial_call=True
         )
         def parameter_analysis(n_clicks, param_name_1, param_name_2, use_opt_1_or_opt_2, param_1_input, param_2_input, param_range_1, param_range_2, param_steps_1, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            """_summary_
+
+            Args:
+                n_clicks (int): The number of times the save button has been clicked. Used to trigger the callback. 
+                param_name_1 (_type_): _description_
+                param_name_2 (_type_): _description_
+                use_opt_1_or_opt_2 (_type_): _description_
+                param_1_input (_type_): _description_
+                param_2_input (_type_): _description_
+                param_range_1 (_type_): _description_
+                param_range_2 (_type_): _description_
+                param_steps_1 (_type_): _description_
+                param_steps_2 (_type_): _description_
+                use_serial_transfer (list): If want to use serial transfer option, list ['option1'] is returned for yes, else it is [] for no. 
+                serial_transfer_value (float): The value of the serial transfer to divide the population by.
+                serial_transfer_bp_option (list): The option to add phages and bacteria to the serial transfer.
+                serial_transfer_frequency (int): Number of times to automatically run serial transfer
+                graphing_data (list): A list of lists. Inside each list, a dictionary with the graph data in key:value format for the individual sub-resources, phages, etc. 
+                non_graphing_data_vectors (list): A list of lists. Inside each list, a dictionary with the non-graphing-vector data in key:value format. Key name is the column of the table.
+                non_graphing_data_matrices (list): A list of lists. Inside each list, a dictionary with the non-graphing-matrix data in key:value format. Key name is the column of the table. 
+                environment_data (list): A list with a single dictionary holding the environment data in key:value format. 
+
+            Returns:
+                _type_: _description_
+            """
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.update_environment_data(environment_data[0])
@@ -575,6 +632,15 @@ class Visualizer():
             prevent_initial_call=True
         )
         def parameter_analysis_slider_update(slider_value, extrapolate):
+            """_summary_
+
+            Args:
+                slider_value (_type_): _description_
+                extrapolate (_type_): _description_
+
+            Returns:
+                _type_: _description_
+            """
             # when first launching the app and opening the Parameter Analysis tab, error is thrown by dash for self.copy_of_parameter_analysis_output being None/empty, so return empty figures to avoid/fix/alleviate this error
             # collect all the stored data from the parameter analysis, and create a heatmap of the final values for each parameter value
             try:
@@ -630,7 +696,7 @@ class Visualizer():
             State('initial_value_analysis_run_name', 'value'),
             State('initial_value_analysis_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
-            State('serial_tranfer_bp_option', 'value'),
+            State('serial_transfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
             State('initial_value_analysis_graph_scale', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
@@ -640,6 +706,28 @@ class Visualizer():
             prevent_initial_call=True
         )
         def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, run_name, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graph_axis_scale, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            """_summary_
+
+            Args:
+                n_clicks (int): The number of times the save button has been clicked. Used to trigger the callback. 
+                param_name (_type_): _description_
+                use_opt_1_or_opt_2 (_type_): _description_
+                param_input (_type_): _description_
+                param_range (_type_): _description_
+                param_steps (_type_): _description_
+                run_name (_type_): _description_
+                use_serial_transfer (list): If want to use serial transfer option, list ['option1'] is returned for yes, else it is [] for no. 
+                serial_transfer_value (float): The value of the serial transfer to divide the population by.
+                serial_transfer_bp_option (list): The option to add phages and bacteria to the serial transfer.
+                serial_transfer_frequency (int): Number of times to automatically run serial transfer
+                graphing_data (list): A list of lists. Inside each list, a dictionary with the graph data in key:value format for the individual sub-resources, phages, etc. 
+                non_graphing_data_vectors (list): A list of lists. Inside each list, a dictionary with the non-graphing-vector data in key:value format. Key name is the column of the table.
+                non_graphing_data_matrices (list): A list of lists. Inside each list, a dictionary with the non-graphing-matrix data in key:value format. Key name is the column of the table. 
+                environment_data (list): A list with a single dictionary holding the environment data in key:value format. 
+
+            Returns:
+                _type_: _description_
+            """
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.update_environment_data(environment_data[0])
@@ -691,7 +779,7 @@ class Visualizer():
             State('phase_portrait_auto_calculate_range', 'value'),
             State('phase_portrait_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
-            State('serial_tranfer_bp_option', 'value'),
+            State('serial_transfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -700,8 +788,31 @@ class Visualizer():
             prevent_initial_call=True
         )
         def phase_portrait(n_clicks, param_name_1, param_name_2, param_range_1, param_steps_1, param_range_2, param_steps_2, starting_x, starting_y, auto_calculate_range, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-            #TODO: give option for auto setting arrow x and y value, give option to scale the arrow values
-            #TODO: fix the issue with the arrows not pointing in the correct direction
+            """Creates a phase portrait of a simulation. Choose two parameters to plot against each other, and the simulation will be run for each combination of the two parameters. The phase portrait is a 2D plot of the two parameters, with the x-axis being the first parameter and the y-axis being the second parameter. The phase portrait is created by running the simulation for each combination of the two parameters, and plotting the results.
+
+            Args:
+                n_clicks (int): _number of clicks on the button_
+                param_name_1 (str): _description_
+                param_name_2 (str): _description_
+                param_range_1 (str): _description_
+                param_steps_1 (int): _description_
+                param_range_2 (str): _description_
+                param_steps_2 (int): _description_
+                starting_x (str): _description_
+                starting_y (str): _description_
+                auto_calculate_range (list): _description_
+                use_serial_transfer (list): If want to use serial transfer option, list ['option1'] is returned for yes, else it is [] for no. 
+                serial_transfer_value (float): The value of the serial transfer to divide the population by.
+                serial_transfer_bp_option (list): The option to add phages and bacteria to the serial transfer.
+                serial_transfer_frequency (int): Number of times to automatically run serial transfer
+                graphing_data (list): A list of lists. Inside each list, a dictionary with the graph data in key:value format for the individual sub-resources, phages, etc. 
+                non_graphing_data_vectors (list): A list of lists. Inside each list, a dictionary with the non-graphing-vector data in key:value format. Key name is the column of the table.
+                non_graphing_data_matrices (list): A list of lists. Inside each list, a dictionary with the non-graphing-matrix data in key:value format. Key name is the column of the table. 
+                environment_data (list): A list with a single dictionary holding the environment data in key:value format. 
+
+            Returns:
+                _type_: _description_
+            """
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.update_environment_data(environment_data[0])
             starting_x = [float(value.strip()) for value in starting_x.split(",")]
@@ -760,18 +871,6 @@ class Visualizer():
                     value2 = updated_data[items_of_name_full.index(param_name_2)]
                     DX[i, j], DY[i, j] = value1, value2
 
-            # Normalize arrows for better visualization
-            M = np.hypot(DX, DY)
-            DX, DY = DX / M, DY / M  # Normalize to unit vectors
-            magnitude = np.sqrt(DX**2 + DY**2)
-            direction = np.arctan2(DY, DX) * 180 / np.pi
-            # fig = ff.create_quiver(X, Y, DX, DY, 
-            #     scale=0.5,
-            #     arrow_scale=0.2,
-            #     name='quiver',
-            #     line_width=2, 
-            #     angle=0.1,
-            # )
             fig = go.Figure()
             fig.update_layout(
                 title=f"Phase Portrait for {param_name_1} vs {param_name_2}",
@@ -808,15 +907,22 @@ class Visualizer():
             Input({'type': 'settings', 'index': ALL}, 'value'),
         )
         def save_settings(n_clicks, settings_name, settings_value):
-            new_settings = {}
-            for i in range(len(settings_name)):
+            """Saves the settings from the dashboard to the analysis object, and updates the settings in the analysis object. 
+
+            Args:
+                n_clicks (int): The number of times the save button has been clicked. Used to trigger the callback. 
+                settings_name (dict): Dictionary of the settings names, used to find the index of the setting in the analysis object.
+                settings_value (list): Values of the settings, used to update the settings in the analysis object.
+            """
+            new_settings = {} # new settings dictionary to save the settings to
+            for i in range(len(settings_name)): # loop through the settings names and rename, makes it easier in the enxt step
                 settings_name[i] = settings_name[i]['index']
-            for name, value in zip(settings_name, settings_value):
-                if type(value) == list:
+            for name, value in zip(settings_name, settings_value): # loop through the settings names and values, and save them to the new settings dictionary
+                if type(value) == list: # this is used for the option checkbox, if checked in the dashbaord, the value retunred is ['option'], otherwise it is []
                     value = True if value != [] else False
-                new_settings[name] = value
-            self.analysis.settings = new_settings
-            self.settings = new_settings
+                new_settings[name] = value # save the value to the new settings dictionary
+            self.analysis.settings = new_settings # save new_settings to the analysis object
+            self.settings = new_settings # save the new settings to the class variable
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure') for name in self.graph_data.keys()],
@@ -824,11 +930,16 @@ class Visualizer():
             Input('clear_bar_chart', 'n_clicks'),
         )
         def clear_bar_chart(n_clicks):
-            self.initial_value_plot = {}
-            plots = []
-            for i in range(len(self.graph_data.keys())+1):
-                plots.append(go.Figure())
-            return plots
-            
+            """Clears the bar chart data from the dashboard, and resets the bar chart to empty figures.
 
+            Args:
+                n_clicks (int): number of times the clear button has been clicked. Used to trigger the callback. 
+
+            Returns:
+                list: list of length self.graph_data.keys() + 1 (for bacteria sum) of empty go.Figure() objects to reset the bar chart.
+            """
+            self.initial_value_plot = {}
+            return [go.Figure() for _ in self.graph_data.keys()] + [go.Figure()]
+
+        # run the app
         self.app.run(debug=True)
