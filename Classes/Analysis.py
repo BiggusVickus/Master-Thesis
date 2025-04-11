@@ -14,14 +14,15 @@ class Analysis():
         Args:
             graph_location (str): location of the graph file to be read in
         """
-        self.graph_location = graph_location 
-        self.graph = nx.read_gexf(graph_location)
-        self.settings = {}
-        self.min_step = 0.01
-        self.max_step = 0.1
-        self.simulation_length = 24
-        self.cutoff_value = 0.000001
-        self.solver_type = 'RK45'
+        self.graph_location = graph_location # graph file location
+        self.graph = nx.read_gexf(graph_location) # read in the graph file
+        self.settings = {} # settings for the class, can be used to set the parameters for the ODE system, like the time step, simulation length, and cutoff value
+        self.min_step = 0.01 # default min step, backup in case the user does not set it
+        self.max_step = 0.1 # default max step, backup in case the user does not set it
+        self.simulation_length = 24 # default simulation length, backup in case the user does not set it
+        self.cutoff_value = 0.000001 # default cutoff value, backup in case the user does not set it
+        self.solver_type = 'RK45' # default solver type, backup in case the user does not set it
+        self.dense_output = False # default dense output, backup in case the user does not set it
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -36,21 +37,21 @@ class Analysis():
         pass
     
     def get_nodes_of_type(self, node_type:str):
-        """Given a particular node type, for example of phage P, bacteria B, or resource R, this method will return a list of all the node names of that type in the graph. It will also store the names of the nodes as an attribute of the class. If the node type is an environment node, it will store the parameters of the environment as attributes of the class.
+        """Given a particular node type, for example of phage P, bacteria B, or resource R, this method will return a list of all the node names of that type in the graph. It will also store the names of the nodes as an attribute of the class. If the node type is an environment or setting node, it will store the parameters of the environment as attributes of the class using add_item_to_class_attribute(). The user can then access the data as an attribute of the class by calling YourClassName.name, assuming that YourClassName extends this Analysis class. You can also directly call add_item_to_class_attribute() to add any extra parameters to the class that are not part of the graph, that you might want to later use for whatever reason. 
 
         Args:
-            node_type (str): The type of node to be extracted from the graph, will usually be either 'P', 'B', 'R', or 'E'. The user can also add their own node types, but they need to make sure that the node type is in the graph file.
+            node_type (str): The type of node to be extracted from the graph, will usually be either 'P', 'B', 'R', 'E' or 'S'. The user can also add their own node types, but they need to make sure that the node type is in the graph file.
 
         Returns:
             list: List of all the node names of the given node type
         """
         # create the list of nodes of the given type
         list_data =  [n for n in self.graph.nodes if self.graph.nodes[n]['node_type'] == node_type]
-        if node_type == "E":
+        # if the node type is an environment node, get the data from the node and store it as an attribute of the class
+        if node_type == "E" or node_type == "S":
             self.environment_node_data = self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data'])
             for d, v in self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data']).items():
                 setattr(self, d, float(v))
-        setattr(self, node_type + '_node_names', list_data)
         return list_data
     
     def load_graph(self):
@@ -86,9 +87,9 @@ class Analysis():
         """Adds the environment data to the class as an attribute
 
         Args:
-            name (str): Name of the attribute to be added
-            data (any): Data to be added to the attribute. Datatype can be of any type desired
+            dictionary (str):Dictionary of environment data to be added to the class, of the form {'key':'value', ...}, where the attribute name is key, and the attirbute value is value. 
         """
+        # loop through the dictionary and set the attributes of the class to the values in the dictionary
         for key, value in dictionary.items():
             setattr(self, key, value)
     
@@ -158,7 +159,7 @@ class Analysis():
         return vector
     
     def flatten_lists_and_matrices(self, *initial_populations:np.array) -> np.array:
-        """Flattens any number of vectors and/or matrices into a single vector
+        """Flattens any number of vectors and/or matrices into a single vector in order
 
         Returns:
             np.array: Flattened matrix of all the vectors and matrices given
@@ -172,20 +173,22 @@ class Analysis():
         Args:
             vector (np.array): The flattened matrix
             length (int or list): The length or list of lengths to unflatten the matrix
+        If length is an int, it will unflatten the matrix into a matrix of the given length.
+        If length is a list, it will unflatten the matrix into submatrices of the lengths specified in the list.
 
         Returns:
             np.array: The unflattened matrix
         """
-        if isinstance(length, int):
-            return np.array([vector[i:i+length] for i in range(0, len(vector), length)])
-        elif isinstance(length, list):
-            result = []
+        if isinstance(length, int): # if length is an int, unflatten the matrix into a matrix of the given length, at intervals of every length
+            return [[vector[i:i+length] for i in range(0, len(vector), length)]]
+        elif isinstance(length, list): # if length is a list, unflatten the matrix into submatrices of the lengths specified in the list
+            result = [] # initialize the result list and index
             index = 0
-            for l in length:
-                if type(l) == int:
+            for l in length: # loop through the lengths in the list
+                if type(l) == int: # if the length is an int, unflatten the matrix into a matrix of the given length
                     result.append(vector[index:index+l])
                     index += l
-                elif type(l) == tuple:
+                elif type(l) == tuple: # if the length is a tuple, unflatten the matrix into a matrix of the given length, reshaped by the tuple
                     result.append(np.array(vector[index:index+int(np.prod(l))]).reshape(l))
                     index += int(np.prod(l))
             return result
@@ -205,13 +208,13 @@ class Analysis():
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
         # check if parametersare in the settings, if not, set it to the time step
-        max_step = float(self.Max_Step) if 'max_step' not in self.settings else float(self.settings['max_step'])
-        min_step = float(self.Min_Step) if 'min_step' not in self.settings else float(self.settings['min_step'])
+        max_step = float(self.max_step) if 'max_step' not in self.settings else float(self.settings['max_step'])
+        min_step = float(self.min_step) if 'min_step' not in self.settings else float(self.settings['min_step'])
         simulation_length = float(self.simulation_length) if 'simulation_length' not in self.settings else float(self.settings['simulation_length'])
         t_start = float(t_start) if t_start is not None else float(self.settings['t_start']) if 't_start' in self.settings else 0
         t_end = float(t_end) if t_end is not None else float(self.settings['t_end']) if 't_end' in self.settings else simulation_length
         solver_type = self.solver_type if 'solver_type' not in self.settings else self.settings['solver_type']
-        dense_output = False if 'dense_output' not in self.settings else self.settings['dense_output']
+        dense_output = self.dense_output if 'dense_output' not in self.settings else self.settings['dense_output']
 
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=solver_type, dense_output=dense_output)
         return solved
