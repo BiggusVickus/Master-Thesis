@@ -72,9 +72,6 @@ class GraphMaker:
         string += f"dense_output: False\n"
         string += f"rtol: 0.001\n"
         string += f"atol: 0.000001\n"
-        string += f"Arrow_Scale_1: 0.1\n"
-        string += f"Arrow_Scale_2: 0.3\n"
-        string += f"Arrow_Radians: 0.3490\n"
         string += f"Simulation_Length: 30\n"
         return string
 
