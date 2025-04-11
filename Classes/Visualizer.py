@@ -35,7 +35,7 @@ class Visualizer():
         self.copy_of_simulation_output = None
         self.copy_of_parameter_analysis_output = None
         self.settings = self.initialize_settings()
-        self.initial_value_plot = {}
+        self.initial_value_plot = OrderedDict()
         self.ending_values_serial_transfer = OrderedDict()
 
     def initialize_settings(self):
