@@ -91,29 +91,31 @@ class System(Analysis):
 # graph = System('simple_test.gexf')
 
 # graph = System('example.gexf')
-graph = System('simple_test_2.gexf')
+system = System('simple_test_2.gexf')
 # graph = System('example_3.gexf')
-phage_nodes = graph.get_nodes_of_type('P')
-bacteria_nodes = graph.get_nodes_of_type('B')
-resource_nodes = graph.get_nodes_of_type('R')
-environemnt_nodes = graph.get_nodes_of_type('E')
+# system.add_item_to_class_attribute('M', 4) # add the M value to the system
 
-R0 = graph.initialize_new_parameter_from_node(resource_nodes, "Initial_Concentration")
-U0 = graph.initialize_new_parameter_from_node(bacteria_nodes, "Initial_Population")
-I0 = graph.initialize_new_matrix(len(U0), graph.M)
-P0 = graph.initialize_new_parameter_from_node(phage_nodes, "Initial_Population")
+phage_nodes = system.get_nodes_of_type('P')
+bacteria_nodes = system.get_nodes_of_type('B')
+resource_nodes = system.get_nodes_of_type('R')
+environemnt_nodes = system.get_nodes_of_type('E')
 
-e_vector = graph.initialize_new_parameter_from_node(resource_nodes, 'e')
-tau_vector = graph.initialize_new_parameter_from_node(bacteria_nodes, 'tau')
-v_matrix = graph.initialize_new_parameter_from_edges(bacteria_nodes, resource_nodes, 'v')
-K_matrix = graph.initialize_new_parameter_from_edges(bacteria_nodes, resource_nodes, 'K')
-r_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes, 'r')
-B_matrix = graph.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes, 'Burst_Size')
+R0 = system.initialize_new_parameter_from_node(resource_nodes, "Initial_Concentration")
+U0 = system.initialize_new_parameter_from_node(bacteria_nodes, "Initial_Population")
+I0 = system.initialize_new_matrix(len(U0), system.M)
+P0 = system.initialize_new_parameter_from_node(phage_nodes, "Initial_Population")
 
-visualizer = Visualizer(graph)
+e_vector = system.initialize_new_parameter_from_node(resource_nodes, 'e')
+tau_vector = system.initialize_new_parameter_from_node(bacteria_nodes, 'tau')
+v_matrix = system.initialize_new_parameter_from_edges(bacteria_nodes, resource_nodes, 'v')
+K_matrix = system.initialize_new_parameter_from_edges(bacteria_nodes, resource_nodes, 'K')
+r_matrix = system.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes, 'r')
+B_matrix = system.initialize_new_parameter_from_edges(phage_nodes, bacteria_nodes, 'Burst_Size')
+
+visualizer = Visualizer(system)
 visualizer.add_graph_data("Resources", R0, resource_nodes)
 visualizer.add_graph_data("Uninfected Bacteria", U0, bacteria_nodes)
-visualizer.add_graph_data("Infected Bacteria", I0, row_names=bacteria_nodes, column_names=[f"Infected B{i}" for i in range(int(graph.M))], add_rows=4)
+visualizer.add_graph_data("Infected Bacteria", I0, row_names=bacteria_nodes, column_names=[f"Infected B{i}" for i in range(int(system.M))], add_rows=4)
 visualizer.add_graph_data("Phages", P0 , phage_nodes)
 
 visualizer.add_non_graph_data_vector("e_vector", e_vector, resource_nodes)
@@ -123,6 +125,6 @@ visualizer.add_non_graph_data_matrix("K_matrix", K_matrix, bacteria_nodes, resou
 visualizer.add_non_graph_data_matrix("r_matrix", r_matrix, phage_nodes, bacteria_nodes)
 visualizer.add_non_graph_data_matrix("B_matrix", B_matrix, phage_nodes, bacteria_nodes)
 
-visualizer.add_other_parameters(phage_nodes, bacteria_nodes, resource_nodes, int(graph.M))
+visualizer.add_other_parameters(phage_nodes, bacteria_nodes, resource_nodes, int(system.M))
 
 visualizer.run()
