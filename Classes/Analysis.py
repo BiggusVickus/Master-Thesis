@@ -213,7 +213,6 @@ class Analysis():
         solver_type = self.solver_type if 'solver_type' not in self.settings else self.settings['solver_type']
         dense_output = False if 'dense_output' not in self.settings else self.settings['dense_output']
 
-        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=method, dense_output=dense_output)
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=solver_type, dense_output=dense_output)
         return solved
     
