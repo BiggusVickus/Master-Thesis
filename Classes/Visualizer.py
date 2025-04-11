@@ -367,7 +367,7 @@ class Visualizer():
         final_time = overall_t[-1]
         for _ in range(int(serial_transfer_frequency)):
             flattened = serial_transfer_calculation(self.graph_data, final_values, serial_transfer_value, serial_transfer_bp_option, flattened)
-            solved_system = self.analysis.solve_system(self.analysis.odesystem, flattened, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.analysis.Simulation_Length))
+            solved_system = self.analysis.solve_system(self.analysis.odesystem, flattened, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.settings['Simulation_Length']))
             overall_y = np.concatenate((overall_y, solved_system.y), axis=1)
             overall_t = np.concatenate((overall_t, solved_system.t))
             if save_bar_plot:
