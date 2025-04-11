@@ -46,7 +46,7 @@ class Visualizer():
         """
         data = self.analysis.graph.nodes["S"]["data"]
         data = parse_contents(data)
-        self.analysis.graph.settings = data
+        self.analysis.settings = data
         return data
     
     def add_graph_data(self, name:str, initial_values:list, column_names:list, row_names:list=None, add_rows:bool=False):
@@ -804,12 +804,19 @@ class Visualizer():
         
         @callback(
             Input('save_settings', 'n_clicks'),
+            Input({'type': 'settings', 'index': ALL}, 'id'),
             Input({'type': 'settings', 'index': ALL}, 'value'),
         )
-        def save_settings(n_clicks, settings):
-            parsed = parse_contents(settings)
-            self.analysis.settings = parsed
-            self.settings = parsed
+        def save_settings(n_clicks, settings_name, settings_value):
+            new_settings = {}
+            for i in range(len(settings_name)):
+                settings_name[i] = settings_name[i]['index']
+            for name, value in zip(settings_name, settings_value):
+                if type(value) == list:
+                    value = True if value != [] else False
+                new_settings[name] = value
+            self.analysis.settings = new_settings
+            self.settings = new_settings
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure') for name in self.graph_data.keys()],

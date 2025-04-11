@@ -17,10 +17,11 @@ class Analysis():
         self.graph_location = graph_location 
         self.graph = nx.read_gexf(graph_location)
         self.attribute_additions = []
-        self.Simulation_Length = 10
-        self.Max_Step = 0.1
-        self.Cutoff_Value = 0.000001
+        self.settings = {}
         self.Min_Step = 0.01
+        self.Max_Step = 0.1
+        self.Simulation_Length = 24
+        self.Cutoff_Value = 0.000001
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -197,14 +198,18 @@ class Analysis():
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
         # check if max_step is in the extra parameters, if not, set it to the time step
-        if t_start is None:
-            t_start = 0
-        if t_end is None:
-            t_end = self.graph.settings['Simulation_Length']
-        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=float(self.Max_Step), min_step=float(self.Min_Step))
+        max_step = float(self.Max_Step) if 'max_step' not in self.settings else float(self.settings['max_step'])
+        min_step = float(self.Min_Step) if 'min_step' not in self.settings else float(self.settings['min_step'])
+        simulation_length = float(self.simulation_length) if 'simulation_length' not in self.settings else float(self.settings['simulation_length'])
+        t_start = float(t_start) if t_start is not None else float(self.settings['t_start']) if 't_start' in self.settings else 0
+        t_end = float(t_end) if t_end is not None else float(self.settings['t_end']) if 't_end' in self.settings else simulation_length
+        method = 'RK45' if 'method' not in self.settings else self.settings['method']
+        dense_output = False if 'dense_output' not in self.settings else self.settings['dense_output']
+
+        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=method, dense_output=dense_output)
         return solved
     
-    def check_cutoff(self, flat_array:np.array, cutoff_value:float = None):
+    def check_cutoff(self, flat_array:np.array):
         """Given a flat array, this method will check for any values below the cutoff value and set them to 0. This is for use in the user provided ODE system function to set any values below a certain threshold to 0, just before returning the vector. This is to prevent any numerical errors for values reaching really small values from propagating through the system.
 
         Args:
@@ -214,11 +219,9 @@ class Analysis():
         Returns:
             _type_: _description_
         """
-        if cutoff_value is not None:
-            cutoff = cutoff_value
-        else:
-            cutoff = self.Cutoff_Value
+        cutoff_value = float(self.cutoff_value) if 'cutoff_value' not in self.settings else float(self.settings['cutoff_value'])
+
         for index, value in enumerate(flat_array):
-            if value <= float(cutoff):
+            if value <= cutoff_value:
                 flat_array[index] = 0
         return flat_array

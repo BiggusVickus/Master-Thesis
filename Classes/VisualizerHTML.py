@@ -114,7 +114,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                                 {'label': 'BDF', 'value': 'BDF'},
                                 {'label': 'LSODA', 'value': 'LSODA'},
                             ],
-                            value=initial_settings['Solver_Type'],
+                            value=initial_settings['solver_type'],
                             id={'type': 'settings', 'index': 'solver_type'},
                         ),
                         html.H4(["t_eval option"]),
@@ -130,9 +130,9 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             id={'type': 'settings', 'index': 'min_step'}, 
                             type="number",
                             placeholder="Minimum Step",
-                            value=initial_settings['Min_Step'],
+                            value=initial_settings['min_step'],
                             required=True, 
-                            min=0.00001, 
+                            min=0.000001, 
                             max=1
                         ),
                         html.H4(["Max Step Size"]),
@@ -140,9 +140,9 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             id={'type': 'settings', 'index': 'max_step'}, 
                             type="number",
                             placeholder="Maximum Step",
-                            value=initial_settings['Max_Step'],
+                            value=initial_settings['max_step'],
                             required=True, 
-                            min=0.00001,
+                            min=0.000001,
                             max=1
                         ),
                         html.H4(["Cutoff value for small numbers"]),
@@ -150,7 +150,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             id={'type': 'settings', 'index': 'cutoff_value'}, 
                             type="number",
                             placeholder="Cutoff Value for small numbers",
-                            value=initial_settings['Cutoff_Value'],
+                            value=initial_settings['cutoff_value'],
                             required=True
                         ),
                         html.H4(["Dense Output"]),
@@ -166,38 +166,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             id={'type': 'settings', 'index': 'rtol'}, 
                             type="number",
                             placeholder="Relative Tolerance",
-                            value=initial_settings['R_Tol'], 
+                            value=initial_settings['rtol'], 
                             required=True
                         ),
                         dcc.Input(
                             id={'type': 'settings', 'index': 'atol'}, 
                             type="number",
                             placeholder="Absolute Tolerance",
-                            value=initial_settings['A_Tol'], 
-                            required=True
-                        ),
-
-                        html.H4(["Phase Portrait Settings (Quiver Plot)"]),
-                        dcc.Input(
-                            id={'type': 'settings', 'index': 'arrow_scale'}, 
-                            type="number",
-                            placeholder="Scale",
-                            value=initial_settings['Arrow_Scale_1'], 
-                            required=True
-                        ),
-                        dcc.Input(
-                            id={'type': 'settings', 'index': 'arrow_scale_scale'}, 
-                            type="number",
-                            placeholder="Arrow Scale",
-                            value=initial_settings['Arrow_Scale_2'], 
-                            required=True
-                        ),
-                        html.H4(["Arrow Head Angle (radians)"]),
-                        dcc.Input(
-                            id={'type': 'settings', 'index': 'arrow_radians'}, 
-                            type="number",
-                            placeholder="Arrow Heah Angle (radians)",
-                            value=initial_settings['Arrow_Radians'], 
+                            value=initial_settings['atol'], 
                             required=True
                         ),
                         html.H4(["Simulation Length Time"]),
@@ -205,7 +181,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, graph, i
                             id={'type': 'settings', 'index': 'simulation_length'}, 
                             type="number",
                             placeholder="Simulation Length in time",
-                            value=initial_settings['Simulation_Length'], 
+                            value=initial_settings['simulation_length'], 
                             required=True
                         ),
                     ])
