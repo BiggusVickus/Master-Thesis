@@ -118,12 +118,13 @@ class Visualizer():
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Not Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        for i, (name, dic) in enumerate(self.graph_data.items()):
+            for j in range(len(unflattened_data[i])):
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
-            for j in range(len(unflattened_data[i])):
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
         fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
