@@ -23,7 +23,7 @@ class Visualizer():
         """Pass an instance of an Analysis object wit
 
         Args:
-            analysis (Analysis): _description_
+            analysis (Analysis): The analysis object that is used to create the web application. The analysis object is used to run the simulation and report back the results. 
         """
 
         self.app = Dash() # the app object that is used to create the web application
@@ -89,6 +89,15 @@ class Visualizer():
         self.other_parameters_to_pass += args
     
     def create_main_figures(self, unflattened_data, overall_t):
+        """Create the main figures for the simple simulation. Shows the evolution of time and population counts. Shows the absolute and relative population levels as a bar plot, and the same for bacteria all summed up. Then shows the ending values of the inoculation and serial transfer simulation as a goruped stacked bar plot.
+
+        Args:
+            unflattened_data (list): List of numpy arrays holding the population data for each graph data.
+            overall_t (np.array): Array of time values for the simulation.
+
+        Returns:
+            list: Returns a list of figures, which are the main figures for the simulation. One for the simple populaiotn evolution, one for the absolute and relative population levels, one for the absolute and relative population levels with bacteria summed up, and one for the ending values of the inoculation and serial transfer simulation.
+        """
         list_of_figs = []
         num_graphs = len(self.graph_data.keys()) + 1
         cols = 3
@@ -202,7 +211,20 @@ class Visualizer():
         list_of_figs.append(fig)
         return list_of_figs
 
-    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name):
+    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name) -> list:
+        """Creates the initial value analysis figures. Creates a new figure for every self.graph_data, plus one for bacteria sum. Each figure creates 3 subplots, the first one shows the classic population evolution through time. THe second one shows the starting value of the selected parameter vs the time of max value reached of the parameter. The third one shows the slope and intercept of the fitted line, and the R^2 value. The figures are created using plotly, and are returned as a list of figures. Option to have a linear or log x axis.
+
+        Args:
+            simulation_output (_type_): _description_
+            time_output (_type_): _description_
+            param_name (_type_): _description_
+            param_values (_type_): _description_
+            graph_axis_scale (_type_): _description_
+            run_name (_type_): _description_
+
+        Returns:
+            list: List of figures, list length is equal to length of graph data + 1 for bacteria sum.
+        """
         list_of_figs = []
         for i, name in enumerate(list(self.graph_data.keys()) + ["Bacteria Sum"]):
             fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"ISV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
@@ -324,6 +346,22 @@ class Visualizer():
         return list_of_figs
         
     def run_serial_transfer_iterations(self, overall_y, overall_t, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices, save_bar_plot=False):
+        """Runs a serial transfer simulation for the given number of iterations. The serial transfer simulation is a simulation that runs for a given number of iterations, and saves the data to the graph_data dictionary. The serial transfer simulation is used to create the figures for the simulation results.
+
+        Args:
+            overall_y (np array): np array of the population levels, straight out of the ODE solver, no other processing done to it.
+            overall_t (np array): np array of the time values, straight out of the ODE solver, no other processing done to it.
+            serial_transfer_frequency (int): The number of iterations to run the serial transfer simulation for. 
+            flattened (_type_): _description_
+            serial_transfer_value (_type_): _description_
+            serial_transfer_bp_option (_type_): _description_
+            non_graphing_data_vectors (_type_): _description_
+            non_graphing_data_matrices (_type_): _description_
+            save_bar_plot (bool, optional): _description_. Defaults to False.
+
+        Returns:
+            _type_: _description_
+        """
         final_values = overall_y[:, -1]
         final_time = overall_t[-1]
         for _ in range(int(serial_transfer_frequency)):
