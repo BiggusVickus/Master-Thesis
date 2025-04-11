@@ -64,12 +64,12 @@ class GraphMaker:
     
     def default_settings_data(self):
         string = ""
-        string += f"Solver_Type: RK45\n"
-        string += f"T_Eval_Option: True\n"
-        string += f"Min_Step: 0.01\n"
-        string += f"Max_Step: 0.1\n"
-        string += f"Cutoff_Value: 0.000001\n"
-        string += f"Dense_Output: False\n"
+        string += f"solver_type: RK45\n"
+        string += f"t_eval_option: True\n"
+        string += f"min_step: 0.01\n"
+        string += f"max_step: 0.1\n"
+        string += f"cutoff_value: 0.000001\n"
+        string += f"dense_output: False\n"
         string += f"rtol: 0.001\n"
         string += f"atol: 0.000001\n"
         string += f"Arrow_Scale_1: 0.1\n"
