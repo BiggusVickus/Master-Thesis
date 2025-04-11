@@ -16,12 +16,11 @@ class Analysis():
         """
         self.graph_location = graph_location 
         self.graph = nx.read_gexf(graph_location)
-        self.attribute_additions = []
         self.settings = {}
-        self.Min_Step = 0.01
-        self.Max_Step = 0.1
-        self.Simulation_Length = 24
-        self.Cutoff_Value = 0.000001
+        self.min_step = 0.01
+        self.max_step = 0.1
+        self.simulation_length = 24
+        self.cutoff_value = 0.000001
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -39,18 +38,17 @@ class Analysis():
         """Given a particular node type, for example of phage P, bacteria B, or resource R, this method will return a list of all the node names of that type in the graph. It will also store the names of the nodes as an attribute of the class. If the node type is an environment node, it will store the parameters of the environment as attributes of the class.
 
         Args:
-            node_type (str): The type of node to be extracted from the graph
+            node_type (str): The type of node to be extracted from the graph, will usually be either 'P', 'B', 'R', or 'E'. The user can also add their own node types, but they need to make sure that the node type is in the graph file.
 
         Returns:
             list: List of all the node names of the given node type
         """
+        # create the list of nodes of the given type
         list_data =  [n for n in self.graph.nodes if self.graph.nodes[n]['node_type'] == node_type]
         if node_type == "E":
             self.environment_node_data = self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data'])
             for d, v in self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data']).items():
                 setattr(self, d, float(v))
-        else:
-            self.attribute_additions.append(node_type + '_node_names')
         setattr(self, node_type + '_node_names', list_data)
         return list_data
     
@@ -73,9 +71,12 @@ class Analysis():
         Returns:
             dictionary: Dictionary with keys and values from the string
         """
+        # new dictionary to be returned
         dictionary = {}
+        # split the string by the new line character, and then split each entry by the ':' character
         for row in string.split('\n'):
             row = row.split(':')
+            # ensure there is only 2 entries in the row, and then add the key and value to the dictionary
             if len(row) == 2:
                 dictionary[row[0]] = row[1]
         return dictionary
@@ -125,7 +126,9 @@ class Analysis():
         Returns:
             np.array: _description_
         """
+        # initialize the matrix with the number of rows and columns given by the length of the node lists
         matrix = np.zeros((len(node_list1), len(node_list2)))
+        # loop through the nodes in node_list1 and node_list2, and check if there is an edge between them. If there is, get the data from the edge and store it in the matrix
         for node1 in node_list1:
             for node2 in node_list2:
                 if self.graph.has_edge(node1, node2):
@@ -133,22 +136,25 @@ class Analysis():
                     matrix[node_list1.index(node1), node_list2.index(node2)] = data_type(data[attribute_name])
         return matrix
     
-    def initialize_new_parameter_from_node(self, node_list1:list, attribute_name:str, data_type = float):
+    def initialize_new_parameter_from_node(self, node_list1:list, attribute_name:str, data_type = float) -> np.array:
         """Initializes a new vector with the number of rows given by th elength of node_list1. The vector is initialized as a numpy array. The data is extracted from the attribute_name given from the nodes given in node_list1. The data is stored in the vector as the data_type given, in case the data is not a float. 
 
         Args:
-            node_list1 (list): List of nodes to be used as the rows of the matrix
+            node_list1 (list): List of nodes to be used as the rows of the vector
             attribute_name (str): 
             data_type (type, optional): The datatype needed/wanted. Can be int for example. Defaults to float.
 
         Returns:
-            np.array: Array of size rows with the attribute data extracted from the nodes given by attribute_name
+            np.array: np array (vector) of size length of node_list1 with the attribute data extracted from the nodes given by attribute_name
         """
-        matrix = np.zeros(len(node_list1))
-        for node1 in node_list1:
-                data = self.turn_string_to_dictionary(self.graph.nodes[node1]['data'])
-                matrix[node_list1.index(node1)] = data_type(data[attribute_name])
-        return matrix
+        # create vector of length of node_list1
+        vector = np.zeros(len(node_list1))
+        for node1 in node_list1: # loop through the nodes in node_list1
+            data = self.turn_string_to_dictionary(self.graph.nodes[node1]['data']) # get the data from the node
+            # check to see if the data is in the vector at the index of the node in node_list1
+            if attribute_name in data:
+                vector[node_list1.index(node1)] = data_type(data[attribute_name])
+        return vector
     
     def flatten_lists_and_matrices(self, *initial_populations:np.array) -> np.array:
         """Flattens any number of vectors and/or matrices into a single vector
@@ -197,7 +203,7 @@ class Analysis():
         Returns:
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
-        # check if max_step is in the extra parameters, if not, set it to the time step
+        # check if parametersare in the settings, if not, set it to the time step
         max_step = float(self.Max_Step) if 'max_step' not in self.settings else float(self.settings['max_step'])
         min_step = float(self.Min_Step) if 'min_step' not in self.settings else float(self.settings['min_step'])
         simulation_length = float(self.simulation_length) if 'simulation_length' not in self.settings else float(self.settings['simulation_length'])
@@ -209,18 +215,29 @@ class Analysis():
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, max_step=max_step, min_step=min_step, method=method, dense_output=dense_output)
         return solved
     
+    def add_item_to_class_attribute(self, name:str, data:object) -> None:
+        """If you decide to add the 'E' node to 'get_nodes_of_type()', the environment data will be added to the class as an attribute. Otherwise this is useful for adding any extra parameters to the class that are not part of the graph, that you might want to later use for whatever reason.
+        
+        You can then access the data as an attribute of the class by calling YourClassName.name, assuming that YourClassName extends this Analysis class. This is useful for adding any extra parameters to the class that are not part of the graph, that you might want to later use for whatever reason. You can also add any extra parameters to the class that are not part of the graph, that you might want to later use for whatever reason.
+
+        Args:
+            name (str): Name of the attribute to be added
+            data (any): Data to be added to the attribute. Datatype can be of any type desired
+        """
+        setattr(self, name, data)
+    
     def check_cutoff(self, flat_array:np.array):
         """Given a flat array, this method will check for any values below the cutoff value and set them to 0. This is for use in the user provided ODE system function to set any values below a certain threshold to 0, just before returning the vector. This is to prevent any numerical errors for values reaching really small values from propagating through the system.
 
         Args:
-            flat_array (np.array): _description_
-            cutoff_value (float, optional): _description_. Defaults to 0.000001.
+            flat_array (np array): The flattened array from the user provided to be checked for cutoff values. Best used at the start of the ODE loop, as the ode solver uses some math behind the scenes to calculate the gradient, affecting the final value plotted. Loops through the array and checks if the value is less than the cutoff value given by in the settings. If it is, it sets the value to 0.
 
         Returns:
-            _type_: _description_
+            np array: Returns the flat array with any values at or below the cutoff value set to 0. The array is returned as a numpy array.
         """
+        # gets the cutoff value from the settings, if not set, sets it to the default value
         cutoff_value = float(self.cutoff_value) if 'cutoff_value' not in self.settings else float(self.settings['cutoff_value'])
-
+        # loop through the array and check if the value is less than the cutoff value, if yes, set = 0. 
         for index, value in enumerate(flat_array):
             if value <= cutoff_value:
                 flat_array[index] = 0
