@@ -18,7 +18,7 @@
         <attvalues>
           <attvalue for="0" value="E" />
           <attvalue for="1" value="3" />
-          <attvalue for="2" value="Temperature: 25&#10;pH: 7&#10;M: 4&#10;" />
+          <attvalue for="2" value="Temperature: 25&#10;pH: 7&#10;M: 4&#10;washout: 0.05" />
         </attvalues>
       </node>
       <node id="S" label="S">
@@ -39,27 +39,27 @@
         <attvalues>
           <attvalue for="0" value="B" />
           <attvalue for="1" value="1" />
-          <attvalue for="2" value="Initial_Population: 50&#10;tau: 0.425&#10;" />
+          <attvalue for="2" value="Initial_Population: 50&#10;tau: 0.7&#10;" />
         </attvalues>
       </node>
       <node id="R0" label="R0">
         <attvalues>
           <attvalue for="0" value="R" />
           <attvalue for="1" value="2" />
-          <attvalue for="2" value="Initial_Concentration: 50&#10;e: 0.01&#10;" />
+          <attvalue for="2" value="Initial_Concentration: 200&#10;e: 0.12&#10;" />
         </attvalues>
       </node>
     </nodes>
     <edges>
       <edge source="P0" target="B0" id="0">
         <attvalues>
-          <attvalue for="3" value="Burst_Size: 207&#10;r: 0.01&#10;" />
+          <attvalue for="3" value="Burst_Size: 10&#10;r: 0.001&#10;" />
           <attvalue for="4" value="0" />
         </attvalues>
       </edge>
       <edge source="B0" target="R0" id="1">
         <attvalues>
-          <attvalue for="3" value="v: 2&#10;K: 0.1&#10;" />
+          <attvalue for="3" value="v: 1&#10;K: 10&#10;" />
           <attvalue for="4" value="0" />
         </attvalues>
       </edge>
