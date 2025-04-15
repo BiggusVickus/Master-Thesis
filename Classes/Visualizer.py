@@ -119,34 +119,44 @@ class Visualizer():
         list_of_figs.append(fig)
 
         fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Not Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        np.random.seed(1)  # Set the random seed for reproducibility
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
+                color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color)), row=1, col=2)
+        np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
+                color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
         fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Sm)", "Relative Population Levels (Bacteria Sum)"), row_heights=[1000])
+        np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one"), row=1, col=1)
+                color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
+        color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
+        np.random.seed(1)
+        for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
-        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria (optical density, absolute)", stackgroup="one"), row=1, col=1)
-        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria, (optical density, relative)", stackgroup="one", groupnorm='percent'), row=1, col=2)
+                color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color)), row=1, col=2)
+        color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria, (optical density, relative)", stackgroup="one",  marker=dict(color=color), groupnorm='percent'), row=1, col=2)
         fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
-
 
         # Step 1: Flatten and assign numeric x positions
         records = []
