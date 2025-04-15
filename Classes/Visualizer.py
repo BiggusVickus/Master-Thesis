@@ -14,7 +14,7 @@ from collections import defaultdict
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 np.random.seed(0)  # Set the random seed for reproducibility
-from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus
+from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker
 
 class Visualizer():
     """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
@@ -228,11 +228,12 @@ class Visualizer():
         """
         list_of_figs = []
         for i, name in enumerate(list(self.graph_data.keys()) + ["Bacteria Sum"]):
-            fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"ISV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
+            fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"SV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
             list_max_x = []
             list_max_y = []
             for j in range(len(simulation_output)):
-                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}"), row=1, col=1)
+                color = unifrom_color_gradient_maker(j, len(simulation_output))
+                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color)), row=1, col=1)
                 max_x = time_output[j][np.argmax(simulation_output[j][i][0])]
                 list_max_x.append(max_x)
                 max_y = np.max(simulation_output[j][i][0])
