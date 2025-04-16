@@ -76,3 +76,20 @@ def determine_type_of_variable(string):
         return int(string)
     else:
         return string
+    
+def determine_max_value_offset(x_data, y_data, upper_value):
+    upper_value = float(upper_value)
+    max_y_value_reached, index_of_max_y_reached = np.max(y_data), np.argmax(y_data)
+    time_of_max_y_value_reached = x_data[index_of_max_y_reached]
+    target_y_value = max_y_value_reached * upper_value
+    if index_of_max_y_reached == 0:
+        return time_of_max_y_value_reached, max_y_value_reached
+    for i in range(len(y_data)-1):
+        if y_data[i] < max_y_value_reached * upper_value and y_data[i+1] > max_y_value_reached * upper_value:
+            y_l = y_data[i]
+            y_r = y_data[i+1]
+            x_l = x_data[i]
+            x_r = x_data[i+1]
+            interpolated_time = x_l + (target_y_value - y_l) * (x_r - x_l) / (y_r - y_l)
+            return interpolated_time, target_y_value
+    return time_of_max_y_value_reached, max_y_value_reached
