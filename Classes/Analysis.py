@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 from scipy.integrate import solve_ivp
+from Classes.Variables import determine_type_of_variable
 np.seterr(divide='ignore')
 
 class Analysis():
@@ -91,7 +92,7 @@ class Analysis():
         """
         # loop through the dictionary and set the attributes of the class to the values in the dictionary
         for key, value in dictionary.items():
-            setattr(self, key, value)
+            setattr(self, key, determine_type_of_variable(value))
     
     def initialize_new_matrix(self, rows:int, columns:int):
         """Initializes a new matrix of zeros with the given number of rows and columns. The matrix is initialized as a numpy array.

@@ -366,7 +366,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         placeholder="1-100",
                     ),
                     html.Br(),
-                    html.H4(["And choose the values to test between the two values for a uniform distribution (including the end values)"]),
+                    html.H4(["And choose the number of uniformly spaced values to test (including the end values)"]),
                     dcc.Input(
                         id="initial_value_analysis_steps",
                         type="number",
