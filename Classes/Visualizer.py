@@ -88,7 +88,7 @@ class Visualizer():
         """
         self.other_parameters_to_pass += args
     
-    def create_main_figures(self, unflattened_data, overall_t):
+    def create_main_figures(self, unflattened_data, overall_t, log_y_scale):
         """Create the main figures for the simple simulation. Shows the evolution of time and population counts. Shows the absolute and relative population levels as a bar plot, and the same for bacteria all summed up. Then shows the ending values of the inoculation and serial transfer simulation as a goruped stacked bar plot.
 
         Args:
@@ -102,21 +102,26 @@ class Visualizer():
         num_graphs = len(self.graph_data.keys()) + 1
         cols = 3
         rows = (num_graphs // cols) + 1  # Calculate the number of rows needed
-        fig = make_subplots(rows=rows, cols=3, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum (Optical Density)'], row_heights=[5000/rows]*rows)
+        fig = make_subplots(rows=rows, cols=3, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum (Optical Density)'], row_heights=[5000]*rows)
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             for j in range(len(unflattened_data[i])):
                 row = (i // cols) + 1
                 col = (i % cols) + 1
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"), row=row, col=col)
-                fig.update_layout(xaxis=dict(title="Time"), yaxis=dict(title="Value", type="log"))
         fig.update_layout(title=f"Graph of Each Population", xaxis=dict(title="Time"), yaxis=dict(title="Value"))
+        if log_y_scale:
+            fig.update_yaxes(type="log")
 
         data_bacteria = optical_density(deepcopy(unflattened_data), list(self.graph_data.keys()))
         col_index = (cols*3 + col)%3 + 1
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (Optical Density)"), row=rows, col=col_index)
         fig.update_layout(hovermode="x unified")
+        if log_y_scale:
+            fig.update_yaxes(type="log")
         list_of_figs.append(fig)
+
+
 
         fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Not Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
         np.random.seed(1)  # Set the random seed for reproducibility
@@ -124,15 +129,19 @@ class Visualizer():
             for j in range(len(unflattened_data[i])):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color)), row=1, col=2)
+
         np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
-        fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
+        if log_y_scale:
+            fig.update_yaxes(type="log", row=1, col=1)
         list_of_figs.append(fig)
+
+
 
         fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Sm)", "Relative Population Levels (Bacteria Sum)"), row_heights=[1000])
         np.random.seed(1)
@@ -153,9 +162,10 @@ class Visualizer():
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color)), row=1, col=2)
         color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria, (optical density, relative)", stackgroup="one",  marker=dict(color=color), groupnorm='percent'), row=1, col=2)
-        fig.update_yaxes(type="log", row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
+        if log_y_scale:
+            fig.update_yaxes(type="log", row=1, col=1)
         list_of_figs.append(fig)
 
         # Step 1: Flatten and assign numeric x positions
@@ -209,7 +219,7 @@ class Visualizer():
         fig = go.Figure(data=traces)
         fig.update_layout(
             barmode="stack",
-            title="Grouped + Stacked Bar Plot with Spacing",
+            title="Grouped + Stacked Bar plot of Ending Values of Inoculation and Serial Transfer Simulations",
             xaxis=dict(
                 tickmode="array",
                 tickvals=x_tick_vals,
@@ -217,8 +227,9 @@ class Visualizer():
                 tickangle=90
             ),
             yaxis_title="Value", 
-            yaxis=dict(type="log"),
         )
+        if log_y_scale:
+            fig.update_yaxes(type="log")
         list_of_figs.append(fig)
         return list_of_figs
 
@@ -412,13 +423,14 @@ class Visualizer():
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_data_bacteria_sum_graph"}, 'figure', allow_duplicate=True),
             Output({'type': 'plot_basic_graph_data', 'index': "plot_basic_graph_serial_transfer_end_values"}, 'figure', allow_duplicate=True),
             Input('run_basic_model', 'n_clicks'),
+            State('main_figure_log_axis', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def plot_main_plots(n_clicks, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def plot_main_plots(n_clicks, main_figure_log_y_axis, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             """_summary_
 
             Args:
@@ -455,7 +467,7 @@ class Visualizer():
             group_names = [name for name in self.graph_data.keys()] + ["Bacteria Sum"]
             column_names = [self.graph_data[name]["column_names"] for name in self.graph_data.keys()] + [["Bacteria Sum"]]
             self.ending_values_serial_transfer["Initial Inoculation"] = {'group_names': group_names, 'column_names': column_names, 'column_data': column_data}
-            list_of_figs = self.create_main_figures(overall_y, solved_system.t)
+            list_of_figs = self.create_main_figures(overall_y, solved_system.t, main_figure_log_y_axis)
             return list_of_figs
         
         @callback(
@@ -467,13 +479,14 @@ class Visualizer():
             State('serial_transfer_value', 'value'),
             State('serial_transfer_bp_option', 'value'),
             State('serial_transfer_frequency', 'value'),
+            State('serial_transfier_figure_log_axis', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def serial_transfer(n_clicks, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def serial_transfer(n_clicks, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, serial_transfer_log_y_axis, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             """_summary_
 
             Args:
@@ -517,7 +530,7 @@ class Visualizer():
             # unflatten the data, save the data to the graph_data dictionary, and sum up the columns if necessary, then create the figures
             overall_y = self.analysis.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
             overall_y = self.save_data(overall_y, overall_t, save_data=False)
-            list_of_figs = self.create_main_figures(overall_y, overall_t)
+            list_of_figs = self.create_main_figures(overall_y, overall_t, serial_transfer_log_y_axis)
             return list_of_figs
         
         @callback(

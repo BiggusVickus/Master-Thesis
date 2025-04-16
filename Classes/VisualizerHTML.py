@@ -73,6 +73,13 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
             html.Div(style={'margin': '60px'}),
             html.Hr(),
             html.Div(style={'margin': '60px'}),
+            dcc.Checklist(
+                options=[
+                    {'label': 'Use log y axis (checked) or linear y axis (unchecked)', 'value': 'option1'},
+                ],
+                value=['option1'],
+                id='main_figure_log_axis'
+            ),
             html.Button('Rerun model', id='run_basic_model'),
 
             # tabs for the data tables, the initial conditions, parameter values for the simulation, environment parameters, and the settings tab
@@ -260,6 +267,13 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value="1"
                     ),
                     html.Br(),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Use log y axis (checked) or linear y axis (unchecked)', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='serial_transfier_figure_log_axis'
+                    ),
                     html.Button("Run Serial Transfer", id="run_serial_transfer"),
                     html.H4(["The plots above in the Line Chart section will update with the new values after the serial transfer is complete, ensure that a model ahs already been run before running the serial transfer. To reset the chart, run the 'Rerun model' button above."]),
                     html.Div(style={'margin': '60px'}),
