@@ -14,7 +14,7 @@ from collections import defaultdict
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 np.random.seed(0)  # Set the random seed for reproducibility
-from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker
+from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker, determine_max_value_offset
 
 class Visualizer():
     """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
@@ -233,7 +233,7 @@ class Visualizer():
         list_of_figs.append(fig)
         return list_of_figs
 
-    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name) -> list:
+    def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name, offset, log_axis) -> list:
         """Creates the initial value analysis figures. Creates a new figure for every self.graph_data, plus one for bacteria sum. Each figure creates 3 subplots, the first one shows the classic population evolution through time. THe second one shows the starting value of the selected parameter vs the time of max value reached of the parameter. The third one shows the slope and intercept of the fitted line, and the R^2 value. The figures are created using plotly, and are returned as a list of figures. Option to have a linear or log x axis.
 
         Args:
@@ -243,6 +243,8 @@ class Visualizer():
             param_values (_type_): _description_
             graph_axis_scale (_type_): _description_
             run_name (_type_): _description_
+            offset (_type_): _description_
+            log_axis (_type_): _description_
 
         Returns:
             list: List of figures, list length is equal to length of graph data + 1 for bacteria sum.
@@ -255,10 +257,11 @@ class Visualizer():
             for j in range(len(simulation_output)):
                 color = unifrom_color_gradient_maker(j, len(simulation_output))
                 fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color)), row=1, col=1)
-                max_x = time_output[j][np.argmax(simulation_output[j][i][0])]
+                max_x, max_y = determine_max_value_offset(time_output[j], simulation_output[j][i][0], offset)
                 list_max_x.append(max_x)
-                max_y = np.max(simulation_output[j][i][0])
                 list_max_y.append(max_y)
+            if log_axis:
+                fig.update_yaxes(type="log", row=1, col=1)
 
             if graph_axis_scale == "linear-linear (linear)": # linear
                 popt, _ = curve_fit(lin_func, param_values, list_max_x)
@@ -720,6 +723,8 @@ class Visualizer():
             State('initial_value_analysis_range', 'value'),
             State('initial_value_analysis_steps', 'value'),
             State('initial_value_analysis_run_name', 'value'),
+            State('initial_value_analysis_offset', 'value'),
+            State('initial_value_analysis_log_axis', 'value'),
             State('initial_value_analysis_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
             State('serial_transfer_bp_option', 'value'),
@@ -731,7 +736,7 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, run_name, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graph_axis_scale, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def initial_value_analysis(n_clicks, param_name, use_opt_1_or_opt_2, param_input, param_range, param_steps, run_name, offset, log_axis, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graph_axis_scale, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             """_summary_
 
             Args:
@@ -789,7 +794,7 @@ class Visualizer():
                 overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                 simulation_output.append(overall_y)
                 time_output.append(overall_t)
-            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale, run_name)
+            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale, run_name, offset, log_axis)
         
         @callback(
             Output('plot_phase_portrait', 'figure', allow_duplicate=True),

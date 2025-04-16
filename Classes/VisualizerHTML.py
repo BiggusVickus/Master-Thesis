@@ -409,6 +409,19 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     ),
                     html.H4(["Choose a scale for the graph (linear or log graph)"]),
                     dcc.Dropdown(['log-linear (log)', 'linear-linear (linear)'], id='initial_value_analysis_graph_scale', value = 'log-linear (log)'),
+                    dcc.Input(
+                        value="0.95",
+                        id='initial_value_analysis_offset',
+                        min=0.01,
+                        max=1,
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Log y axis IVA plot', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='initial_value_analysis_log_axis'
+                    ),
                     html.Button("Run Initial Value Analysis", id="run_initial_value_analysis"),
                     html.H4(["Clear Bar Chart"]),
                     html.Button("Clear Bar Chart", id="clear_bar_chart"),
