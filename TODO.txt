@@ -1,2 +1,0 @@
-select all the tables and save them, then rerun the simulation
-turn streamlit into a class with functionality
