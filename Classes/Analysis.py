@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
 from scipy.integrate import solve_ivp
-from Classes.Variables import determine_type_of_variable
+from Classes.Math import determine_type_of_variable
 np.seterr(divide='ignore')
 
 class Analysis():
