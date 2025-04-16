@@ -36,7 +36,7 @@ class System(Analysis):
                     sum_g += g(N[n_index], v, K)
                     sum_u += U[b_index]
                     sum_i += np.sum(I[b_index])
-            new_N[n_index] = -(e_value * sum_g) * (sum_u + sum_i)
+            new_N[n_index] = -(e_value * sum_g) * (sum_u + sum_i) - N[n_index] * self.washout
         
         # update U vector, i, and j are flipped relative to what is seen in update N vector for v, K, and r matrices because of how the row and columns are defined in the graph
         # dont sum U in left and right, because we are looking at an individual bacteria
@@ -52,7 +52,7 @@ class System(Analysis):
                 p_index = phage_nodes.index(phage)
                 if graph.has_edge(phage, uninfected):
                     right += r_matrix[p_index, u_index] * P[p_index]
-            new_U[u_index] = g_sum * U[u_index] - right * U[u_index]
+            new_U[u_index] = g_sum * U[u_index] - right * U[u_index] - U[u_index] * self.washout
 
         for infected in bacteria_nodes:
             i_index = bacteria_nodes.index(infected)
@@ -65,11 +65,11 @@ class System(Analysis):
                         if graph.has_edge(phage, infected):
                             left_sum += r_matrix[p_index, i_index] * P[p_index]
                             right_sum += M / tau_vector[i_index] * I[i_index, 0]
-                    new_I[i_index, 0] = left_sum * U[i_index] - right_sum
+                    new_I[i_index, 0] = left_sum * U[i_index] - right_sum - U[i_index] * self.washout
                 else:
                     m_tau = M / tau_vector[i_index]
                     right = I[i_index, infected_stage - 1] - I[i_index, infected_stage]
-                    new_I[i_index, infected_stage] = m_tau * right
+                    new_I[i_index, infected_stage] = m_tau * right - new_I[i_index, infected_stage] * self.washout
         
         for phage in phage_nodes:
             p_index = phage_nodes.index(phage)
@@ -80,7 +80,7 @@ class System(Analysis):
                 if graph.has_edge(phage, infected):
                     left_sum += B_matrix[p_index, i_index] * M / tau_vector[i_index] * I[i_index, -1]
                     right_sum += r_matrix[p_index, i_index] * (U[i_index] + np.sum(I[i_index])) * P[p_index]
-            new_P[p_index] = left_sum - right_sum
+            new_P[p_index] = left_sum - right_sum - P[p_index] * self.washout
 
         flattened_y1 = self.flatten_lists_and_matrices(new_N, new_U, new_I, new_P)
         return flattened_y1
