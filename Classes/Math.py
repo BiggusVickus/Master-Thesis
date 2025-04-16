@@ -56,3 +56,23 @@ def unifrom_color_gradient_maker(i, n):
     g = int(255 * ratio)        # interpolate to green
     b = 0                       # no blue component
     return f'rgb({r},{g},{b})'
+
+def determine_type_of_variable(string):
+    string = string.strip()
+    if string == "True":
+        return True
+    if string == "False":
+        return False
+    if string[0] == "[":
+        list_maker = []
+        string = string.replace('[', '').replace(']', '').replace(' ', '')
+        string = string.split(',')
+        for element in string:
+            list_maker.append(determine_type_of_variable(element))
+        return list_maker
+    if "." in string:
+        return float(string)
+    if string.isnumeric():
+        return int(string)
+    else:
+        return string
