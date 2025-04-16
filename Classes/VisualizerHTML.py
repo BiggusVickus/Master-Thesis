@@ -162,7 +162,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         html.H4(["t_eval option"]), # evaluation option
                         dcc.Checklist(
                             options=[
-                                {'label': 'Use solver suggested t_values (checked) or your own t_eval (unchecked) which uses the simulation length and ', 'value': 'option1'},
+                                {'label': 'Use solver suggested t_values (checked) or your own t_eval (unchecked) which uses the simulation time start and end and number of steps', 'value': 'option1'},
                             ],
                             value=['option1'],
                             id={'type': 'settings', 'index': 't_eval_option'}
