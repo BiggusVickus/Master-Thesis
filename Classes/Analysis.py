@@ -50,7 +50,7 @@ class Analysis():
         list_data =  [n for n in self.graph.nodes if self.graph.nodes[n]['node_type'] == node_type]
         # if the node type is an environment node, get the data from the node and store it as an attribute of the class
         if node_type == "E":
-            self.environment_node_data = self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data'])
+            self.environment_data = self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data'])
             for d, v in self.turn_string_to_dictionary(self.graph.nodes[list_data[0]]['data']).items():
                 setattr(self, d, float(v))
         return list_data
@@ -92,7 +92,10 @@ class Analysis():
         """
         # loop through the dictionary and set the attributes of the class to the values in the dictionary
         for key, value in dictionary.items():
-            setattr(self, key, determine_type_of_variable(value))
+            new_value = determine_type_of_variable(value)
+            setattr(self, key, new_value)
+            dictionary[key] = new_value
+        return dictionary        
     
     def initialize_new_matrix(self, rows:int, columns:int):
         """Initializes a new matrix of zeros with the given number of rows and columns. The matrix is initialized as a numpy array.

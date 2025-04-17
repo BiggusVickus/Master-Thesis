@@ -60,7 +60,8 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
     """
     graph_data_name_list = [name for name in graph_data.keys()]
     non_graph_data_name_list = [name for name in OrderedDict(list(non_graph_data_vector.items()) + list(non_graph_data_matrix.items()))]
-    both_params = graph_data_name_list + non_graph_data_name_list
+    environment_params = [name for name in analysis.environment_data.keys()]
+    both_params = graph_data_name_list + non_graph_data_name_list + environment_params
 
     return html.Div([
             # main title and area for main, basic plots. 1 for the basic plot, 1 for the bacteria not sum stacked lineplot, 1 for the bacteria summed up stacked lineplot, and 1 for the serial transfer end values plot
@@ -140,9 +141,9 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         html.H2(f"DataTable for Environment Parameters"),
                         html.H4(f"Note: Some prameters wont influence the simulation. For example, changing M wont affect the number of steps in the lysis process, but overall should ahve an immediate effect on the simulation."),
                         dash_table.DataTable(
-                            pd.DataFrame([analysis.environment_node_data]).to_dict('records'),
+                            pd.DataFrame([analysis.environment_data]).to_dict('records'),
                             id="environment_data",
-                            columns=[{"name": col, "id": col} for col in analysis.environment_node_data.keys()],
+                            columns=[{"name": col, "id": col} for col in analysis.environment_data.keys()],
                             editable=True
                         ),
                     ])
@@ -437,7 +438,21 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_2', value = graph_data_name_list[1] if len(graph_data_name_list) > 1 else None),
                     # TODO: remove the value from the input after testing
-                    html.H4(["Choose a start value and end value for each parameter separated by a '-' sign and the number of steps for each parameter for uniformly spaced values (including the start/end values) for parameter 1 and 2"]),
+                    html.H4(["Option 1: Input the values you want to test separated by commas"]),
+                    dcc.Input(
+                        id="phase_portrait_starting_x", 
+                        type="text",
+                        placeholder="List of x starting values separated by commas",
+                        value="48, 49, 50"
+                    ),
+                    dcc.Input(
+                        id="phase_portrait_starting_y", 
+                        type="text",
+                        placeholder="List of y starting values separated by comma",
+                        value="10, 50, 100"
+                    ),
+                    html.H4(["Option 2: Choose a start value and end value for each parameter separated by a '-' sign"]),
+                    html.H4(["Parameter 1:"]),
                     dcc.Input(
                         id="phase_portrait_range_1", 
                         type="text",
@@ -451,6 +466,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value="15"
                     ),
                     html.Br(),
+                    html.H4(["Parameter 2:"]),
                     dcc.Input(
                         id="phase_portrait_range_2", 
                         type="text",
@@ -463,26 +479,27 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         placeholder="Number of steps for parameter 2",
                         value="15"
                     ),
-                    html.Br(), 
-                    dcc.Input(
-                        id="phase_portrait_starting_x", 
-                        type="text",
-                        placeholder="List of x starting values separated by commas",
-                        value="48, 49, 50"
-                    ),
-                    dcc.Input(
-                        id="phase_portrait_starting_y", 
-                        type="text",
-                        placeholder="List of y starting values separated by comma",
-                        value="10, 50, 100"
-                    ),
                     html.Br(),
                     dcc.Checklist(
                         options=[
-                            {'label': 'Auto Calculate Quiver Range', 'value': 'option1'},
+                            {'label': 'Use option 1 (checked) or option 2 (unchecked)', 'value': 'option1'},
                         ],
                         value=['option1'],
                         id='phase_portrait_auto_calculate_range'
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Log x graph', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='phase_portrait_log_x'
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Log y graph', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='phase_portrait_log_y'
                     ),
                     dcc.Checklist(
                         options=[

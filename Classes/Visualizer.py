@@ -394,7 +394,7 @@ class Visualizer():
         final_time = overall_t[-1]
         for _ in range(int(serial_transfer_frequency)):
             flattened = serial_transfer_calculation(self.graph_data, final_values, serial_transfer_value, serial_transfer_bp_option, flattened)
-            solved_system = self.analysis.solve_system(self.analysis.odesystem, flattened, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, t_start=float(final_time), t_end=float(final_time) + float(self.settings['simulation_length']))
+            solved_system = self.analysis.solve_system(self.analysis.odesystem, flattened, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data, t_start=float(final_time), t_end=float(final_time) + float(self.settings['simulation_length']))
             overall_y = np.concatenate((overall_y, solved_system.y), axis=1)
             overall_t = np.concatenate((overall_t, solved_system.t))
             if save_bar_plot:
@@ -449,10 +449,10 @@ class Visualizer():
             """
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, flattened, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
-            self.analysis.update_environment_data(environment_data[0])
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
 
             # solves sytem of ODEs, saves y and t data results
-            solved_system = self.analysis.solve_system(self.analysis.odesystem, flattened, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+            solved_system = self.analysis.solve_system(self.analysis.odesystem, flattened, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
             self.copy_of_simulation_output = solved_system
 
             # unflattens the data, saves the data to the graph_data dictionary, and sums up the columns if necessary
@@ -505,13 +505,9 @@ class Visualizer():
             Returns:
                 list: List of figures, list length is equal to length of graph data + 1 for bacteria sum.
             """
-            print(graphing_data)
-            print(non_graphing_data_vectors)
-            print(non_graphing_data_matrices) 
-            print(environment_data)
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, new_non_graphing_data_vectors, new_non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
-            self.analysis.update_environment_data(environment_data[0])
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
 
             #use previously saved data to start the simulation from the last time point
             try:
@@ -562,7 +558,7 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def parameter_analysis(n_clicks, param_name_1, param_name_2, use_opt_1_or_opt_2, param_1_input, param_2_input, param_range_1, param_range_2, param_steps_1, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def parameter_analysis(n_clicks, param_name_1, param_name_2, use_opt_1_or_opt_2, param_input_1, param_input_2, param_range_1, param_range_2, param_steps_1, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             """_summary_
 
             Args:
@@ -590,12 +586,13 @@ class Visualizer():
             """
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
-            self.analysis.update_environment_data(environment_data[0])
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
 
             #if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
+            print(use_opt_1_or_opt_2)
             try:
-                param_values_1 = split_comma_minus(param_1_input, param_range_1, param_steps_1, use_opt_1_or_opt_2)
-                param_values_2 = split_comma_minus(param_2_input, param_range_2, param_steps_2, use_opt_1_or_opt_2)
+                param_values_1 = split_comma_minus(param_input_1, param_range_1, param_steps_1, use_opt_1_or_opt_2)
+                param_values_2 = split_comma_minus(param_input_2, param_range_2, param_steps_2, use_opt_1_or_opt_2)
             except:
                 return *[go.Figure() for _ in self.graph_data.keys()], go.Figure(), 0, {}, 0
 
@@ -618,8 +615,10 @@ class Visualizer():
                         initial_condition[index] = param_value_1
                     elif param_name_1 in self.non_graph_data_vector:
                         non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_1)][0] = param_value_1
-                    else:
+                    elif param_name_1 in self.non_graph_data_matrix:
                         non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_1)][0][0] = param_value_1
+                    elif param_name_1 in self.analysis.environment_data:
+                        self.analysis.environment_data[param_name_1] = param_value_1
                     
                     # if the parameter 2 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
                     if param_name_2 in self.graph_data:
@@ -629,9 +628,11 @@ class Visualizer():
                         non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_2)][0] = param_value_2
                     elif param_name_2 in self.non_graph_data_matrix:
                         non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_2)][0][0] = param_value_2
+                    elif param_name_2 in self.analysis.environment_data:
+                        self.analysis.environment_data[param_name_2] = param_value_2
                     
                     # solve the system of ODEs, and save the final value and time value
-                    solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+                    solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
                     overall_y = solved_system.y
                     overall_t = solved_system.t
                     
@@ -761,10 +762,10 @@ class Visualizer():
             """
             # turn the data in the dashboard into numpy arrays, and save/update the environemnt data to the graph object
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
-            self.analysis.update_environment_data(environment_data[0])
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
 
             # if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
-            param_1_values = split_comma_minus(param_input, param_range, param_steps, use_opt_1_or_opt_2)
+            param_values_1 = split_comma_minus(param_input, param_range, param_steps, use_opt_1_or_opt_2)
             # create a list of the names of the parameters, to be used to find the index of the parameter in the flattened array
             items_of_name = []
             for key, value in self.graph_data.items():
@@ -774,19 +775,21 @@ class Visualizer():
             simulation_output = []
             time_output = []
             # loop through each parameter value, and solve the system of ODEs, and save the final time point value for each parameter value
-            for param_1_value in param_1_values:
+            for param_value_1 in param_values_1:
                 # if the parameter 1 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
                 if param_name in self.graph_data:
                     index = items_of_name.index(param_name)
-                    initial_condition[index] = param_1_value
+                    initial_condition[index] = param_value_1
                 elif param_name in self.non_graph_data_vector:
-                    non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_1_value
+                    non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_value_1
                 elif param_name in self.non_graph_data_matrix:
-                    non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = param_1_value
+                    non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = param_value_1
+                elif param_name in self.analysis.environment_data:
+                    self.analysis.environment_data[param_name] = param_value_1
                 # solve the system of ODEs, and save the final value and time value
-                updated_data = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
-                overall_y = updated_data.y
-                overall_t = updated_data.t
+                solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
+                overall_y = solved_system.y
+                overall_t = solved_system.t
                 if use_serial_transfer:
                     overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
                 overall_y = self.analysis.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
@@ -794,7 +797,7 @@ class Visualizer():
                 overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
                 simulation_output.append(overall_y)
                 time_output.append(overall_t)
-            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_1_values, graph_axis_scale, run_name, offset, log_axis)
+            return self.create_initial_value_analysis_figures(simulation_output, time_output, param_name, param_values_1, graph_axis_scale, run_name, offset, log_axis)
         
         @callback(
             Output('plot_phase_portrait', 'figure', allow_duplicate=True),
@@ -808,6 +811,8 @@ class Visualizer():
             State('phase_portrait_starting_x', 'value'),
             State('phase_portrait_starting_y', 'value'),
             State('phase_portrait_auto_calculate_range', 'value'),
+            State('phase_portrait_log_x', 'value'),
+            State('phase_portrait_log_y', 'value'),
             State('phase_portrait_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
             State('serial_transfer_bp_option', 'value'),
@@ -818,7 +823,7 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def phase_portrait(n_clicks, param_name_1, param_name_2, param_range_1, param_steps_1, param_range_2, param_steps_2, starting_x, starting_y, auto_calculate_range, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def phase_portrait(n_clicks, param_name_1, param_name_2, param_range_1, param_steps_1, param_range_2, param_steps_2, starting_x, starting_y, use_opt_1_or_opt_2, log_x, log_y, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             """Creates a phase portrait of a simulation. Choose two parameters to plot against each other, and the simulation will be run for each combination of the two parameters. The phase portrait is a 2D plot of the two parameters, with the x-axis being the first parameter and the y-axis being the second parameter. The phase portrait is created by running the simulation for each combination of the two parameters, and plotting the results.
 
             Args:
@@ -845,16 +850,14 @@ class Visualizer():
                 _type_: _description_
             """
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
-            self.analysis.update_environment_data(environment_data[0])
-            starting_x = [float(value.strip()) for value in starting_x.split(",")]
-            starting_y = [float(value.strip()) for value in starting_y.split(",")]
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
+            starting_x = split_comma_minus(starting_x, param_range_1, param_steps_1, use_opt_1_or_opt_2)
+            starting_y = split_comma_minus(starting_y, param_range_2, param_steps_2, use_opt_1_or_opt_2)
             items_of_name_full = []
             items_of_name_short = []
             for key, value in self.graph_data.items():
                 items_of_name_full += [key] * value["data"].size
                 items_of_name_short.append(key)
-            min_x_overall, max_x_overall = None, None
-            min_y_overall, max_y_overall = None, None
             list_of_solved = []
             for i in range(len(starting_x)):
                 for j in range(len(starting_y)):
@@ -862,7 +865,7 @@ class Visualizer():
                     initial_condition[index] = starting_x[i]
                     index = items_of_name_full.index(param_name_2)
                     initial_condition[index] = starting_y[j]
-                    solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices)
+                    solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
                     overall_y = solved_system.y
                     overall_t = solved_system.t
                     if use_serial_transfer:
@@ -873,34 +876,6 @@ class Visualizer():
                     solved_x_values = unflattened_data[items_of_name_short.index(param_name_1)][0]
                     solved_y_values = unflattened_data[items_of_name_short.index(param_name_2)][0]
                     list_of_solved.append((solved_x_values, solved_y_values, overall_t, starting_x[i], starting_y[j]))
-                    if (auto_calculate_range):
-                        min_x, max_x = min(solved_x_values), max(solved_x_values)
-                        min_y, max_y = min(solved_y_values), max(solved_y_values)
-                    else:
-                        min_x, max_x = [float(value.strip()) for value in param_range_1.split("-")]
-                        min_y, max_y = [float(value.strip()) for value in param_range_2.split("-")]
-                    if (min_x_overall is None or min_x < min_x_overall):
-                        min_x_overall = min_x
-                    if (max_x_overall is None or max_x > max_x_overall):
-                        max_x_overall = max_x
-                    if (min_y_overall is None or min_y < min_y_overall):
-                        min_y_overall = min_y
-                    if (max_y_overall is None or max_y > max_y_overall):
-                        max_y_overall = max_y
-            x_vals = np.linspace(float(min_x_overall), float(max_x_overall), int(param_steps_1))
-            y_vals = np.linspace(float(min_y_overall), float(max_y_overall), int(param_steps_2))
-            X, Y = np.meshgrid(x_vals, y_vals)
-
-            DX, DY = np.zeros(X.shape), np.zeros(Y.shape)
-            for i in range(X.shape[0]):
-                for j in range(X.shape[1]):
-                    initial_condition_copy = initial_condition.copy()
-                    initial_condition_copy[items_of_name_full.index(param_name_1)] = X[i, j]
-                    initial_condition_copy[items_of_name_full.index(param_name_2)] = Y[i, j]
-                    updated_data = self.analysis.odesystem(0, initial_condition_copy, *[self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices])
-                    value1 = updated_data[items_of_name_full.index(param_name_1)]
-                    value2 = updated_data[items_of_name_full.index(param_name_2)]
-                    DX[i, j], DY[i, j] = value1, value2
 
             fig = go.Figure()
             fig.update_layout(
@@ -930,6 +905,10 @@ class Visualizer():
                     hovertemplate=f"{param_name_1}: %{{x}}<br>{param_name_2}: %{{y}}<extra></extra>",      
                 )
             )
+            if log_x:
+                fig.update_xaxes(type="log")
+            if log_y:
+                fig.update_yaxes(type="log")
             return fig
         
         @callback(
