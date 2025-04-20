@@ -1,9 +1,10 @@
 \chapter{Introduction}
 \label{Introduction}
 
-Phages, small viruses that infect, replicate, and kill bacteria, are nature's natural anti-microbial defense. 
+Phages, small viruses that infect and lyse (kill) bacteria, are nature's natural anti-microbial defense. 
 Researchers are trying to determine phage applications in controlling bacterial infections and spread. 
-Phages have applications in human and animal health. 
+But first the interactions between phages and bacteria need to be known. 
+There is particular interest in phage applications due to their applications in human and animal health. 
 Phage cocktails are a medicine for sick patients with bacterial diseases, such as \textit{E. coli}. 
 A patient can intake a pill filled with specific phages that target \textit{E. coli}.
 The phages will target the specific \textit{E. coli} bacteria, but it will not affect the other bacteria and will not have any side effects on the body. 
@@ -32,7 +33,7 @@ There have been previous attempts to model the complex dynamics of the populatio
 However, these methods have mainly stayed with 1-to-1-to-1 models, meaning 1 phage, 1 bacteria, and 1 resource.
 Other methods such as Partial Differential Equations (PDE) or cellular models have been created in an attempt to model these types of dynamics.
 There are two main ways to model phage-bacteria dynamics: a spatial model or a non-spatial one.
-A spatial model means that phages and bacteria can move through space, whereas in non-spatial models, the bacteria and phages are assumed to be in a well-mixed solution.
+A spatial model means that phages and bacteria can move through space and interact with their neighbors, whereas in non-spatial models, the bacteria and phages are assumed to be in a well-mixed solution and no distinction is made in regard to neighbors or distances to other agents. 
 Special considerations have to be accounted for with spatial models.
 Bacteria and phages can only interact when they are in proximity to each other.
 Only a percentage $p$ of bacteria and phages interact with one another at time step $t$.
