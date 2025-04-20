@@ -1,3 +1,5 @@
+from SALib import ProblemSpec
+from SALib.sample.sobol import sample
 import numpy as np
 from Classes.Analysis import Analysis
 import plotly.express as px
@@ -950,6 +952,73 @@ class Visualizer():
             """
             self.initial_value_plot = {}
             return [go.Figure() for _ in self.graph_data.keys()] + [go.Figure()]
+
+        @callback(
+            Output('SOBOL_analysis_parameter', 'figure'),
+            Output('SOBOL_analysis_time', 'figure'),
+            Input('run_SOBOL_analysis', 'n_clicks'),
+            State({'type': 'sobol_analysis_input', 'index': ALL}, 'value'),
+            State({'type': 'sobol_analysis_input', 'index': ALL}, 'id'),
+            State('SOBOL_analysis_samples', 'value'),
+            State('SOBOL_analysis_2nd_order', 'value'),
+            State('SOBOL_analysis_use_serial_transfer', 'value'),
+            State('serial_transfer_value', 'value'),
+            State('serial_transfer_bp_option', 'value'),
+            State('serial_transfer_frequency', 'value'),
+            State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
+            State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
+            State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
+            State('environment_data', 'data'),
+            # prevent_initial_call=True
+        )
+        def run_SOBOL_analysis(n_clicks, SOBOL_analysis_values, SOBOL_analysis_id, SOBOL_number_samples, SOBOL_2nd_order, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
+            number_variables = len(SOBOL_analysis_values)
+            names = [i['index'] for i in SOBOL_analysis_id]
+            bounds = [[float(i.split('-')[0]), float(i.split('-')[1])] for i in SOBOL_analysis_values]
+            problem_spec = ProblemSpec({
+                'num_vars': number_variables,
+                'names': names,
+                'bounds': bounds,
+            }) 
+            SOBOL_2nd_order = True if SOBOL_2nd_order else False
+            param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order)
+            for params in param_samples: 
+                # turn the data in the dashboard into numpy arrays, and save/update the environment data to the graph object
+                j = 0
+                sum_decrease = 0
+                for i, (key, value) in enumerate(self.graph_data.items()):
+                    initial_condition[j] = params[i]
+                    if value["add_rows"] != False:
+                        j += value["add_rows"]
+                        sum_decrease += value["add_rows"] - 1
+                    else:
+                        j += 1
+                summed_length = j - sum_decrease 
+  
+                for i in range(len(non_graphing_data_vectors)):
+                    non_graphing_data_vectors[i][0] = params[i+summed_length]
+                summed_length += len(non_graphing_data_vectors)
+
+                for i in range(len(non_graphing_data_matrices)):
+                    non_graphing_data_matrices[i][0] = params[i+summed_length]
+                summed_length = summed_length + len(non_graphing_data_matrices)
+
+                for i, (key, value) in zip(range(len(self.analysis.environment_data)), self.analysis.environment_data.items()):
+                    self.analysis.environment_data[key] = params[i+summed_length]
+                
+                # solve the system of ODEs, and save the final value and time value
+                solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
+                overall_y = solved_system.y
+                overall_t = solved_system.t
+                if use_serial_transfer:
+                    overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
+                overall_y = self.analysis.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
+                overall_y = self.save_data(overall_y, overall_t)
+                overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
+            
+            return [go.Figure() for _ in range(2)] 
 
         # run the app
         self.app.run(debug=True)
