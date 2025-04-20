@@ -512,5 +512,44 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     html.Div(style={'margin': '60px'}),
                     dcc.Graph(id="plot_phase_portrait")
                 ]),
+
+                dcc.Tab(label='SOBOL Analysis', children=[
+                    html.H4("Runs a Sobol Analysis"),
+                    *[
+                        html.Div([
+                            html.H4(name),
+                            dcc.Input(
+                                id={"type": "sobol_analysis_input", "index": name}, 
+                                type="text",
+                                placeholder="Sobol Analysis Input",
+                                value="0.01-10"
+                            )
+                        ]) for name in both_params
+                    ],
+                    html.H4(['Number of samples, 2^x, where x is the number inputed below']),
+                    dcc.Input(
+                        id="SOBOL_analysis_samples", 
+                        type="number",
+                        placeholder="Number of samples",
+                        value=2
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Calculate 2nd order', 'value': 'option1'},
+                        ],
+                        value=['option1'],
+                        id='SOBOL_analysis_2nd_order'
+                    ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Use Serial Transfer', 'value': 'option1'},
+                        ],
+                        value=[],
+                        id='SOBOL_analysis_use_serial_transfer'
+                    ),
+                    dcc.Graph(id="SOBOL_analysis_parameter"),
+                    dcc.Graph(id="SOBOL_analysis_time"), 
+                    html.Button("Run SOBOL Analysis", id="run_SOBOL_analysis"),
+                ]),
             ]),
         ])
