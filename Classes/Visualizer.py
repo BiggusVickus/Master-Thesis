@@ -591,7 +591,6 @@ class Visualizer():
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
 
             #if option 1 is selected, then the values used to test the simulation are split by commas, and are put into a list as a float. Otherwise the range is split by a dash and linspace is used to create the values, and put into a list as a float
-            print(use_opt_1_or_opt_2)
             try:
                 param_values_1 = split_comma_minus(param_input_1, param_range_1, param_steps_1, use_opt_1_or_opt_2)
                 param_values_2 = split_comma_minus(param_input_2, param_range_2, param_steps_2, use_opt_1_or_opt_2)
@@ -969,7 +968,7 @@ class Visualizer():
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
             State('environment_data', 'data'),
-            # prevent_initial_call=True
+            prevent_initial_call=True
         )
         def run_SOBOL_analysis(n_clicks, SOBOL_analysis_values, SOBOL_analysis_id, SOBOL_number_samples, SOBOL_2nd_order, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
