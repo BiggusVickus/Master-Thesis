@@ -43,7 +43,30 @@ This term accounts for competion between Populace 0 and Populace 1, with $p_{0, 
 Assuming $P_0$ is being looked at and $P_0$ has a high value, if $P_1$ is high, then a lot of $P_0$ is going to die out due to the competition with $P_1$. 
 If $P_1$ has a low population, then not many $P_0$ are going to die out due to less competition with $P_1$. \\ 
 
-The model can be further extended by accounting for temeprature, pH, more interactions between other agents, density of nutrients, constant addition and removal of other agents, and other considerations.
+The model can be further extended by accounting for temeprature, pH, more interactions between other agents, ther constant addition and removal of other agents, and other considerations. 
+
+\subsubsection{Spatial simulations}
+https://www.sciencedirect.com/science/article/abs/pii/S0022519318305368
+The ODE models work very nicely when there is no consideration for space and 2D/3D-space dimensionality. 
+Spatial models complicate the simulation, making it harder to analyze. 
+Data collection and analysis becomes harder. 
+Unique and novel analysis and visualization methods have to be created to be able to represent and visualize the data through space and time. 
+\paragraph{PDE}
+PDE are the next logical step to add space to an ODE model. The general formula, as given by 
+\[
+    \frac{\partial u}{\partial t} = D\nabla^2u + f(u, x, y, \dots, t)
+\] where $u(x, y, \dots, t)$ is the population density of interest, $D$ is the diffusion cosntant, $\nabla^2$ is the derivative of each spatial direction, and $f(x, y, \dots, t)$ is the function encapsulating growth, death, and interactions dynamics. 
+\subparagraph{Discretization}
+The dimensions can be discretized into boxes of dimensions $\delta x, \delta y, \dots$. 
+This transforms the PDE into a system of difference equations, which can be solved numerically. 
+For example, the Laplacian term $\nabla^2 u$ in 2D can be approximated using finite differences as:
+\[
+    \nabla^2 u \approx \frac{u_{i+1,j} - 2u_{i,j} + u_{i-1,j}}{\delta x^2} + \frac{u_{i,j+1} - 2u_{i,j} + u_{i,j-1}}{\delta y^2}
+\]
+where $u_{i,j}$ represents the value of $u$ at the grid point $(i, j)$. 
+This discretization allows the PDE to be solved iteratively over a grid, enabling spatial simulations of population dynamics. 
+Each box can be represented by a matrix, and the population value can be displayed as a heatmap using visualization software. 
+
 
 \begin{figure}
     \centering
