@@ -105,20 +105,20 @@ class Visualizer():
         num_graphs = len(self.graph_data.keys()) + 1
         cols = 3
         rows = (num_graphs // cols) + 1  # Calculate the number of rows needed
-        fig = make_subplots(rows=rows, cols=3, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum (Optical Density)'], row_heights=[5000]*rows)
+        fig = make_subplots(rows=rows, cols=3, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum'], row_heights=[5000]*rows)
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             for j in range(len(unflattened_data[i])):
                 row = (i // cols) + 1
                 col = (i % cols) + 1
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}"), row=row, col=col)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}", hoverlabel=dict(namelength = -1)), row=row, col=col)
         fig.update_layout(title=f"Graph of Each Population", xaxis=dict(title="Time"), yaxis=dict(title="Value"))
         if log_y_scale:
             fig.update_yaxes(type="log")
 
         data_bacteria = optical_density(deepcopy(unflattened_data), list(self.graph_data.keys()))
         col_index = (cols*3 + col)%3 + 1
-        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (Optical Density)"), row=rows, col=col_index)
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum", hoverlabel=dict(namelength = -1)), row=rows, col=col_index)
         fig.update_layout(hovermode="x unified")
         if log_y_scale:
             fig.update_yaxes(type="log")
@@ -131,13 +131,13 @@ class Visualizer():
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color)), row=1, col=2)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
 
         np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
         if log_y_scale:
@@ -153,18 +153,18 @@ class Visualizer():
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
         color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (absolute)", stackgroup="one", marker=dict(color=color)), row=1, col=1)
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
         np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color)), row=1, col=2)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
         color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Total bacteria, (optical density, relative)", stackgroup="one",  marker=dict(color=color), groupnorm='percent'), row=1, col=2)
+        fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (relative)", stackgroup="one",  marker=dict(color=color), groupnorm='percent', hoverlabel=dict(namelength = -1)), row=1, col=2)
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
         if log_y_scale:
@@ -230,9 +230,11 @@ class Visualizer():
                 tickangle=90
             ),
             yaxis_title="Value", 
+            hoverlabel=dict(namelength = -1)
         )
         if log_y_scale:
             fig.update_yaxes(type="log")
+        fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
         return list_of_figs
 
@@ -259,7 +261,7 @@ class Visualizer():
             list_max_y = []
             for j in range(len(simulation_output)):
                 color = unifrom_color_gradient_maker(j, len(simulation_output))
-                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color)), row=1, col=1)
+                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color), hoverlabel = dict(namelength = -1)), row=1, col=1)
                 max_x, max_y = determine_max_value_offset(time_output[j], simulation_output[j][i][0], offset)
                 list_max_x.append(max_x)
                 list_max_y.append(max_y)
@@ -281,17 +283,18 @@ class Visualizer():
             corr_matrix = np.corrcoef(list_max_x, predictions)
             corr = corr_matrix[0,1]
             r_squared = corr**2
+            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Measured time of collapse", hovertemplate=f"%{{y}}<br>SV of {param_name}: %{{x}}<br>", hoverlabel = dict(namelength = -1), marker=dict(size=10)), row=1, col=2)
             fig.add_trace(
                 go.Scatter(
                     x=param_values, 
                     y=predictions, 
                     mode="lines", 
                     name="Fitted Curve",
-                    hovertemplate=f"Parameter Value: %{{x}}<br>Fitted Value: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}<extra></extra>"
+                    hovertemplate=f"<br>SV of {param_name}: %{{x}}<br>Fitted time of collapse: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}", 
+                    hoverlabel = dict(namelength = -1) 
                 ), 
                 row=1, col=2
             )
-            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Data"), row=1, col=2)
             fig.update_xaxes(title_text="Time", row=1, col=1)
             fig.update_yaxes(title_text="Value", row=1, col=1)
             fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)
@@ -315,10 +318,12 @@ class Visualizer():
                         name=self.initial_value_plot[name]['iterations'][j], 
                         text=self.initial_value_plot[name]['data'][j],
                         textposition=["outside" if value >= 0 else "outside" for value in self.initial_value_plot[name]['data'][j]],
-                        textangle=-90  # Set text orientation to vertical
+                        textangle=-90, 
+                        hoverlabel = dict(namelength = -1) 
                     ), 
                     row=1, col=3
                 )
+            fig.update_layout(hovermode="x unified")
             list_of_figs.append(fig)
         return list_of_figs
     
