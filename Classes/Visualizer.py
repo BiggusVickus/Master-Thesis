@@ -13,6 +13,7 @@ from scipy.optimize import curve_fit
 import warnings
 from copy import deepcopy
 from collections import defaultdict
+import itertools
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 np.random.seed(0)  # Set the random seed for reproducibility
@@ -1018,6 +1019,73 @@ class Visualizer():
                 overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
             
             return [go.Figure() for _ in range(2)] 
+        
+        @callback(
+            Output('plot_ultimate_analysis', 'figure'),
+            Input('run_ultimate_analysis', 'n_clicks'),
+            State({'type': 'ultimate_analysis_input_input', 'index': ALL}, 'value'),
+            State({'type': 'ultimate_analysis_input_range', 'index': ALL}, 'value'),
+            State({'type': 'ultimate_analysis_input_steps', 'index': ALL}, 'value'),
+            State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'value'),
+            State({'type': 'ultimate_analysis_include_parameter', 'index': ALL}, 'value'),
+            State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'id'),
+            State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
+            State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
+            State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
+            State('environment_data', 'data'),
+            prevent_initial_call=True
+        )
+        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+            _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
+            self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
+            environment_data_original_copy = deepcopy(self.analysis.environment_data)
+            list_of_param_values = []
+            unique_param_names = []
+            for i in range(len(input_values)):
+                if input_ids[i]['index'] not in unique_param_names:
+                    unique_param_names.append(input_ids[i]['index'])
+            print(unique_param_names)
+            
+            for input, ranges, steps, use_opt_1_or_opt_2, include_param, id in zip(input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, input_ids):
+                if include_param == []:
+                    continue
+                try:
+                    param_values = split_comma_minus(input, ranges, steps, use_opt_1_or_opt_2)
+                    list_of_param_values.append(param_values)
+                except:
+                    continue
+            
+            list_of_iterables = itertools.product(*list_of_param_values)
+            items_of_name = []
+            for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
+            
+            for param_combination in list_of_iterables:
+                for param_name, param_value in zip(unique_param_names, param_combination):
+                    initial_condition_copy = deepcopy(initial_condition)
+                    non_graphing_data_vectors_copy = deepcopy(non_graphing_data_vectors)
+                    non_graphing_data_matrices_copy = deepcopy(non_graphing_data_matrices)
+                    environment_data_copy = deepcopy(self.analysis.environment_data)
+
+                    if param_name in self.graph_data:
+                        indexes = [i for i, item in enumerate(items_of_name) if item == param_name]
+                        for index in indexes:
+                            initial_condition_copy[index] = param_value
+                    elif param_name in self.non_graph_data_vector:
+                        non_graphing_data_vectors_copy[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_value
+                    elif param_name in self.non_graph_data_matrix:
+                        non_graphing_data_matrices_copy[list(self.non_graph_data_matrix.keys()).index(param_name)][0][0] = param_value
+                    elif param_name in self.analysis.environment_data:
+                        self.analysis.environment_data[param_name] = param_value
+                    print("parameter name: ", param_name)
+                    print("parameter value: ", param_value)
+                    print("initial condition: ", initial_condition_copy)
+                    print("non graphing data vectors: ", non_graphing_data_vectors_copy)
+                    print("non graphing data matrices: ", non_graphing_data_matrices_copy)
+                    print("environment data: ", self.analysis.environment_data)
+                    print('--'*20)
+                    self.analysis.environment_data = environment_data_original_copy
+            return go.Figure()
 
         # run the app
         self.app.run(debug=True)

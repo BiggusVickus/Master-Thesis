@@ -551,5 +551,51 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     dcc.Graph(id="SOBOL_analysis_time"), 
                     html.Button("Run SOBOL Analysis", id="run_SOBOL_analysis"),
                 ]),
+
+                dcc.Tab(label='Ultimate Analysis', children=[
+                    html.H4(["Choose values you want to test for the ultimate analysis"]),
+                    # TODO: remove the value from the input after testing
+                    html.H4(["Option 1: Input the values you want to test separated by commas"]),
+                    *[
+                        html.Div([
+                            html.H4(name),
+                            dcc.Input(
+                                id={"type": "ultimate_analysis_input_input", "index": name}, 
+                                type="text",
+                                placeholder="Opt 1: your selected values",
+                                value=""
+                            ),
+                            dcc.Input(
+                                id={"type": "ultimate_analysis_input_range", "index": name}, 
+                                type="text",
+                                placeholder="Opt 2: range of values",
+                                value=""
+                            ),
+                            dcc.Input(
+                                id={"type": "ultimate_analysis_input_steps", "index": name}, 
+                                type="text",
+                                placeholder="Opt 2: number of steps",
+                                value=""
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {'label': 'Use Opt 1 or 2', 'value': 'option1'},
+                                ],
+                                value=['option1'],
+                                id={"type": "ultimate_analysis_input_opt_1_or_2", "index": name}
+                            ),
+                            dcc.Checklist(
+                                options=[
+                                    {'label': 'Include parameter in simulation', 'value': 'option1'},
+                                ],
+                                value=['option1'],
+                                id={"type": "ultimate_analysis_include_parameter", "index": name}
+                            ),
+                        ]) for name in both_params
+                    ],
+                    html.Button("Run Ultimate Anlaysis ", id="run_ultimate_analysis"),
+                    html.Div(style={'margin': '60px'}),
+                    dcc.Graph(id="plot_ultimate_analysis"),
+                ]),
             ]),
         ])
