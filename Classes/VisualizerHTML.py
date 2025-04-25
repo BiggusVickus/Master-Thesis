@@ -432,7 +432,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     ],
                     dcc.Graph(id={"type": "plot_initial_value_analysis", "index": "plot_initial_value_analysis_bacteria_sum"})
                 ]),
-
                 dcc.Tab(label='Phase Portrait', children=[
                     html.H4(["Note: Choose 2 parameters of choice. The program will run a simulation and plot a phase portrait of the two parameters. The phase portrait will show the relationship between the two parameters over time."]),
                     dcc.Dropdown(graph_data_name_list, id='phase_portrait_param_name_1', value = graph_data_name_list[0] if len(graph_data_name_list) > 0 else None),

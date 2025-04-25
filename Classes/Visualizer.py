@@ -19,6 +19,24 @@ warnings.filterwarnings("ignore", message="The following arguments have no effec
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 from joblib import Parallel, delayed
 
+def process_combinations(param_combination, unique_param_names, graphing_items_of_name, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+    for param_name, param_value in zip(unique_param_names, param_combination):
+        if param_name in graphing_items_of_name:
+            indexes = [i for i, item in enumerate(graphing_items_of_name) if item == param_name]
+            for index in indexes:
+                initial_condition[index] = param_value
+        elif param_name in vector_items_of_name:
+            non_graphing_data_vectors[vector_items_of_name.index(param_name)][:] = param_value
+        elif param_name in matrix_items_of_names:
+            non_graphing_data_matrices[matrix_items_of_names.index(param_name)][:][:] = param_value
+        elif param_name in environment_data:
+            environment_data[param_name] = param_value
+    solved_system = analysis.solve_system(analysis.odesystem, initial_condition, analysis, *other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices,  environment_data)
+    return solved_system.y, solved_system.t  
+
+def run_parallel(list_of_param_values, unique_param_names, graphing_items_of_name, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+    results = Parallel(n_jobs=-1)(delayed(process_combinations)(x, unique_param_names, graphing_items_of_name, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data) for x in list(itertools.product(*list_of_param_values)))
+    return results
 
 class Visualizer():
     """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
@@ -1046,53 +1064,22 @@ class Visualizer():
         def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
-            environment_data_original_copy = deepcopy(self.analysis.environment_data)
             list_of_param_values = []
-            unique_param_names = []
-            for i in range(len(input_values)):
-                if input_ids[i]['index'] not in unique_param_names:
-                    unique_param_names.append(input_ids[i]['index'])
-            print(unique_param_names)
-            
+            param_names_to_run = []
             for input, ranges, steps, use_opt_1_or_opt_2, include_param, id in zip(input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, input_ids):
                 if include_param == []:
                     continue
                 try:
                     param_values = split_comma_minus(input, ranges, steps, use_opt_1_or_opt_2)
                     list_of_param_values.append(param_values)
+                    param_names_to_run.append(id['index'])
                 except:
                     continue
-            
-            list_of_iterables = itertools.product(*list_of_param_values)
             items_of_name = []
             for key, value in self.graph_data.items():
                 items_of_name += [key] * value["data"].size
-            
-            for param_combination in list_of_iterables:
-                for param_name, param_value in zip(unique_param_names, param_combination):
-                    initial_condition_copy = deepcopy(initial_condition)
-                    non_graphing_data_vectors_copy = deepcopy(non_graphing_data_vectors)
-                    non_graphing_data_matrices_copy = deepcopy(non_graphing_data_matrices)
-                    environment_data_copy = deepcopy(self.analysis.environment_data)
 
-                    if param_name in self.graph_data:
-                        indexes = [i for i, item in enumerate(items_of_name) if item == param_name]
-                        for index in indexes:
-                            initial_condition_copy[index] = param_value
-                    elif param_name in self.non_graph_data_vector:
-                        non_graphing_data_vectors_copy[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_value
-                    elif param_name in self.non_graph_data_matrix:
-                        non_graphing_data_matrices_copy[list(self.non_graph_data_matrix.keys()).index(param_name)][0][0] = param_value
-                    elif param_name in self.analysis.environment_data:
-                        self.analysis.environment_data[param_name] = param_value
-                    print("parameter name: ", param_name)
-                    print("parameter value: ", param_value)
-                    print("initial condition: ", initial_condition_copy)
-                    print("non graphing data vectors: ", non_graphing_data_vectors_copy)
-                    print("non graphing data matrices: ", non_graphing_data_matrices_copy)
-                    print("environment data: ", self.analysis.environment_data)
-                    print('--'*20)
-                    self.analysis.environment_data = environment_data_original_copy
+            results3 = run_parallel(list_of_param_values, param_names_to_run, items_of_name, list(self.non_graph_data_vector), list(self.non_graph_data_matrix), initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
             return go.Figure()
 
         # run the app
