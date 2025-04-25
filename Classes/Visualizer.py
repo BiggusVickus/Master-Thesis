@@ -1,23 +1,24 @@
+from Classes.Analysis import Analysis
+from Classes.VisualizerHTML import html_code, parse_contents
+from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker, determine_max_value_offset
 from SALib import ProblemSpec
 from SALib.sample.sobol import sample
 import numpy as np
-from Classes.Analysis import Analysis
+np.random.seed(0)  # Set the random seed for reproducibility
 import plotly.express as px
-import pandas as pd
-from dash import Dash, Input, Output, callback, ALL, State
 import plotly.graph_objs as go
-from collections import OrderedDict
-from Classes.VisualizerHTML import html_code, parse_contents
 from plotly.subplots import make_subplots
 from scipy.optimize import curve_fit
-import warnings
+import pandas as pd
+from dash import Dash, Input, Output, callback, ALL, State
+from collections import OrderedDict, defaultdict
 from copy import deepcopy
-from collections import defaultdict
 import itertools
+import warnings
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
-np.random.seed(0)  # Set the random seed for reproducibility
-from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker, determine_max_value_offset
+from joblib import Parallel, delayed
+
 
 class Visualizer():
     """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
