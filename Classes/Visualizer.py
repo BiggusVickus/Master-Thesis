@@ -922,6 +922,7 @@ class Visualizer():
             Input('save_settings', 'n_clicks'),
             Input({'type': 'settings', 'index': ALL}, 'id'),
             Input({'type': 'settings', 'index': ALL}, 'value'),
+            prevent_initial_call=True
         )
         def save_settings(n_clicks, settings_name, settings_value):
             """Saves the settings from the dashboard to the analysis object, and updates the settings in the analysis object. 
@@ -945,6 +946,7 @@ class Visualizer():
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure') for name in self.graph_data.keys()],
             Output({'type': 'plot_initial_value_analysis', 'index': 'plot_initial_value_analysis_bacteria_sum'}, 'figure'),
             Input('clear_bar_chart', 'n_clicks'),
+            prevent_initial_call=True
         )
         def clear_bar_chart(n_clicks):
             """Clears the bar chart data from the dashboard, and resets the bar chart to empty figures.
