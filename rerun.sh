@@ -1,7 +1,7 @@
 #!/bin/bash
 
 FILE="streamlit.py"
-RUN_CMD="/usr/local/bin/python3 /Users/vicpi/Documents/GitHub/Master_Thesis/streamlit.py"
+RUN_CMD="./.venv/bin/python /Users/vicpi/Documents/GitHub/Master_Thesis/streamlit.py"
 
 echo "📡 Watching $FILE. Will rerun on crash and change..."
 
