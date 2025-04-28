@@ -61,15 +61,10 @@ class UltimateAnalysis:
         return self.dictionary
         
     def new_query(self):
-        return self.hdf_data
-    
-    def simple_query(self, dataset, parameter_name, comparison, value_search, error=0):
         memory_file = io.BytesIO()
-        op = self.evaluate_operator(comparison)
-        with h5py.File(memory_file, 'w') as hf_new:
-            for datagroup_name, datagroup in dataset.items():
-                if op(datagroup.attrs[parameter_name], value_search):
-                    # print(f"Dataset: {datagroup_name}, Parameter: {parameter_name}, Value: {datagroup.attrs[parameter_name]}")
+        with self.hdf_data as hf:
+            with h5py.File(memory_file, 'w') as hf_new:
+                for datagroup_name, datagroup in hf.items():
                     result_group = hf_new.create_group(datagroup_name)
                     # Copy attributes
                     for attr_name, attr_value in datagroup.attrs.items():
@@ -78,18 +73,68 @@ class UltimateAnalysis:
                     # Copy datasets
                     for dataset_name, dataset_data in datagroup.items():
                         result_group.create_dataset(dataset_name, data=dataset_data[()])
+            memory_file.seek(0)
+        return memory_file
+    
+    def create_filter(self, datagroup, parameter_names, comparisons, value_searches):
+        conditions = [
+            self.evaluate_operator(comp)(datagroup.attrs[param], val) 
+            for param, comp, val in zip(parameter_names, comparisons, value_searches)
+        ]
+        return conditions
+
+    def simple_query(self, dataset, parameter_name, comparison, value_search):
+        memory_file = io.BytesIO()
+        op = self.evaluate_operator(comparison)
+        with h5py.File(dataset, 'r') as data:  
+            with h5py.File(memory_file, 'w') as hf_new:
+                for datagroup_name, datagroup in data.items():
+                    if op(datagroup.attrs[parameter_name], value_search):
+                        result_group = hf_new.create_group(datagroup_name)
+                        for attr_name, attr_value in datagroup.attrs.items():
+                            result_group.attrs[attr_name] = attr_value
+                        for dataset_name, dataset_data in datagroup.items():
+                            result_group.create_dataset(dataset_name, data=dataset_data[()])
+        memory_file.seek(0)
+        return memory_file
+    
+    def and_query(self, dataset, parameter_names, comparisons, value_searches):
+        memory_file = io.BytesIO()
+        with h5py.File(dataset, 'r') as data:  
+            with h5py.File(memory_file, 'w') as hf_new:
+                for datagroup_name, datagroup in data.items():
+                    if all(self.create_filter(datagroup, parameter_names, comparisons, value_searches)):
+                        result_group = hf_new.create_group(datagroup_name)
+                        for attr_name, attr_value in datagroup.attrs.items():
+                            result_group.attrs[attr_name] = attr_value
+                        for dataset_name, dataset_data in datagroup.items():
+                            result_group.create_dataset(dataset_name, data=dataset_data[()])
         memory_file.seek(0)
         return memory_file
 
-    def and_query(self, dataset, parameter_name, comparison, value):
-        pass
-
-    def or_query(self, dataset, parameter_name, comparison, value):
-        pass
+    def or_query(self, dataset, parameter_names, comparisons, value_searches):
+        memory_file = io.BytesIO()
+        with h5py.File(dataset, 'r') as data:  
+            with h5py.File(memory_file, 'w') as hf_new:
+                for datagroup_name, datagroup in data.items():
+                    if any(self.create_filter(datagroup, parameter_names, comparisons, value_searches)):
+                        result_group = hf_new.create_group(datagroup_name)
+                        for attr_name, attr_value in datagroup.attrs.items():
+                            result_group.attrs[attr_name] = attr_value
+                        for dataset_name, dataset_data in datagroup.items():
+                            result_group.create_dataset(dataset_name, data=dataset_data[()])
+        memory_file.seek(0)
+        return memory_file
 
     def finalize_query(self, dataset, ):
         pass
 
-    def export_query(self, data, filename):
-        with h5py.File(filename, 'w') as hf:
-            hf.write(data.getbuffer())
+    def export_query_as_hdf(self, data, filename):
+        with h5py.File(data, 'r') as data:
+            with h5py.File(filename, 'w') as hf:
+                for datagroup_name, datagroup in data.items():
+                    result_group = hf.create_group(datagroup_name)
+                    for attr_name, attr_value in datagroup.attrs.items():
+                        result_group.attrs[attr_name] = attr_value
+                    for dataset_name, dataset_data in datagroup.items():
+                        result_group.create_dataset(dataset_name, data=dataset_data[()])
