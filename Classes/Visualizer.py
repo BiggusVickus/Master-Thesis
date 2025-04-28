@@ -1,6 +1,7 @@
 from Classes.Analysis import Analysis
 from Classes.VisualizerHTML import html_code, parse_contents
 from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker, determine_max_value_offset
+from Classes.ParallelComputing import ParallelComputing
 from SALib import ProblemSpec
 from SALib.sample.sobol import sample
 import numpy as np
@@ -13,30 +14,10 @@ import pandas as pd
 from dash import Dash, Input, Output, callback, ALL, State
 from collections import OrderedDict, defaultdict
 from copy import deepcopy
-import itertools
 import warnings
+import h5py
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
-from joblib import Parallel, delayed
-
-def process_combinations(param_combination, unique_param_names, graphing_items_of_name, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-    for param_name, param_value in zip(unique_param_names, param_combination):
-        if param_name in graphing_items_of_name:
-            indexes = [i for i, item in enumerate(graphing_items_of_name) if item == param_name]
-            for index in indexes:
-                initial_condition[index] = param_value
-        elif param_name in vector_items_of_name:
-            non_graphing_data_vectors[vector_items_of_name.index(param_name)][:] = param_value
-        elif param_name in matrix_items_of_names:
-            non_graphing_data_matrices[matrix_items_of_names.index(param_name)][:][:] = param_value
-        elif param_name in environment_data:
-            environment_data[param_name] = param_value
-    solved_system = analysis.solve_system(analysis.odesystem, initial_condition, analysis, *other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices,  environment_data)
-    return solved_system.y, solved_system.t  
-
-def run_parallel(list_of_param_values, unique_param_names, graphing_items_of_name, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-    results = Parallel(n_jobs=-1)(delayed(process_combinations)(x, unique_param_names, graphing_items_of_name, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data) for x in list(itertools.product(*list_of_param_values)))
-    return results
 
 class Visualizer():
     """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
@@ -54,9 +35,9 @@ class Visualizer():
         self.non_graph_data_vector = OrderedDict()
         self.non_graph_data_matrix = OrderedDict()
         self.other_parameters_to_pass = []
+        self.settings = self.initialize_settings()
         self.copy_of_simulation_output = None
         self.copy_of_parameter_analysis_output = None
-        self.settings = self.initialize_settings()
         self.initial_value_plot = OrderedDict()
         self.ending_values_serial_transfer = OrderedDict()
 
