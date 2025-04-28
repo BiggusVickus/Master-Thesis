@@ -1028,7 +1028,7 @@ class Visualizer():
             return [go.Figure() for _ in range(2)] 
         
         @callback(
-            Output('plot_ultimate_analysis', 'figure'),
+            # Output('plot_ultimate_analysis', 'figure'),
             Input('run_ultimate_analysis', 'n_clicks'),
             State({'type': 'ultimate_analysis_input_input', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_range', 'index': ALL}, 'value'),
@@ -1056,12 +1056,34 @@ class Visualizer():
                     param_names_to_run.append(id['index'])
                 except:
                     continue
-            items_of_name = []
-            for key, value in self.graph_data.items():
-                items_of_name += [key] * value["data"].size
+            parallel = ParallelComputing()
+            results = parallel.run_parallel(list_of_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
+            results_y, results_t, iter_items = results[:3]  # Adjust unpacking based on the actual number of returned values
+            print(iter_items)
+            
+            # print(len(parallel_data))
+            # results, iter_items = parallel_data
+            # results_y = results[0]
+            # results_t = results[1]
 
-            results3 = run_parallel(list_of_param_values, param_names_to_run, items_of_name, list(self.non_graph_data_vector), list(self.non_graph_data_matrix), initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
-            return go.Figure()
+            output_filename = 'function_results_test.hdf5'
+            with h5py.File(output_filename, 'w') as hf:
+                # Add metadata to the root of the file
+                hf.attrs['parameter_names_used'] = param_names_to_run  # Store metadata as attributes
+                # hf.create_dataset('parameter_values_tested', iter_items)  # Store analysis object as an attribute
+
+                # Create a group to store the results
+                # Store the parameters as a dataset
+                # results_group.create_dataset('parameter_values_tested', data=np.array(params_to_test))
+                for i, (item_y, item_t) in enumerate(zip(results_y, results_t)):
+                    # print(i)
+                    results_group = hf.create_group(f'results_{i+1}')
+                    results_group.create_dataset(f'y_values', data=item_y)
+                    results_group.create_dataset(f't_values', data=item_t)
+                    for param_name, param_value in zip(param_names_to_run, iter_items[i]):
+                        results_group.attrs[param_name] = param_value  # Store parameter values as attributes
+            hf.close()
+            # return go.Figure()
 
         # run the app
         self.app.run(debug=True)
