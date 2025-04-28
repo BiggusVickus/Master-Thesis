@@ -126,8 +126,16 @@ class UltimateAnalysis:
         memory_file.seek(0)
         return memory_file
 
-    def finalize_query(self, dataset, ):
-        pass
+    def finalize_query(self, dataset):
+        dictionary = {}
+        with h5py.File(dataset, 'r') as data:
+            for datagroup_name, datagroup in data.items():
+                dictionary[datagroup_name] = {}
+                for attr_name, attr_value in datagroup.attrs.items():
+                    dictionary[datagroup_name]['parameters'][attr_name] = attr_value
+                for dataset_name, dataset_data in datagroup.items():
+                    dictionary[datagroup_name][dataset_name] = dataset_data[()]
+        return dictionary
 
     def export_query_as_hdf(self, data, filename):
         with h5py.File(data, 'r') as data:
