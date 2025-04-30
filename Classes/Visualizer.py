@@ -1083,6 +1083,20 @@ class Visualizer():
                     for param_name, param_value in zip(param_names_to_run, iter_items[i]):
                         results_group.attrs[param_name] = param_value  # Store parameter values as attributes
             hf.close()
+            dictionary = {
+                'parameter_names_used': param_names_to_run,
+                'parameter_values_tested': iter_items,
+                'analysis': self.analysis,
+                'graph_data': self.graph_data,
+                'non_graph_data_vector': self.non_graph_data_vector,
+                'non_graph_data_matrix': self.non_graph_data_matrix,
+                'settings': self.settings,
+                'environment_data': self.analysis.environment_data,
+                'other_parameters': self.other_parameters_to_pass,
+                'hdf_file_location': 'function_results_test.hdf5',
+            }
+
+            pickle.dump(dictionary, open('function_results_test.pickle', 'wb'))
             # return go.Figure()
 
         # run the app
