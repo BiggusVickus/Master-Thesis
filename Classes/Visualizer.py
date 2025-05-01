@@ -16,6 +16,7 @@ from collections import OrderedDict, defaultdict
 from copy import deepcopy
 import warnings
 import h5py
+import pickle
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
 
@@ -1058,31 +1059,28 @@ class Visualizer():
                     continue
             parallel = ParallelComputing()
             results = parallel.run_parallel(list_of_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
-            results_y, results_t, iter_items = results[:3]  # Adjust unpacking based on the actual number of returned values
-            print(iter_items)
-            
-            # print(len(parallel_data))
-            # results, iter_items = parallel_data
-            # results_y = results[0]
-            # results_t = results[1]
-
-            output_filename = 'function_results_test.hdf5'
-            with h5py.File(output_filename, 'w') as hf:
-                # Add metadata to the root of the file
-                hf.attrs['parameter_names_used'] = param_names_to_run  # Store metadata as attributes
-                # hf.create_dataset('parameter_values_tested', iter_items)  # Store analysis object as an attribute
-
-                # Create a group to store the results
-                # Store the parameters as a dataset
-                # results_group.create_dataset('parameter_values_tested', data=np.array(params_to_test))
-                for i, (item_y, item_t) in enumerate(zip(results_y, results_t)):
-                    # print(i)
-                    results_group = hf.create_group(f'results_{i+1}')
-                    results_group.create_dataset(f'y_values', data=item_y)
-                    results_group.create_dataset(f't_values', data=item_t)
-                    for param_name, param_value in zip(param_names_to_run, iter_items[i]):
-                        results_group.attrs[param_name] = param_value  # Store parameter values as attributes
-            hf.close()
+            results_t, results_y, iter_items = results[:3]
+            rows = []
+            col_names = ['run_id'] + param_names_to_run + ['t_values', 'y_values']
+            for run_id, (t, y, simulation_params) in enumerate(zip(results_t, results_y, iter_items)):
+                new_dic = {}
+                new_dic['run_id'] = run_id
+                for name, param_value in zip(param_names_to_run, simulation_params):
+                    new_dic[name] = param_value
+                new_dic['t_values'] = t
+                new_dic['y_values'] = y
+                rows.append(new_dic)
+            df = pd.DataFrame(rows, columns=col_names)
+            ODE_sizes = [length["data"].size for length in self.graph_data.values()]
+            items_of_name = []
+            for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
+            print("items_of_name", items_of_name)
+            print("ODE_sizes", ODE_sizes)
+            item_names = []
+            for key, value in self.graph_data.items():
+                item_names += value['column_names']
+            print(item_names)
             dictionary = {
                 'parameter_names_used': param_names_to_run,
                 'parameter_values_tested': iter_items,
@@ -1093,10 +1091,13 @@ class Visualizer():
                 'settings': self.settings,
                 'environment_data': self.analysis.environment_data,
                 'other_parameters': self.other_parameters_to_pass,
-                'hdf_file_location': 'function_results_test.hdf5',
+                'simulation_results': df,
+                'agent_type_count': ODE_sizes,
+                'agent_type': items_of_name,
+                'agent_names': item_names,
             }
 
-            pickle.dump(dictionary, open('function_results_test.pickle', 'wb'))
+            pickle.dump(dictionary, open('simulation_results.pickle', 'wb'))
             # return go.Figure()
 
         # run the app
