@@ -1095,9 +1095,10 @@ class Visualizer():
             pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.pickle', 'wb'))
             
             parallel = ParallelComputing()
-            batch_size = 500 * os.cpu_count()  # Number of simulations to run before saving intermediate results
+            batch_size = 20 * os.cpu_count()  # Number of simulations to run before saving intermediate results
             total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
             run_id = 1
+            time1 = time.time()
             for batch_index in range(total_batches):
                 print(f"Running batch {batch_index + 1}/{total_batches}...")
                 rows = []
@@ -1105,7 +1106,7 @@ class Visualizer():
                 end_index = min(start_index + batch_size, len(iter_items))
                 batch_param_values = iter_items[start_index:end_index]
                 # Run the simulations for the current batch
-                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
+                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
                 # Save intermediate results to a Parquet file
                 t_results, y_results = batch_results[:2]
                 del batch_results
@@ -1137,6 +1138,5 @@ class Visualizer():
                 gc.collect()  # Force garbage collection to free up memory
 
                 print(f"Batch {batch_index + 1}/{total_batches} completed and saved.")
-
         # run the app
         self.app.run(debug=True)
