@@ -1098,7 +1098,6 @@ class Visualizer():
             batch_size = 500 * os.cpu_count()  # Number of simulations to run before saving intermediate results
             total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
             run_id = 1
-            time1 = time.time()
             for batch_index in range(total_batches):
                 print(f"Running batch {batch_index + 1}/{total_batches}...")
                 rows = []
