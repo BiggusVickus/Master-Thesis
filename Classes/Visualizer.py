@@ -17,6 +17,7 @@ from copy import deepcopy
 import warnings
 import itertools
 import os
+import datetime
 import json
 
 import pickle
@@ -1089,8 +1090,8 @@ class Visualizer():
                 'agent_type': items_of_name,
                 'agent_names': item_names,
             }
-
-            pickle.dump(dictionary, open('simulation_results.pickle', 'wb'))
+            timestamp = int(datetime.datetime.now().timestamp())
+            pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.pickle', 'wb'))
             
             parallel = ParallelComputing()
             batch_size = 500 * os.cpu_count()  # Number of simulations to run before saving intermediate results
@@ -1119,10 +1120,10 @@ class Visualizer():
                 batch_df['t_values'] = batch_df['t_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
                 batch_df['y_values'] = batch_df['y_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
                 # Save the DataFrame to a Parquet file
-                if os.path.exists("simulation_results.parquet"):
-                    batch_df.to_parquet('simulation_results.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=longest_param_names)
+                if os.path.exists(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet"):
+                    batch_df.to_parquet(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=longest_param_names)
                 else:
-                    batch_df.to_parquet(f"simulation_results.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=longest_param_names)
+                    batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=longest_param_names)
                 # Clear the batch DataFrame to free up memory
                 del batch_df
 

@@ -15,7 +15,7 @@ class ParallelComputing:
         return results_t, results_y
     
     def process_combinations(self, param_combination, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-        # print(f"Processing combination: {param_combination}")
+        print(f"Processing combination: {param_combination}")
         items_of_name = []
         for key, value in graph_data.items():
             items_of_name += [key] * value["data"].size
