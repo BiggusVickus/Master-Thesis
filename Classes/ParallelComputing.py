@@ -1,4 +1,3 @@
-import itertools
 from joblib import Parallel, delayed
 
 class ParallelComputing:
@@ -10,14 +9,13 @@ class ParallelComputing:
         self.filename_location = filename_location
 
     
-    def run_parallel(self, list_of_param_values, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-        iter_items = list(itertools.product(*list_of_param_values))
+    def run_parallel(self, iter_items, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
         results = Parallel(n_jobs=-1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data) for x in iter_items)
         results_t, results_y = zip(*results)
-        return results_t, results_y, iter_items
+        return results_t, results_y
     
     def process_combinations(self, param_combination, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-        print(f"Processing combination: {param_combination}")
+        # print(f"Processing combination: {param_combination}")
         items_of_name = []
         for key, value in graph_data.items():
             items_of_name += [key] * value["data"].size

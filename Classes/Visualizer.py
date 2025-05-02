@@ -15,7 +15,10 @@ from dash import Dash, Input, Output, callback, ALL, State
 from collections import OrderedDict, defaultdict
 from copy import deepcopy
 import warnings
-import h5py
+import itertools
+import os
+import json
+
 import pickle
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
@@ -1057,30 +1060,21 @@ class Visualizer():
                     param_names_to_run.append(id['index'])
                 except:
                     continue
-            parallel = ParallelComputing()
-            results = parallel.run_parallel(list_of_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
-            results_t, results_y, iter_items = results[:3]
-            rows = []
-            col_names = ['run_id'] + param_names_to_run + ['t_values', 'y_values']
-            for run_id, (t, y, simulation_params) in enumerate(zip(results_t, results_y, iter_items)):
-                new_dic = {}
-                new_dic['run_id'] = run_id
-                for name, param_value in zip(param_names_to_run, simulation_params):
-                    new_dic[name] = param_value
-                new_dic['t_values'] = t
-                new_dic['y_values'] = y
-                rows.append(new_dic)
-            df = pd.DataFrame(rows, columns=col_names)
+            # Find the indices of the two longest sublists in list_of_param_values
+            lengths = [len(sublist) for sublist in list_of_param_values]
+            sorted_indices = sorted(range(len(lengths)), key=lambda i: lengths[i], reverse=True)[:2]
+
+            # Use the indices to find the corresponding values in param_names_to_run
+            longest_param_names = [param_names_to_run[i] for i in sorted_indices]
+
+            col_names = param_names_to_run + ['t_values', 'y_values']
             ODE_sizes = [length["data"].size for length in self.graph_data.values()]
             items_of_name = []
-            for key, value in self.graph_data.items():
-                items_of_name += [key] * value["data"].size
-            print("items_of_name", items_of_name)
-            print("ODE_sizes", ODE_sizes)
             item_names = []
             for key, value in self.graph_data.items():
+                items_of_name += [key] * value["data"].size
                 item_names += value['column_names']
-            print(item_names)
+            iter_items = list(itertools.product(*list_of_param_values))
             dictionary = {
                 'parameter_names_used': param_names_to_run,
                 'parameter_values_tested': iter_items,
@@ -1091,14 +1085,48 @@ class Visualizer():
                 'settings': self.settings,
                 'environment_data': self.analysis.environment_data,
                 'other_parameters': self.other_parameters_to_pass,
-                'simulation_results': df,
                 'agent_type_count': ODE_sizes,
                 'agent_type': items_of_name,
                 'agent_names': item_names,
             }
 
             pickle.dump(dictionary, open('simulation_results.pickle', 'wb'))
-            # return go.Figure()
+            
+            parallel = ParallelComputing()
+            batch_size = 500 * os.cpu_count()  # Number of simulations to run before saving intermediate results
+            total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
+            run_id = 1
+            for batch_index in range(total_batches):
+                print(f"Running batch {batch_index + 1}/{total_batches}...")
+                rows = []
+                start_index = batch_index * batch_size
+                end_index = min(start_index + batch_size, len(iter_items))
+                batch_param_values = iter_items[start_index:end_index]
+                # Run the simulations for the current batch
+                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis.environment_data)
+                # Save intermediate results to a Parquet file
+                t_results, y_results = batch_results[:2]
+                del batch_results
+                for param_values, t_values, y_values in zip(batch_param_values, t_results, y_results):
+                    dic1 = {}
+                    for i, (name, param_value) in enumerate(zip(param_names_to_run, param_values)):
+                        dic1[name] = param_value
+                    dic1['t_values'] = t_values
+                    dic1['y_values'] = y_values
+                    rows.append(dic1)
+                    run_id += 1
+                batch_df = pd.DataFrame(rows, columns=col_names)
+                batch_df['t_values'] = batch_df['t_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
+                batch_df['y_values'] = batch_df['y_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
+                # Save the DataFrame to a Parquet file
+                if os.path.exists("simulation_results.parquet"):
+                    batch_df.to_parquet('simulation_results.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=longest_param_names)
+                else:
+                    batch_df.to_parquet(f"simulation_results.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=longest_param_names)
+                # Clear the batch DataFrame to free up memory
+                del batch_df
+
+                print(f"Batch {batch_index + 1}/{total_batches} completed and saved.")
 
         # run the app
         self.app.run(debug=True)
