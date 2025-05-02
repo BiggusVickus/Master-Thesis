@@ -1,0 +1,11 @@
+Resources: 150-250, 8
+Uninfected: 40-60, 8
+Phages: 5-15, 8
+e_vector: 0.1-0.2, 8
+tau_vector: 0.7-1.5, 8
+v_matrix: 1, 1.35, 1.7
+r_matrix: 0.001-0.15, 8
+washout: 0, 0.001, 0.005
+
+2,359,296 combinations
+start simulation at 7:08pm May 2 on windows pc, ryzen 7 7700, 8 cores
