@@ -1079,7 +1079,7 @@ class Visualizer():
             iter_items = list(itertools.product(*list_of_param_values))
             dictionary = {
                 'parameter_names_used': param_names_to_run,
-                'parameter_values_tested': iter_items,
+                'param_values_list_combination': list_of_param_values,
                 'analysis': self.analysis,
                 'graph_data': self.graph_data,
                 'non_graph_data_vector': self.non_graph_data_vector,
