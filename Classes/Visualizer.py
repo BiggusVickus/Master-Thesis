@@ -19,6 +19,7 @@ import itertools
 import os
 import datetime
 import json
+import gc
 
 import pickle
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
@@ -1126,6 +1127,14 @@ class Visualizer():
                     batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=longest_param_names)
                 # Clear the batch DataFrame to free up memory
                 del batch_df
+                del rows
+                del t_results
+                del y_results
+                del batch_param_values
+                del param_values
+                del t_values
+                del y_values
+                gc.collect()  # Force garbage collection to free up memory
 
                 print(f"Batch {batch_index + 1}/{total_batches} completed and saved.")
 
