@@ -1034,13 +1034,14 @@ class Visualizer():
             return [go.Figure() for _ in range(2)] 
         
         @callback(
-            # Output('plot_ultimate_analysis', 'figure'),
+            Output('ultimate_analysis_text', 'children'),
             Input('run_ultimate_analysis', 'n_clicks'),
             State({'type': 'ultimate_analysis_input_input', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_range', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_steps', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_include_parameter', 'index': ALL}, 'value'),
+            State({'type': 'ultimate_analysis_partition_data', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'id'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
@@ -1048,7 +1049,9 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, partition_data, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+
+            partition_data = [partition[0] for partition in partition_data if partition is not None]
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
             list_of_param_values = []
@@ -1062,12 +1065,6 @@ class Visualizer():
                     param_names_to_run.append(id['index'])
                 except:
                     continue
-            # Find the indices of the two longest sublists in list_of_param_values
-            lengths = [len(sublist) for sublist in list_of_param_values]
-            sorted_indices = sorted(range(len(lengths)), key=lambda i: lengths[i], reverse=True)[:2]
-
-            # Use the indices to find the corresponding values in param_names_to_run
-            longest_param_names = [param_names_to_run[i] for i in sorted_indices]
 
             col_names = param_names_to_run + ['t_values', 'y_values']
             ODE_sizes = [length["data"].size for length in self.graph_data.values()]
@@ -1097,7 +1094,6 @@ class Visualizer():
             parallel = ParallelComputing()
             batch_size = 500 * os.cpu_count()  # Number of simulations to run before saving intermediate results
             total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
-            run_id = 1
             for batch_index in range(total_batches):
                 print(f"Running batch {batch_index + 1}/{total_batches}...")
                 rows = []
@@ -1116,15 +1112,14 @@ class Visualizer():
                     dic1['t_values'] = t_values
                     dic1['y_values'] = y_values
                     rows.append(dic1)
-                    run_id += 1
                 batch_df = pd.DataFrame(rows, columns=col_names)
                 batch_df['t_values'] = batch_df['t_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
                 batch_df['y_values'] = batch_df['y_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
                 # Save the DataFrame to a Parquet file
                 if os.path.exists(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet"):
-                    batch_df.to_parquet(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=longest_param_names)
+                    batch_df.to_parquet(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=partition_data)
                 else:
-                    batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=longest_param_names)
+                    batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=partition_data)
                 # Clear the batch DataFrame to free up memory
                 del batch_df
                 del rows
@@ -1137,5 +1132,6 @@ class Visualizer():
                 gc.collect()  # Force garbage collection to free up memory
 
                 print(f"Batch {batch_index + 1}/{total_batches} completed and saved.")
+            return f"Finished simulation, simulation results saved to SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet"
         # run the app
         self.app.run(debug=True)

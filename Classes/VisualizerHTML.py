@@ -590,11 +590,16 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                                 value=['option1'],
                                 id={"type": "ultimate_analysis_include_parameter", "index": name}
                             ),
+                            dcc.Checklist(
+                                options=[
+                                    {'label': 'Partition data on this attribute', 'value': name},
+                                ],
+                                id={"type": "ultimate_analysis_partition_data", "index": name}
+                            ),
                         ]) for name in both_params
                     ],
+                    html.Div("", id="ultimate_analysis_text", style={"color": "red", "font-weight": "bold"}),
                     html.Button("Run Ultimate Anlaysis ", id="run_ultimate_analysis"),
-                    html.Div(style={'margin': '60px'}),
-                    dcc.Graph(id="plot_ultimate_analysis"),
                 ]),
             ]),
         ])
