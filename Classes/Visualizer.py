@@ -4,6 +4,7 @@ from Classes.Math import optical_density, log_func, lin_func, serial_transfer_ca
 from Classes.ParallelComputing import ParallelComputing
 from SALib import ProblemSpec
 from SALib.sample.sobol import sample
+from SALib.analyze.sobol import analyze
 import numpy as np
 np.random.seed(0)  # Set the random seed for reproducibility
 import plotly.express as px
@@ -24,6 +25,7 @@ import gc
 import pickle
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
+warnings.filterwarnings("ignore", message="FutureWarning: unique with argument that is not not a Series, Index, ExtensionArray, or np.ndarray is deprecated and will raise in a future version.")
 
 class Visualizer():
     """Class used to visualize the simulation results of the graph object. It uses the Dash library to create a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data
@@ -386,6 +388,39 @@ class Visualizer():
             fig.update_yaxes(type='category')
             list_of_figs.append(fig)
         return list_of_figs
+    
+    def SOBOL_figure(self, final_analysis, avg_analysis, var_analysis, second_order, columns):
+        list1 = [final_analysis, avg_analysis, var_analysis]
+        list_of_figures = []
+        for type_of_analysis, name_of_analysis_type in zip(list1, ["Final Value of Run", "Average Value of Run", "Variance of Run"]):
+            fig = make_subplots(rows=len(final_analysis), cols=2, row_heights=[1500] * len(final_analysis))
+            for i, data in enumerate(type_of_analysis):
+                for j, type in enumerate(["ST", "S1"]):
+                    fig.add_trace(
+                        go.Bar(
+                            x=columns,
+                            y=data[type],
+                            name=f"{name_of_analysis_type} - {type}",
+                            error_y=dict(
+                                type='data',
+                                array=data[type+'_conf'],
+                                visible=True
+                            ),
+                            hovertemplate=f"Parameter: %{{x}}<br>{name_of_analysis_type} - {type}: %{{y:.4f}}<br>Error: %{{error_y.array:.4f}}<extra></extra>"
+                        ),
+                        row=i+1, col=j+1, 
+                    )
+                if i+1 < len(final_analysis):
+                    fig.update_xaxes(showticklabels=False, row=i+1)
+            fig.update_layout(
+                title=f"SOBOL {name_of_analysis_type} Analysis Results",
+                barmode="group",
+                yaxis=dict(title="Sensitivity Indices"),
+                hovermode="x unified",
+                xaxis=dict(matches='x'),  # Synchronize x-axes across subplots
+            )
+            list_of_figures.append(fig)
+        return list_of_figures
         
     def run_serial_transfer_iterations(self, overall_y, overall_t, serial_transfer_frequency, flattened, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices, save_bar_plot=False):
         """Runs a serial transfer simulation for the given number of iterations. The serial transfer simulation is a simulation that runs for a given number of iterations, and saves the data to the graph_data dictionary. The serial transfer simulation is used to create the figures for the simulation results.
@@ -967,26 +1002,32 @@ class Visualizer():
             return [go.Figure() for _ in self.graph_data.keys()] + [go.Figure()]
 
         @callback(
-            Output('SOBOL_analysis_parameter', 'figure'),
-            Output('SOBOL_analysis_time', 'figure'),
+            Output('SOBOL_analysis_final_value', 'figure'),
+            Output('SOBOL_analysis_average_value', 'figure'),
+            Output('SOBOL_analysis_variance', 'figure'),
+            # Output('SOBOL_analysis_time', 'figure'),
             Input('run_SOBOL_analysis', 'n_clicks'),
             State({'type': 'sobol_analysis_input', 'index': ALL}, 'value'),
             State({'type': 'sobol_analysis_input', 'index': ALL}, 'id'),
             State('SOBOL_analysis_samples', 'value'),
+            State('SOBOL_analysis_number_timesteps', 'value'),
             State('SOBOL_analysis_2nd_order', 'value'),
-            State('SOBOL_analysis_use_serial_transfer', 'value'),
-            State('serial_transfer_value', 'value'),
-            State('serial_transfer_bp_option', 'value'),
-            State('serial_transfer_frequency', 'value'),
+            State('SOBOL_analysis_seed', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def run_SOBOL_analysis(n_clicks, SOBOL_analysis_values, SOBOL_analysis_id, SOBOL_number_samples, SOBOL_2nd_order, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def run_SOBOL_analysis(n_clicks, SOBOL_analysis_values, SOBOL_analysis_id, SOBOL_number_samples, SOBOL_2nd_order, t_eval_steps, seed, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
+
+            for i in range(len(SOBOL_analysis_values)):
+                indices_to_remove = [i for i, value in enumerate(SOBOL_analysis_values) if value == '']
+                for i in sorted(indices_to_remove, reverse=True):
+                    SOBOL_analysis_values.pop(i)
+                    SOBOL_analysis_id.pop(i)
             number_variables = len(SOBOL_analysis_values)
             names = [i['index'] for i in SOBOL_analysis_id]
             bounds = [[float(i.split('-')[0]), float(i.split('-')[1])] for i in SOBOL_analysis_values]
@@ -996,42 +1037,69 @@ class Visualizer():
                 'bounds': bounds,
             }) 
             SOBOL_2nd_order = True if SOBOL_2nd_order else False
-            param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order)
-            for params in param_samples: 
-                # turn the data in the dashboard into numpy arrays, and save/update the environment data to the graph object
-                j = 0
-                sum_decrease = 0
-                for i, (key, value) in enumerate(self.graph_data.items()):
-                    initial_condition[j] = params[i]
-                    if value["add_rows"] != False:
-                        j += value["add_rows"]
-                        sum_decrease += value["add_rows"] - 1
-                    else:
-                        j += 1
-                summed_length = j - sum_decrease 
-  
-                for i in range(len(non_graphing_data_vectors)):
-                    non_graphing_data_vectors[i][0] = params[i+summed_length]
-                summed_length += len(non_graphing_data_vectors)
+            param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order, seed=int(seed))
+            parallel = ParallelComputing()
+            results = parallel.run_parallel(param_samples, names, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data, t_eval_steps=t_eval_steps)
+            t_values, y_values = results[:2]
+            data_size = [length["data"].size for length in self.graph_data.values()]
+            graph_data_keys = list(self.graph_data.keys())
+            Y_final = np.zeros((len(param_samples), len(data_size)+1))
+            Y_avg = np.zeros((len(param_samples), len(data_size)+1))
+            Y_var = np.zeros((len(param_samples), len(data_size)+1))
+            Y_time = np.zeros((len(param_samples), len(data_size)+1, t_eval_steps))
+            # Set numpy print options to display the whole array
+            new_list_y_values = []
+            for i, (t_value, y_value) in enumerate(zip(t_values, y_values)): 
+                overall_y = self.analysis.unflatten_initial_matrix(y_value, data_size)
+                overall_y = self.save_data(overall_y, t_value)
+                overall_y.append([optical_density(deepcopy(overall_y), graph_data_keys)])
+                new_list_y_values.append(overall_y)
+                for j, data in enumerate(overall_y):
+                    Y_final[i, j] = data[0][-1]
+                    Y_avg[i, j] = np.mean(data[0])
+                    Y_var[i, j] = np.var(data[0])
+                    Y_time[i, j] = data[0]
+            final_analyzed = []
+            avg_analyzed = []
+            var_analyzed = []
+            for i in range(Y_final.shape[1]):
+                final_analyzed.append(analyze(problem_spec, Y_final[:, i], calc_second_order=SOBOL_2nd_order))
+                avg_analyzed.append(analyze(problem_spec, Y_final[:, i], calc_second_order=SOBOL_2nd_order))
+                var_analyzed.append(analyze(problem_spec, Y_final[:, i], calc_second_order=SOBOL_2nd_order))
 
-                for i in range(len(non_graphing_data_matrices)):
-                    non_graphing_data_matrices[i][0] = params[i+summed_length]
-                summed_length = summed_length + len(non_graphing_data_matrices)
-
-                for i, (key, value) in zip(range(len(self.analysis.environment_data)), self.analysis.environment_data.items()):
-                    self.analysis.environment_data[key] = params[i+summed_length]
-                
-                # solve the system of ODEs, and save the final value and time value
-                solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
-                overall_y = solved_system.y
-                overall_t = solved_system.t
-                if use_serial_transfer:
-                    overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
-                overall_y = self.analysis.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
-                overall_y = self.save_data(overall_y, overall_t)
-                overall_y.append([optical_density(deepcopy(overall_y), list(self.graph_data.keys()))])
-            
-            return [go.Figure() for _ in range(2)] 
+            dictionary_results = {
+                "seed": seed,
+                "number_variables": number_variables,
+                "parameter_names": names,
+                "parameter_value_bounds": bounds,
+                "problem_spec": problem_spec,
+                "t_eval_steps": t_eval_steps,
+                "t_values": t_values,
+                "y_values": y_values,
+                "y_final": Y_final,
+                "y_avg": Y_avg,
+                "y_var": Y_var,
+                "y_time": Y_time,
+                "final_analyzed": final_analyzed,
+                "avg_analyzed": avg_analyzed,
+                "var_analyzed": var_analyzed,
+                "SOBOL_2nd_order": SOBOL_2nd_order,
+                "SOBOL_number_samples": SOBOL_number_samples,
+                "SOBOL_number_samples_tested": 2**SOBOL_number_samples,
+                "data_size": data_size,
+                "graph_data_keys": graph_data_keys,
+                "analysis": self.analysis,
+                "graph_data": self.graph_data,
+                "non_graph_data_vector": self.non_graph_data_vector,
+                "non_graph_data_matrix": self.non_graph_data_matrix,
+                "settings": self.settings,
+                "environment_data": self.analysis.environment_data,
+                "other_parameters": self.other_parameters_to_pass,
+            }
+            timestamp = int(datetime.datetime.now().timestamp())
+            with open(f"SimulationResults/SensitivityAnalysis/SOBOL_analysis_{timestamp}.pickle", "wb") as f:
+                pickle.dump(dictionary_results, f)
+            return self.SOBOL_figure(final_analyzed, avg_analyzed, var_analyzed, SOBOL_2nd_order, names)
         
         @callback(
             Output('ultimate_analysis_text', 'children'),
