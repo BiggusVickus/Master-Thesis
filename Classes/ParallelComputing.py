@@ -9,12 +9,12 @@ class ParallelComputing:
         self.filename_location = filename_location
 
     
-    def run_parallel(self, iter_items, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data):
-        results = Parallel(n_jobs=-1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data) for x in iter_items)
+    def run_parallel(self, iter_items, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data, t_eval_steps=None):
+        results = Parallel(n_jobs=-1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data, t_eval_steps) for x in iter_items)
         results_t, results_y = zip(*results)
         return results_t, results_y
     
-    def process_combinations(self, param_combination, unique_param_names, graph_data, vector_items_of_names, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data):
+    def process_combinations(self, param_combination, unique_param_names, graph_data, vector_items_of_names, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data, t_eval_steps):
         print(f"Processing combination: {param_combination}")
         non_graphing_data_vectors = [value['data'] for value in vector_items_of_names.values()]
         non_graphing_data_matrices = [value['data'] for value in matrix_items_of_names.values()]
@@ -32,5 +32,5 @@ class ParallelComputing:
                 non_graphing_data_matrices[list(matrix_items_of_names.keys()).index(param_name)][:][:] = param_value
             elif param_name in environment_data:
                 environment_data[param_name] = param_value
-        solved_system = analysis.solve_system(analysis.odesystem, initial_condition, analysis, *other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices,  environment_data)
+        solved_system = analysis.solve_system(analysis.odesystem, initial_condition, analysis, *other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, environment_data, t_eval = t_eval_steps)
         return solved_system.t, solved_system.y

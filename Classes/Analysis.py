@@ -3,6 +3,8 @@ import numpy as np
 from scipy.integrate import solve_ivp
 from Classes.Math import determine_type_of_variable
 np.seterr(divide='ignore')
+import warnings
+warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 
 class Analysis():
     def __init__(self, graph_location):
@@ -219,7 +221,8 @@ class Analysis():
         t_end = float(t_end) if t_end is not None else float(self.settings['t_end']) if 't_end' in self.settings else simulation_length
         solver_type = self.solver_type if 'solver_type' not in self.settings else self.settings['solver_type']
         dense_output = self.dense_output if 'dense_output' not in self.settings else self.settings['dense_output']
-
+        if "t_eval" in extra_parameters:
+            extra_parameters['t_eval'] = np.linspace(t_start, t_end, int(extra_parameters['t_eval']))
         solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, min_step=min_step, max_step=max_step, method=solver_type, dense_output=dense_output)
         return solved
     
