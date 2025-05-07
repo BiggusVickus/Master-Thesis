@@ -154,7 +154,6 @@ class UltimateAnalysis:
                     dict1['t_values'] = datagroup['t_values'][()]
                     dict1['y_values'] = datagroup['y_values'][()]
                     row_list.append(dict1)
-            # print(row_list)
             df = pd.DataFrame(row_list)
             return df
 

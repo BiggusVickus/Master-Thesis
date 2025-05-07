@@ -513,7 +513,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                 ]),
 
                 dcc.Tab(label='SOBOL Analysis', children=[
-                    html.H4("Runs a Sobol Analysis"),
+                    html.H4("Runs a Sobol Analysis. Select the range of values to test for each parameter. The program will run the simulation for a random selection fo values for each parameter in the range. The program will then plot the results of the Sobol Analysis. Done in parallel. If you dont want to include a parameter int he stability analysis, dont include the parameter range in the field. You can choose the number of samples to test, if it tests a 2nd order, and the seed value for the random number generator. It uses the sobol sampler and sobol analyzer read more on the SALib Sobol documentation. "),
                     *[
                         html.Div([
                             html.H4(name),
@@ -532,6 +532,22 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         placeholder="Number of samples",
                         value=2
                     ),
+                    html.Br(),
+                    html.H4(['Number of timesteps']),
+                    dcc.Input(
+                        id="SOBOL_analysis_number_timesteps", 
+                        type="number",
+                        placeholder="Number of timesteps",
+                        value=100
+                    ),
+                    html.Br(),
+                    dcc.Input(
+                        id="SOBOL_analysis_seed", 
+                        type="number",
+                        placeholder="seed value",
+                        value=0
+                    ),
+                    html.Br(),
                     dcc.Checklist(
                         options=[
                             {'label': 'Calculate 2nd order', 'value': 'option1'},
@@ -539,20 +555,17 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value=['option1'],
                         id='SOBOL_analysis_2nd_order'
                     ),
-                    dcc.Checklist(
-                        options=[
-                            {'label': 'Use Serial Transfer', 'value': 'option1'},
-                        ],
-                        value=[],
-                        id='SOBOL_analysis_use_serial_transfer'
-                    ),
-                    dcc.Graph(id="SOBOL_analysis_parameter"),
-                    dcc.Graph(id="SOBOL_analysis_time"), 
+                    html.H4(['Seed value']),
+                    html.Br(),
                     html.Button("Run SOBOL Analysis", id="run_SOBOL_analysis"),
+                    dcc.Graph(id="SOBOL_analysis_final_value"),
+                    dcc.Graph(id="SOBOL_analysis_average_value"),
+                    dcc.Graph(id="SOBOL_analysis_variance"),
+                    # dcc.Graph(id="SOBOL_analysis_time"), 
                 ]),
 
                 dcc.Tab(label='Ultimate Analysis', children=[
-                    html.H4(["Choose values you want to test for the ultimate analysis"]),
+                    html.H4(["Choose values you want to test for the ultimate analysis. The program runs the simulation for each combination of the parameters (so watch out for exponential explosion!). It overwrites all values int he associated vector/matrix. Then it saves a pickle file with the combinaitons, and other data, and saves a parquet file with the results of the full simulation (time and y values), without any processing to it. The system periodically updates the parquet file with the results of the simulation to prevent old data form using up ram. Read the documentaiotn on Dask to load the data into your own program for later processing. Partitioning the data allows for faster querying on the data, so select a small subsection of data where you will want to do frequent queries on. "]),
                     # TODO: remove the value from the input after testing
                     html.H4(["Option 1: Input the values you want to test separated by commas"]),
                     *[
