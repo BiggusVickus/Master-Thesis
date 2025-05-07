@@ -91,9 +91,9 @@ class System(Analysis):
 # graph = System('simple_test.gexf')
 
 # graph = System('example.gexf')
-# system = System('simple_test_2.gexf')
+system = System('simple_test_2.gexf')
 # system = System('example_3.gexf')
-system = System('final_graph.gexf')
+# system = System('final_graph.gexf')
 # system.add_item_to_class_attribute('M', 4) # add the M value to the system
 
 phage_nodes = system.get_nodes_of_type('P')
