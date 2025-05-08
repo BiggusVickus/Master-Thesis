@@ -1,39 +1,64 @@
 \chapter{Methods}
 \label{Methods}
+\section{Project Overview}
+To help complete this Master thesis, I created various tools that would help create the final model outputs. 
+The project is divided into three logical parts. 
+
+\subsection{Part 1: Graphical User Interface (GUI) Tool}
+The first part involves the development of a GUI tool to create and edit the network topography of interactions. 
+This tool allows users to quickly and intuitively define agents, interaction parameters, environmental parameters and setting parameters. 
+It provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure. 
+The tool created a network graph which is then used for part 2 and part 3. 
+
+\subsection{Part 2: Simulation Framework}
+The second part focuses on the simulation framework. 
+The user provides an ODE model and the network topography as an input to the framework. 
+The framework uses numerical solvers to simulate the interactions of the network over time.
+As output, the user receives two outputs.
+The first output is an array of time values that the solver used to calculate the population count. 
+The second output is an array containing the population count of every agent. 
+
+\subsection{Part 3: Analysis and Visualization}
+The third part involves analyzing and visualizing the simulation results. 
+The user can use a dashboard built using Plotly Dash to interact with the solver and network. 
+The user can change parameter, environment values, and setting values on the fly. 
+This allows for the user to quickly change parameter values and test different situations. 
+The dashboard includes various starter plots that allows for the user to test the model. 
 
 \section{Network Topography of Interactions}
-In a microbial environment, there are numerous interactions between agents, but not every agent can and will interact with one another.
+In a microbial environment, there are numerous interactions occurring between agents. 
+However not every agent can and will interact with one another.
 Based on which agents interact with one another, a network topography can be created, capturing the dynamics of the interactions.
-Each agent is represented as a node.
-If an agent interacts with another agent, an edge can be linked between the agents.
+Every node represents a unique agent. 
+An edge links agents together if there is an interaction occurring between the agents.  
+The network allows for self-loops. 
 
-Each node can contain attributes and properties intrinsic to that agent. 
-For example, this would include the starting population or concentration, washout rate, reproduction speed, and the optimal ambient temperature. 
-Each edge likewise also contains attributes to capture the unique dynamic interactions between the agents, for example the probability of a phage encountering and successfully infecting a bacteria. 
-For example, bacteria 1 might use up resource 1 faster than resource 2, or phage 1 binds to (the affinity) and infects bacteria 1 faster than phage 2 can. 
-Adding the attributes to the nodes and edges allow for various interaction dynamics within the context of the community to be modelled. 
-If there are no interactions between agents, say bacteria 1 does not consume resource 3, then no edge is added between the agents and the parameter values are set to 0. 
-Using a graph network, these interactions between agents can be visualized, tracked and edited. \newline 
+Each node contains attributes and properties intrinsic to that agent. 
+For example, this would include the starting population or concentration, reproduction speed (if any), or death rate (if any). 
+Each edge likewise also contains attributes to capture the unique dynamic interactions between the agents. 
+This could be the probability for a successful interaction, the burst size of a specific phage-bacteria pair, or the bacteria consumption rate of resources. 
+Adding the attributes to the nodes and edges allow for the capture of various interaction dynamics within the context of the community. 
+The interactions between the agents can be visualized and edited using a GUI tool. \newline 
 
 A GUI tool has been developed using Python and NetworkX to help aid in the development of this network topography. 
 With this tool, a network topography can be created by adding any number of agents of varying type, such as bacteria, phages, or resources.
 There is an environment node that is used to store global environmental data, for example the temperature of the system, the pH of the system, washout rate, etc.
-There is a settings node that holds information such as simulation lenght, max timestep, and type of ODE solver to use. 
+There is a settings node that holds information such as simulation length, max timestep, and type of ODE solver to use. 
 The attributes of the agents, interactions, and environment can easily be edited using the GUI tool. \newline 
 
-\Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the very simple tool build using tkinter, matplotlib, and networkx %TODO: Citation needed. 
+\Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the very simple tool build using tkinter, matplotlib, and NetworkX %TODO: Citation needed. 
 Although the button labels are self-explanatory, the buttons allow the user to add exactly 1 node of either type “P” for phage, “B” for bacteria, or “R” for resource and provide a name. 
 That is however tedious for large graphs, so the user can add multiple nodes at the same time. 
 The newly created node is provided with default parameter values that the user has to provide beforehand. 
 This can be done by importing the tool as one would import any other Python package. 
 The user provides a base class, extending the class of the tool. 
 The user can proceed to override the default implementation of the method that gives the default value. 
-It is of clurse possible to add single edges, add mutliple edges at once, remove edges, edit node attirbutes, edit edge attirbutes, and import or export the graph. 
+It is of course possible to add single or multiple edges at once, remove edges, edit node and edge attributes, and import or export the graph. 
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{Screenshots/initial_startup_GUI_tool.png}
-    \caption{The GUI tool when you start it up. There are numerous tools that you can use to edit the graph. By default, an environment node holding parameters such as pH and temperature is added. A settings node is added as well, holding settings data to be used for the solver like the type of solver (RK23 or RK45) as well as plotting settings like size of the arrows in the quiver plot. }
+    \caption{The GUI tool when you start it up. There are numerous tools that you can use to edit the graph. By default, an environment node holding parameters such as pH and temperature is added. A settings node is added as well, holding settings data to be used for the solver like the type of solver (RK23 or RK45). }
     \label{fig:ss:initial_startup_GUI_tool}
 \end{figure}
 
@@ -45,5 +70,71 @@ It is of clurse possible to add single edges, add mutliple edges at once, remove
     \label{fig:ss:example_network}
 \end{figure}
  
-Once a network topography capturing the interactions between any number of agents has been created, it would be useful to see how the population count or concentration value changes through time. 
-A Python package has been created that allows for uploading a network topography, and with a method that calculates the ODE equations that the user needs to provide, with the setting up of initial parameters and provided equations, runs a numerical solver using SciPy's solve\_ivp() function.  
+
+\section{Dashboard}
+The dashboard allows for the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections. 
+The first section allows for the user to edit parameter and setting values on the fly, to quickly iterate through different conditions and to fine tune parameter selection without having to rebuild the network using the GUI tool. 
+The first section is closely tied with the second and third section. 
+The second section allows for the visualization of the changes in parameter values. 
+The user can run a simple run, where the model returns a simple graph showing the population count through time. 
+The final section allows for the user to run more advanced analysis, for example by changing multiple parameter values. 
+\subsection{Editing Network and Parameter Values}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
+    \caption{
+        The panel where a user can edit the initial conditions of the agents. 
+        The columns of each table show for which agent the value corresponds to. 
+        A copy of this data is sent to the solver. 
+        This instance of the model models a 3 resource, 3 bacteria, and 2 phage system. 
+        The bacteria are split into an uninfected and an infected stage. 
+        Once infected by a phage, a bacterium will go through four intermediary infection stages before lysing. 
+        The infected stages are represented as a matrix, with each row representing a bacterial agent while each column represents the stage of infection. 
+    }
+    \label{fig:ss:ds:initial_condition}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_vector_settings.png}
+    \caption{
+        The panel where the user can edit the attributes for a given attribute name. 
+        This version is specifically used represent the attributes that are associated with nodes, and are represented as a vector. 
+        The columns of each table show for which agent the value corresponds to. 
+        A copy of this data is sent to the solver.
+    }
+    \label{fig:ss:ds:vector}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_matrix_settings.png}
+    \caption{
+        The panel where the user can edit the attributes for a given attribute name. 
+        This version is specifically used to represent the attributes that are associated with edges between agents, and are represented as a matrix. 
+        The rows and columns of each table show for which agent the value corresponds to. 
+        Due to limitations with Dash datatables, the row names can't explicitly be labelled, however text above the table shows the row names. 
+        A copy of this data is sent to the solver. 
+    }
+    \label{fig:ss:ds:matrix}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_environment_settings.png}
+    \caption{
+        The panel where a user can edit the edge attributes the environment settings. 
+        Each column represents a single environment parameter. 
+        A copy of this data is sent to the solver.
+    }
+    \label{fig:ss:ds:environment}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_settings_settings.png}
+    \caption{
+        The panel where a user can edit the settings of the solver. 
+        Various options exist, such as solver type, cutoff value for small values, or tolerances of the solver. 
+        A copy of this data is not sent to the solver. 
+        The user needs to save the settings, while for the other panels the user does not need to save the changes. 
+    }
+    \label{fig:ss:ds:settings}
+\end{figure}
+
