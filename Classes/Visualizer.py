@@ -6,7 +6,7 @@ from SALib import ProblemSpec
 from SALib.sample.sobol import sample
 from SALib.analyze.sobol import analyze
 import numpy as np
-np.random.seed(0)  # Set the random seed for reproducibility
+# np.random.seed(0)
 import plotly.express as px
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
@@ -21,6 +21,7 @@ import os
 import datetime
 import json
 import gc
+import time
 
 import pickle
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
@@ -244,6 +245,8 @@ class Visualizer():
             fig.update_yaxes(type="log")
         fig.update_layout(hovermode="x unified")
         list_of_figs.append(fig)
+        t = 1000 * time.time() # current time in milliseconds
+        np.random.seed(int(t) % 2**32)
         return list_of_figs
 
     def create_initial_value_analysis_figures(self, simulation_output, time_output, param_name, param_values, graph_axis_scale, run_name, offset, log_axis) -> list:
