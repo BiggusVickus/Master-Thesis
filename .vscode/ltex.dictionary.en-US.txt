@@ -2,3 +2,7 @@ lyse
 ODEs
 DDEs
 Lotka-Voltera
+Plotly
+NetworkX
+timestep
+lysing
