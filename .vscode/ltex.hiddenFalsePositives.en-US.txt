@@ -2,3 +2,5 @@
 {"rule":"PASSIVE_VOICE","sentence":"^\\QThis version is specifically used represent the attributes that are associated with nodes, and are represented as a vector.\\E$"}
 {"rule":"PASSIVE_VOICE","sentence":"^\\QA copy of this data is sent to the solver.\\E$"}
 {"rule":"PASSIVE_VOICE","sentence":"^\\QA copy of this data is not sent to the solver.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QSOBOL Analysis.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QParquet with Dask offers superior performance and data The user can proceed to create their own plots for any given condition.\\E$"}

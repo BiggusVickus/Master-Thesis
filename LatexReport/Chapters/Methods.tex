@@ -80,6 +80,7 @@ The user can run a simple run, where the model returns a simple graph showing th
 The final section allows for the user to run more advanced analysis, for example by changing multiple parameter values. 
 
 \subsection{Editing Network and Parameter Values}
+\label{sec:editing_network_and_parameter_values}
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
@@ -139,12 +140,60 @@ The final section allows for the user to run more advanced analysis, for example
     \label{fig:ss:ds:settings}
 \end{figure}
 
-\subsection{Advanced Visualizatoin and Analysis}
+\subsection{Advanced Visualization and Analysis}
 In the advanced analysis section, the user can run different analysis methods to gain a greater understanding of the model. 
-For the most part, the visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analze the visualization. 
-These advances visualizations are more for understanding a simple model, from which the user can gain a deeper understanding of the model. 
-There are five different analysis and visualization methods, and one system where the user can run a large simulation on the whole network and receive an output file contianing the raw simulation file data. 
+The visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analyze the visualization. 
+These advanced visualizations were created with the mind of understanding a simple network. 
+There are five different analysis and visualization methods, and one system where the user can run a large simulation on the whole network and receive an output file containing the raw simulation file data. 
+The raw data is stored as a \textit{parquet} file, a tabular-like dataformat, which when combined with Dask (note: not Dash), allows for querying of the data similarly to Pandas. 
+Parquet with Dask offers superior performance and data storage solutions that Pandas can't offer. 
+Once queried, the user can create their own graphs and plots as they have access to the parameter values used and the raw simulation data. 
 \subsubsection{Serial Transfer}
+Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and  nutrients, possibly with phages, and transfers the old media into a solution containing new media. 
+At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out. 
+However, usually only resources are added during the transfer process. 
+An example would be an experiment starts with 50ml of solution. 
+The experiment runs for 24 hours before 5ml is removed. 
+Researchers can run various tests, such as using optical density measurements to assess bacterial density in the solution or employing a mass spectrometer to determine the concentration of the resources. 
+The 5ml is then re-added to a new solution of 45ml containing fresh resources. 
+The effect that this has is tit creates a sort of artificial stable point. 
+As the bacteria grow, they consume the resources found in the solution. 
+However eventually the resources run out, and the bacteria die out due to a lack of nutrients. 
+By introducing new nutrients at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior. 
+\newline 
+
+The implementation of serial transfer is slightly different. 
+A user can select a number which will divide the population count of the agents by that number. 
+Then the program takes the initial condition values defined for the nutrients the initial condition in \ref{sec:editing_network_and_parameter_values} and adds those values to the nutrients respectively. 
+By selecting a checkbox, the values as defined in the initial condition box for phages and bacteria in \ref{sec:editing_network_and_parameter_values} can optionally be added as well. 
+As a concrete example, if at the end of a simulation, there are 120 resources remaining, 5000 bacteria, and 1000 phages, and the chosen serial transfer value is 15, then the ending resource, nutrient, and phage value is 8, 333.33, and 66.66 respectively. 
+If the initial condition for the resources, bacteria, and phages are 500, 80, and 10 respectively, then if the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively. 
+If the checkbox is checked, the new population count will be 508, 413.33, and 76.66 respectively. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_settings.png}
+    \caption{
+        The section where the user can set up the serial transfer. To adjust the values added, the user would need to edit the initial condition values. 
+    }
+    \label{fig:ss:av:serial_transfer_settings}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_settings.png}
+    \caption{
+        Running the serial transfer updates the plot at the top of the page. The simulation initially ran for $t=10$, and completed two serial transfers with a dilution rate of 10. The first transfer was compelted without adding new phages and bacteria. The second transfer was doen with adding new phages and bacteria. 
+        The R1 (red) and R0 (purple) resource died out at $t=1.5$ and $t=2.8$ but are reintroduced at $t=10$ as part of the serial transfer process. 
+        All bacteria become infected and die out before or at $t=10$. 
+        At $t=10$ the phages have a value of roughly 818 and 1078 pre-serial transfer, and have a value of 81.8 and 107.8 post serial transfer. 
+        At $t=20$, a second serial transfer occurs where bacteria are reintroduced to the system, and more phages are added to the existing population. 
+        The stacked line plots show the absolute and relative distribution of different population groups. 
+        The stacked barchart at the bottom shows the final population count of each agent group type at the end of each serial transfer. 
+        It might not always be feasible to experimentally determine the population count at each timestep in a lab, hence this graph can be used as a replacement to show the population count at serial transfer time. 
+    }
+    \label{fig:ss:av:serial_transfer_run2_with_p_b}
+\end{figure}
+
 \subsubsection{Parameter Analysis}
 \subsubsection{Initial Value Analysis}
 \subsubsection{Phase Portrait}
