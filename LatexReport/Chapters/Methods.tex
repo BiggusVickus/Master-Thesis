@@ -73,11 +73,12 @@ It is of course possible to add single or multiple edges at once, remove edges, 
 
 \section{Dashboard}
 The dashboard allows for the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections. 
-The first section allows for the user to edit parameter and setting values on the fly, to quickly iterate through different conditions and to fine tune parameter selection without having to rebuild the network using the GUI tool. 
+The first section allows for the user to edit the network parameters (but not the shape) and setting values on the fly, to quickly iterate through different conditions and to fine tune parameter selection without having to rebuild the network using the GUI tool. 
 The first section is closely tied with the second and third section. 
 The second section allows for the visualization of the changes in parameter values. 
 The user can run a simple run, where the model returns a simple graph showing the population count through time. 
 The final section allows for the user to run more advanced analysis, for example by changing multiple parameter values. 
+
 \subsection{Editing Network and Parameter Values}
 \begin{figure}
     \centering
@@ -138,3 +139,14 @@ The final section allows for the user to run more advanced analysis, for example
     \label{fig:ss:ds:settings}
 \end{figure}
 
+\subsection{Advanced Visualizatoin and Analysis}
+In the advanced analysis section, the user can run different analysis methods to gain a greater understanding of the model. 
+For the most part, the visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analze the visualization. 
+These advances visualizations are more for understanding a simple model, from which the user can gain a deeper understanding of the model. 
+There are five different analysis and visualization methods, and one system where the user can run a large simulation on the whole network and receive an output file contianing the raw simulation file data. 
+\subsubsection{Serial Transfer}
+\subsubsection{Parameter Analysis}
+\subsubsection{Initial Value Analysis}
+\subsubsection{Phase Portrait}
+\subsubsection{SOBOL Analysis}
+\subsubsection{Ultimate Analysis}
