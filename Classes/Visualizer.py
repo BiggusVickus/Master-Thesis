@@ -1012,7 +1012,6 @@ class Visualizer():
             State({'type': 'sobol_analysis_input', 'index': ALL}, 'value'),
             State({'type': 'sobol_analysis_input', 'index': ALL}, 'id'),
             State('SOBOL_analysis_samples', 'value'),
-            State('SOBOL_analysis_number_timesteps', 'value'),
             State('SOBOL_analysis_2nd_order', 'value'),
             State('SOBOL_analysis_seed', 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
@@ -1021,10 +1020,12 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def run_SOBOL_analysis(n_clicks, SOBOL_analysis_values, SOBOL_analysis_id, SOBOL_number_samples, SOBOL_2nd_order, t_eval_steps, seed, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def run_SOBOL_analysis(n_clicks, SOBOL_analysis_values, SOBOL_analysis_id, SOBOL_number_samples, SOBOL_2nd_order, seed, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
-
+            if seed is None:
+                t = 1000 * time.time() # current time in milliseconds
+                seed = int(t) % 2**32
             for i in range(len(SOBOL_analysis_values)):
                 indices_to_remove = [i for i, value in enumerate(SOBOL_analysis_values) if value == '']
                 for i in sorted(indices_to_remove, reverse=True):
@@ -1111,7 +1112,6 @@ class Visualizer():
             State({'type': 'ultimate_analysis_input_range', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_steps', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'value'),
-            State({'type': 'ultimate_analysis_include_parameter', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_partition_data', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'id'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
@@ -1120,23 +1120,20 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, partition_data, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, partition_data, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
 
             partition_data = [partition[0] for partition in partition_data if partition is not None]
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
             list_of_param_values = []
             param_names_to_run = []
-            for input, ranges, steps, use_opt_1_or_opt_2, include_param, id in zip(input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, include_parameters, input_ids):
-                if include_param == []:
-                    continue
+            for input, ranges, steps, use_opt_1_or_opt_2, id in zip(input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, input_ids):
                 try:
                     param_values = split_comma_minus(input, ranges, steps, use_opt_1_or_opt_2)
                     list_of_param_values.append(param_values)
                     param_names_to_run.append(id['index'])
                 except:
                     continue
-
             col_names = param_names_to_run + ['t_values', 'y_values']
             ODE_sizes = [length["data"].size for length in self.graph_data.values()]
             items_of_name = []
