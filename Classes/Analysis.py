@@ -26,6 +26,9 @@ class Analysis():
         self.cutoff_value = 0.000001 # default cutoff value, backup in case the user does not set it
         self.solver_type = 'RK45' # default solver type, backup in case the user does not set it
         self.dense_output = False # default dense output, backup in case the user does not set it
+        self.t_eval_option = False # default t_eval option, backup in case the user does not set it
+        self.t_start = 0 # default t_start, backup in case the user does not set it
+        self.t_eval_steps = 200 # default t_eval steps, backup in case the user does not set it
     
     def odesystem(self, t, y, *args):
         """The user must provide their own implementation of the ODE system function. The user can program the function in any way they see fit, but it must take in the time, the current state of the system, and any parameters needed to calculate the ODE system, and return the derivative of the system at that time. The function must be in the form of f(t, y, *args) -> np.array. The user can implement how they see fit, with for loops or with matrix-vector calculations, but they need to make sure that they unpack the y0_flattened vector into the correct matrices and vectors to do the calculations. The function must return the derivative of the system at that time in a reflattened vector.
@@ -217,13 +220,19 @@ class Analysis():
         max_step = float(self.max_step) if 'max_step' not in self.settings else float(self.settings['max_step'])
         min_step = float(self.min_step) if 'min_step' not in self.settings else float(self.settings['min_step'])
         simulation_length = float(self.simulation_length) if 'simulation_length' not in self.settings else float(self.settings['simulation_length'])
-        t_start = float(t_start) if t_start is not None else float(self.settings['t_start']) if 't_start' in self.settings else 0
-        t_end = float(t_end) if t_end is not None else float(self.settings['t_end']) if 't_end' in self.settings else simulation_length
+
+        if t_start is None:
+            t_start = float(self.t_start) if 't_start' not in self.settings else float(self.settings['t_start'])
+        if t_end is None:
+            t_end = float(t_start + simulation_length)
+        t_eval_option = self.t_eval_option if 't_eval_option' not in self.settings else self.settings['t_eval_option']
+        t_eval_steps = int(self.t_eval_steps) if 't_eval_steps' not in self.settings else int(self.settings['t_eval_steps'])
+        t_eval = np.linspace(t_start, t_end, t_eval_steps) if t_eval_option else None
+
         solver_type = self.solver_type if 'solver_type' not in self.settings else self.settings['solver_type']
         dense_output = self.dense_output if 'dense_output' not in self.settings else self.settings['dense_output']
-        if "t_eval" in extra_parameters:
-            extra_parameters['t_eval'] = np.linspace(t_start, t_end, int(extra_parameters['t_eval']))
-        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, min_step=min_step, max_step=max_step, method=solver_type, dense_output=dense_output)
+
+        solved = solve_ivp(ODE_system_function, (t_start, t_end), y0_flattened, args=ODE_system_parameters, **extra_parameters, min_step=min_step, max_step=max_step, method=solver_type, dense_output=dense_output, t_eval = t_eval)
         return solved
     
     def add_item_to_class_attribute(self, name:str, data:object) -> None:

@@ -152,7 +152,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                 # tab for the settings, like the solver type and the min/max step size.
                 dcc.Tab(label='Settings', children=[
                     html.H4(["These settings affect various parts of the simulation. For example the solver type (RK23 or RK45 or DOP853), or to use the defualt selected options by the solver or a linspace of selected options."]),
-                    html.Button("Save Settings", id="save_settings"),
                     html.Div([
                         html.H4(["Solver Type"]), # dropdown of the solver types
                         dcc.Dropdown(
@@ -170,10 +169,19 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         html.H4(["t_eval option"]), # evaluation option
                         dcc.Checklist(
                             options=[
-                                {'label': 'Use solver suggested t_values (checked) or your own t_eval (unchecked) which uses the simulation time start and end and number of steps', 'value': 'option1'},
+                                {'label': 'Use your own t_eval (checked) with selecting t_start, simulation length, and number of steps, or the solver suggested t_values (unchecked)', 'value': False},
                             ],
-                            value=['option1'],
+                            value=[],
                             id={'type': 'settings', 'index': 't_eval_option'}
+                        ),
+                        html.H4(["Number timesteps for own t_eval"]), # minimum step size
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 't_eval_steps'}, 
+                            type="number",
+                            placeholder="Minimum Step",
+                            value=initial_settings['t_eval_steps'],
+                            required=True, 
+                            min=2,
                         ),
                         html.H4(["Minimum Step Size"]), # minimum step size
                         dcc.Input(
@@ -224,6 +232,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                             type="number",
                             placeholder="Absolute Tolerance",
                             value=initial_settings['atol'], 
+                            required=True
+                        ),
+                        html.H4(["Simulation Start Time"]), # simulation length time
+                        dcc.Input(
+                            id={'type': 'settings', 'index': 't_start'}, 
+                            type="number",
+                            placeholder="Start time of Simulation",
+                            value=initial_settings['t_start'], 
                             required=True
                         ),
                         html.H4(["Simulation Length Time"]), # simulation length time

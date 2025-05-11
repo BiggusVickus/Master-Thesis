@@ -66,12 +66,14 @@ class GraphMaker:
         string = ""
         string += f"solver_type: RK45\n"
         string += f"t_eval_option: True\n"
+        string += f"t_eval_steps: 200\n"
         string += f"min_step: 0.01\n"
         string += f"max_step: 0.1\n"
         string += f"cutoff_value: 0.000001\n"
         string += f"dense_output: False\n"
         string += f"rtol: 0.001\n"
         string += f"atol: 0.000001\n"
+        string += f"t_start: 0\n"
         string += f"simulation_length: 30\n"
         return string
 

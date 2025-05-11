@@ -963,12 +963,11 @@ class Visualizer():
             return fig
         
         @callback(
-            Input('save_settings', 'n_clicks'),
             Input({'type': 'settings', 'index': ALL}, 'id'),
             Input({'type': 'settings', 'index': ALL}, 'value'),
             prevent_initial_call=True
         )
-        def save_settings(n_clicks, settings_name, settings_value):
+        def save_settings(settings_name, settings_value):
             """Saves the settings from the dashboard to the analysis object, and updates the settings in the analysis object. 
 
             Args:
@@ -1042,10 +1041,11 @@ class Visualizer():
             SOBOL_2nd_order = True if SOBOL_2nd_order else False
             param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order, seed=int(seed))
             parallel = ParallelComputing()
-            results = parallel.run_parallel(param_samples, names, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data, t_eval_steps=t_eval_steps)
+            results = parallel.run_parallel(param_samples, names, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
             t_values, y_values = results[:2]
             data_size = [length["data"].size for length in self.graph_data.values()]
             graph_data_keys = list(self.graph_data.keys())
+            t_eval_steps = self.settings['t_eval_steps']
             Y_final = np.zeros((len(param_samples), len(data_size)+1))
             Y_avg = np.zeros((len(param_samples), len(data_size)+1))
             Y_var = np.zeros((len(param_samples), len(data_size)+1))

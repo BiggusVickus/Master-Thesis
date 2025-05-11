@@ -25,7 +25,7 @@
         <attvalues>
           <attvalue for="0" value="S" />
           <attvalue for="1" value="3" />
-          <attvalue for="2" value="solver_type: RK45&#10;t_eval_option: True&#10;min_step: 0.01&#10;max_step: 0.1&#10;cutoff_value: 0.000001&#10;dense_output: False&#10;rtol: 0.001&#10;atol: 0.000001&#10;simulation_length: 10&#10;" />
+          <attvalue for="2" value="solver_type: RK45&#10;t_eval_option: False&#10;min_step: 0.01&#10;max_step: 0.1&#10;cutoff_value: 0.000001&#10;dense_output: False&#10;rtol: 0.001&#10;atol: 0.000001&#10;simulation_length: 10&#10;t_eval_steps: 100&#10;t_start: 0&#10;" />
         </attvalues>
       </node>
       <node id="P0" label="P0">
