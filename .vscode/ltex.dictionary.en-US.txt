@@ -6,3 +6,4 @@ Plotly
 NetworkX
 timestep
 lysing
+SOBOL

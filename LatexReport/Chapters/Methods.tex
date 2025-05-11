@@ -238,7 +238,7 @@ The initial value analysis allows for the user to choose a single parameter and 
 
 \subsubsection{Phase Portrait}
 \begin{figure}
-    \centering
+    \centering 
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_settings.png}
     \caption{
     }
@@ -246,17 +246,46 @@ The initial value analysis allows for the user to choose a single parameter and 
 \end{figure}
 
 \subsubsection{SOBOL Analysis}
-SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output. 
-SOBOl can quantify how much variance is due to a specific parameter. 
+SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output by changing the parameter values  of the model and measuring the change in model output. 
+SOBOL can quantify how much variance in the output can be attributed to a specific parameter. 
+SOBOL can measure the global, first, and second order sensitivity index. 
+When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ is an input vector of $d$ elements, and $Y$ is a univariate model output. 
+$X$ is assumed to be independently and uniformly distributed within a hypercube $X_i \in [0, 1]$ for $i=1, \dots d$. 
+The first order sensitivity measures the output variance of the main affect of parameter $X_i$, measuring the effect of varying $X_i$ averaged over other input parameters, and standardized to provide a fractional contribution. 
+The first order sensitivity is described as 
+\[
+    S_i = \frac{V_i}{Var(Y)}
+\] where $V_i = Var_{X_i}(E{X_{\sim i}}(Y|X_i))$ and where $X_{\sim i}$ represents all the parameters that are not $X_i$. 
+\newline
+
+The second order index measures the impact of input $X_i$ interacting with $X_j$. For many inputs, this becomes unwieldy to analyze. 
+The global sensitivity was developed to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$s interaction with other variables. 
+\[
+    S_{T_i} = \frac{E_{X_{\sim i}}(Var_{X_i}(Y|X_{\sim i}))}{Var(Y)} = 1 - \frac{Var_{X_i}(E_{X_i}(Y|X_{\sim i}))}{Var(Y)}
+\]
+SOBOL can analyze various univariate outputs. 
+This could be either the average value of an agent population, the variance in population count, the time at the peak of an agent count, the final population value, etc. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/SOBOL_analysis_settings.png}
     \caption{
+		For each parameter, the user can choose a range of values that SOBOL will use to test and analyze. 
+		If no values for a parameter are inputted, then the parameter is not included in the analysis. 
+		The user then needs to select the number of samples to run. 
+        The larger the number, the more accurate the results, but more simulations would need to be run. 
+        If the user wants to analyze the second order interactions, then the model will run the system $N(2D+2)$ times with the randomly sampled input values, where $N$ is a multiple of 2, and $D$ is the number of parameters being tested. 
+        Otherwise, if 2nd order is not chosen, the model is run $N(D+2)$ times. 
+        As each run can produce different time data of varying length, the number of timesteps has to be fixed by the user. 
+        Due to the randomness of the sampling method, a seed value can be provided to ensure repeatable results. 
     }
     \label{fig:ss:av:SOBOL_analysis_settings}
 \end{figure}
 
 \subsubsection{Ultimate Analysis}
+The Ultimate Analysis section does not produce any visualizations or analysis, however it allows for the user to define which initial conditions and parameter values they want to test. 
+The solver will iterate over every single possibility, running the full simulation, and save the results in a $.parquet$ file. 
+Similarly to the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values. 
+There is an option to include the parameter in the simulatoin
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/ultimate_analysis_settings.png}
