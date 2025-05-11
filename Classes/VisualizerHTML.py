@@ -541,6 +541,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value=100
                     ),
                     html.Br(),
+                    html.H4(['Seed value']),
                     dcc.Input(
                         id="SOBOL_analysis_seed", 
                         type="number",
@@ -555,7 +556,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value=['option1'],
                         id='SOBOL_analysis_2nd_order'
                     ),
-                    html.H4(['Seed value']),
                     html.Br(),
                     html.Button("Run SOBOL Analysis", id="run_SOBOL_analysis"),
                     dcc.Graph(id="SOBOL_analysis_final_value"),

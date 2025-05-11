@@ -58,7 +58,12 @@ It is of course possible to add single or multiple edges at once, remove edges, 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{Screenshots/initial_startup_GUI_tool.png}
-    \caption{The GUI tool when you start it up. There are numerous tools that you can use to edit the graph. By default, an environment node holding parameters such as pH and temperature is added. A settings node is added as well, holding settings data to be used for the solver like the type of solver (RK23 or RK45). }
+    \caption{
+        The GUI tool when you start up the program. 
+        There are numerous tools that you can use to edit the graph. 
+        By default, an environment node holding parameters such as pH and temperature is added. 
+        A settings node is added as well, holding settings data to be used for the solver like the type of solver (RK23 or RK45). 
+    }
     \label{fig:ss:initial_startup_GUI_tool}
 \end{figure}
 
@@ -66,21 +71,29 @@ It is of course possible to add single or multiple edges at once, remove edges, 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{Screenshots/example_network.png}
-    \caption{An arbitrary $3\times2\times3$ network. Phage 0 (P0) interacts/infects bacteria 0 (B0) (and likewise B0 interacts with P0 in some way). P1 infects B0 and B1, etc. Finally, resource 0 (R0) interacts with R1 (an example of this would be a complex sugar degrading into a simple sugar over time). The nature of the interaction needs to be defined and captured in the parameter names, values, and ODE equations. Note: nothing can interact with the environment node.}
+    \caption{
+        An arbitrary $3\times2\times3$ network. Phage 0 (P0) interacts with bacteria 0 (B0). 
+        P1 interacts with B0 and B1, etc. Finally, resource 0 (R0) interacts with R1 (an example of this would be a complex sugar degrading into a simple sugar over time). 
+        The nature of the interaction needs to be defined and captured in the parameter names, values, and ODE equations. 
+        It is up to the user to correctly define the interaction in the ODE model. 
+        Nothing can interact with the environment and setting node, they are simply there to hold data about the environment and network solver.
+    }
     \label{fig:ss:example_network}
 \end{figure}
  
 
 \section{Dashboard}
 The dashboard allows for the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections. 
-The first section allows for the user to edit the network parameters (but not the shape) and setting values on the fly, to quickly iterate through different conditions and to fine tune parameter selection without having to rebuild the network using the GUI tool. 
-The first section is closely tied with the second and third section. 
-The second section allows for the visualization of the changes in parameter values. 
-The user can run a simple run, where the model returns a simple graph showing the population count through time. 
-The final section allows for the user to run more advanced analysis, for example by changing multiple parameter values. 
+The first section allows for the user to edit the network parameters and setting values on the fly to quickly iterate through different conditions and to fine tune parameter selection without having to rebuild the network using the GUI tool. 
+The second section allows for the user to see how the population count evolves over time for a given initial condition and parameter values, allowing to quickly test the network input. 
+The final section allows for the user to run more advanced analysis on the network, for example by changing multiple parameter values and visualizing the output. 
+
 
 \subsection{Editing Network and Parameter Values}
 \label{sec:editing_network_and_parameter_values}
+The editing network and parameter value section five sections. 
+\subsubsection{Initial Condition}
+The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. Each agent type has their own table contianing the initial condition. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
@@ -95,6 +108,7 @@ The final section allows for the user to run more advanced analysis, for example
     }
     \label{fig:ss:ds:initial_condition}
 \end{figure}
+
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_vector_settings.png}
@@ -180,22 +194,73 @@ If the checkbox is checked, the new population count will be 508, 413.33, and 76
 \end{figure}
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_settings.png}
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_run2_with_p_b.png}
     \caption{
-        Running the serial transfer updates the plot at the top of the page. The simulation initially ran for $t=10$, and completed two serial transfers with a dilution rate of 10. The first transfer was compelted without adding new phages and bacteria. The second transfer was doen with adding new phages and bacteria. 
+        Running the serial transfer updates the plot at the top of the page. 
+        The simulation initially ran for $t=10$, and completed two serial transfers with a dilution rate of 10. 
+        The first transfer was completed without adding new phages and bacteria. 
+        The second transfer was done with adding new phages and bacteria. 
         The R1 (red) and R0 (purple) resource died out at $t=1.5$ and $t=2.8$ but are reintroduced at $t=10$ as part of the serial transfer process. 
         All bacteria become infected and die out before or at $t=10$. 
         At $t=10$ the phages have a value of roughly 818 and 1078 pre-serial transfer, and have a value of 81.8 and 107.8 post serial transfer. 
-        At $t=20$, a second serial transfer occurs where bacteria are reintroduced to the system, and more phages are added to the existing population. 
+        At $t=20$, a second serial transfer occurs where the bacteria were reintroduced to the system, and more phages were added to the existing population. 
         The stacked line plots show the absolute and relative distribution of different population groups. 
-        The stacked barchart at the bottom shows the final population count of each agent group type at the end of each serial transfer. 
+        The stacked bar chart at the bottom shows the final population count of each agent group type at the end of each serial transfer. 
         It might not always be feasible to experimentally determine the population count at each timestep in a lab, hence this graph can be used as a replacement to show the population count at serial transfer time. 
     }
     \label{fig:ss:av:serial_transfer_run2_with_p_b}
 \end{figure}
 
 \subsubsection{Parameter Analysis}
+The parameter analysis allows the user to choose two parameters and individually run the model with the varying input values. 
+The values that can be tested and changed include all initial condition values, vector and matrix data, and environmental data. 
+As input, the user can select 2 parameters of choice. 
+After the parameter name selection, the user can manually choose which parameter values they want to test or test a range of values equally spaced by selecting the number of values to test. 
+Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. 
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/parameter_analysis_settings.png}
+    \caption{
+    }
+    \label{fig:ss:av:parameter_analysis_settings}
+\end{figure}
+
 \subsubsection{Initial Value Analysis}
+The initial value analysis allows for the user to choose a single parameter and vary the value of that parameter. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/initial_value_analysis_settings.png}
+    \caption{
+    }
+    \label{fig:ss:av:initial_value_analysis_settings}
+\end{figure}
+
 \subsubsection{Phase Portrait}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_settings.png}
+    \caption{
+    }
+    \label{fig:ss:av:phase_portrait_settings}
+\end{figure}
+
 \subsubsection{SOBOL Analysis}
+SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output. 
+SOBOl can quantify how much variance is due to a specific parameter. 
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/SOBOL_analysis_settings.png}
+    \caption{
+    }
+    \label{fig:ss:av:SOBOL_analysis_settings}
+\end{figure}
+
 \subsubsection{Ultimate Analysis}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/ultimate_analysis_settings.png}
+    \caption{
+    }
+    \label{fig:ss:av:ultimate_analysis_settings}
+\end{figure}
