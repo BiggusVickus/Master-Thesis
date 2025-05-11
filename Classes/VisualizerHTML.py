@@ -354,6 +354,13 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value=[],
                         id='parameter_analysis_use_serial_transfer'
                     ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Extrapolate value in case slider value is in between 2 calculated time intervals', 'value': 'option1'},
+                        ],
+                        value=[],
+                        id='parameter_analysis_extrapolate'
+                    ),
                     html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
                     dcc.Slider(
                         min=0,
@@ -362,13 +369,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         step=0.001,
                         id='parameter_analysis_slider',
                         tooltip={"placement": "bottom", "always_visible": True}
-                    ),
-                    dcc.Checklist(
-                        options=[
-                            {'label': 'Extrapolate value in case slider value is in between 2 calculated time intervals', 'value': 'option1'},
-                        ],
-                        value=[],
-                        id='parameter_analysis_extrapolate'
                     ),
                     html.Div(children = [
                         *[
@@ -547,14 +547,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         type="number",
                         placeholder="Number of samples",
                         value=2
-                    ),
-                    html.Br(),
-                    html.H4(['Number of timesteps']),
-                    dcc.Input(
-                        id="SOBOL_analysis_number_timesteps", 
-                        type="number",
-                        placeholder="Number of timesteps",
-                        value=100
                     ),
                     html.Br(),
                     html.H4(['Seed value']),
