@@ -262,3 +262,19 @@ class Analysis():
             if value <= cutoff_value:
                 flat_array[index] = 0
         return flat_array
+    
+    def prevent_negative_numbers(self, ODE_input:list, ODE_output:list)->np.array:
+        """Given a list of ODE inputs and outputs, this method will check for any when the ODE solver is given a value of 0 or less, and the derivative would be negative, it will set the value to 0. This is to prevent any numerical errors for values reaching really small values from propagating through the system, and from preventing values from going negative. 
+        Args:
+            ODE_input (list): The list of ODE inputs to be checked for negative values
+            ODE_output (list): The list of ODE outputs to be checked for negative values
+
+        Returns:
+            list: Returns the ODE output list with any negative values set to 0 if the ODE input is less than the cutoff value. The list is returned as a numpy array.
+        """
+        # loop through the array and check if the value is less than the cutoff value, if yes, set = 0. 
+        cutoff_value = float(self.cutoff_value) if 'cutoff_value' not in self.settings else float(self.settings['cutoff_value'])
+        for i in range(len(ODE_input)):
+            if ODE_input[i] <= cutoff_value and ODE_output[i] < 0:
+                ODE_output[i] = 0
+        return ODE_output

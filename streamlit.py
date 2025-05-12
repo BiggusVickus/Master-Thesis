@@ -83,6 +83,7 @@ class System(Analysis):
             new_P[p_index] = left_sum - right_sum - P[p_index] * environment['washout']
 
         flattened_y1 = self.flatten_lists_and_matrices(new_N, new_U, new_I, new_P)
+        flattened_y1 = self.prevent_negative_numbers(Y, flattened_y1)
         return flattened_y1
 
 
