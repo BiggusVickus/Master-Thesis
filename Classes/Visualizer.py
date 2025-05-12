@@ -385,7 +385,7 @@ class Visualizer():
                 height=1000
             )
             fig.update_traces(
-                hovertemplate=f"{y_labels}: %{{x}}<br>{x_labels}: %{{y}}<br>End Value: %{{z}}<extra></extra>"
+                hovertemplate=f"{y_labels}: %{{x}}<br>{x_labels}: %{{y}}<br>Value: %{{z}}<extra></extra>"
             )
             fig.update_xaxes(type='category')
             fig.update_yaxes(type='category')
