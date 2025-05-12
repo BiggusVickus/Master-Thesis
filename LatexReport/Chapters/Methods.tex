@@ -310,14 +310,18 @@ This could be either the average value of an agent population, the variance in p
 \end{figure}
 
 \subsubsection{Ultimate Analysis}
-The Ultimate Analysis section does not produce any visualizations or analysis, however it allows for the user to define which initial conditions and parameter values they want to test. 
-The solver will iterate over every single possibility, running the full simulation, and save the results in a $.parquet$ file. 
+The Ultimate Analysis section does not produce any visualizations or analysis, but instead allows for the user to define which initial conditions and parameter values they want to run a simulation on. 
+The solver will iterate over every single parameter input possibility and save the results in a \textit{.parquet} file. 
 Similarly to the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values. 
-There is an option to include the parameter in the simulation
+\newline 
+Using Dask and the saved \textit{.parquet}, the user can query for specific runs, for example runs where a parameter value was greater than 0.05, and use the simulation data to create their own plots. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/ultimate_analysis_settings.png}
     \caption{
+        The section where a user can start an ultimate analysis, where they provide the values they want to test, and run the simulations. 
+        As an output, the user receives a $.parquet$ file containing the parameter values that were changed for that specific and the $t$ and $y$ values for that specific run. 
+        A pickle file of a dictionary containing information on that run such as the parameter names and values chosen, the original graph data, and original parameter values. 
     }
     \label{fig:ss:av:ultimate_analysis_settings}
 \end{figure}

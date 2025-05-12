@@ -1090,7 +1090,7 @@ class Visualizer():
                 "SOBOL_number_samples_tested": 2**SOBOL_number_samples,
                 "data_size": data_size,
                 "graph_data_keys": graph_data_keys,
-                "analysis": self.analysis,
+                # "analysis": self.analysis,
                 "graph_data": self.graph_data,
                 "non_graph_data_vector": self.non_graph_data_vector,
                 "non_graph_data_matrix": self.non_graph_data_matrix,
