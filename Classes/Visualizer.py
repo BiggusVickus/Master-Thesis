@@ -910,23 +910,21 @@ class Visualizer():
                 items_of_name_full += [key] * value["data"].size
                 items_of_name_short.append(key)
             list_of_solved = []
-            for i in range(len(starting_x)):
-                for j in range(len(starting_y)):
-                    index = items_of_name_full.index(param_name_1)
-                    initial_condition[index] = starting_x[i]
-                    index = items_of_name_full.index(param_name_2)
-                    initial_condition[index] = starting_y[j]
-                    solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
-                    overall_y = solved_system.y
-                    overall_t = solved_system.t
-                    if use_serial_transfer:
-                        overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
-                    self.copy_of_simulation_output = solved_system
-                    unflattened_data = self.analysis.unflatten_initial_matrix(overall_y, [length["data"].size for length in self.graph_data.values()])
-                    unflattened_data = self.save_data(unflattened_data, overall_t)
-                    solved_x_values = unflattened_data[items_of_name_short.index(param_name_1)][0]
-                    solved_y_values = unflattened_data[items_of_name_short.index(param_name_2)][0]
-                    list_of_solved.append((solved_x_values, solved_y_values, overall_t, starting_x[i], starting_y[j]))
+            parallel = ParallelComputing()
+            param_samples = itertools.product(starting_x, starting_y)
+            param_samples_list = list(deepcopy(param_samples))
+            names = [param_name_1, param_name_2]
+            results = parallel.run_parallel(param_samples, names, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+            t_values, y_values = results[:2]
+            length_data_size = [length["data"].size for length in self.graph_data.values()]
+            for i, (overall_t, overall_y) in enumerate(zip(t_values, y_values)):
+                if use_serial_transfer:
+                    overall_y, overall_t = self.run_serial_transfer_iterations(overall_y, overall_t, serial_transfer_frequency, initial_condition, serial_transfer_value, serial_transfer_bp_option, non_graphing_data_vectors, non_graphing_data_matrices)
+                unflattened_data = self.analysis.unflatten_initial_matrix(overall_y, length_data_size)
+                unflattened_data = self.save_data(unflattened_data, overall_t)
+                solved_x_values = unflattened_data[items_of_name_short.index(param_name_1)][0]
+                solved_y_values = unflattened_data[items_of_name_short.index(param_name_2)][0]
+                list_of_solved.append((solved_x_values, solved_y_values, overall_t, param_samples_list[i][0], param_samples_list[i][1]))
 
             fig = go.Figure()
             fig.update_layout(
