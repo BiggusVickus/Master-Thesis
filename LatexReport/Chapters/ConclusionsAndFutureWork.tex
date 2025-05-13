@@ -6,12 +6,12 @@
 
 \section{Future Work}
 \label{Future Work}
-Next steps would be to give the model to the lab technicians running lab experiments so that they can verify the results as seen in the output by comapring the lab results with the model output. 
+Next steps would be to give the model to the lab technicians running lab experiments so that they can verify the results as seen in the output by comparing the lab results with the model output. 
 With the lab results, the model can be adapted to better fit the lab results. 
-This can be done by changing parameter values, or by chnaging the model equation. 
-The user can decide to add the Monod microbial growth model to the groth of the bacteria, or adapt the Monod equation to being dependent on multiple sources. 
+This can be done by changing parameter values, or by changing the model equation. 
+The user can decide to add the Monod microbial growth model to the growth of the bacteria, or adapt the Monod equation to being dependent on multiple sources. 
 Using the model, the technicians can improve and validate their methods. 
-If the emperical results significantly deviate from the model results, the technician can review to see if their method is good. 
+If the empirical results significantly deviate from the model results, the technician can review to see if their method is good. 
 They might have accidentally not added enough resources, or accidentally miscalculated the initial concentration of bacteria. 
 
 \subsection{Other Models}
@@ -34,16 +34,16 @@ The model can be adapted to include a carrying capacity (the max population leve
 \end{align}
 where $K$ is the carrying capacity. This adapted model, the logistic growth model better accounts for the eventual restriction of population growth. 
 \newline
-\Cref{fig:created:exponential_vs_logistic_growth} shows how the carrying capacity has a large infleunce on the speed and growth trajectory of a population. 
+\Cref{fig:created:exponential_vs_logistic_growth} shows how the carrying capacity has a large influence on the speed and growth trajectory of a population. 
 The logistic curve initially follows the exponential curve before the maximum growth rate is reached and starts to slow down and taper off as the population asymptotically approaches the carrying capacity $K=200$. 
 
 A further step would be to introduce competition between other bacteria. 
 For example, a $p_{0, 1}\cdot P_0 \cdot P_1$ term can be subtracted from the logistic growth curve. 
-This term accounts for competion between Populace 0 and Populace 1, with $p_{0, 1}$ being the interaction factor between $P_0$ and $P_1$. 
+This term accounts for competition between Populace 0 and Populace 1, with $p_{0, 1}$ being the interaction factor between $P_0$ and $P_1$. 
 Assuming $P_0$ is being looked at and $P_0$ has a high value, if $P_1$ is high, then a lot of $P_0$ is going to die out due to the competition with $P_1$. 
 If $P_1$ has a low population, then not many $P_0$ are going to die out due to less competition with $P_1$. \\ 
 
-The model can be further extended by accounting for temeprature, pH, more interactions between other agents, ther constant addition and removal of other agents, and other considerations. 
+The model can be further extended by accounting for temperature, pH, more interactions between other agents, the constant addition and removal of other agents, and other considerations. 
 
 \subsubsection{Spatial simulations}
 https://www.sciencedirect.com/science/article/abs/pii/S0022519318305368
@@ -55,7 +55,7 @@ Unique and novel analysis and visualization methods have to be created to be abl
 PDE are the next logical step to add space to an ODE model. The general formula, as given by 
 \[
     \frac{\partial u}{\partial t} = D\nabla^2u + f(u, x, y, \dots, t)
-\] where $u(x, y, \dots, t)$ is the population density of interest, $D$ is the diffusion cosntant, $\nabla^2$ is the derivative of each spatial direction, and $f(x, y, \dots, t)$ is the function encapsulating growth, death, and interactions dynamics. 
+\] where $u(x, y, \dots, t)$ is the population density of interest, $D$ is the diffusion constant, $\nabla^2$ is the derivative of each spatial direction, and $f(x, y, \dots, t)$ is the function encapsulating growth, death, and interactions dynamics. 
 \subparagraph{Discretization}
 The dimensions can be discretized into boxes of dimensions $\delta x, \delta y, \dots$. 
 This transforms the PDE into a system of difference equations, which can be solved numerically. 

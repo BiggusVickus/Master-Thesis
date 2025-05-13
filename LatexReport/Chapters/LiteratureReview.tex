@@ -18,8 +18,8 @@ The model can be made more complicated, by modelling each stage of the phage rep
 The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data.
 Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
 
-\subsection{Generalized Lotka-Voltera Model}
-The Lotka-Voltera model, a first-order non-linear differential model, is a model that captures the dynamics between predators and prey, with phages being the predator and bacteria being the prey.
+\subsection{Generalized Lotka-Volterra Model}
+The Lotka-Volterra model, a first-order non-linear differential model, is a model that captures the dynamics between predators and prey, with phages being the predator and bacteria being the prey.
 Any population can be modelled as such:
 \[ 
     \frac{d{B}_i}{dt} = {B}_i \left(\left(r_i + \sum_{j}^{N} \alpha_{ij}{B}_j \right) - m_i\right)
@@ -72,13 +72,13 @@ The system consumes resources and converts them into new sub-resource types with
 \subsection{What Are Phages?}
 
 \subsection{How Does the Phage Cycle Work?}
-There are 3 main parts to the phage-bacteria host cycle, the Infection stage, the Lysogenic cycle, and the Lytic cycle. 
+There are 3 main parts to the phage-bacteria host cycle, the infection stage, the lysogenic cycle, and the lytic cycle. 
 In the infection stage, a phage floating through the environment detects and attaches to the surface of a bacteria cell. 
-Once injected, the phage can control of the cell directly goes into the Lysogenic cycle or into the Lytic cycle. 
+Once injected, the phage can control of the cell directly goes into the lysogenic cycle or into the Lytic cycle. 
 The phage proceeds to inject its DNA into the bacteria. 
 \newline 
 
-In the Lysogenic cycle, the phage DNA injects integrates into the genome of the bacteria. 
+In the lysogenic cycle, the phage DNA injects integrates into the genome of the bacteria. 
 As the bacteria undergoes cellular replication, the DNA of the phage will be copied with the cell. 
 After a set amount of time, the phage DNA can cut itself from the genome and enters the Lytic cycle.
 \newline 
@@ -215,14 +215,14 @@ Some phages can employ defenses against other phages from infecting the bacteria
 This is called superinfection exclusion (SIE), where a phage that has integrated with the bacterial DNA, called a prophage, prevents a secondary infection from a similar or closely related phage \cite{patelAntiphageDefenceInhibition2024}. 
 There are various methods of preventing further infections. 
 The phage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. 
-Other phages like the T4 phage can use proteins like the Spackle protien. 
+Other phages like the T4 phage can use proteins like the Spackle protein. 
 The protein inhibits the lysozome activity used in the process of DNA injection by other phages \cite{bucherPhageMachineSIEence2024, kanamaruStructureFunctionT42020}. 
 Finally, prophages can encode proteins that will interfere with the replication process of other phages. 
-For example, the SieA protien encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. 
+For example, the SieA protein encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. 
 
 \subsection{Implications of Phage Against Phage Defense}
 SIE can affect the speed and development of phage and bacterial populations. A phage restricting other phages from infecting the bacteria creates a competitive environment and can outcompete and dominate the other population. 
-This is commonly seen in wildlife populations, where invading species can outcompete other species by eating more food/other species faster, breeding at a faster rate than other species, and having no natural predators. 
+This is commonly seen in wildlife populations, where invading species can out compete other species by eating more food/other species faster, breeding at a faster rate than other species, and having no natural predators. 
 
 \subsection{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 

@@ -94,7 +94,7 @@ The final section allows for the user to run more advanced analysis on the netwo
 The editing network and parameter value section five sections. 
 \subsubsection{Initial Condition}
 The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
-Each agent type has their own table containing the initial populaiton count. 
+Each agent type has their own table containing the initial population count. 
 Data that can be represented as a vector, for example the data attributed to an agent type have their won section, \Cref{fig:ss:ds:vector}. 
 Data that is stored as a matrix, the data stored on edges between agents, is stored in the matrix tab \Cref{fig:ss:ds:matrix}. 
 The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively. 
@@ -190,7 +190,7 @@ As an example, if at the end of a simulation, there are 120 resources, 5000 bact
 Then, if the initial condition for the resources, bacteria, and phages in \ref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively. 
 If the checkbox is checked, the new population count will be 508, 413.33, and 76.66 respectively. 
 These new values would be used as the new starting initial condition for a new simulation, and the run results will be appended to the previous run. 
-As output, new graphs are created showing the runs appended to one another, with an examplee output shown in \Cref{fig:ss:av:serial_transfer_run}. 
+As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_settings.png}
@@ -214,7 +214,7 @@ As output, new graphs are created showing the runs appended to one another, with
         At $t=20$, a second serial transfer occurs where the bacteria were reintroduced to the system, and more phages were added to the existing population. 
         The stacked line plots show the absolute and relative distribution of different population groups. 
         The stacked bar chart at the bottom shows the final population count of each agent group type at the end of each serial transfer. 
-        It might not always be feasible to experimentally determine the population count at each timestep in a lab, hence this graph can be used as a replacement to show the population count at serial transfer time. 
+        It might not always be feasible to experimentally determine the population count at each time step in a lab, hence this graph can be used as a replacement to show the population count at serial transfer time. 
     }
     \label{fig:ss:av:serial_transfer_run}
 \end{figure}
@@ -284,33 +284,38 @@ For every re-run of the initial value analysis, the slope, intercept and $R^2$ v
     \label{fig:ss:av:initial_value_analysis_run}
 \end{figure}
 
-\subsubsection{Parameter Space Slot}
-The parameter settings panel as to be seen in \Cref{fig:ss:av:parameter_space_settings} allows for the 
+\subsubsection{Phase Portrait}
+The phase portrait plot allows for the user to analyze how an agent population evolves with respect to the other agent population through time. 
+Phase portraits indicate how one population increases while the other decreases, and vice versa. 
+Steady states can be identified and classified as either stable, unstable, or as saddle points. 
+By comparing different starting points, it is possible to see if the system is chaotic or not. 
+The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}
 \begin{figure}
     \centering 
-    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/parameter_space_settings.png}
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_settings.png}
     \caption{
         The user can select two starting values for the initial condition, but they can't choose vector, matrix, or environment settings due to the plot showing the development of agent populations against other agent populations. 
         As typical, the user can select their own values or auto-generate values between two values, as well as use a serial transfer option. 
-        There is also an option to take the logarithm of the x and/or y-axis. 
+        There is also an option to take the logarithm of the x and/or y-axis, 
     }
-    \label{fig:ss:av:parameter_space_settings}
+    \label{fig:ss:av:phase_portrait_settings}
 \end{figure}
 \begin{figure}
     \centering 
-    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/parameter_space_run.png}
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_run.png}
     \caption{
         An example run of a parameter space plot. 
         Resources are plotted against phages, with a high washout rate of $0.05$ explaining why the phage population is decreasing. 
         For initial phage population of 60 and less, the phages “die out” due to the washout rate, while for an initial population count of 70 and higher the phages are able to proliferate. 
         There is an initial population decrease due to the washout, but after the infected bacteria start to die out and release new phages, the population can grow. 
+        In this area of parameter space input, 
     }
-    \label{fig:ss:av:parameter_space_run}
+    \label{fig:ss:av:phase_portrait_run}
 \end{figure}
 
 \subsubsection{SOBOL Analysis}
 SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output by changing the parameter values of the model and measuring the change in model output. 
-SOBOL quantifies how much variance in the output can be attributed to a specific parameter and cna measure the effect of global, first, and second order sensitivity.  
+SOBOL quantifies how much variance in the output can be attributed to a specific parameter and can measure the effect of global, first, and second order sensitivity.  
 When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ is an input vector of $d$ elements, and $Y$ is a univariate model output. 
 $X$ is assumed to be independently and uniformly distributed within a hypercube $X_i \in [0, 1]$ for $i=1, \dots d$. 
 The first order sensitivity measures the output variance of the main affect of parameter $X_i$. 
@@ -343,7 +348,7 @@ The global and first sensitivity are shown next to one another, and each subrow 
     \caption{
 		For each parameter, the user can choose a range of values that SOBOL will use to test and analyze. 
 		If no values for a parameter are inputted, then the parameter is not included in the analysis. 
-        As each run can produce different time data of varying length, the number of timesteps has to be fixed by the user. 
+        As each run can produce different time data of varying length, the number of time steps has to be fixed by the user. 
         Due to the randomness of the sampling method, a seed value can be provided to ensure repeatable results. 
     }
     \label{fig:ss:av:SOBOL_analysis_settings}

@@ -28,3 +28,6 @@
 /temperature-microbial-communities-main
 test.ipynb
 venv/
+package-lock.json
+node_modules/
+package.json

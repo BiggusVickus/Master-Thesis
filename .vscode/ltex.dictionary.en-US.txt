@@ -1,7 +1,7 @@
 lyse
 ODEs
 DDEs
-Lotka-Voltera
+Lotka-Volterra
 Plotly
 NetworkX
 timestep
