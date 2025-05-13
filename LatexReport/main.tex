@@ -35,13 +35,16 @@
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{amsmath}
 \usepackage{booktabs}
-\usepackage{cleveref}
+\usepackage[nameinlink]{cleveref}
 \PassOptionsToPackage{hyphens}{url}
 \usepackage{hyperref}
 \usepackage{array}
 \usepackage{amsmath}
+\usepackage[svgnames]{xcolor}
 \usepackage{textcomp}
 \usepackage[font=small,labelfont=bf]{caption}
+\usepackage{float}
+\usepackage{subcaption}
 \DeclareMathOperator*{\argmin}{arg\,min} 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \hypersetup{urlcolor=black, colorlinks=true} % Colors hyperlinks in blue - change to black if annoying
@@ -334,6 +337,36 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 \addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
 
 \backmatter
+
+
+% \begin{figure}[h!]
+%     \centering
+%     \begin{subfigure}{\linewidth}
+%         \centering
+%         \includegraphics[width=1\linewidth]{figure1.png}
+%         \caption{caption text}
+%      \label{fig:label1}
+%      \end{subfigure}  
+    
+%     \begin{subfigure}{\linewidth}
+%         \centering
+%         \includegraphics[width=1\linewidth]{figure2.png}
+%         \caption{caption text}
+%         \label{fig:label2}
+%     \end{subfigure}%
+%  \end{figure}
+
+% \begin{figure}[ht]
+%     \centering
+%     \subfloat[text here describing fig 1]{\includegraphics[width=0.4\textwidth]{figure1.png}}
+%     \subfloat[text here describing fig 2]{\includegraphics[width=0.4\textwidth]{figure2.png}}
+%     \hfill
+%     \subfloat[text here describing fig 3]{\includegraphics[width=0.4\textwidth]{figure3.png}}
+%     \subfloat[text here describing fig 4]{\includegraphics[width=0.4\textwidth]{figure4.png}}
+%     \caption{Caption text}
+%     \label{fig:streamlines}
+% \end{figure}
+
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY

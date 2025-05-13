@@ -86,7 +86,7 @@ After a set amount of time, the phage DNA can cut itself from the genome and ent
 In the Lytic cycle, the phage hijacks the cellular process of the bacteria. 
 The phage DNA hijacks the replication, transcription, and replication process of the cell, making more and more copies of phage. 
 The phage parts build together to make a full part. 
-Eventually the cellwall bursts releasing the phages into the environment ready to infect more bacteria. 
+Eventually the cell wall bursts releasing the phages into the environment ready to infect more bacteria. 
 
 \subsubsection{Infection Stage}
 The infection stage is characterized as the searching for a bacterium, detection, and subsequent attachment and injection of DNA into the bacteria. 
@@ -112,12 +112,12 @@ Replication of phage DNA.
 \paragraph{Assembly of Phage Parts}
 Assembly into a phage. 
 \paragraph{Lysis of the Bacterial Cell}
-The lysis of the bacterial cellwall. 
+The lysis of the bacterial cell wall. 
 
 
 \section{Bacterial Defense Against Phages} 
 There is a constant battle between phages and bacteria. 
-The bacteria don't want to be killed by the phages, so they adapt defenses such as thickening of the cellwall, or once the viral DNA has integrated with the bacteria's DNA, the bacteria will cut the viral DNA out of their DNA using CRISPR. 
+The bacteria don't want to be killed by the phages, so they adapt defenses such as thickening of the cell wall, or once the viral DNA has integrated with the bacteria's DNA, the bacteria will cut the viral DNA out of their DNA using CRISPR. 
 \cite{iglerPhenotypicFluxRole2022}
 
 \subsection{Mutations in Bacterial DNA (Genetic (Co-)Evolution)}
@@ -204,9 +204,6 @@ If the proteins that build the subparts of each phage have similar chemical prop
 This allows for biological diversity to spread throughout a phage population. 
 Each phage body part can have unique characteristics such as better attachment rate, larger DNA storage capsule, or better probability of injection. 
 
-
-
-
 Coexistence between phages and bacteria via genetic co-evolution seems unlikely due to trade-offs imposed by the new mutations \cite{bullOptimalityModelsPhage2006}. 
 
 
@@ -226,10 +223,56 @@ This is commonly seen in wildlife populations, where invading species can out co
 
 \subsection{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 
-Cocktail \cite{nilssonCocktailComputerProgram2022} and PhageDyn \cite{krysiak-baltynSimulationPhageDynamics2017}, a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of wastewater treatment plants. PhageDyn itself does not model phage dynamics. 
+Cocktail is a simple but yet complex software that models phages in a chemostat system \cite{nilssonCocktailComputerProgram2022}. 
+Simple as it has a defined set of parameters, and only considers one resource, one bacteria, and 2 phages, but complex due to the ability for the bacteria to gain phage resistance. 
+
+PhageDyn \cite{krysiak-baltynSimulationPhageDynamics2017} is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of wastewater treatment plants. 
 
 \subsubsection{Cocktail}
-\cite{nilssonCocktailComputerProgram2022}
+The Cocktail software was developed by Anders S. Nilsson to model phage infection kinetics in a chemostat. 
+The model assumes there is one bacteria strain that can be infected by phage A and phage B, and by both phages at the same time, phage AB. 
+The bacteria can grow resistance to phage A, phage B, and phage AB independent of one another. 
+The model contains inputs controlling bacterial growth rates, decay rate, resistance mutation rate against phage A, phage B, and against phage AB. 
+The software as settings for controlling the resource concentration, available supply, and flow rate of the resource. 
+Finally, the user can control the parameter values for phage A and B, such as the adsorption rate, patent period, and burst size. 
+There is an option to periodically add more phages. 
+Finally there are some settings to control the model settings, such as if the model is deterministic or stochastic, and the step size \cite{nilssonCocktailComputerProgram2022}. 
+After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_software_output}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{Plots/Sourced/cocktail_plot.png}
+    \caption{
+        Example output from Cocktail. \newline
+        Figure A) \textit{E. coli} infected with phage T4 in a chemostat exhibiting an oscillating growth behavior, following the model of \cite{bohannanEffectResourceEnrichment1997}. \newline
+        Figure B) Oscillations of bacteria and phages can exist at higher titers, dependent on low resource concentration, following the model of \cite{lenskiDynamicsInteractionsBacteria1988}. \newline
+        Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. \newline
+        Figure D) A system modelling the interactions with phage A and B. \newline
+        See \cite{nilssonCocktailComputerProgram2022} for more information on parameter values, sources, and supplementary resources. 
+    }
+    \label{fig:cocktail_software_output}
+\end{figure}
 
 \subsubsection{PhageDyn}
+PhageDyn is an add-on for the commercial software GPS-X, an advanced wastewater and industrial wastewater treatment plants modelling simulation software created by Hydromantis Inc. 
+The aim of the software is to model phage dynamics in multi-reactor models. 
+Previous attempts at modelling phage dynamics are not applicable to a complex multi-reactor wastewater treatment plant model. 
+PhageDyn models the behavior of phages in multiple interconnected reactors with the aim of reducing foaming in wastewater treatment plants caused by bacteria \cite{heardEffectFilamentousBacteria2008}. 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{Plots/Sourced/phagedyn_plot.png}
+    \caption{
+        Example output from PhageDyn, showing concentration of heterotrophic biomass in an aerobic plug flow across four situations.
+        \textcolor[HTML]{551A8C}{\textbf{Purple}} is heterotrophic biomass, 
+        \textcolor[HTML]{4580B4}{\textbf{Blue}} is foaming biomass, 
+        \textcolor[HTML]{FF0000}{\textbf{Red}} is phages, 
+        \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. 
+        Figure A) Biomass concentration immediately post phage dosing.
+        Figure B) Biomass concentration with low phage concentration and maintain low concentration post spike in population count. 
+        Figure C) Biomass concentration when phages are extinct. 
+        Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. 
+        A change in phage concentration shows a decrease in heterotrophic and foaming biomass. 
+    }
+    \label{fig:cocktail_software_output}
+\end{figure}
+
 \cite{krysiak-baltynSimulationPhageDynamics2017}
