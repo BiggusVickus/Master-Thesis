@@ -93,7 +93,12 @@ The final section allows for the user to run more advanced analysis on the netwo
 \label{sec:editing_network_and_parameter_values}
 The editing network and parameter value section five sections. 
 \subsubsection{Initial Condition}
-The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. Each agent type has their own table contianing the initial condition. 
+The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
+Each agent type has their own table containing the initial populaiton count. 
+Data that can be represented as a vector, for example the data attributed to an agent type have their won section, \Cref{fig:ss:ds:vector}. 
+Data that is stored as a matrix, the data stored on edges between agents, is stored in the matrix tab \Cref{fig:ss:ds:matrix}. 
+The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively. 
+
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
@@ -159,9 +164,10 @@ In the advanced analysis section, the user can run different analysis methods to
 The visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analyze the visualization. 
 These advanced visualizations were created with the mind of understanding a simple network. 
 There are five different analysis and visualization methods, and one system where the user can run a large simulation on the whole network and receive an output file containing the raw simulation file data. 
-The raw data is stored as a \textit{parquet} file, a tabular-like dataformat, which when combined with Dask (note: not Dash), allows for querying of the data similarly to Pandas. 
+The raw data is stored as a \textit{parquet} file, a tabular-like data format, which when combined with Dask (not Dash), allows for querying of the data similarly to Pandas. 
 Parquet with Dask offers superior performance and data storage solutions that Pandas can't offer. 
 Once queried, the user can create their own graphs and plots as they have access to the parameter values used and the raw simulation data. 
+
 \subsubsection{Serial Transfer}
 Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and  nutrients, possibly with phages, and transfers the old media into a solution containing new media. 
 At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out. 
@@ -170,31 +176,33 @@ An example would be an experiment starts with 50ml of solution.
 The experiment runs for 24 hours before 5ml is removed. 
 Researchers can run various tests, such as using optical density measurements to assess bacterial density in the solution or employing a mass spectrometer to determine the concentration of the resources. 
 The 5ml is then re-added to a new solution of 45ml containing fresh resources. 
-The effect that this has is tit creates a sort of artificial stable point. 
+The effect that this has is it creates a sort of artificial stable point. 
 As the bacteria grow, they consume the resources found in the solution. 
 However eventually the resources run out, and the bacteria die out due to a lack of nutrients. 
 By introducing new nutrients at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior. 
 \newline 
 
 The implementation of serial transfer is slightly different. 
-A user can select a number which will divide the population count of the agents by that number. 
+A user can select a number which will divide the population count of the agents by that number (\Cref{fig:ss:av:serial_transfer_settings}). 
 Then the program takes the initial condition values defined for the nutrients the initial condition in \ref{sec:editing_network_and_parameter_values} and adds those values to the nutrients respectively. 
 By selecting a checkbox, the values as defined in the initial condition box for phages and bacteria in \ref{sec:editing_network_and_parameter_values} can optionally be added as well. 
-As a concrete example, if at the end of a simulation, there are 120 resources remaining, 5000 bacteria, and 1000 phages, and the chosen serial transfer value is 15, then the ending resource, nutrient, and phage value is 8, 333.33, and 66.66 respectively. 
-If the initial condition for the resources, bacteria, and phages are 500, 80, and 10 respectively, then if the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively. 
+As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen serial transfer value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively. 
+Then, if the initial condition for the resources, bacteria, and phages in \ref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively. 
 If the checkbox is checked, the new population count will be 508, 413.33, and 76.66 respectively. 
-
+These new values would be used as the new starting initial condition for a new simulation, and the run results will be appended to the previous run. 
+As output, new graphs are created showing the runs appended to one another, with an examplee output shown in \Cref{fig:ss:av:serial_transfer_run}. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_settings.png}
     \caption{
-        The section where the user can set up the serial transfer. To adjust the values added, the user would need to edit the initial condition values. 
+        The section where the user can set up the serial transfer. 
+        To adjust the values added to the agent populations, the user would need to edit the initial condition values. 
     }
     \label{fig:ss:av:serial_transfer_settings}
 \end{figure}
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_run2_with_p_b.png}
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_run.png}
     \caption{
         Running the serial transfer updates the plot at the top of the page. 
         The simulation initially ran for $t=10$, and completed two serial transfers with a dilution rate of 10. 
@@ -208,15 +216,22 @@ If the checkbox is checked, the new population count will be 508, 413.33, and 76
         The stacked bar chart at the bottom shows the final population count of each agent group type at the end of each serial transfer. 
         It might not always be feasible to experimentally determine the population count at each timestep in a lab, hence this graph can be used as a replacement to show the population count at serial transfer time. 
     }
-    \label{fig:ss:av:serial_transfer_run2_with_p_b}
+    \label{fig:ss:av:serial_transfer_run}
 \end{figure}
 
 \subsubsection{Parameter Analysis}
-The parameter analysis allows the user to choose two parameters and individually run the model with the varying input values. 
+The parameter analysis settings tab as shown in \Cref{fig:ss:av:parameter_analysis_settings} allows the user to choose two parameters and individually run the model with the varying input values. 
 The values that can be tested and changed include all initial condition values, vector and matrix data, and environmental data. 
 As input, the user can select 2 parameters of choice. 
 After the parameter name selection, the user can manually choose which parameter values they want to test or test a range of values equally spaced by selecting the number of values to test. 
-Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. 
+Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. \newline 
+
+\Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each agent type. 
+Each heatmap has cells that unique model input, and contains the value of
+A heatmap matrix is created for each agent type, with dimension of the input values. 
+Each box corresponds to each pair of parameter inputs, and shows the population count of the agent at that time. 
+The value inside the cell can be changed by sliding the slider, 
+Note that the heatmap color range resets for each heatmap, so similar colors across heatmaps will not correspond to the same values. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/parameter_analysis_settings.png}
@@ -230,27 +245,46 @@ Finally, the user can optionally run a serial transfer, where the serial transfe
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/parameter_analysis_run.png}
     \caption{
-        An example run with the output. 
-        A heatmap matrix is created for each agent type, with dimension of the input values. 
-        Each box corresponds to each pair of parameter inputs, and shows the population count of the agent at that time, which can be changed by sliding the slider. 
-        Note that the heatmap color range resets for each heatmap, and the units of the heatmap can reach to small numbers, such as $4\mu$. 
+        An example run of the parameter analysis. 
+        The point in time to be shown in the heatmap can be changed by moving the slider above the heatmaps. 
+        This in turn affects the value shown in the heatmap. 
     }
     \label{fig:ss:av:parameter_analysis_run}
 \end{figure}
 
-
 \subsubsection{Initial Value Analysis}
-The initial value analysis allows for the user to choose a single parameter and vary the value of that parameter. 
+The initial value analysis settings tab as shown in \Cref{fig:ss:av:initial_value_analysis_settings}allows for the user to choose a single parameter and vary the value of that parameter. 
+This allows for the user to quickly iterate over a range of values for a parameter and visualize how the values affect the population count of the agents. 
+
+\Cref{fig:ss:av:initial_value_analysis_run} shows the plots that the user receives. 
+For each agent type, there are three plots made. 
+The left plot shows the population count through time, one line for each parameter value submitted. 
+The middle plot takes each run and calculates the “percentage from the max value“ (default value of $0.95 \rightarrow 95\%$) reached of the peak. 
+This value is considered the time of peak, and is used to fix some issues that can arise where the population plateaus or only keeps on rising. 
+The initial value is plotted on the x-axis, with the time at which the max value is reached on the y-axis. 
+Using the plotted data, a linear or log fit can be created. 
+Using this data can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum. 
+The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name. 
+For every re-run of the initial value analysis, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data. 
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/initial_value_analysis_settings.png}
     \caption{
+        A unique setting featured in the initial value analysis is the "run name" and the "percentage from the max value reached". 
     }
     \label{fig:ss:av:initial_value_analysis_settings}
 \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/initial_value_analysis_run.png}
+    \caption{
+    }
+    \label{fig:ss:av:initial_value_analysis_run}
+\end{figure}
 
 \subsubsection{Parameter Space Slot}
+The parameter settings panel as to be seen in \Cref{fig:ss:av:parameter_space_settings} allows for the 
 \begin{figure}
     \centering 
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/parameter_space_settings.png}
@@ -259,7 +293,7 @@ The initial value analysis allows for the user to choose a single parameter and 
         As typical, the user can select their own values or auto-generate values between two values, as well as use a serial transfer option. 
         There is also an option to take the logarithm of the x and/or y axis. 
     }
-    \label{fig:ss:av:phase_portrait_settings}
+    \label{fig:ss:av:parameter_space_settings}
 \end{figure}
 \begin{figure}
     \centering 
@@ -270,7 +304,7 @@ The initial value analysis allows for the user to choose a single parameter and 
         For initial phage population of 60 and less, the phages “die out” due to the washout rate, while for an initial population count of 70 and higher the phages are able to proliferate. 
         There is an initial population decrease due to the washout, but after the infected bacteria start to die out and release new phages, the population can grow. 
     }
-    \label{fig:ss:av:phase_portrait_run}
+    \label{fig:ss:av:parameter_space_run}
 \end{figure}
 
 \subsubsection{SOBOL Analysis}
@@ -292,21 +326,33 @@ The global sensitivity is used to analyze the global sensitivity without evaluat
     S_{T_i} = \frac{E_{X_{\sim i}}(Var_{X_i}(Y|X_{\sim i}))}{Var(Y)} = 1 - \frac{Var_{X_i}(E_{X_i}(Y|X_{\sim i}))}{Var(Y)}
 \]
 SOBOL can analyze various univariate outputs. 
-This could be either the average value of an agent population, the variance in population count, the time at the peak of an agent count, the final population value, etc. 
+This could be either the average value of an agent population, the variance in population count, the time at the peak of an agent count, the final population value, etc. \newline
+SOBOL accepts a list of parameter names and a list of range of values to sample from, which the user can input in the SOBOL settings tab \Cref{fig:ss:av:SOBOL_analysis_settings}. 
+The user then needs to select the number of samples to run, using the formula $2^x$, where $x$ is the number they input, and $2^x$ is the number of samples that SOBOL will create and run. 
+The larger $x$ is, the more accurate the SOBOL analysis results will be, but the more simulations would need to be run. \newline 
+If the user wants to analyze the second order interactions, then the model will run the system $N(2D+2)$ times with the randomly sampled input values, where $N$ is a multiple of 2, and $D$ is the number of parameters being tested. 
+Otherwise, if 2nd order is not chosen, the model is run $N(D+2)$ times. 
+
+Three SOBOL analyses are included by default in the dashboard, as shown in \Cref{fig:ss:av:SOBOL_analysis_run}. 
+An analysis of the final value of the simulation, the average population count, and the variance in population count. 
+The global and first sensitivity are shown next to one another, and each subrow within a plot row represents each agent type. 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/SOBOL_analysis_settings.png}
     \caption{
 		For each parameter, the user can choose a range of values that SOBOL will use to test and analyze. 
 		If no values for a parameter are inputted, then the parameter is not included in the analysis. 
-		The user then needs to select the number of samples to run. 
-        The larger the number, the more accurate the results, but more simulations would need to be run. 
-        If the user wants to analyze the second order interactions, then the model will run the system $N(2D+2)$ times with the randomly sampled input values, where $N$ is a multiple of 2, and $D$ is the number of parameters being tested. 
-        Otherwise, if 2nd order is not chosen, the model is run $N(D+2)$ times. 
         As each run can produce different time data of varying length, the number of timesteps has to be fixed by the user. 
         Due to the randomness of the sampling method, a seed value can be provided to ensure repeatable results. 
     }
     \label{fig:ss:av:SOBOL_analysis_settings}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/SOBOL_analysis_run.png}
+    \caption{
+    }
+    \label{fig:ss:av:SOBOL_analysis_run}
 \end{figure}
 
 \subsubsection{Ultimate Analysis}
