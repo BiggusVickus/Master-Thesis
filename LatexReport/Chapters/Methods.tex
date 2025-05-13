@@ -266,12 +266,13 @@ Using the plotted data, a linear or log fit can be created.
 Using this data can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum. 
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name. 
 For every re-run of the initial value analysis, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data. 
-
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/initial_value_analysis_settings.png}
     \caption{
-        A unique setting featured in the initial value analysis is the "run name" and the "percentage from the max value reached". 
+        A unique setting featured in the initial value analysis is the “run name” and the “percentage from the max value reached”. 
+        For each run of the initial value analysis, a linear curve fit is created for the parameter value vs time until max value. 
+        The curve fit values are plotted in a barchart with a name given by the user, to compare the fit of the curves for different changes in parameter values. 
     }
     \label{fig:ss:av:initial_value_analysis_settings}
 \end{figure}
@@ -291,7 +292,7 @@ The parameter settings panel as to be seen in \Cref{fig:ss:av:parameter_space_se
     \caption{
         The user can select two starting values for the initial condition, but they can't choose vector, matrix, or environment settings due to the plot showing the development of agent populations against other agent populations. 
         As typical, the user can select their own values or auto-generate values between two values, as well as use a serial transfer option. 
-        There is also an option to take the logarithm of the x and/or y axis. 
+        There is also an option to take the logarithm of the x and/or y-axis. 
     }
     \label{fig:ss:av:parameter_space_settings}
 \end{figure}
@@ -351,6 +352,9 @@ The global and first sensitivity are shown next to one another, and each subrow 
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/SOBOL_analysis_run.png}
     \caption{
+        The proportion of the global and local sensitivity can be seen for each agent type and each parameter. 
+        The results across the final population count, average population count and variance of population count for each agent type is very similar. 
+        However, this might change with different ODE models, for example if cyclic behavior is exhibited, where the average and variance of population count will vary more with different parameter inputs. 
     }
     \label{fig:ss:av:SOBOL_analysis_run}
 \end{figure}

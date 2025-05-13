@@ -5,3 +5,7 @@
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QSOBOL Analysis.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QParquet with Dask offers superior performance and data The user can proceed to create their own plots for any given condition.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QAs each run can produce different time data of varying length, the number of timesteps has to be fixed by the user.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThank you to Dr. Matti Gralka for the weekly meetings and teaching me everything about phages and bacteria.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThank you to Sofia Blaszczyk for finding this opening and suggesting that I email Dr. Gralka for an introductory meeting, and for acting as my \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, and watching my cringe screen recordings that I sent her at 2am showcasing various demos of my code.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThank you to Dr. Rik Kaasschieter and Dr. Martijn Anthonissen for introducing me to Computational Sciences in my Bachelors program, as for without following their courses “Introduction Computational Sciences“ and “Numerical Linear Algebra“, I would not have been interested in Computational Sciences and would not have found the MSc Computational Sciences program.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThank you to Sarah Flickinger for showing me the research that she has been doing in the lab.\\E$"}
