@@ -82,14 +82,14 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                 id='main_figure_log_axis'
             ),
             html.Button('Rerun model', id='run_basic_model'),
-
+            html.Br(),
             # tabs for the data tables, the initial conditions, parameter values for the simulation, environment parameters, and the settings tab
             dcc.Tabs([
                 # initial conditions: loop through the graph data and create a DataTable for each one to show initial conditions
-                dcc.Tab(label='Graphing Data (Initial Conditions)', children=[
+                dcc.Tab(label='Initial Condition', children=[
                     *[
                         html.Div([
-                            html.H2(f"DataTable for {name}"),
+                            html.H2(f"{name}"),
                             html.H3(f"Row names {dic['row_names']}") if dic["row_names"] is not None else None, # in case the row names are not None
                             dash_table.DataTable(
                                 # first turn into dataframe. there is the [dic["data"]], which is a list of lists, and the column names, which is a list of strings. If the row names are None, then we just use the data as is. This isfor vector or matrix representation respectively. 
@@ -103,10 +103,10 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                 ]),
                 
                 # non graphing data: loop through the non graphing data and create a DataTable for each one to show parameter values
-                dcc.Tab(label='Non Graphing Data (Parameter Values): Vectors', children=[
+                dcc.Tab(label='Vector Data', children=[
                     *[
                         html.Div([
-                            html.H2(f"DataTable for {name}"),
+                            html.H2(f"{name}"),
                             dash_table.DataTable(
                                 # no need for dic["row_names"] here, since it is a vector
                                 pd.DataFrame([dic["data"]], columns=dic["column_names"]).to_dict('records'),
@@ -119,10 +119,10 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                 ]),
                 
                 # non graphing data: loop through the non graphing data and create a DataTable for each one to show parameter values
-                dcc.Tab(label='Non Graphing Data (Parameter Values): Matrices', children=[
+                dcc.Tab(label='Matrix Data', children=[
                     *[
                         html.Div([
-                            html.H2(f"DataTable for {name}"),
+                            html.H2(f"{name}"),
                             html.H3(f"Row Names: {dic['row_names']}"),
                             dash_table.DataTable(
                                 # no need for [dic["row_names"]] here, since it is a matrix
@@ -138,8 +138,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                 # tab for the environment parameters, like pH and Temperature. 
                 dcc.Tab(label='Environment Parameters', children=[
                     html.Div([
-                        html.H2(f"DataTable for Environment Parameters"),
-                        html.H4(f"Note: Some prameters wont influence the simulation. For example, changing M wont affect the number of steps in the lysis process, but overall should ahve an immediate effect on the simulation."),
+                        html.H2(f"Environment Parameters"),
                         dash_table.DataTable(
                             pd.DataFrame([analysis.environment_data]).to_dict('records'),
                             id="environment_data",
@@ -151,7 +150,6 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
 
                 # tab for the settings, like the solver type and the min/max step size.
                 dcc.Tab(label='Settings', children=[
-                    html.H4(["These settings affect various parts of the simulation. For example the solver type (RK23 or RK45 or DOP853), or to use the defualt selected options by the solver or a linspace of selected options."]),
                     html.Div([
                         html.H4(["Solver Type"]), # dropdown of the solver types
                         dcc.Dropdown(
