@@ -1,2 +1,3 @@
 have option to save the new weights to grpah object
 have option to also include the original weights in the ultimate analysis. 
+randomize network button, and fully complete network button in GUI
