@@ -1048,7 +1048,7 @@ class Visualizer():
             Y_final = np.zeros((len(param_samples), len(data_size)+1))
             Y_avg = np.zeros((len(param_samples), len(data_size)+1))
             Y_var = np.zeros((len(param_samples), len(data_size)+1))
-            Y_time = np.zeros((len(param_samples), len(data_size)+1, t_eval_steps))
+            # Y_time = np.zeros((len(param_samples), len(data_size)+1, t_eval_steps))
             # Set numpy print options to display the whole array
             new_list_y_values = []
             for i, (t_value, y_value) in enumerate(zip(t_values, y_values)): 
@@ -1060,7 +1060,7 @@ class Visualizer():
                     Y_final[i, j] = data[0][-1]
                     Y_avg[i, j] = np.mean(data[0])
                     Y_var[i, j] = np.var(data[0])
-                    Y_time[i, j] = data[0]
+                    # Y_time[i, j] = data[0]
             final_analyzed = []
             avg_analyzed = []
             var_analyzed = []
@@ -1081,7 +1081,7 @@ class Visualizer():
                 "y_final": Y_final,
                 "y_avg": Y_avg,
                 "y_var": Y_var,
-                "y_time": Y_time,
+                # "y_time": Y_time,
                 "final_analyzed": final_analyzed,
                 "avg_analyzed": avg_analyzed,
                 "var_analyzed": var_analyzed,
