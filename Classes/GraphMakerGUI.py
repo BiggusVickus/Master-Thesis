@@ -1,7 +1,6 @@
 from tkinter import * 
 import tkinter as tk
 from tkinter import simpledialog, messagebox
-import networkx as nx
 import numpy as np
 from Classes.GraphMaker import GraphMaker 
 np.random.seed(69)

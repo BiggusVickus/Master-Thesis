@@ -2,10 +2,9 @@ from tkinter import *
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import tkinter as tk
-from tkinter import simpledialog, messagebox
+from tkinter import messagebox
 import networkx as nx
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
 import numpy as np
 np.random.seed(69)
 

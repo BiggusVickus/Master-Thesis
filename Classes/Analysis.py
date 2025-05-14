@@ -216,7 +216,7 @@ class Analysis():
         Returns:
             np.array: The solution/derivative to the ODE system at time t. The solution is returned as a vector. 
         """
-        # check if parametersare in the settings, if not, set it to the time step
+        # check if parameters are in the settings, if not, set it to the time step
         max_step = float(self.max_step) if 'max_step' not in self.settings else float(self.settings['max_step'])
         min_step = float(self.min_step) if 'min_step' not in self.settings else float(self.settings['min_step'])
         simulation_length = float(self.simulation_length) if 'simulation_length' not in self.settings else float(self.settings['simulation_length'])

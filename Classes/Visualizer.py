@@ -1,6 +1,6 @@
 from Classes.Analysis import Analysis
 from Classes.VisualizerHTML import html_code, parse_contents
-from Classes.Math import optical_density, log_func, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, unifrom_color_gradient_maker, determine_max_value_offset
+from Classes.Math import optical_density, lin_func, serial_transfer_calculation, sum_up_columns, split_comma_minus, uniform_color_gradient_maker, determine_max_value_offset
 from Classes.ParallelComputing import ParallelComputing
 from SALib import ProblemSpec
 from SALib.sample.sobol import sample
@@ -22,7 +22,6 @@ import datetime
 import json
 import gc
 import time
-
 import pickle
 warnings.filterwarnings("ignore", message="The following arguments have no effect for a chosen solver: `min_step`.")
 warnings.filterwarnings("ignore", message="invalid value encountered in divide")
@@ -271,7 +270,7 @@ class Visualizer():
             list_max_x = []
             list_max_y = []
             for j in range(len(simulation_output)):
-                color = unifrom_color_gradient_maker(j, len(simulation_output))
+                color = uniform_color_gradient_maker(j, len(simulation_output))
                 fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color), hoverlabel = dict(namelength = -1)), row=1, col=1)
                 max_x, max_y = determine_max_value_offset(time_output[j], simulation_output[j][i][0], offset)
                 list_max_x.append(max_x)

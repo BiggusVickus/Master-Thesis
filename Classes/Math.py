@@ -50,7 +50,7 @@ def split_comma_minus(input, range, steps, use_opt_1_or_opt_2):
         start_1, end_1 = [float(value.strip()) for value in range.split("-")]
         return np.linspace(start_1, end_1, int(steps)).tolist()
     
-def unifrom_color_gradient_maker(i, n):
+def uniform_color_gradient_maker(i, n):
     ratio = i / (n - 1) if n > 1 else 0  # avoid division by zero
     r = int(255 * (1 - ratio))  # interpolate from red
     g = int(255 * ratio)        # interpolate to green
