@@ -452,10 +452,10 @@ There are other changes that can be made, to the model, for example by adding a 
 
 \subsection{The Golden Model Adapted}
 \begin{align}
-    \frac{dN_n}{dt} &= -e_{[n, b]} \cdot g(N_n)\cdot (U + \sum_{i=1}^{M} I_M)\\
-    \frac{dU_b}{dt} &= g(N_n)\cdot U_b - U_b \cdot (\sum_{p \in P} r_{[p, b]} \cdot P_p)\\
-    \frac{dI_{1_b}}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \\
-    \frac{dI_{k_b}}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
-    \frac{dP_p}{dt} &= B\cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
-    g(N_n) &= \frac{v_\cdot N}{N + K}
+    \frac{dN_n}{dt} &= \sum_{b \in B} -e_{b, n} \cdot g(N_n, b)\cdot (U_b + \sum_{i=1}^{M} I_{i_b})\\
+    \frac{dU_b}{dt} &= U_b \cdot \sum_{b \in B} g(N_n, b)\cdot - U_b \cdot (\sum_{p \in P} r_{p, b} \cdot P_p)\\
+    \frac{dI_{1_b}}{dt} &= U_b \cdot (\sum_{p \in P}r_{p, b} \cdot P_p) - \frac{M}{\tau_b}\cdot I_{1_b} \\
+    \frac{dI_{k_b}}{dt} &= \frac{M}{\tau}(I_{k-1_b}-I_{k_b}) \text{ for } k=2, \dots, M \\
+    \frac{dP_p}{dt} &= B_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{M_b} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{M_b})\cdot P_p \\
+    g(N_n, b) &= \frac{v_{b, n} \cdot N_n}{N_n + K_{b, n}}
 \end{align},
