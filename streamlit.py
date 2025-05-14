@@ -8,7 +8,7 @@ class System(Analysis):
         super().__init__(graph_location)
 
     def odesystem(self, t, Y, *params):
-        # start simple, bacteria-resource, see how the bacteria and reosurces grow/shrink, bacteria should hit carrying capacity, nutrient should reach 0, not negative, etc
+        # start simple, bacteria-resource, see how the bacteria and resources grow/shrink, bacteria should hit carrying capacity, nutrient should reach 0, not negative, etc
         graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, M, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
         graph = graph_object.graph
         def g(N, v, K):
@@ -92,9 +92,9 @@ class System(Analysis):
 # system = System('simple_test.gexf')
 
 # system = System('example.gexf')
-system = System('simple_test_2.gexf')
+# system = System('simple_test_2.gexf')
 # system = System('example_3.gexf')
-# system = System('final_graph.gexf')
+system = System('final_graph.gexf')
 # system.add_item_to_class_attribute('M', 4) # add the M value to the system
 
 phage_nodes = system.get_nodes_of_type('P')

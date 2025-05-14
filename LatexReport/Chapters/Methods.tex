@@ -6,13 +6,18 @@ The project is divided into three logical parts, with an optional fourth part.
 
 
 \subsection{Part 1: Network Creation Tool (GUI)}
+\label{sec:part1}
 The first part involves the development of a GUI tool to create and edit the network topography of interactions.
 This tool allows users to quickly and intuitively define agents, interaction parameters, environmental parameters, and setting parameters.
-It provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure.
-The tool created a network graph, which is used for part 2 and part 3.
+The tool provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure. \newline 
+Once the user is happy with the graph shape, they can export the graph for use in part 2 (\Cref{sec:part2}), part 3 (\Cref{sec:part3}), and part 4 (\Cref{sec:part4}). 
+The most important part is that the user defines the network edges and the attributes that each node and edge has, as that can't be edited in part 2 onwards. 
+It's not a big issue however because the user can upload the graph to the tool again to edit the edge connections and add or remove nodes and attributes. 
+In part 3, the user can edit the values of the attributes, so the parameter values do not have to be dialed in, and the user does not need to use the GUI tool to edit parameter values. 
 
 
 \subsection{Part 2: Simulation Framework}
+\label{sec:part2}
 The second part focuses on the simulation framework.
 The user provides an ODE model and the network topography as input to the framework.
 The simulation framework deals with handling the input and output of the data, collecting and storing the data needed for the simulation.
@@ -23,6 +28,7 @@ The second output is an array containing the population count at each time step 
 
 
 \subsection{Part 3: Analysis and Visualization}
+\label{sec:part3}
 The third part involves analyzing and visualizing the simulation results.
 The user can use a dashboard built using Plotly Dash to interact with the solver and network.
 The user can change parameter, environment values, and setting values on the fly.
@@ -30,7 +36,8 @@ This allows the user to quickly change parameter values and test different situa
 The dashboard includes various starter plots that allow the user to test the model.
 
 
-\section{Network Topography of Interactions Creation Tool}
+\section{Part 4: Network Topography of Interactions Creation Tool}
+\label{sec:part4}
 In a microbial environment, numerous interactions are occurring between agents.
 However, not every agent can and will interact with one another.
 Based on which agents interact with one another, a network topography can be created, capturing the dynamics of the interactions.
@@ -44,17 +51,16 @@ For example, this would include the starting population or concentration, reprod
 Each edge likewise also contains attributes to capture the unique dynamic interactions between the agents.
 This could be the probability for a successful interaction, the burst size of a specific phage-bacteria pair, or the bacteria's consumption rate of resources.
 Adding the attributes to the nodes and edges allow for the capture of various interaction dynamics within the context of the community.
-The interactions between the agents can be visualized and edited using a GUI tool. \newline
+The interactions between the agents can be visualized and edited using a GUI tool.
 
 
 A GUI tool has been developed using Python and NetworkX to help aid in the development of this network topography.
 With this tool, a network topography can be created by adding any number of agents of varying types, such as bacteria, phages, or resources.
 There is an environment node that is used to store global environmental data, for example, the temperature of the system, the pH of the system, the wash-in/out rate, etc.
 There is a settings node that holds information such as simulation length, max time step, and the type of ODE solver to use.
-The attributes of the agents, interactions, and environment can easily be edited using the GUI tool. \newline
+The attributes of the agents, interactions, and environment can easily be edited using the GUI tool.
 
-
-\Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the GUI tool built using tkinter and NetworkX. \Cref{fig:example_network} shows an example network that can be created. %TODO: Citation needed.
+\Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the GUI tool built using Tkinter and NetworkX. \Cref{fig:ss:example_network} shows an example network that can be created. %TODO: Citation needed.
 There are numerous buttons that can be used to edit the graph, for example adding or removing nodes and edges. 
 By default, an environment node holding parameters such as pH and temperature is added.
 A settings node is added as well, holding settings data to be used for the solver, like the type of solver or simulation length.
@@ -64,7 +70,7 @@ For each node and edge, default attribute names and values are added which can l
 The user can alter the default attribute name and value by importing the GUI tool class and overriding the method implementation implementing the default names and values. 
 The nature of the interaction needs to be defined and captured in the parameter names, values, and ODE equations.
 
-\begin{figure}[h!]
+\begin{figure}
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -113,7 +119,7 @@ The environment data and settings data also have their own tab, \Cref{fig:ss:ds:
         \vspace*{\fill}
         \includegraphics[width=\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
         \caption{
-            The tab where a user can edit the initial conditions of the agents.
+            The tab where the user can edit the initial conditions of the agents.
         }
         \label{fig:ss:ds:initial_condition}
         \vspace*{\fill}
@@ -157,14 +163,13 @@ The environment data and settings data also have their own tab, \Cref{fig:ss:ds:
         \vspace*{\fill}
         \includegraphics[width=\linewidth]{Screenshots/DashboardSettings/initial_settings_settings.png}
         \caption{
-            The panel where a user can edit the settings of the solver and simulation. 
+            The tab where a user can edit the settings of the solver and simulation. 
         }
         \label{fig:ss:ds:settings}
         \vspace*{\fill}
     \end{subfigure}
-    \caption{The tabs where the user can edit the various parameter values}
+    \caption{The tabs where the user can edit the various parameter values and control the simulation parameters}
  \end{figure}
-
 
 \subsection{Advanced Visualization and Analysis}
 In the advanced analysis section, the user can run different analysis methods to gain a greater understanding of the model.
@@ -175,9 +180,8 @@ The raw data is stored as a \textit{parquet} file, a tabular-like data format, w
 Parquet with Dask offers superior performance and data storage solutions that Pandas can't offer.
 Once queried, the user can create their own graphs and plots as they have access to the parameter values used and the raw simulation data.
 
-
 \subsubsection{Serial Transfer}
-Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and  nutrients, possibly with phages, and transfers the old media into a solution containing new media.
+Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and nutrients, possibly with phages, and transfers the old media into a solution containing new media.
 At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out.
 However, usually only resources are added during the transfer process.
 An example would be an experiment starts with 50ml of solution.
@@ -190,17 +194,15 @@ However eventually the resources run out, and the bacteria die out due to a lack
 By introducing new nutrients at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
 \newline
 
-
 The implementation of serial transfer is slightly different.
 A user can select a number which will divide the population count of the agents by that number (\Cref{fig:ss:av:serial_transfer_settings}).
-Then the program takes the initial condition values defined for the nutrients the initial condition in \ref{sec:editing_network_and_parameter_values} and adds those values to the nutrients respectively.
-By selecting a checkbox, the values as defined in the initial condition box for phages and bacteria in \ref{sec:editing_network_and_parameter_values} can optionally be added as well.
+Then the program takes the initial condition values defined for the nutrients the initial condition in \Cref{sec:editing_network_and_parameter_values} and adds those values to the nutrients respectively.
+By selecting a checkbox, the values as defined in the initial condition box for phages and bacteria in \Cref{sec:editing_network_and_parameter_values} can optionally be added as well.
 As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen serial transfer value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively.
-Then, if the initial condition for the resources, bacteria, and phages in \ref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively.
+Then, if the initial condition for the resources, bacteria, and phages in \Cref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively.
 If the checkbox is checked, the new population count will be 508, 413.33, and 76.66 respectively.
 These new values would be used as the new starting initial condition for a new simulation, and the run results will be appended to the previous run.
 As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}.
-
 
 \begin{figure}[h!]
     \centering
@@ -234,7 +236,6 @@ The values that can be tested and changed include all initial condition values, 
 As input, the user can select 2 parameters of choice.
 After the parameter name selection, the user can manually choose which parameter values they want to test or test a range of values equally spaced by selecting the number of values to test.
 Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. \newline
-
 
 \Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each agent type.
 Each heatmap has cells that unique model input, and contains the value of
@@ -366,7 +367,7 @@ The global sensitivity is used to analyze the global sensitivity without evaluat
 \]
 SOBOL can analyze various univariate outputs.
 This could be either the average value of an agent population, the variance in population count, the time at the peak of an agent count, the final population value, etc. \newline
-SOBOL accepts a list of parameter names and a list of range of values to sample from, which the user can input in the SOBOL settings tab \Cref{fig:ss:av:SOBOL_analysis_settings}. 
+SOBOL accepts a list of parameter names and a list of range of values to sample from, which the user can input in the SOBOL settings tab, \Cref{fig:ss:av:SOBOL_analysis_settings}. 
 If no values are added, the parameter is not included in the simulation and the default value is instead used. 
 The user then needs to select the number of samples to run, using the formula $2^x$, where $x$ is the number they input, and $2^x$ is the number of samples that SOBOL will create and run.
 The larger $x$ is, the more accurate the SOBOL analysis results will be, but the more simulations would need to be run. \newline
@@ -377,7 +378,7 @@ Due to the randomness of the sampling method, the user can, but does not need to
 
 Three SOBOL analyses are included by default in the dashboard, as shown in \Cref{fig:ss:av:SOBOL_analysis_run}.
 An analysis of the final value of the simulation, the average population count, and the variance in population count.
-The global and first sensitivity are shown next to one another, and each subrow within a plot represents each agent type. 
+The global and first sensitivity are shown next to one another, and each sub-row within a plot represents each agent type. 
 The proportion of the global and local sensitivity can be seen for each agent type and each parameter.
 
 \begin{figure}[h!]
@@ -412,7 +413,7 @@ The Ultimate Analysis section does not produce any visualizations or analysis, b
 The solver will iterate over every single parameter input possibility and save the results in a \textit{.parquet} file.
 Similarly to the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values.
 \newline
-Using Dask and the saved \textit{.parquet}, the user can query for specific runs, for example runs where a parameter value was greater than 0.05, and use the simulation data to create their own plots.
+Using Dask and the saved \textit{.parquet} file, the user can query for specific runs, for example runs where a parameter value was greater than 0.05, and use the simulation data to create their own plots.
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{Screenshots/AdvancedVisualization/ultimate_analysis_settings.png}
@@ -427,3 +428,34 @@ Using Dask and the saved \textit{.parquet}, the user can query for specific runs
 As the dashboard can not create a graph for every situation, or analyze every situation, Ultimate Analysis (\Cref{sec:ultimate_analysis}) can be used to run and download the simulation data to the disk to create later create your own custom visualizations. 
 Depending on the used model, different behavior might appear, for example the population count can exhibit cyclic behavior. 
 A custom visualization would then perform a Fourier transformation to obtain the predominant frequencies. 
+
+\section{The Golden Model}
+In this report, the default model, called the “Golden model“ \cite{gengUsingBacterialPopulation2024} that will be used for all simulations is as follows:
+
+\begin{align}
+    \frac{dN}{dt} &= -e \cdot g(N)\cdot (U + \sum_{i=1}^{M} I_M)\\
+    \frac{dU}{dt} &= g(N)\cdot U - r\cdot U \cdot P\\
+    \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \\
+    \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
+    \frac{dP}{dt} &= B\cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
+    g(N) &= \frac{v\cdot N}{N + K}
+\end{align}where $N$ is nutrients, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
+The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
+The cell growth process is described by $g(N)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
+The consumption rate of a resource by a bacteria is $e$. \newline
+Once infected by a phage, cells go through $M$ stages of infection $I_1, \dots, I_M$ before lysing, with equal transition probability $\frac{M}{\tau}$ from state $I_k$ to state $I_{k+1}$. The probability of a successful infection of a cell is $r$. \newline
+After a bacteria lyses after stage $I_M$, $B$ phages are releases, the burst size of the phage. \newline 
+
+However this model is specifically designed for a $1\times 1 \times 1$ model. 
+In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be adapted. 
+There are other changes that can be made, to the model, for example by adding a washin rate $w^{i}$, where resources are constantly being introduced,such as in a chemostat, and a washout rate $w^{o}$ where phages, bacteria, and resources are being washed out. 
+
+\subsection{The Golden Model Adapted}
+\begin{align}
+    \frac{dN_n}{dt} &= -e_{[n, b]} \cdot g(N_n)\cdot (U + \sum_{i=1}^{M} I_M)\\
+    \frac{dU_b}{dt} &= g(N_n)\cdot U_b - U_b \cdot (\sum_{p \in P} r_{[p, b]} \cdot P_p)\\
+    \frac{dI_{1_b}}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \\
+    \frac{dI_{k_b}}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
+    \frac{dP_p}{dt} &= B\cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
+    g(N_n) &= \frac{v_\cdot N}{N + K}
+\end{align},

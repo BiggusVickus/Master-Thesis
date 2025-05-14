@@ -35,7 +35,7 @@ The generalized Consumer-Resource Model models the growth of a population and re
 \end{align}
 
 \subsection{Trait-Based Model}
-The Trait-Based Model is a model that takes into account external factors such as the temperature or pH of the system and can be modeled as follows:  
+The Trait-Based Model is a model that takes into account external factors such as the temperature or pH of the system and can be modeled as follows: 
 \begin{align}
     \frac{dB_i}{dt} &= \left(r_i - m_i\right) B_i \\
     r_i &= \frac{r_{i\alpha}^{max}R_\alpha}{R_\alpha + K_{i\alpha}}e^{S_i\left(T-T_{ref}\right)}
@@ -63,7 +63,7 @@ The cellular agents rules are as follows:
     \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
 \end{align}, where if $i> \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
 The system consumes resources and converts them into new sub-resource types with the following equation:
-\begin{align}    
+\begin{align} 
     \frac{dR_\alpha}{dt} &= -\sum_i C_{i\alpha}R_\alpha I \\
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
 \end{align}. 
@@ -154,7 +154,7 @@ Freshly lysed bacteria can still contain biomarkers that phages use to detect th
 Bacteria can also produce proteolytic enzymes that will damage the proteins found in a phage \cite{tanQuorumSensingDetermines2015}. 
 Some bacteria can produce outer membrane vesicles that phages can absorb to, and later detach the vesicle with the phage \cite{rabinovitchBacterialDebrisEcological2003}. 
 The vesicle will proceed to float away with the phage attached/injected inside, posing no risk to the source bacteria or to other bacteria. 
-It is suspected that the impact of these vesicles acting as a sink is  minor \cite{bullPhageBacterialDynamicsSpatial2018}, but helpful nonetheless. 
+It is suspected that the impact of these vesicles acting as a sink is minor \cite{bullPhageBacterialDynamicsSpatial2018}, but helpful nonetheless. 
 
 \subsection{CRISPR-Cas Methods}
 CRISPR is a gene editing tool that cells can use to cut out specified/unwanted parts of a DNA strand. 
