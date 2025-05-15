@@ -15,7 +15,7 @@ The ODE method is simpler and easier to set up, however it can only capture larg
 Certain assumptions about the community interactions have to be made.
 For example, $\omega$ percent of the bacteria population is washed out.
 The model can be made more complicated, by modelling each stage of the phage replication and lysis process, or instead of assuming exponential growth, there is a maximum carrying capacity of the population.
-The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data.
+The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data. 
 Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
 
 \subsection{Generalized Lotka-Volterra Model}
@@ -47,7 +47,7 @@ Agent-based Models (ABM) model the system through space and time.
 An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes.
 Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
 Resources diffuse through the system using a PDE solver for a Boundary Value Problem (BVP).
-Agents can move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as nutrient density, microbe density, or stochastic chance. \newline 
+Agents can move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as resource density, microbe density, or stochastic chance. \newline 
 ABMs are useful when simulating many individual elements interacting in a system.
 Chaotic or emergent behavior can arise from these interactions.
 Chaotic behavior refers to the irregular and unpredictable evolution of a system's behavior due to nonlinear equations, exhibiting sensitive dependence on initial conditions \cite{encyclopedia_of_physical_science_and_technology}. \newline 
@@ -181,7 +181,7 @@ If phages don't adapt to the ever-changing bacterial defenses, the phages will e
 It essentially becomes a race to the bottom, seeing who can out-adapt the other. 
 However, if the phages out-adapt the bacteria too much, the bacteria die out, then eventually the phages die out due to not having any bacteria left to infect. 
 This can be avoided if the phages can adapt to target a second strain of bacteria, but this is unlikely. 
-On the other hand, if bacteria out-adapt the phages, that is no problem for the bacteria because they don't need the phages to survive, and can keep on growing, limited only by the available space and nutrients. 
+On the other hand, if bacteria out-adapt the phages, that is no problem for the bacteria because they don't need the phages to survive, and can keep on growing, limited only by the available space and resources. 
 
 This is a problem intrinsic to predator-prey systems, namely that the predators are dependent on the prey. 
 Once the prey disappear, the predators also disappear. 

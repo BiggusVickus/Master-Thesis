@@ -8,29 +8,29 @@ class System(Analysis):
         super().__init__(graph_location)
 
     def odesystem(self, t, Y, *params):
-        # start simple, bacteria-resource, see how the bacteria and resources grow/shrink, bacteria should hit carrying capacity, nutrient should reach 0, not negative, etc
-        graph_object, phage_nodes, bacteria_nodes, nutrient_nodes, M, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
+        # start simple, bacteria-resource, see how the bacteria and resources grow/shrink, bacteria should hit carrying capacity, resource should reach 0, not negative, etc
+        graph_object, phage_nodes, bacteria_nodes, resource_nodes, M, e_vector, tau_vector, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
         graph = graph_object.graph
         def g(N, v, K):
             return (N * v) / (N + K)
 
         Y = self.check_cutoff(Y)
         
-        N, U, I, P = self.unflatten_initial_matrix(Y, [len(nutrient_nodes), len(bacteria_nodes), (len(bacteria_nodes), M), len(phage_nodes)])
+        N, U, I, P = self.unflatten_initial_matrix(Y, [len(resource_nodes), len(bacteria_nodes), (len(bacteria_nodes), M), len(phage_nodes)])
         new_N = np.zeros_like(N)
         new_U = np.zeros_like(U)
         new_I = np.zeros_like(I)
         new_P = np.zeros_like(P)
         #update N vector
-        for nutrient in nutrient_nodes:
-            n_index = nutrient_nodes.index(nutrient)
+        for resource in resource_nodes:
+            n_index = resource_nodes.index(resource)
             e_value = e_vector[n_index] 
             sum_g = 0
             sum_u = 0
             sum_i = 0
             for bacteria in bacteria_nodes:
                 b_index = bacteria_nodes.index(bacteria)
-                if graph.has_edge(bacteria, nutrient):
+                if graph.has_edge(bacteria, resource):
                     v = v_matrix[b_index, n_index]
                     K = K_matrix[b_index, n_index]
                     sum_g += g(N[n_index], v, K)
@@ -44,9 +44,9 @@ class System(Analysis):
             u_index = bacteria_nodes.index(uninfected)
             g_sum = 0
             right = 0
-            for nutrient in nutrient_nodes:
-                n_index = nutrient_nodes.index(nutrient)
-                if graph.has_edge(uninfected, nutrient):
+            for resource in resource_nodes:
+                n_index = resource_nodes.index(resource)
+                if graph.has_edge(uninfected, resource):
                     g_sum += g(N[n_index], v_matrix[u_index, n_index], K_matrix[u_index, n_index])
             for phage in phage_nodes:
                 p_index = phage_nodes.index(phage)

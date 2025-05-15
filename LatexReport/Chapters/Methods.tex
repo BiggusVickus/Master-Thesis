@@ -107,13 +107,16 @@ The final section allows for the user to run more advanced analyses on the netwo
 \subsection{Editing Network and Parameter Values}
 \label{sec:editing_network_and_parameter_values}
 The editing network and parameter value contain five separate sections.
-\subsubsection{Initial Condition}
+\paragraph{Initial Condition}
 The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
 Each agent type has a table containing the initial population count. 
-An extra hidden agent can be included. 
+Extra hidden agents can be included. 
 When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria agent starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}. \newline 
+\paragraph{Vector Data} 
 Data that can be represented as a vector, for example the data attributed to an agent type have their own section, \Cref{fig:ss:ds:vector}.
+\paragraph{Matrix Data}
 Data that is stored as a matrix, the data stored on edges between agents, is stored in the matrix tab (\Cref{fig:ss:ds:matrix}).
+\paragraph{Environment and settings}
 The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively.
 
 \begin{figure}[h!]
@@ -186,7 +189,7 @@ Once queried, the user can create their own graphs and plots as they have access
 
 \subsubsection{Serial Transfer}
 \label{sec:serial_transfer}
-Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and nutrients, possibly with phages, and transfers the old media into a solution containing new media.
+Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and resources, possibly with phages, and transfers the old media into a solution containing new media.
 At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out.
 However, usually only resources are added during the transfer process.
 An example would be an experiment starts with 50ml of solution.
@@ -195,13 +198,13 @@ Researchers can run various tests, such as using optical density measurements to
 The 5ml is then re-added to a new solution of 45ml containing fresh resources.
 The effect that this has is it creates a sort of artificial stable point.
 As the bacteria grow, they consume the resources found in the solution.
-However eventually the resources run out, and the bacteria die out due to a lack of nutrients.
-By introducing new nutrients at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
+However eventually the resources run out, and the bacteria die out due to a lack of resources.
+By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
 \newline
 
 The implementation of serial transfer is slightly different.
 A user can select a number which will divide the population count of the agents by that number (\Cref{fig:ss:av:serial_transfer_settings}).
-Then the program takes the initial condition values defined for the nutrients the initial condition in \Cref{sec:editing_network_and_parameter_values} and adds those values to the nutrients respectively.
+Then the program takes the initial condition values defined for the resources the initial condition in \Cref{sec:editing_network_and_parameter_values} and adds those values to the resources respectively.
 By selecting a checkbox, the values as defined in the initial condition box for phages and bacteria in \Cref{sec:editing_network_and_parameter_values} can optionally be added as well.
 As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen serial transfer value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively.
 Then, if the initial condition for the resources, bacteria, and phages in \Cref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively.
@@ -433,11 +436,14 @@ Using Dask and the saved \textit{.parquet} file, the user can query for specific
 \end{figure}
 
 
-\section{Custom Advanced Analyses and Visualizations}
+\subsubsection{Custom Advanced Analyses and Visualizations}
 \label{sec:custom_analysis}
 As the dashboard can not create a graph for every situation, or analyze every situation, Ultimate Analysis (\Cref{sec:ultimate_analysis}) can be used to run and download the simulation data to the disk to create later create your own custom visualizations. 
 Depending on the used model, different behavior might appear, for example the population count can exhibit cyclic behavior. 
 A custom visualization would then perform a Fourier transformation to obtain the predominant frequencies. 
+
+\subsection{Interaction Network}
+A flowchart of the interactions between the user and systems can be seen in \Cref{AppendixC}. 
 
 \section{The Golden Model}
 \label{sec:golden_model}
@@ -450,7 +456,7 @@ In this report, the default model, called the “Golden model“ \cite{gengUsing
     \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
     \frac{dP}{dt} &= B\cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
     g(N) &= \frac{v\cdot N}{N + K}
-\end{align}where $N$ is nutrients, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
+\end{align}where $N$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
 The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
 The cell growth process is described by $g(N)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
 The consumption rate of a resource by a bacteria is $e$. \newline
@@ -459,7 +465,7 @@ After a bacteria lyses after stage $I_M$, $B$ phages are releases, the burst siz
 
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be adapted. 
-There are other changes that can be made, to the model, for example by adding a washin rate $w^{i}$, where resources are constantly being introduced,such as in a chemostat, and a washout rate $w^{o}$ where phages, bacteria, and resources are being washed out. 
+There are other changes that can be made, to the model, for example by adding a washin rate $w^{i}$, where resources are constantly being introduced, such as in a chemostat, and a washout rate $w^{o}$ where phages, bacteria, and resources are being washed out. 
 
 \subsection{The Adapted Golden Model}
 \label{sec:adapted_golden_model}
