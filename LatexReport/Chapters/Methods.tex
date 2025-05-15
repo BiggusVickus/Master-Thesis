@@ -368,14 +368,14 @@ Measuring the effect of varying $X_i$ averaged over other input parameters, and 
 The first order sensitivity is described as
 \[
     S_i = \frac{V_i}{\textit{Var}(Y)}
-\] where $V_i = \textit{Var}_{X_i}(E{X_{\sim i}}(Y|X_i))$ and where $X_{\sim i}$ represents all the parameters that are not $X_i$.
+\] where $V_i = \textit{Var}_{X_i}(\mathbb{E}_{X_{\sim i}}[Y|X_i])$ and where $X_{\sim i}$ represents all the parameters that are not $X_i$.
 \newline
 
 
 The second order index measures the impact of input $X_i$ interacting with $X_j$. For many inputs, this becomes unwieldy to analyze.
 The global sensitivity is used to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$s interaction with other variables.
 \[
-    S_{T_i} = \frac{E_{X_{\sim i}}(\textit{Var}_{X_i}(Y|X_{\sim i}))}{\textit{Var}(Y)} = 1 - \frac{\textit{Var}_{X_i}(E_{X_i}(Y|X_{\sim i}))}{\textit{Var}(Y)}
+    S_{T_i} = \frac{\mathbb{E}_{X_{\sim i}}[\textit{Var}_{X_i}(Y|X_{\sim i}))}{\textit{Var}(Y)} = 1 - \frac{\textit{Var}_{X_i}(\mathbb{E}_{X_i}[Y|X_{\sim i}])}{\textit{Var}(Y)}
 \]
 SOBOL can analyze various univariate outputs.
 This could be either the average value of an agent population, the variance in population count, the time at the peak of an agent count, the final population value, etc. \newline
@@ -450,11 +450,11 @@ A flowchart of the interactions between the user and systems can be seen in \Cre
 In this report, the default model, called the “Golden model“ \cite{gengUsingBacterialPopulation2024} that will be used for all simulations is as follows:
 
 \begin{align}
-    \frac{dN}{dt} &= -e \cdot g(N)\cdot (U + \sum_{i=1}^{M} I_M)\\
+    \frac{dR}{dt} &= -e \cdot g(R)\cdot (U + \sum_{i=1}^{M} I_M)\\
     \frac{dU}{dt} &= g(N)\cdot U - r\cdot U \cdot P\\
     \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \\
     \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
-    \frac{dP}{dt} &= B\cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
+    \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
     g(N) &= \frac{v\cdot N}{N + K}
 \end{align}where $N$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
 The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
@@ -465,7 +465,7 @@ After a bacteria lyses after stage $I_M$, $B$ phages are releases, the burst siz
 
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be adapted. 
-There are other changes that can be made, to the model, for example by adding a washin rate $w^{i}$, where resources are constantly being introduced, such as in a chemostat, and a washout rate $w^{o}$ where phages, bacteria, and resources are being washed out. 
+There are other changes that can be made, to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, such as in a chemostat, and a washout rate $\omega^{o}$ where phages, bacteria, and resources are being washed out. 
 
 \subsection{The Adapted Golden Model}
 \label{sec:adapted_golden_model}
@@ -474,7 +474,7 @@ There are other changes that can be made, to the model, for example by adding a 
     \frac{dU_b}{dt} &= U_b \cdot \sum_{b \in B} g(N_n, b)\cdot - U_b \cdot (\sum_{p \in P} r_{p, b} \cdot P_p) - w^o \cdot U_b\\
     \frac{dI_{1_b}}{dt} &= U_b \cdot (\sum_{p \in P}r_{p, b} \cdot P_p) - \frac{M}{\tau_b}\cdot I_{1_b} - w^o \cdot I_{1_b}\\
     \frac{dI_{k_b}}{dt} &= \frac{M}{\tau}(I_{k-1_b}-I_{k_b}) - w^o \cdot I_{k_b}\text{ for } k=2, \dots, M \\
-    \frac{dP_p}{dt} &= B_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{M_b} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{M_b})\cdot P_p - w^o \cdot P_p\\
+    \frac{dP_p}{dt} &= \beta_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{M_b} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{M_b})\cdot P_p - w^o \cdot P_p\\
     g(N_n, b) &= \frac{v_{b, n} \cdot N_n}{N_n + K_{b, n}}
 \end{align}. 
 
