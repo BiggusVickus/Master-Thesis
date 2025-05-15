@@ -4,32 +4,60 @@
 
 Parameters used in equations. 
 
-\begin{table}[ht!]
-    \begin{tabular}{|l|p{3.5cm}|p{4cm}|l|l|l|}
-        \hline
-        Parameter & Parameter Full Name & Description & Default Value & Alternatives & Notes \\ \hline
-        ${P}$ & Phage Population & Phage population count & & & \\ \hline
-        ${U}$ & Uninfected Bacteria Population & Uninfected bacteria population count & & & \\ \hline
-        ${I}$ & Infected Bacteria Population & Infected bacteria population count & & & \\ \hline
-        ${B}$ & Bacteria Parameter & Bacteria population & & & Some models explicitly model uninfected and infected bacteria, ${B} = {U} + {I}$ \\ \hline
-        ${R}$ & Resource Concentration & Resource concentration & & & \\ \hline
-        $e$ & Washin Rate & Rate of resources being added & & & \\ \hline
-        $v$ & Maximal Growth Rate & & & & \\ \hline
-        $K$ & Monod Constant & & & & \\ \hline
-        $M$ & Number of infection stages & & & & \\ \hline
-        $e$ & Resource consumption rate & & & & \\ \hline
-        $\tau$ & transition probability & & & & \\ \hline
-        $\omega^i$ & Washin Rate & Rate of resources being added & & & \\ \hline
-        $\omega^o$ & Washout Rate & Rate of parameter being removed & & & \\ \hline
-        $\beta$ & Burst Size & Number of phages created when bacteria cell bursts & & & \\ \hline
-        $t$ & Time & Time step during simulation &  &  & \\ \hline
-        $\mu$ & Mean & Mean &  &  & \\ \hline
-        $\sigma$ & Standard Deviation & Standard deviation &  &  & \\ \hline
-        $T_{min}$ & Minimum Temperature & Minimum operating temperature for a microbe &  &  & \\ \hline
-        $T_{opt}$& Optimal Temperature & Optimal operating temperature for a microbe &  &  & \\ \hline
-        $T_{max}$& Maximum Temperature & Maximum operating temperature for a microbe &  &  & \\ \hline
-        $pH_{min}$& Minimum pH & Minimum operating pH for a microbe &  &  & \\ \hline
-        $pH_{opt}$& Optimal pH & Optimal operating pH for a microbe &  &  & \\ \hline
-        $pH_{max}$& Maximum pH & Maximum operating pH for a microbe &  &  & \\ \hline
-    \end{tabular}
+\begin{table}[htbp]
+    \small % or \footnotesize to make it more compact
+    \centering
+    Golden Model
+    \begin{tabularx}{\textwidth}{l l X}
+        \toprule
+        \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
+        \midrule
+        $P_p$ & Phages agent & Phage population for phage $p$ \\
+        $U_b$ & Uninfected Bacteria agent & Uninfected population for bacteria $b$ \\
+        $I_{b_i}$ & Infected Bacteria agent & Infected population for bacteria $b$ at stage $1, \dots, i, \dots, M$  \\
+        $B_b$ & Bacteria agent & Total bacteria population for bacteria $b$, assuming $B_b = U_b + \sum_{i=1}^M I_{b_i}$ \\
+        $R_r$ & Resource agent & Resource $r$ concentration\\
+        $e_{b, r}$ & Consumption rate& \\
+        $\beta_{p, b}$ & Burst size & Lytic burst size for phage $p$ and bacteria $b$\\
+        $r_{p, b}$ & Successful phage/cell encounter & Probability of a successful bacteria $b$ infection from phage $p$\\
+        $\tau_{b}$ & Latent period & Time it takes bacteria $b$ to go through one infection stage\\
+        $v_{b, n}$ & Maximal growth rate & Growth rate of bacteria $b$ from resource $r$ \\
+        $K_{b, n}$ & Monod Constant & Monod constant for resource consumption rate dependent on resource $r$ concentration\\
+        $\omega^i_r$ & wash-in rate & Rate of resources $r$ being added\\
+        $\omega^o$ & wash-out rate & Rate of agents being removed, acts on all agents equally\\
+        $M$ & Number of infection stages & Number of infection stages that a bacteria goes through, constant for all bacteria agents\\
+        $t$ & time & time value \\
+        \bottomrule
+    \end{tabularx}\newline
+
+    SOBOL
+    \begin{tabularx}{\textwidth}{l l X}
+        \toprule
+        \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
+        \midrule
+        $Y$ & Univariate parameter output & univariate model output, such as mean $\mu$ or variance $\sigma$ \\
+        $X$ & Input vector & Vector of size $d$, input vector to $f$\\
+        $X_i$ & Parameter input & Value of vector $X$ at position $i=1, \dots, d$ \\
+        $d$ & Input size & Size of input vector $X$\\
+        $X_{\sim i}$ & Parameter input & All values of $X$ that are not $X_i$ \\
+        $f$ & Function $f$& Arbitrary black-box function describing model \\
+        $N$ & Samples & Number of samples, power of 2, $2^x$ \\
+        $D$ & Parameter input size & Number of parameters inputted into SOBOL, $d$ \\
+        $S_{T_i}$ & Global sensitivity & Contribution of $X_i$ to output variance of $Y$ due to interactions with other variables  \\
+        $S_i$ & First order sensitivity & Contribution of $X_i$ to output variance of $Y$ \\
+        \bottomrule
+    \end{tabularx} \newline
+
+    Linear Regression
+    \begin{tabularx}{\textwidth}{l l X}
+        \toprule
+        \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
+        \midrule
+        $a$ & slope of linear regression line \\
+        $c$ & Intercept of linear regression line\\
+        $R^2$ & Coefficient of determination of linear regression fit, quality of regression \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Model parameters with variables, names, and descriptions. Subscripts on parameters indicate relationships; for example, $e_{b, r}$ is nonzero if there is an edge connecting bacteria $b$ to resource $r$ in the network, zero otherwise.}
+    \label{tab:parameters}
 \end{table}

@@ -373,7 +373,7 @@ The first order sensitivity is described as
 
 
 The second order index measures the impact of input $X_i$ interacting with $X_j$. For many inputs, this becomes unwieldy to analyze.
-The global sensitivity is used to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$s interaction with other variables.
+The global sensitivity is used to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$'s interaction with other variables.
 \[
     S_{T_i} = \frac{\mathbb{E}_{X_{\sim i}}[\textit{Var}_{X_i}(Y|X_{\sim i}))}{\textit{Var}(Y)} = 1 - \frac{\textit{Var}_{X_i}(\mathbb{E}_{X_i}[Y|X_{\sim i}])}{\textit{Var}(Y)}
 \]
@@ -460,21 +460,24 @@ In this report, the default model, called the “Golden model“ \cite{gengUsing
 The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
 The cell growth process is described by $g(N)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
 The consumption rate of a resource by a bacteria is $e$. \newline
-Once infected by a phage, cells go through $M$ stages of infection $I_1, \dots, I_M$ before lysing, with equal transition probability $\frac{M}{\tau}$ from state $I_k$ to state $I_{k+1}$. The probability of a successful infection of a cell is $r$. \newline
-After a bacteria lyses after stage $I_M$, $B$ phages are releases, the burst size of the phage. \newline 
+Once infected by a phage, the bacteria goes from $U$ to $I_1$. 
+The bacteria goes through $M$ stages of infection $I_1, \dots, I_M$ before lysing, where the bacteria goes from state $I_k$ to state $I_{k+1}$ with equal transition rate $\frac{M}{\tau}$. The probability of a successful infection of a cell is $r$. \newline
+After a bacteria lyses after stage $I_M$, $\beta$ phages are releases, the burst size of the phage. \newline 
 
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be adapted. 
-There are other changes that can be made, to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, such as in a chemostat, and a washout rate $\omega^{o}$ where phages, bacteria, and resources are being washed out. 
+There are other changes that can be made, to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where phages, bacteria, and resources are being washed out. 
 
 \subsection{The Adapted Golden Model}
 \label{sec:adapted_golden_model}
+The adapted model accounts for the interactions of multiple agents. 
+
 \begin{align}
-    \frac{dN_n}{dt} &= \sum_{b \in B} -e_{b, n} \cdot g(N_n, b)\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_n - w^o \cdot N_n\\
+    \frac{dN_n}{dt} &= -\sum_{b \in B} e_{b, n} \cdot g(N_n, b)\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_n - w^o \cdot N_n\\
     \frac{dU_b}{dt} &= U_b \cdot \sum_{b \in B} g(N_n, b)\cdot - U_b \cdot (\sum_{p \in P} r_{p, b} \cdot P_p) - w^o \cdot U_b\\
-    \frac{dI_{1_b}}{dt} &= U_b \cdot (\sum_{p \in P}r_{p, b} \cdot P_p) - \frac{M}{\tau_b}\cdot I_{1_b} - w^o \cdot I_{1_b}\\
-    \frac{dI_{k_b}}{dt} &= \frac{M}{\tau}(I_{k-1_b}-I_{k_b}) - w^o \cdot I_{k_b}\text{ for } k=2, \dots, M \\
-    \frac{dP_p}{dt} &= \beta_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{M_b} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{M_b})\cdot P_p - w^o \cdot P_p\\
+    \frac{dI_{b_1}}{dt} &= U_b \cdot (\sum_{p \in P}r_{p, b} \cdot P_p) - \frac{M}{\tau_b}\cdot I_{b_1} - w^o \cdot I_{b_1}\\
+    \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) - w^o \cdot I_{b_k}\text{ for } k=2, \dots, M \\
+    \frac{dP_p}{dt} &= \beta_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{b_i})\cdot P_p - w^o \cdot P_p\\
     g(N_n, b) &= \frac{v_{b, n} \cdot N_n}{N_n + K_{b, n}}
 \end{align}. 
 

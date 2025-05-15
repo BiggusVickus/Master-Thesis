@@ -243,11 +243,12 @@ After choosing the parameter values, an output is created, with four sample plot
     \includegraphics[width=0.7\linewidth]{Plots/Sourced/cocktail_plot.png}
     \caption{
         Example output from Cocktail. \newline
-        Figure A) \textit{E. coli} infected with phage T4 in a chemostat exhibiting an oscillating growth behavior, following the model of \cite{bohannanEffectResourceEnrichment1997}. \newline
-        Figure B) Oscillations of bacteria and phages can exist at higher titers, dependent on low resource concentration, following the model of \cite{lenskiDynamicsInteractionsBacteria1988}. \newline
-        Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. \newline
-        Figure D) A system modelling the interactions with phage A and B. \newline
-        See \cite{nilssonCocktailComputerProgram2022} for more information on parameter values, sources, and supplementary resources. 
+        \raggedright
+        Figure A) \textit{E. coli} infected with phage T4 in a chemostat exhibiting an oscillating growth behavior, following the model of \citet{bohannanEffectResourceEnrichment1997}. \\
+        Figure B) Oscillations of bacteria and phages can exist at higher titers, dependent on low resource concentration, following the model of \citet{lenskiDynamicsInteractionsBacteria1988}. \\
+        Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. \\
+        Figure D) A system modelling the interactions with phage A and B. \\
+        See \citet{nilssonCocktailComputerProgram2022} for more information on parameter values, sources, and supplementary resources. 
     }
     \label{fig:cocktail_software_output}
 \end{figure}
@@ -256,7 +257,7 @@ After choosing the parameter values, an output is created, with four sample plot
 PhageDyn is an add-on for the commercial software GPS-X, an advanced wastewater and industrial wastewater treatment plants modelling simulation software created by Hydromantis Inc. 
 The aim of the software is to model phage dynamics in multi-reactor models. 
 Previous attempts at modelling phage dynamics are not applicable to a complex multi-reactor wastewater treatment plant model. 
-PhageDyn models the behavior of phages in multiple interconnected reactors with the aim of reducing foaming in wastewater treatment plants caused by bacteria \cite{heardEffectFilamentousBacteria2008}. 
+PhageDyn models the behavior of phages in multiple interconnected reactors with the aim of reducing foaming in wastewater treatment plants caused by bacteria \cite{heardEffectFilamentousBacteria2008}. \Cref{fig:PhageDyn_software_output} shows the output 
 \begin{figure}
     \centering
     \includegraphics[width=0.7\linewidth]{Plots/Sourced/phagedyn_plot.png}
@@ -265,14 +266,13 @@ PhageDyn models the behavior of phages in multiple interconnected reactors with 
         \textcolor[HTML]{551A8C}{\textbf{Purple}} is heterotrophic biomass, 
         \textcolor[HTML]{4580B4}{\textbf{Blue}} is foaming biomass, 
         \textcolor[HTML]{FF0000}{\textbf{Red}} is phages, 
-        \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. 
-        Figure A) Biomass concentration immediately post phage dosing.
-        Figure B) Biomass concentration with low phage concentration and maintain low concentration post spike in population count. 
-        Figure C) Biomass concentration when phages are extinct. 
-        Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. 
-        A change in phage concentration shows a decrease in heterotrophic and foaming biomass. 
+        \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. \\
+        \raggedright
+        Figure A) Biomass concentration immediately post phage dosing. \\
+        Figure B) Biomass concentration with low phage concentration and maintain low concentration post spike in population count. \\
+        Figure C) Biomass concentration when phages are extinct. \\
+        Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. \\
+        A change in phage concentration shows a decrease in heterotrophic and foaming biomass. \cite{krysiak-baltynSimulationPhageDynamics2017}
     }
-    \label{fig:cocktail_software_output}
+    \label{fig:PhageDyn_software_output}
 \end{figure}
-
-\cite{krysiak-baltynSimulationPhageDynamics2017}
