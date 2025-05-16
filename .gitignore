@@ -31,5 +31,3 @@ venv/
 package-lock.json
 node_modules/
 package.json
-[zotero "betterbibtex"]
-push = false
