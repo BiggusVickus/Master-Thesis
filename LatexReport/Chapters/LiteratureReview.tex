@@ -6,9 +6,14 @@ There are numerous ways to model the interactions between phages and bacteria.
 Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods.
 On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs).
 DDEs are similar to ODEs, except where when ODEs are calculating the values of the equations at time $t$ using time $t-1$, DDEs can, but don't have to, use the value of the equation at time $t-\tau$, where $1 \leq \tau \leq t$. 
-DDEs are a generalized version of ODEs. \newline 
+DDEs are a generalized version of ODEs and are significantly harder to analyze and find stability conditions than ODEs due to the dependence on the past \cite{liExploringComplicatedBehaviors2023}. \newline
+One way to introduce DDE like behavior is to force agents to go through stages, causing a delay in other events. 
+For example, in the paper \citet{gengUsingBacterialPopulation2024}, infected bacteria go through $M$ stages of infection, before lysing. 
+The more stages there are, the longer the delay in seeing a rise in phage population. By changing the value of $\tau$ in the model proposed by \citet{gengUsingBacterialPopulation2024}, the throughput of bacteria going from stage $i$ to stage $i+1$ of infection increases, thus seeing a larger rise in phage population. 
+\newline
 
-Each type of system has its pros and cons.
+
+Each type of model has its pros and cons.
 With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is in general much more complex.
 However, more information can be gained from the simulations and can guide research in creating phages for a certain type of bacteria.
 The ODE method is simpler and easier to set up, however it can only capture large population dynamics.
@@ -74,8 +79,8 @@ The system consumes resources and converts them into new sub-resource types with
 \subsection{How Does the Phage Cycle Work?}
 There are 3 main parts to the phage-bacteria host cycle, the infection stage, the lysogenic cycle, and the lytic cycle. 
 In the infection stage, a phage floating through the environment detects and attaches to the surface of a bacteria cell. 
-Once injected, the phage can control of the cell directly goes into the lysogenic cycle or into the Lytic cycle. 
-The phage proceeds to inject its DNA into the bacteria. 
+Once injected, the phage-cell pair can directly go into the lysogenic cycle or into the lytic cycle. 
+\Cref{fig:phage_life_cycle} shows a detailed overview of the phage cycle. 
 \newline 
 
 In the lysogenic cycle, the phage DNA injects integrates into the genome of the bacteria. 
@@ -83,7 +88,7 @@ As the bacteria undergoes cellular replication, the DNA of the phage will be cop
 After a set amount of time, the phage DNA can cut itself from the genome and enters the Lytic cycle.
 \newline 
 
-In the Lytic cycle, the phage hijacks the cellular process of the bacteria. 
+In the lytic cycle, the phage hijacks the cellular process of the bacteria. 
 The phage DNA hijacks the replication, transcription, and replication process of the cell, making more and more copies of phage. 
 The phage parts build together to make a full part. 
 Eventually the cell wall bursts releasing the phages into the environment ready to infect more bacteria. 
@@ -91,28 +96,48 @@ Eventually the cell wall bursts releasing the phages into the environment ready 
 \subsubsection{Infection Stage}
 The infection stage is characterized as the searching for a bacterium, detection, and subsequent attachment and injection of DNA into the bacteria. 
 \paragraph{Attachment}
+Phages float through the medium and by chance land on a bacteria. The phage detects the cell via host cell surface receptors tuned to a specific bacteria cell wall \cite{stoneUnderstandingExploitingPhage2019}. 
 
-
-\paragraph{Entry of Phage Into Bacteria}
-Injection of DNA into bacteria. 
+\paragraph{Phage Entry}
+The phage injects the DNA into the cytoplasm of the cell. 
+The initiation is triggered by the specific recognition between the phage's RBPs located at the tip of the tail and a receptor located on the surface of the host cell. 
+This specificity is directly related to the specificity of adsorption, which correlates to the structure of receptors located on the host's cell surface \cite{stoneUnderstandingExploitingPhage2019}. 
+The injected DNA is often called a plasmid, genetic structure usually in the shape of a circle that can replicate independently of chromosomes. 
 
 \subsubsection{Lysogenic Cycle}
 \paragraph{Repression of DNA}
-Represses DNA. 
-\paragraph{Integration of Phage DNA Into Bacteria DNA}
-Integrate DNA. 
+As phages are viruses, they need to evade viral detection methods such as Cyclic oligonucleotide-based antiphage signalling systems (CBASS). 
+CBASS triggers effector proteins that cause cell death, preventing phage replication and lysis \cite{banhBacterialCGASSenses2023}. \newline
+CRISPR-Cas is another method that bacteria can use to detect the presence of phage DNA. 
+CRISPR-Cas is an adaptive immune system in bacteria that defends against phages by acquiring foreign DNA sequences (spacers) into its CRISPR array, transcribing them into CRISPR RNAs (crRNAs), and using these crRNAs with Cas proteins to identify and degrade foreign nucleic acids \cite{levyCRISPRAdaptationBiases2015}. 
+
+\paragraph{Phage DNA Integration Into Bacteria DNA}
+The DNA of the phage is able to integrate into the bacteria's DNA. 
+The phage can also alter the fitness of the cell, by changing metabolic routes to better survive under nutrient limitations or by increasing resistance against other phages \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
+
+
 \paragraph{Cellular Replication}
-Cellular replication of the bacteria
-\subparagraph{Induction of Phage}
-Phage DNA leaved bacteria DNA. 
+The cell undergoes division multiple times, copying the phage DNA along with the cell DNA. The new copy of the bacteria also has a copy of the phage DNA already integrated into the DNA. 
+\subparagraph{Phage Induction}
+Phage DNA leaves (inducts from) the bacteria DNA under specific conditions. 
+Induction can occur depending on the phage and host. 
+The induction process starts with proteolytic cleavage and displacement of the phage repressor, which most of the time occurs upon activation of the SOS response following DNA damage \cite{waldorPhageRegulatoryCircuits2005}
+DNA-damaging agents like UV light and antibiotics can jump-start the process to switch to the lytic cycle \cite{stoneUnderstandingExploitingPhage2019, fortierImportanceProphagesEvolution2013}. 
+
 
 \subsubsection{Lytic Cycle}
 \paragraph{Replication, Transcription, and Translation of the Phage DNA}
-Replication of phage DNA. 
+The phage hijacks the cellular replication process and creates the different proteins that make up the phage, like the legs, body, and head. 
+The replicaiotn process 
 \paragraph{Assembly of Phage Parts}
-Assembly into a phage. 
+Phage parts self-assemble by using various protein-protein and protein-nucleic interactions, along with other forms of interactions such as hydrogen bonding and hydrophobic/philic interactions. \cite{aksyukBacteriophageAssembly2011}
+Phage induction can also lead to transduction, where genetic material is transferred between bacterial cells via phages, driving bacterial evolution \cite{fortierImportanceProphagesEvolution2013}. 
+This can also have the unintended side effect where one bacteria will directly infect another bacteria by transferring phage DNA. 
+Using the 
 \paragraph{Lysis of the Bacterial Cell}
-The lysis of the bacterial cell wall. 
+Internal pressure buildup causes the cell wall to explode, releasing phages, resources, and other organic matter into the environment. 
+Genetic material from one bacteria can be transferred to other bacterial cells via phages, driving bacterial evolution % \cite
+% Phage induction can also lead to transduction, where genetic material is transferred between bacterial cells via phages, driving bacterial evolution \cite
 
 
 \section{Bacterial Defense Against Phages} 
