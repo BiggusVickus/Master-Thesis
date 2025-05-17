@@ -171,14 +171,9 @@ The phage hijacks the cellular replication process to create the different prote
 Phenotypic reconfiguration of the host is frequently facilitated by auxiliary metabolic genes, which are genes initially sourced from host genomes but preserved and modified within viral genomes to channel energy and resources toward viral replication \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
 \paragraph{Assembly of Phage Parts}
 Phage parts self-assemble by using various protein-protein and protein-nucleic interactions, along with other forms of interactions such as hydrogen bonding and hydrophobic/philic interactions \cite{aksyukBacteriophageAssembly2011}. 
-Phage induction can also lead to transduction, where genetic material is transferred between bacterial cells via phages, driving bacterial evolution \cite{fortierImportanceProphagesEvolution2013}. 
-This can also have the unintended side effect where one bacteria will directly infect another bacteria by transferring phage DNA. 
 \paragraph{Lysis of the Bacterial Cell}
 Internal pressure buildup causes the cell wall to explode, releasing phages, resources, and other organic matter into the environment. 
-Genetic material from one bacteria can be transferred to other bacterial cells via phages, driving bacterial evolution.  e
-% Phage induction can also lead to transduction, where genetic material is transferred between bacterial cells via phages, driving bacterial evolution \cite
-
-Numerous interactions are occurring between agents in a microbial environmen
+Genetic material from one bacteria can be transferred to other bacterial cells via phages, driving bacterial evolution. 
 
 
 \section{Bacterial Defense Against Phages} 
@@ -195,20 +190,22 @@ Bacteria can horizontally transfer DNA to other bacteria on contact.
 There are three primary ways of this happening, which is visualized in \Cref{fig:horizontal_gene_transfer}. 
 
 The first method is via conjugation, where a donor cell donates DNA fragments using a mechanism called the F-factor or plasmid with a pilus. 
-The pilus acts a tunnel connecting the donor cell to the recipient cell and the DNA can be transferred to the receiver cell. 
+The pilus acts as a tunnel between the donor cell and the recipient cell so that DNA can be transferred from the donor cell to the receiver cell. 
+This method of sharing DNA can also have the unintended side effect where one bacteria will directly infect another bacteria by transferring phage DNA. 
 
 The second method, called transformation, occurs when a cell takes up released DNA fragments from the environment. 
-Once inside the receiver cell, the donor DNA can integrate itself with the receiver DNA \cite{chenInsOutsDNA2005}. 
+Once inside the receiver cell, the donor DNA can integrate itself with the receiver DNA. 
+There is also the chance that the bacteria picks up viral DNA \cite{chenInsOutsDNA2005}. 
 
 The third method is via transduction. 
-When a phage is assembling in the cell just before lysis, the phage can collect a piece of the hosts DNA instead of its own DNA. 
+When a phage is assembling in the cell just before lysis, the phage can accidentally collect a piece of the host's DNA instead of its own DNA. 
 The dying bacterium proceeds to lyse, releasing the phages. 
 The phage with the now dead hosts DNA can infect the next bacteria, injecting the DNA strand of the now dead cell into the new host cell. 
 The old bacterial DNA will proceed to integrate with the new host cells DNA \cite{tamangHorizontalGeneTransfer2023, kasmanBacteriophages2025}. 
 
 All methods provide a way for the cell to mutate and change the fitness value of the cell.
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\linewidth]{Figures/horizontal_gene_transfer.png}
     \caption{The three main ways that a (dead) bacterium can transfer DNA over to another bacterium \cite{tamangHorizontalGeneTransfer2023}.}
@@ -301,62 +298,71 @@ Simple as it has a defined set of parameters, and only considers one resource, o
 
 PhageDyn \cite{krysiak-baltynSimulationPhageDynamics2017} is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of wastewater treatment plants. 
 
-Cocktail and PhageDyn however have limitations. 
+There are limitations to Cocktail and PhageDyn. 
 Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model two phages, one bacteria and one resource in a chemostat. 
 Constant resources are being added into a chemostat, with the constant removal of medium from the chemostat. 
 Phages A and B can infect the bacteria, and the bacteria can gain resistance to phage A, B, and AB. 
 The limitation of Cocktail is that the model can not easily be adapted. 
 The ODE model accepts inputs from a hardcoded GUI frontend. 
 So any changes to the frontend or to the ODE model will require changes to the ODE model and the frontend to accept the new inputs and outputs. 
-The code for Cocktail is open source, so adding new buttons and input fields should not pose a significant challenge, but a time commitment will be required. 
-
+The code for Cocktail is open source, so adding new buttons and changing the model should not pose a significant challenge, but still an undertaking. \newline
+PhageDyn works with GPS-X, a very niche wastewater treatment modelling software. 
+PhageDyn is programmed for a very specific task with no flexibility in changing the model or inputs. 
+To the best of my ability, I could not find a copy of PhageDyn or an acknowledgement that the code is open or closed source. 
+When clicking on the link in the supplementary material of \citet{krysiak-baltynSimulationPhageDynamics2017} to download a copy of the Java applet, the link returned a "URL Not Found" error. 
 
 
 \subsection{Cocktail}
-The Cocktail software was developed by Anders S. Nilsson to model phage infection kinetics in a chemostat. 
+Cocktail was developed by \citet{nilssonCocktailComputerProgram2022} to model phage infection kinetics in a chemostat. 
 The model assumes there is one bacteria strain that can be infected by phage A and phage B, and by both phages at the same time, phage AB. 
-The bacteria can grow resistance to phage A, phage B, and phage AB independent of one another. 
-The model contains inputs controlling bacterial growth rates, decay rate, resistance mutation rate against phage A, phage B, and against phage AB. 
-The software as settings for controlling the resource concentration, available supply, and flow rate of the resource. 
-Finally, the user can control the parameter values for phage A and B, such as the adsorption rate, patent period, and burst size. 
-There is an option to periodically add more phages. 
-Finally there are some settings to control the model settings, such as if the model is deterministic or stochastic, and the step size \cite{nilssonCocktailComputerProgram2022}. 
+The bacteria models resistance to phage A, B, and AB. 
+The user controls the parameter values such as resistance rate to A, B, and AB, resource concentration and outflow, and phage adsorption rate. 
+There is an also an option to periodically add more phages. 
+Model settings, such as if the model is deterministic or stochastic, and the step size is also controllable \cite{nilssonCocktailComputerProgram2022}. 
 After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_software_output}
-\begin{figure}
+
+
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\linewidth]{Plots/Sourced/cocktail_plot.png}
-    \caption{
-        Example output from Cocktail. \newline
-        \raggedright
-        Figure A) \textit{E. coli} infected with phage T4 in a chemostat exhibiting an oscillating growth behavior, following the model of \citet{bohannanEffectResourceEnrichment1997}. \\
-        Figure B) Oscillations of bacteria and phages can exist at higher titers, dependent on low resource concentration, following the model of \citet{lenskiDynamicsInteractionsBacteria1988}. \\
-        Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. \\
-        Figure D) A system modelling the interactions with phage A and B. \\
-        See \citet{nilssonCocktailComputerProgram2022} for more information on parameter values, sources, and supplementary resources. 
-    }
-    \label{fig:cocktail_software_output}
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Sourced/cocktail_plot.png}
+        \caption{
+            Figure A) \textit{E. coli} infected with phage T4 in a chemostat exhibiting an oscillating growth behavior, following the model of \citet{bohannanEffectResourceEnrichment1997}. 
+            Figure B) Oscillations of bacteria and phages can exist at higher titers, dependent on low resource concentration, following the model of \citet{lenskiDynamicsInteractionsBacteria1988}. 
+            Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. 
+            Figure D) A system modelling the interactions with phage A and B. 
+        }
+        \label{fig:cocktail_software_output}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Sourced/phagedyn_plot.png}
+        \caption{
+            Figure A) Biomass concentration immediately post phage dosing. 
+            Figure B) Biomass concentration with low phage concentration and maintain low concentration post spike in population count. 
+            Figure C) Biomass concentration when phages are extinct. 
+            Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. 
+            A change in phage concentration shows a decrease in heterotrophic and foaming biomass \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+        }
+        \label{fig:PhageDyn_software_output}
+    \end{subfigure}
+    \caption{Example output from Cocktail and PhageDyn respectively. For PhageDyn, concentration of heterotrophic biomass in an aerobic plug flow across four situations.
+            \textcolor[HTML]{551A8C}{\textbf{Purple}} is heterotrophic biomass, 
+            \textcolor[HTML]{4580B4}{\textbf{Blue}} is foaming biomass, 
+            \textcolor[HTML]{FF0000}{\textbf{Red}} is phages, 
+            \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. 
+            See \citet{nilssonCocktailComputerProgram2022} and \cite{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. }
 \end{figure}
 
 \subsection{PhageDyn}
 PhageDyn is an add-on for the commercial software GPS-X, an advanced wastewater and industrial wastewater treatment plants modelling simulation software created by Hydromantis Inc. 
 The aim of the software is to model phage dynamics in multi-reactor models. 
 Previous attempts at modelling phage dynamics are not applicable to a complex multi-reactor wastewater treatment plant model. 
-PhageDyn models the behavior of phages in multiple interconnected reactors with the aim of reducing foaming in wastewater treatment plants caused by bacteria \cite{heardEffectFilamentousBacteria2008}. \Cref{fig:PhageDyn_software_output} shows the output 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.7\linewidth]{Plots/Sourced/phagedyn_plot.png}
-    \caption{
-        Example output from PhageDyn, showing concentration of heterotrophic biomass in an aerobic plug flow across four situations.
-        \textcolor[HTML]{551A8C}{\textbf{Purple}} is heterotrophic biomass, 
-        \textcolor[HTML]{4580B4}{\textbf{Blue}} is foaming biomass, 
-        \textcolor[HTML]{FF0000}{\textbf{Red}} is phages, 
-        \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. \\
-        \raggedright
-        Figure A) Biomass concentration immediately post phage dosing. \\
-        Figure B) Biomass concentration with low phage concentration and maintain low concentration post spike in population count. \\
-        Figure C) Biomass concentration when phages are extinct. \\
-        Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. \\
-        A change in phage concentration shows a decrease in heterotrophic and foaming biomass. \cite{krysiak-baltynSimulationPhageDynamics2017}
-    }
-    \label{fig:PhageDyn_software_output}
-\end{figure}
+PhageDyn models the behavior of phages in multiple interconnected reactors with the aim of reducing foaming in wastewater treatment plants caused by bacteria \cite{heardEffectFilamentousBacteria2008}. 
+It should be noted that PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics into models of wastewater treatment plants. 
+And in order for PhageDyn to work, an activated copy of GPS-X is required \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+\Cref{fig:PhageDyn_software_output} shows the output that PhageDyn provides. 
