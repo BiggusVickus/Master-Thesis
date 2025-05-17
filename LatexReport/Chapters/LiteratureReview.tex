@@ -124,7 +124,7 @@ Once injected, the phage-cell pair can directly go into the lysogenic cycle or i
 
 In the lysogenic cycle, the phage DNA injects integrates into the genome of the bacteria. 
 As the bacteria undergoes cellular replication, the DNA of the phage will be copied with the cell. 
-After a set amount of time, the phage DNA can cut itself from the genome and enters the Lytic cycle.
+After a set amount of time, the phage DNA can cut itself from the genome and enters the lytic cycle.
 \newline 
 
 In the lytic cycle, the phage hijacks the cellular process of the bacteria. 
@@ -175,8 +175,10 @@ Phage induction can also lead to transduction, where genetic material is transfe
 This can also have the unintended side effect where one bacteria will directly infect another bacteria by transferring phage DNA. 
 \paragraph{Lysis of the Bacterial Cell}
 Internal pressure buildup causes the cell wall to explode, releasing phages, resources, and other organic matter into the environment. 
-Genetic material from one bacteria can be transferred to other bacterial cells via phages, driving bacterial evolution.  % \cite
+Genetic material from one bacteria can be transferred to other bacterial cells via phages, driving bacterial evolution.  e
 % Phage induction can also lead to transduction, where genetic material is transferred between bacterial cells via phages, driving bacterial evolution \cite
+
+Numerous interactions are occurring between agents in a microbial environmen
 
 
 \section{Bacterial Defense Against Phages} 
@@ -185,7 +187,7 @@ The bacteria don't want to be killed by the phages, so they adapt defenses such 
 
 \subsection{Mutations in Bacterial DNA (Genetic (Co-)Evolution)}
 As bacteria cells grow and divide, random point mutations can occur in the DNA. 
-These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to infect the bacteria cell. 
+These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to detect and  infect the cell. 
 Mutations might not always work, or they can have the opposite effect. 
 They can be partially effective if full effectiveness requires multiple steps to achieve, which can occasionally fail \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984} or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall. \newline
 
@@ -241,7 +243,8 @@ Movement is instead passive, relying on the environment to move through the envi
 The motion that phages exhibit is called Brownian motion, the seemingly random movement of small particles throughout a medium due to other microscopic particles interacting and bouncing off of one another \cite{moineauBacteriophage2013}. 
 Unlike phages, bacteria have the ability to actively move through the environment, and they can use this to their advantage by crawling or swimming away if they detect a phage. 
 
-\subsection{Phage Counter Defense Against Bacteria}
+
+\section{Phage Counter Defense Against Bacteria}
 With some of the defenses that bacteria have developed, phages are always mutating to counter their defenses. 
 If phages don't adapt to the ever-changing bacterial defenses, the phages will die out due to their inability to infect and multiply. 
 It essentially becomes a race to the bottom, seeing who can out-adapt the other. 
@@ -255,10 +258,12 @@ If the prey population goes down, and as a result the predator population goes d
 
 Phages face this exact same problem: the complete removal of either the bacteria or phages will lead to the removal of the phages from the system unless reintroduced. 
 
-\subsection{Genetic mutations}
-During the replication process, point mutations can occur. 
+\subsection{Genetic Mutations}
+Mutations in viral DNA will affect how the phage body parts are designed and built. 
+These mutations will affect external phage behavior such as how it detects a bacteria, as well as internal behavior such as evading detection and integrating with the cell's DNA. 
+The chnages will lead to changes in overall phage fitness, ie the ability for the phage to infect, replicate, and lyse bacteria. 
 
-\subsection{Viral recombination}
+\subsection{Viral Recombination}
 https://www.sciencedirect.com/science/article/pii/S1931312821004170
 https://pmc.ncbi.nlm.nih.gov/articles/PMC3185693/
 Multiple phages can infect a cell and replicate itself using the cells internal replication process. 
@@ -276,11 +281,12 @@ Coexistence between phages and bacteria via genetic co-evolution seems unlikely 
 
 \section{Phage Defense Against Phages}
 Some phages can employ defenses against other phages from infecting the bacterial cell. 
-This is called superinfection exclusion (SIE), where a phage that has integrated with the bacterial DNA, called a prophage, prevents a secondary infection from a similar or closely related phage \cite{patelAntiphageDefenceInhibition2024}. 
+This is called superinfection exclusion (SIE), where a prophage prevents a secondary infection from a similar or closely related phage \cite{patelAntiphageDefenceInhibition2024}. 
 There are various methods of preventing further infections. 
-The phage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. 
+The prophage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. 
 Other phages like the T4 phage can use proteins like the Spackle protein. 
 The protein inhibits the lysozome activity used in the process of DNA injection by other phages \cite{bucherPhageMachineSIEence2024, kanamaruStructureFunctionT42020}. 
+Other methods include altering the matabolic pathway of the bacteria
 Finally, prophages can encode proteins that will interfere with the replication process of other phages. 
 For example, the SieA protein encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. 
 
@@ -288,14 +294,25 @@ For example, the SieA protein encoded by phage P22 blocks infection from other p
 SIE can affect the speed and development of phage and bacterial populations. A phage restricting other phages from infecting the bacteria creates a competitive environment and can outcompete and dominate the other population. 
 This is commonly seen in wildlife populations, where invading species can out compete other species by eating more food/other species faster, breeding at a faster rate than other species, and having no natural predators. 
 
-\subsection{Software Mathematically Modelling Phages, Bacteria, and Resources}
+\section{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 
 Cocktail is a simple but yet complex software that models phages in a chemostat system \cite{nilssonCocktailComputerProgram2022}. 
 Simple as it has a defined set of parameters, and only considers one resource, one bacteria, and 2 phages, but complex due to the ability for the bacteria to gain phage resistance. 
 
 PhageDyn \cite{krysiak-baltynSimulationPhageDynamics2017} is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of wastewater treatment plants. 
 
-\subsubsection{Cocktail}
+Cocktail and PhageDyn however have limitations. 
+Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model two phages, one bacteria and one resource in a chemostat. 
+Constant resources are being added into a chemostat, with the constant removal of medium from the chemostat. 
+Phages A and B can infect the bacteria, and the bacteria can gain resistance to phage A, B, and AB. 
+The limitation of Cocktail is that the model can not easily be adapted. 
+The ODE model accepts inputs from a hardcoded GUI frontend. 
+So any changes to the frontend or to the ODE model will require changes to the ODE model and the frontend to accept the new inputs and outputs. 
+The code for Cocktail is open source, so adding new buttons and input fields should not pose a significant challenge, but a time commitment will be required. 
+
+
+
+\subsection{Cocktail}
 The Cocktail software was developed by Anders S. Nilsson to model phage infection kinetics in a chemostat. 
 The model assumes there is one bacteria strain that can be infected by phage A and phage B, and by both phages at the same time, phage AB. 
 The bacteria can grow resistance to phage A, phage B, and phage AB independent of one another. 
@@ -320,7 +337,7 @@ After choosing the parameter values, an output is created, with four sample plot
     \label{fig:cocktail_software_output}
 \end{figure}
 
-\subsubsection{PhageDyn}
+\subsection{PhageDyn}
 PhageDyn is an add-on for the commercial software GPS-X, an advanced wastewater and industrial wastewater treatment plants modelling simulation software created by Hydromantis Inc. 
 The aim of the software is to model phage dynamics in multi-reactor models. 
 Previous attempts at modelling phage dynamics are not applicable to a complex multi-reactor wastewater treatment plant model. 
