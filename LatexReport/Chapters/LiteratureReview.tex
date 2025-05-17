@@ -75,6 +75,45 @@ The system consumes resources and converts them into new sub-resource types with
 
 \section{Biology of Phages}
 \subsection{What Are Phages?}
+Phages are small bundles of proteins that contain viral DNA. 
+Phages are made up of multiple parts built like Legos to complete the task of infecting a bacterium. 
+The pha
+The aim of the phage is to find a suitable bacterial host and infect the host with viral DNA. 
+The DNA alters the host's metabolic pathways to its benefit and hijacks the cellular replication process to create new copies of the phage. 
+Eventually, the cell lyses, releasing the newly created phages into the environment to infect more bacteria. 
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.25\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Sourced/phage_diagram.png}
+        \caption{
+            Phage body structure. 
+            % (https://www.newyorker.com/tech/annals-of-technology/phage-killer-viral-dark-matter). 
+        }
+        \label{fig:plots:sourced:phage_diagram}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Sourced/phage_real.png}
+        \caption{
+            Phages infecting an \textit{E. coli} bacteria. 
+            % (https://www.newyorker.com/tech/annals-of-technology/phage-killer-viral-dark-matter). 
+        }
+        \label{fig:plots:sourced:phage_real}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.35\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Sourced/phage_impression.png}
+        \caption{
+            Artist representation of phages infecting a bacterium. 
+            %(https://www.gettyimages.nl/detail/foto/bacteriophage-virus-attacking-a-bacterium-royalty-free-beeld/1179038792). 
+        }
+        \label{fig:plots:sourced:phage_impression}
+    \end{subfigure}
+    \caption{Real life picture of phages infecting an \textit{E. coli} bacterium and an artists impression of phages infecting a bacteria. }
+\end{figure}
 
 \subsection{How Does the Phage Cycle Work?}
 There are 3 main parts to the phage-bacteria host cycle, the infection stage, the lysogenic cycle, and the lytic cycle. 
@@ -151,12 +190,12 @@ Mutations might not always work, or they can have the opposite effect.
 They can be partially effective if full effectiveness requires multiple steps to achieve, which can occasionally fail \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984} or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall. \newline
 
 Bacteria can horizontally transfer DNA to other bacteria on contact. 
-There are three primary ways of this happening, which can be visualized in detail in \Cref{fig:horizontal_gene_transfer}. 
+There are three primary ways of this happening, which is visualized in \Cref{fig:horizontal_gene_transfer}. 
 
 The first method is via conjugation, where a donor cell donates DNA fragments using a mechanism called the F-factor or plasmid with a pilus. 
 The pilus acts a tunnel connecting the donor cell to the recipient cell and the DNA can be transferred to the receiver cell. 
 
-The second method, called transformation, occurs when a cell takes up DNA fragments released by a dead or degrading cell. 
+The second method, called transformation, occurs when a cell takes up released DNA fragments from the environment. 
 Once inside the receiver cell, the donor DNA can integrate itself with the receiver DNA \cite{chenInsOutsDNA2005}. 
 
 The third method is via transduction. 
@@ -164,6 +203,8 @@ When a phage is assembling in the cell just before lysis, the phage can collect 
 The dying bacterium proceeds to lyse, releasing the phages. 
 The phage with the now dead hosts DNA can infect the next bacteria, injecting the DNA strand of the now dead cell into the new host cell. 
 The old bacterial DNA will proceed to integrate with the new host cells DNA \cite{tamangHorizontalGeneTransfer2023, kasmanBacteriophages2025}. 
+
+All methods provide a way for the cell to mutate and change the fitness value of the cell.
 
 \begin{figure}
     \centering
@@ -175,10 +216,11 @@ The old bacterial DNA will proceed to integrate with the new host cells DNA \cit
 \subsection{Phage Inactivation and Decoys}
 Bacteria can further protect themselves by producing decoys that the phage will attach to instead of themselves, inactivating the phage. 
 Freshly lysed bacteria can still contain biomarkers that phages use to detect the bacteria, but upon injection, nothing happens as the cell doesn't function anymore. 
-Bacteria can also produce proteolytic enzymes that will damage the proteins found in a phage \cite{tanQuorumSensingDetermines2015}. 
+Bacteria can also produce proteolytic enzymes that will damage the proteins found in a phage \cite{tanQuorumSensingDetermines2015}. \newline
 Some bacteria can produce outer membrane vesicles that phages can absorb to, and later detach the vesicle with the phage \cite{rabinovitchBacterialDebrisEcological2003}. 
-The vesicle will proceed to float away with the phage attached/injected inside, posing no risk to the source bacteria or to other bacteria. 
+The vesicle will proceed to float away with the attached phage, posing no risk to itself or to other bacteria. 
 It is suspected that the impact of these vesicles acting as a sink is minor \cite{bullPhageBacterialDynamicsSpatial2018}, but helpful nonetheless. 
+
 
 \subsection{CRISPR-Cas Methods}
 CRISPR is a gene editing tool that cells can use to cut out specified/unwanted parts of a DNA strand. 
@@ -201,7 +243,7 @@ Unlike phages, bacteria have the ability to actively move through the environmen
 
 \subsection{Phage Counter Defense Against Bacteria}
 With some of the defenses that bacteria have developed, phages are always mutating to counter their defenses. 
-If phages don't adapt to the ever-changing bacterial defenses, the phages will experience an extinction event due to their inability to infect and multiply. 
+If phages don't adapt to the ever-changing bacterial defenses, the phages will die out due to their inability to infect and multiply. 
 It essentially becomes a race to the bottom, seeing who can out-adapt the other. 
 However, if the phages out-adapt the bacteria too much, the bacteria die out, then eventually the phages die out due to not having any bacteria left to infect. \newline
 This can be avoided if the phages can adapt to target a second strain of bacteria, but this is unlikely. 
@@ -214,6 +256,7 @@ If the prey population goes down, and as a result the predator population goes d
 Phages face this exact same problem: the complete removal of either the bacteria or phages will lead to the removal of the phages from the system unless reintroduced. 
 
 \subsection{Genetic mutations}
+During the replication process, point mutations can occur. 
 
 \subsection{Viral recombination}
 https://www.sciencedirect.com/science/article/pii/S1931312821004170
