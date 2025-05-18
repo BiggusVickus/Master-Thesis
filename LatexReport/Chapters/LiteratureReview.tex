@@ -228,6 +228,14 @@ Strands of DNA can be selectively added or removed from a DNA strand to achieve 
 Specialized defenses in the bacteria can detect unwanted strands and remove the strand, acting as a line of defense against phages. 
 
 \subsection{Phenotype Resistance}
+Although mutations can occur in bacterial DNA, not every mutation results in a distinct phenotypic change.
+However, there is still a chance that a mutation can change the phenotype representation. 
+A mutation can cause the cell wall to thicken, making it harder for a phage to infect the cell. 
+The bacterium can decrease the number of receptors that a phage can detect, making it harder for the phage to detect the bacterium. 
+
+\citet{guptaCombinatorialPhenotypicLandscape2025} found that some \textit{Bacteroides fragilis} bacteria were able to evade phage infection.  
+The presence of combinatorial phenotypic states where differential expression of protective mechanisms created rare super-resistant cells capable of withstanding phage attack.
+By acting together, these heterogeneously expressed anti-phage defense mechanisms created a phenotypic landscape where distinct protective combinations enabled the survival and re-growth of bacteria expressing these phenotypes without acquiring additional mutations. 
 
 \subsection{Spatial Refuge/Biofilms} 
 Usually bacteria and phages coexist in well mixed environments such as the ocean, however some environments offer natural structures for bacteria to hide behind. 
@@ -239,6 +247,9 @@ Phages can not swim and do not contain any parts that allow it to move under its
 Movement is instead passive, relying on the environment to move through the environment, such as diffusion, changes in pressure or heat gradients \cite{lohrmannInfluenceBacterialSwimming2024}. 
 The motion that phages exhibit is called Brownian motion, the seemingly random movement of small particles throughout a medium due to other microscopic particles interacting and bouncing off of one another \cite{moineauBacteriophage2013}. 
 Unlike phages, bacteria have the ability to actively move through the environment, and they can use this to their advantage by crawling or swimming away if they detect a phage. 
+
+\subsection{Other Methods of Defense}
+Other methods of defense include phage restriction by prokaryotic argonaute proteins, production of small molecules that block phage propagation, depletion of molecules essential for phage replication, systems that use small molecule signaling to activate immune effectors, retrons that involve reverse-transcription of non-coding RNAs, and more \cite{stokar-avihailDiscoveryPhageDeterminants2023}.
 
 
 \section{Phage Counter Defense Against Bacteria}
@@ -277,19 +288,26 @@ Coexistence between phages and bacteria via genetic co-evolution seems unlikely 
 
 
 \section{Phage Defense Against Phages}
-Some phages can employ defenses against other phages from infecting the bacterial cell. 
-This is called superinfection exclusion (SIE), where a prophage prevents a secondary infection from a similar or closely related phage \cite{patelAntiphageDefenceInhibition2024}. 
+Some phages can employ defenses against other phages from infecting the bacterial cell ensuring the hots resources are all for itself. 
+\subsection{Superinfection Exclusion}
+The act of preventing a secondary infection form a similar or closely related phage is called superinfection exclusion (SIE). \cite{patelAntiphageDefenceInhibition2024}. 
 There are various methods of preventing further infections. 
-The prophage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. 
+\subsection{Altering Cell Structure}
+The prophage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. The prophage can hijack the internal metabolic pathway and cellular functions, affecting the genes that are expressed and transcribed to proteins. 
+
+\subsection{Protein Creation}
 Other phages like the T4 phage can use proteins like the Spackle protein. 
-The protein inhibits the lysozome activity used in the process of DNA injection by other phages \cite{bucherPhageMachineSIEence2024, kanamaruStructureFunctionT42020}. 
-Other methods include altering the matabolic pathway of the bacteria
-Finally, prophages can encode proteins that will interfere with the replication process of other phages. 
-For example, the SieA protein encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. 
+The Spackle protein inhibits the lysozyme activity used in the process of DNA injection by other phages \cite{bucherPhageMachineSIEence2024, kanamaruStructureFunctionT42020}. 
+Some prophages can encode proteins that will interfere with the replication process of other phages. 
+For example, the SieA protein encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. \newline
+TAB (Tail Assembly Blocker) is an anti-phage defense mechanism encoded by a \textit{Pseudomonas aeruginosa} prophage. 
+While TAB permits the invading phage to replicate its genome, it inhibits the assembly of the phage tail, thereby preventing the production of infectious virions. 
+The prophage that encodes TAB is not affected by this inhibition, as it also expresses a protein that neutralizes TAB's blocking activity. 
+Although the host cell still undergoes lysis, no infectious phages are released.
 
 \subsection{Implications of Phage Against Phage Defense}
-SIE can affect the speed and development of phage and bacterial populations. A phage restricting other phages from infecting the bacteria creates a competitive environment and can outcompete and dominate the other population. 
-This is commonly seen in wildlife populations, where invading species can out compete other species by eating more food/other species faster, breeding at a faster rate than other species, and having no natural predators. 
+SIE can affect the speed and development of phage and bacterial populations. A phage restricting other phages from infecting the bacteria creates a competitive environment and can out-compete and dominate the other population. 
+This is commonly seen in wildlife populations, where invading species can out compete other species by consuming resources faster than local species, breeding at a faster rate than other species, and having no natural predators. 
 
 \section{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 
@@ -342,6 +360,10 @@ After choosing the parameter values, an output is created, with four sample plot
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Sourced/phagedyn_plot.png}
         \caption{
+            \textcolor[HTML]{551A8C}{\textbf{Purple}} is heterotrophic biomass, 
+            \textcolor[HTML]{4580B4}{\textbf{Blue}} is foaming biomass, 
+            \textcolor[HTML]{FF0000}{\textbf{Red}} is phages, 
+            \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. 
             Figure A) Biomass concentration immediately post phage dosing. 
             Figure B) Biomass concentration with low phage concentration and maintain low concentration post spike in population count. 
             Figure C) Biomass concentration when phages are extinct. 
@@ -351,11 +373,8 @@ After choosing the parameter values, an output is created, with four sample plot
         \label{fig:PhageDyn_software_output}
     \end{subfigure}
     \caption{Example output from Cocktail and PhageDyn respectively. For PhageDyn, concentration of heterotrophic biomass in an aerobic plug flow across four situations.
-            \textcolor[HTML]{551A8C}{\textbf{Purple}} is heterotrophic biomass, 
-            \textcolor[HTML]{4580B4}{\textbf{Blue}} is foaming biomass, 
-            \textcolor[HTML]{FF0000}{\textbf{Red}} is phages, 
-            \textcolor[HTML]{01E6EE}{\textbf{Light Blue}} is total suspended solids. 
-            See \citet{nilssonCocktailComputerProgram2022} and \cite{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. }
+        See \citet{nilssonCocktailComputerProgram2022} and \cite{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. 
+    }
 \end{figure}
 
 \subsection{PhageDyn}
