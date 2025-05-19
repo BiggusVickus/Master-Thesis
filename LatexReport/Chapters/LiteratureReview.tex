@@ -49,7 +49,7 @@ where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_
 
 \subsection{Agent-Based Models}
 Agent-based Models (ABM) model the system through space and time.
-An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller subcells containing resources and microbes.
+An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller sub-cells containing resources and microbes.
 Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
 Resources diffuse through the system using a PDE solver for a Boundary Value Problem (BVP).
 Agents can move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as resource density, microbe density, or stochastic chance. \newline 
@@ -66,18 +66,17 @@ Sometimes, people consider systems with emergent behaviors more complex than the
 The cellular agents rules are as follows: 
 \begin{align} 
     \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
-\end{align}, where if $i> \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
+\end{align} where if $i> \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
 The system consumes resources and converts them into new sub-resource types with the following equation:
 \begin{align} 
     \frac{dR_\alpha}{dt} &= -\sum_i C_{i\alpha}R_\alpha I \\
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
-\end{align}. 
+\end{align}
 
-\section{Biology of Phages}
+\section{Phage Biology}
 \subsection{What Are Phages?}
 Phages are small bundles of proteins that contain viral DNA. 
-Phages are made up of multiple parts built like Legos to complete the task of infecting a bacterium. 
-The pha
+Phages are made up of multiple parts built like LEGO to complete the task of infecting a bacterium. 
 The aim of the phage is to find a suitable bacterial host and infect the host with viral DNA. 
 The DNA alters the host's metabolic pathways to its benefit and hijacks the cellular replication process to create new copies of the phage. 
 Eventually, the cell lyses, releasing the newly created phages into the environment to infect more bacteria. 
@@ -112,7 +111,7 @@ Eventually, the cell lyses, releasing the newly created phages into the environm
         }
         \label{fig:plots:sourced:phage_impression}
     \end{subfigure}
-    \caption{Real life picture of phages infecting an \textit{E. coli} bacterium and an artists impression of phages infecting a bacteria. }
+    \caption{Parts of a phage, a real life picture of phages infecting an \textit{E. coli} bacterium, and an artist's impression of phages infecting a bacterium. }
 \end{figure}
 
 \subsection{How Does the Phage Cycle Work?}
@@ -147,7 +146,7 @@ The injected DNA is called a plasmid, genetic structure usually in the shape of 
 The lysogenic cycle describes the process in which the viral DNA of the phage evades detection, integrates into the cell's DNA, replicates with the cell, and inducts from the DNA. 
 Phages that have integrated into the host's DNA are called prophages. 
 \paragraph{Repression of DNA}
-As phages are viruses, they need to evade viral detection methods such as Cyclic oligonucleotide-based antiphage signalling systems (CBASS). 
+As phages are viruses, they need to evade viral detection methods such as Cyclic oligonucleotide-based anti-phage signalling systems (CBASS). 
 CBASS triggers effector proteins that cause cell death, preventing phage replication and lysis \cite{banhBacterialCGASSenses2023}. 
 Two big benefits of programmed cell death is that the cell death slows the growth of phages and the dead cells release nutrients into the environment, allowing other bacteria to recycle the nutrients and grow \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. \newline
 CRISPR-Cas is another method that bacteria can use to detect the presence of phage DNA. 
@@ -208,7 +207,7 @@ All methods provide a way for the cell to mutate and change the fitness value of
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.7\linewidth]{Figures/horizontal_gene_transfer.png}
-    \caption{The three main ways that a (dead) bacterium can transfer DNA over to another bacterium \cite{tamangHorizontalGeneTransfer2023}.}
+    \caption{The three main ways that a (dead) bacterium can horizontally transfer DNA and genes over to another bacterium \cite{tamangHorizontalGeneTransfer2023}.}
     \label{fig:horizontal_gene_transfer}
 \end{figure}
 
@@ -269,7 +268,7 @@ Phages face this exact same problem: the complete removal of either the bacteria
 \subsection{Genetic Mutations}
 Mutations in viral DNA will affect how the phage body parts are designed and built. 
 These mutations will affect external phage behavior such as how it detects a bacteria, as well as internal behavior such as evading detection and integrating with the cell's DNA. 
-The chnages will lead to changes in overall phage fitness, ie the ability for the phage to infect, replicate, and lyse bacteria. 
+The changes will lead to changes in overall phage fitness, ie the ability for the phage to infect, replicate, and lyse bacteria. 
 
 \subsection{Viral Recombination}
 https://www.sciencedirect.com/science/article/pii/S1931312821004170

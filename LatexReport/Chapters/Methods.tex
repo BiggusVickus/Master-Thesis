@@ -2,77 +2,45 @@
 \label{Methods}
 \section{Project Overview}
 To help complete this Master thesis, I created various tools that would help create the final model outputs.
-The project is divided into three logical parts, with an optional fourth part.
+The project is divided into four parts. 
+The first part is the tool that a user can use to design and create the network of agent interactions. 
+The second part is the simulation framework that handles the data and runs the ODE solving method. 
+The third part is a dashboard that runs in the browser. The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
+The final part allows for the user to download the simulation data to create their own custom graphs and analyses. 
+
+A flowchart acting as a bird eye view of interactions between the user and systems can be seen in \nameref{AppendixC}. 
 
 
-\subsection{Part 1: Network Creation Tool}
+\subsection{Network Creation Tool}
 \label{sec:part1}
-The first part involves the development of a GUI tool to create and edit the network topography of interactions.
-This tool allows users to quickly and intuitively define agents, interaction parameters, environmental parameters, and setting parameters.
-The tool provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure. \newline 
-Once the user is happy with the graph shape, they can export the graph for use in part 2 (\Cref{sec:part2}), part 3 (\Cref{sec:part3}), and part 4 (\Cref{sec:part4}). 
-The most important part is that the user defines the network edges and the attributes that each node and edge has, as that can't be edited in part 2 onwards. 
-It's not a big issue however because the user can upload the graph to the tool again to edit the edge connections and add or remove nodes and attributes. 
-In part 3, the user can edit the values of the attributes, so the parameter values do not have to be dialed in, and the user does not need to use the GUI tool to edit parameter values. 
-
-
-\subsection{Part 2: Simulation Framework}
-\label{sec:part2}
-The second part focuses on the simulation framework.
-The user provides an ODE model and the network topography as input to the framework.
-The simulation framework deals with handling the input and output of the data, collecting and storing the data needed for the simulation.
-The framework uses SciPy's \textit{solve\_ivp()} numerical solver to simulate the provided ODE equations and calculate the population levels through time.
-As output, the user receives two outputs.
-The first output is an array of time values that the solver used to calculate the population count.
-The second output is an array containing the population count at each time step for every agent.
-
-
-\subsection{Part 3: Analysis and Visualization}
-\label{sec:part3}
-The third part involves analyzing and visualizing the simulation results.
-The user can use a dashboard built using Plotly Dash to interact with the solver and network.
-The user can change parameter, environment values, and setting values on the fly.
-This allows the user to quickly change parameter values and test different situations.
-The dashboard includes various starter plots that allow the user to test the model.
-
-
-\subsection{Part 4: Custom Analyses and Visualizations}
-\label{sec:part4}
-The final part, an optional step, allows for the user to define a number of parameters they want to simulate and download the simulation data after running the simulations. 
-Downloading the data then allows the user to create their own custom visualizations without having to rerun the simulations, especially if there are many long and complex simulations. 
-The data can then be further processed and visualized as the user wishes. 
-
-
-\section{Network Topography of Interactions Creation Tool}
+The network creation tool is the first step that a user needs to use, and it revolves around using a GUI tool built to create and edit the graph representation of the agent interaction.
 Numerous interactions occur between agents in a microbial environment.
 However, not every agent can and will interact with one another.
-Based on which agents interact with one another, a network topography can be created, capturing the dynamics of the interactions.
+Based on which agents interact with one another, a network topography representing the agent interactions and dynamics can be created. 
+
 Every node represents a unique agent, and each agent has their own intrinsic properties. 
-This would include the starting population or concentration, reproduction rate, and death rate. \newline 
-
-An edge links agents together if there is an arbitrary interaction occurring between two agents, with the properties exhibited in the interaction dependent on the interacting agents. 
+The user can intuitively define agents, their interactions, environmental and model settings using the GUI tool. 
+This tool allows users to quickly and intuitively define agents and their attributes, agent interactions and their attributes, environmental data, and model settings.
+An edge links two agents together if there is an arbitrary interaction occurring between the agents, with the properties exhibited in the interaction dependent on the interacting agents. 
 Self interactions are allowed in the network. 
-Large populations of bacteria can provide support to other bacteria and prevent phage infection. 
-Each edge likewise also contains attributes to capture the unique dynamic interactions between the agents.
-This could be the probability for a successful interaction, the burst size of a specific phage-bacteria pair, or the bacteria's consumption rate of resources.
-Adding the attributes to the nodes and edges allow for the capture of various interaction dynamics within the context of the community.
-
-
-A GUI tool has been developed using Python and NetworkX to help aid in the development of the exhibited network topography.
-With this tool, a network topography can be created by adding any number of phages, bacteria, and resources. 
-There is an environment node that is used to store global environmental data, for example, the temperature of the system, the pH of the system, the wash-in/out rate, etc.
+There is an environment node that is used to store global environmental data, such as the temperature and pH of the system.
 The settings node holds information such as simulation length, max time step, and the type of ODE solver to use.
-The interactions and attributes of the agents, environment, and settings can easily be edited using the GUI tool. 
+The tool provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure.  
 
-\Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the GUI tool built using Tkinter and NetworkX. \Cref{fig:ss:example_network} shows an example network that can be created. %TODO: Citation needed.
+Once the user is happy with the graph shape, they can export the network representation for use in \nameref{sec:part2}, \nameref{sec:part3}, and \nameref{sec:part4}. 
+The most important part is that the user defines the shape and the attributes of the network, as that can't be edited in part 2 onwards. 
+It is possible go back to the network creation tool and upload the graph to the tool to be able to edit the network representation. \newline
+The user can edit the values of the attributes in \nameref{sec:part3}, so the parameter values do not have to be perfect. 
+As such, the user does not need to keep on using the GUI tool to edit parameter values. 
+
+\Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the GUI tool. \Cref{fig:ss:example_network} shows an example network that can be created.
 There are numerous buttons that can be used to edit the graph, for example adding or removing nodes and edges. 
 By default, an environment node holding parameters such as pH and temperature is added.
 A settings node is added as well, holding settings data to be used for the solver, like the type of solver or simulation length.
 Manually adding nodes and edges can get tedious and repetitive for large graphs, so the user can add multiple nodes and edges at the same time.
 Nothing can interact with the environment and setting node, as they are used to hold data about the environment and network solver.
-For each node and edge, default attribute names and values are added which can later be edited by the user. 
 The user can alter the default attribute name and value by importing the GUI tool class and overriding the method implementation implementing the default names and values. 
-The nature of the interaction needs to be defined and captured in the parameter names, values, and ODE equations.
+The user can self-decide which parameter values to give, and if and how the parameter values are randomized. 
 
 \begin{figure}
     \centering
@@ -84,7 +52,6 @@ The nature of the interaction needs to be defined and captured in the parameter 
             The GUI tool as seen on the startup of the program.
         }
         \label{fig:ss:initial_startup_GUI_tool}
-        \vspace*{\fill}
     \end{subfigure}
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -93,25 +60,56 @@ The nature of the interaction needs to be defined and captured in the parameter 
         \caption{
             An arbitrary $3\times2\times3$ network with each node representing a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
         }
-        \vspace*{\fill}
         \label{fig:ss:example_network}
     \end{subfigure} 
  \end{figure}
 
-\section{Dashboard for Analysis and Visualization}
+\subsection{Simulation Framework}
+\label{sec:part2}
+The user provides an ODE model and the network topography as input to the framework. 
+The simulation framework deals with handling the input, output, collecting and storing of the simulation input and output.
+The framework uses SciPy's \cite{virtanenSciPy10Fundamental2020} \textit{solve\_ivp()} numerical solver \cite{ dormandFamilyEmbeddedRungeKutta1980} to simulate the provided ODE equations and calculate the population levels through time.
+The user receives two outputs from the framework. 
+The first output is an array of time values that the solver used to calculate the population count.
+The second output is an array containing the population count at each time step for every agent.
+
+In order to facilitate more complex model behavior, "hidden" agents can be added to the simulation, where the hidden agents represent states that a "visible" agent can be in. 
+Such an example would be the distinction between uninfected and infected bacteria. 
+Each bacteria agent $b_i$ would contain two hidden sub-agents, called sub-agent states, an uninfected sub-agent state $b_{i_\text{uninfected}}$ and infected sub-agent state $b_{i_\text{infected}}$. 
+It is possible to create further sub-agents, by having a bacteria go through $M$ stages of infection. 
+So each infected agent has sub-agent $b_{i_{\text{infected}_k}}$, where $1 \leq k \leq M$. 
+
+In the network model you would explicitly create a $2\times 3 \times 2$ network, but when passing the network to the simulation framework, you would tell the framework to model the subagents. 
+The user's ODE model has to correctly model each (hidden) agent and correctly handle the changes in states. 
+
+Even though the user might submit a $2 \times 3 \times 2$ model, if the user follows the uninfected and infected classification, where each bacterium goes through $4$ stages, the ODE model and framework will explicitly be modelling 2 phages, 15 bacteria (3 uninfected + $3\cdot 4=12$ infected bacteria), and 2 resources. 
+
+The user might also be interested in modelling a resource reservoir, where resources go from an external reservoir not accessible by the bacteria to the simulation environment accessible by the bacteria. 
+2 hidden resource agents would be added to the system that would model the transfer of resources from the reservoir to the simulation environment. 
+
+\subsection{Visualization Dashboard}
+\label{sec:part3}
+The third part involves analyzing and visualizing the simulation results on an interactive Dash Plotly \cite{DashDocumentationUser} dashboard. 
+The user can use a dashboard built using Plotly Dash to interact with the solver and network.
+The user can interact with the solver and network by changing parameter, environment, and setting values on the fly.
+This allows the user to quickly change parameter values and test different situations.
+The dashboard includes various starter plots that allow the user to test the model.
+As output, the dashboard will show interactive plots so that the user can analyze the system. 
+
+
 The dashboard allows the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections.
 The first section allows for the user to edit the network parameters and setting values on the fly to quickly iterate through different conditions and to fine-tune parameter selection without having to rebuild the network using the GUI tool.
 The second section allows for the user to see how the population count evolves over time for a given initial condition and parameter values, allowing to quickly test the network input.
 The final section allows for the user to run more advanced analyses on the network, for example, by changing multiple parameter values and visualizing the output. 
 
-\subsection{Editing Network and Parameter Values}
+\subsubsection{Editing Network and Parameter Values}
 \label{sec:editing_network_and_parameter_values}
 The editing network and parameter value contain five separate sections.
 \paragraph{Initial Condition}
 The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
 Each agent type has a table containing the initial population count. 
 Extra hidden agents can be included. 
-When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria agent starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}. \newline 
+When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria agent starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}.  
 \paragraph{Vector Data} 
 Data that can be represented as a vector, for example the data attributed to an agent type have their own section, \Cref{fig:ss:ds:vector}.
 \paragraph{Matrix Data}
@@ -178,16 +176,16 @@ The environment data and settings data also have their own tab, \Cref{fig:ss:ds:
     \caption{The tabs where the user can edit the various parameter values and control the simulation parameters}
  \end{figure}
 
-\subsection{Advanced Visualization and Analysis}
-In the advanced analysis section, the user can run different analysis methods to gain a greater understanding of the model.
-The visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analyze the visualization.
+\subsubsection{Visualization and Analysis}
+In the analysis section, the user can run different analysis methods to gain a greater understanding of the model.
+For simplicity, the visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analyze the visualization as the aim of the tool is to gain a deeper understanding of the interactions in a reduced complexity environment. 
 These advanced visualizations were created with the mind of understanding a simple network.
 There are five different analysis and visualization methods, and one system where the user can run a large simulation on the whole network and receive an output file containing the raw simulation file data.
-The raw data is stored as a \textit{parquet} file, a tabular-like data format, which when combined with Dask (not Dash), allows for querying of the data similarly to Pandas.
+The raw data is stored as a \textit{parquet} file, a tabular-like data format, which when combined with Dask \cite{DaskDaskDocumentation}, allows for querying of the data similarly to Pandas.
 Parquet with Dask offers superior performance and data storage solutions that Pandas can't offer.
 Once queried, the user can create their own graphs and plots as they have access to the parameter values used and the raw simulation data.
 
-\subsubsection{Serial Transfer}
+\paragraph{Serial Transfer}
 \label{sec:serial_transfer}
 Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and resources, possibly with phages, and transfers the old media into a solution containing new media.
 At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out.
@@ -200,7 +198,6 @@ The effect that this has is it creates a sort of artificial stable point.
 As the bacteria grow, they consume the resources found in the solution.
 However eventually the resources run out, and the bacteria die out due to a lack of resources.
 By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
-\newline
 
 The implementation of serial transfer is slightly different.
 A user can select a number which will divide the population count of the agents by that number (\Cref{fig:ss:av:serial_transfer_settings}).
@@ -238,7 +235,7 @@ As output, new graphs are created showing the runs appended to one another, with
     \caption{Serial Transfer}
  \end{figure}
 
-\subsubsection{Parameter Analysis}
+\paragraph{Parameter Analysis}
 \label{sec:parameter_analysis}
 The parameter analysis settings tab as shown in \Cref{fig:ss:av:parameter_analysis_settings} allows the user to choose two parameters and individually run the model with the varying input values.
 The values that can be tested and changed include all initial condition values, vector and matrix data, and environmental data.
@@ -247,11 +244,9 @@ After the parameter name selection, the user can manually choose which parameter
 Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. \newline
 
 \Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each agent type.
-Each heatmap has cells that unique model input, and contains the value of
-A heatmap matrix is created for each agent type, with dimension of the input values.
-Each box corresponds to each pair of parameter inputs, and shows the population count of the agent at the time selected on the slider. 
-As the user slides the slider, the value inside the cell changes to correspond with the chosen time. 
-Note that the heatmap color range resets for each heatmap, so similar colors across heatmaps will not correspond to the same values.
+Each heatmap cell represents the input of 2 unique parameter values, and shows the population count for that parameter run at the time shown in the slider. 
+As the user slides the slider, the value inside the cell updates to correspond with the selected time. 
+Note that the heatmap color range resets for each heatmap, so similar colors across heatmaps and across time will not correspond to the same values.
 
 \begin{figure}[h!]
     \centering
@@ -280,7 +275,7 @@ Note that the heatmap color range resets for each heatmap, so similar colors acr
 \end{figure}
 
 
-\subsubsection{Initial Value Analysis}
+\paragraph{Initial Value Analysis}
 \label{sec:initial_value_analysis}
 The initial value analysis settings tab as shown in \Cref{fig:ss:av:initial_value_analysis_settings} allows the user to choose a single parameter and vary the value of that parameter, visualizing how a change in parameter value affects the population count of the agents.
 
@@ -321,7 +316,7 @@ For every re-run of the initial value analysis, the slope, intercept and $R^2$ v
     \caption{Initial value analysis}
 \end{figure}
 
-\subsubsection{Phase Portrait}
+\paragraph{Phase Portrait}
 \label{sec:phase_portrait}
 The phase portrait plot allows for the user to analyze how an agent population evolves with respect to the other agent population through time.
 Phase portraits indicate how one population increases while the other decreases, and vice versa.
@@ -357,7 +352,7 @@ The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_s
     \caption{Phase Portrait}
 \end{figure}
 
-\subsubsection{SOBOL Analysis}
+\paragraph{SOBOL Analysis}
 \label{sec:SOBOL_analysis}
 SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output by changing the parameter values of the model and measuring the change in model output.
 SOBOL quantifies how much variance in the output can be attributed to a specific parameter and can measure the effect of global, first, and second order sensitivity. 
@@ -369,8 +364,6 @@ The first order sensitivity is described as
 \[
     S_i = \frac{V_i}{\textit{Var}(Y)}
 \] where $V_i = \textit{Var}_{X_i}(\mathbb{E}_{X_{\sim i}}[Y|X_i])$ and where $X_{\sim i}$ represents all the parameters that are not $X_i$.
-\newline
-
 
 The second order index measures the impact of input $X_i$ interacting with $X_j$. For many inputs, this becomes unwieldy to analyze.
 The global sensitivity is used to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$'s interaction with other variables.
@@ -419,7 +412,7 @@ The proportion of the global and local sensitivity can be seen for each agent ty
     \caption{SOBOL variance analysis}
 \end{figure}
 
-\subsubsection{Ultimate Analysis}
+\paragraph{Ultimate Analysis}
 \label{sec:ultimate_analysis}
 The Ultimate Analysis section does not produce any visualizations or analysis, but instead allows for the user to define which initial conditions and parameter values they want to run a simulation on.
 The solver will iterate over every single parameter input possibility and save the results in a \textit{.parquet} file.
@@ -435,15 +428,18 @@ Using Dask and the saved \textit{.parquet} file, the user can query for specific
     \label{fig:ss:av:ultimate_analysis_settings}
 \end{figure}
 
+\subsection{Custom Visualizations and Analyses}
+\label{sec:part4}
+The final part, an optional step, allows for the user to define a number of parameters they want to simulate and download the simulation data after running the simulations. 
+Downloading the data then allows the user to create their own custom visualizations without having to rerun the simulations, especially if there are many long and complex simulations. 
+The data can then be further processed and visualized as the user wishes. 
 
-\subsubsection{Custom Advanced Analyses and Visualizations}
-\label{sec:custom_analysis}
-As the dashboard can not create a graph for every situation, or analyze every situation, Ultimate Analysis (\Cref{sec:ultimate_analysis}) can be used to run and download the simulation data to the disk to create later create your own custom visualizations. 
-Depending on the used model, different behavior might appear, for example the population count can exhibit cyclic behavior. 
-A custom visualization would then perform a Fourier transformation to obtain the predominant frequencies. 
-
-\subsection{Interaction Network}
-A flowchart of the interactions between the user and systems can be seen in \Cref{AppendixC}. 
+Depending on the provided model, different behavior might appear. 
+As the dashboard can not create a graph for every situation, or analyze every situation, \nameref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
+For example the model can describe cyclic behavior. 
+A custom visualization that the could be created for this cyclic model would be to perform a Fourier transformation on the curve to obtain the predominant frequencies. 
+A change in parameter values could change the frequencies, so it would be easy to quantify how a change in parameter value affects the frequency output. 
+If dampening occurs, then a change in amplitude can also be measured, and compared to the change in frequency, allowing the user to identify if the frequency-dampening relationship is correlated or not. 
 
 \section{The Golden Model}
 \label{sec:golden_model}
@@ -462,7 +458,7 @@ The cell growth process is described by $g(N)$, the instantaneous growth rate de
 The consumption rate of a resource by a bacteria is $e$. \newline
 Once infected by a phage, the bacteria goes from $U$ to $I_1$. 
 The bacteria goes through $M$ stages of infection $I_1, \dots, I_M$ before lysing, where the bacteria goes from state $I_k$ to state $I_{k+1}$ with equal transition rate $\frac{M}{\tau}$. The probability of a successful infection of a cell is $r$. \newline
-After a bacteria lyses after stage $I_M$, $\beta$ phages are releases, the burst size of the phage. \newline 
+After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst size of the phage. 
 
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be adapted. 
@@ -483,9 +479,9 @@ The adapted model accounts for the interactions of multiple agents.
 
 
 \section{Software Used and Packages}
-The program was created exclusively in Python, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy and SciPy to more niche packages such as pickle and SALib. \newline
+The program was created exclusively in Python, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}. \newline
 
-The graphical tool uses Tkinter acting as the front end, handling the user inputs, while NetworkX stores the graph and contains the attribute data. 
+The graphical tool uses Tkinter acting as the front end, handling the user inputs, while NetworkX \cite{hagbergExploringNetworkStructure2008} stores the graph and contains the attribute data. 
 The GUI tool also uses Matplotlib to create the figure of the graph to display to the user in the GUI tool. \newline
 
 The simulation framework, the backend of the modelling, makes extensive usage of SciPy's \textit{solve\_ivp()} to create the ODE data. 
@@ -494,14 +490,14 @@ It also makes light usage of NetworkX to load the graph, as it initially takes a
 The visualization part makes heavily usage of Dash and Plotly. 
 Dash acts as the server and is used for displaying the HTML aspect of the frontend and dealing with any input and output. 
 Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like "log x-axis" form the frontend to the backend server. 
-In the backend, the various inputs are handled, like changing the input string "0.05, 0.1, 0.15, 0.2" provided by the user into an iterable list [0.05, 0.1, 0.15, 0.2] that the simulation framework can iterate over to vary the parameter value. 
-Then a call to the simulation solver is done. \newline 
+In the backend, the various inputs are handled, like changing the input string “0.05, 0.1, 0.15, 0.2” into an iterable list [0.05, 0.1, 0.15, 0.2] that the simulation framework can iterate over to vary the parameter value.  \newline 
 
-If there are many simulations to run through, in the case of SOBOL (\ref{sec:SOBOL_analysis}) or ultimate analysis (\ref{sec:ultimate_analysis}), then an intermediate call to a parallel computing library Joblib is called, where Joblib parallelizes the for-loop to compute the simulations in parallel. 
-The ultimate analysis makes use of pandas to store the data as a dataframe to then be stored as a \textit{.parquet} file. 
-To effectively load the data saved from the ultimate analysis section, the user can use Dask to query and load large datasets into memory. \newline 
-SOBOL makes use of the SALib library to sample and analyze the parameter input. 
+If there are many simulations to run through, in the case of \nameref{sec:SOBOL_analysis} or \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called, where Joblib parallelizes the for-loop to compute the simulations in parallel. 
+Ultimate analysis uses Pandas to write the data to a \textit{.parquet} file. 
+Parquet offers data compression and efficient memory usage. 
+To effectively load the data saved from the ultimate analysis section, the user can use Dask to query and load the \textit{.parquet} file into memory. \newline 
+SOBOL uses the SALib library to sample and analyze the parameter input. 
 Both the ultimate analysis and SOBOL also save a \textit{.pickle} file containing a dictionary with the parameter values tested,and other important information regarding the simulation in question. \newline
-The initial value analysis visualization (\Cref{sec:initial_value_analysis}) uses SciPy's \textit{curve\_fit()} function to curve fit the points in the middle plot (\Cref{fig:ss:av:initial_value_analysis_run}). 
+\nameref{sec:initial_value_analysis} uses SciPy's \textit{curve\_fit()} function to curve fit the points in the middle plot (\Cref{fig:ss:av:initial_value_analysis_run}). 
 
-Other packages that are used include Pandas, collections, copy, warnings, itertools, os, datetime, json, gc, and time. 
+Other packages that are used include collections, copy, warnings, itertools, os, datetime, json, gc, and time. 
