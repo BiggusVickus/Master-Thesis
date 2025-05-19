@@ -6,7 +6,7 @@ The project is divided into four parts.
 The first part is the tool that a user can use to design and create the network of agent interactions. 
 The second part is the simulation framework that handles the data and runs the ODE solving method. 
 The third part is a dashboard that runs in the browser. The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
-The final part allows for the user to download the simulation data to create their own custom graphs and analyses. 
+The final part allows the user to download the simulation data to create their own custom graphs and analyses. 
 
 A flowchart showing the user-system interactions can be seen in \nameref{AppendixC}. 
 
@@ -478,13 +478,13 @@ The adapted model accounts for the interactions of multiple agents.
 
 
 \section{Software Used and Packages}
-The program was created exclusively in Python \cite{Python}, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy \cite{NumPy} and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}. \newline
+The program was created exclusively in Python \cite{Python}, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy \cite{NumPy} and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}.
 
 The graphical tool uses Tkinter acting as the front end, handling the user inputs, while NetworkX \cite{hagbergExploringNetworkStructure2008} stores the graph and contains the attribute data. 
-The GUI tool also uses Matplotlib \cite{Matplotlib}to create the figure of the graph to display to the user in the GUI tool. \newline
+The GUI tool also uses Matplotlib \cite{Matplotlib}to create the figure of the graph to display to the user in the GUI tool.
 
 The simulation framework, the backend of the modelling, makes extensive usage of SciPy's \textit{solve\_ivp()} to create the ODE data. 
-It also makes light usage of NetworkX to load the graph, as it initially takes a graph as an input, and light usage of NumPy to setup the parameters at startup. \newline 
+It also makes light usage of NetworkX to load the graph, as it initially takes a graph as an input, and light usage of NumPy to setup the parameters at startup. 
 
 The visualization part makes heavily usage of Dash and Plotly. 
 Dash acts as the server and is used for displaying the HTML aspect of the frontend and dealing with any input and output. 

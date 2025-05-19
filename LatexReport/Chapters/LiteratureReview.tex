@@ -10,8 +10,6 @@ DDEs are a generalized version of ODEs and are significantly harder to analyze a
 One way to introduce DDE like behavior is to force agents to go through stages, causing a delay in other events. 
 For example, in the paper \citet{gengUsingBacterialPopulation2024}, infected bacteria go through $M$ stages of infection, before lysing. 
 The more stages there are, the longer the delay in seeing a rise in phage population. By changing the value of $\tau$ in the model proposed by \citet{gengUsingBacterialPopulation2024}, the throughput of bacteria going from stage $i$ to stage $i+1$ of infection increases, thus seeing a larger rise in phage population. 
-\newline
-
 
 Each type of model has its pros and cons.
 With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is in general much more complex.
@@ -134,8 +132,11 @@ Eventually the cell wall bursts releasing the phages into the environment ready 
 \subsubsection{Infection Stage}
 The infection stage is characterized as the searching for a bacterium, detection, and subsequent attachment and injection of DNA into the bacteria. 
 \paragraph{Detection and Attachment}
-Phages float through the medium and by chance land on a bacteria. The phage detects the cell via host cell surface receptors tuned to a specific bacteria cell wall \cite{stoneUnderstandingExploitingPhage2019}. 
-Various inter-molecular forces such as hydrogen bonds help the phage attach to the cell. 
+Phages float through the medium and by chance land on a bacteria. The phage detects the cell via phage receptor binding proteins located at the tip of the phage tail. 
+Various inter-molecular forces such as hydrogen bonds help the phage detect and attach to the cell. 
+The receptors are tuned to specific receptors found on the surface of the bacteria cell wall. 
+Upon detection, conformational alterations in the phage's baseplate occur, causing changes in protein shapes, causing the sheath to contract and inject the viral DNA into the host. 
+The successful binding and adsorption depends on the phage binding protein sensitivity, localization,and density of receptors. \cite{stoneUnderstandingExploitingPhage2019}. 
 \paragraph{Phage DNA Injection}
 The injection is triggered by the recognition between the phage's receptor-binding protein located at the tip of the tail and a specific receptor located on the surface of the bacteria. 
 Once a suitable injection site has been identified, the phage injects the DNA into the cytoplasm of the cell. 
@@ -309,29 +310,10 @@ SIE can affect the speed and development of phage and bacterial populations. A p
 This is commonly seen in wildlife populations, where invading species can out compete other species by consuming resources faster than local species, breeding at a faster rate than other species, and having no natural predators. 
 
 \section{Software Mathematically Modelling Phages, Bacteria, and Resources}
-Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 
-
-Cocktail is a simple but yet complex software that models phages in a chemostat system \cite{nilssonCocktailComputerProgram2022}. 
-Simple as it has a defined set of parameters, and only considers one resource, one bacteria, and 2 phages, but complex due to the ability for the bacteria to gain phage resistance. 
-
-PhageDyn \cite{krysiak-baltynSimulationPhageDynamics2017} is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of wastewater treatment plants. 
-
-There are limitations to Cocktail and PhageDyn. 
-Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model a chemostat. 
-Constant resources are being added into a chemostat, with the constant removal of medium from the chemostat. 
-Phages A and B can infect the bacteria, and the bacteria can gain resistance to phage A, B, and AB. 
-The limitation of Cocktail is that the model can not easily be adapted. 
-The ODE model accepts inputs from a hardcoded GUI frontend. 
-So any changes to the frontend or to the ODE model will require changes to the ODE model and the frontend to accept the new inputs and outputs. 
-The code for Cocktail is open source, so adding new buttons and changing the model should not pose a significant challenge, but still an undertaking. \newline
-PhageDyn works with GPS-X, a very niche wastewater treatment modelling software. 
-PhageDyn is programmed for a very specific task with no flexibility in changing the model or inputs. 
-To the best of my ability, I could not find a copy of PhageDyn or an acknowledgement that the code is open or closed source. 
-When clicking on the link in the supplementary material of \citet{krysiak-baltynSimulationPhageDynamics2017} to download a copy of the Java applet, the link returned a "URL Not Found" error. 
-
+Some software programs modelling phage-bacteria-resource interactions already exists. 
 
 \subsection{Cocktail}
-Cocktail was developed by \citet{nilssonCocktailComputerProgram2022} to model phage infection kinetics in a chemostat. 
+Cocktail was developed by \citet{nilssonCocktailComputerProgram2022} to model phage-bacteria-resource kinetics in a chemostat. 
 The model assumes there is one bacteria strain that can be infected by phage A and phage B, and by both phages at the same time, phage AB. 
 The bacteria models resistance to phage A, B, and AB. 
 The user controls the parameter values such as resistance rate to A, B, and AB, resource concentration and outflow, and phage adsorption rate. 
@@ -339,8 +321,30 @@ There is an also an option to periodically add more phages.
 Model settings, such as if the model is deterministic or stochastic, and the step size is also controllable \cite{nilssonCocktailComputerProgram2022}. 
 After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_software_output}
 
+\subsection{PhageDyn}
+PhageDyn is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of industrial wastewater treatment plants \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+The aim of PhageDyn is to model phage dynamics in multi-reactor models. 
+Existing models are not applicable to a complex multi-reactor wastewater treatment plant model, which is why \citet{krysiak-baltynSimulationPhageDynamics2017} decided to create PhageDyn to determine how phages can be used to reduce foaming caused by bacteria in wastewater treatment plants \cite{heardEffectFilamentousBacteria2008}. 
+It should be noted that PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics into models of wastewater treatment plants. 
+And in order for PhageDyn to work, an activated copy of GPS-X is required \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+\Cref{fig:PhageDyn_software_output} shows the output that PhageDyn provides. 
 
-\begin{figure}[!ht]
+\subsection{Cocktail and PhageDyn Limitations}
+However there are limitations to Cocktail and PhageDyn. 
+Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model a chemostat. 
+Constant resources are being added into a chemostat, with the constant removal of medium from the chemostat. 
+Phages A and B can infect the bacteria, and the bacteria can gain resistance to phage A, B, and AB. 
+The limitation of Cocktail is that the model can not easily be adapted. 
+The ODE model accepts inputs from a hardcoded GUI frontend. 
+So any changes to the frontend or to the ODE model will require changes to the ODE model and the frontend to accept the new inputs and outputs. 
+The code for Cocktail is open source, so adding new buttons and changing the model should not pose a significant challenge, but still an undertaking. 
+
+PhageDyn works with GPS-X, a very niche wastewater treatment modelling software. 
+PhageDyn is programmed for a very specific task with no flexibility in changing the model or inputs. 
+To the best of my ability, I could not find a copy of PhageDyn or an acknowledgement that the code is open or closed source. 
+When clicking on the link in the supplementary material of \citet{krysiak-baltynSimulationPhageDynamics2017} to download a copy of the Java applet, the link returned a "URL Not Found" error. 
+
+\begin{figure}
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -376,12 +380,3 @@ After choosing the parameter values, an output is created, with four sample plot
         See \citet{nilssonCocktailComputerProgram2022} and \cite{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. 
     }
 \end{figure}
-
-\subsection{PhageDyn}
-PhageDyn is an add-on for the commercial software GPS-X, an advanced wastewater and industrial wastewater treatment plants modelling simulation software created by Hydromantis Inc. 
-The aim of the software is to model phage dynamics in multi-reactor models. 
-Previous attempts at modelling phage dynamics are not applicable to a complex multi-reactor wastewater treatment plant model. 
-PhageDyn models the behavior of phages in multiple interconnected reactors with the aim of reducing foaming in wastewater treatment plants caused by bacteria \cite{heardEffectFilamentousBacteria2008}. 
-It should be noted that PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics into models of wastewater treatment plants. 
-And in order for PhageDyn to work, an activated copy of GPS-X is required \cite{krysiak-baltynSimulationPhageDynamics2017}. 
-\Cref{fig:PhageDyn_software_output} shows the output that PhageDyn provides. 

@@ -1,13 +1,11 @@
 \chapter{Appendix A: Equation Parameters}
-
 \label{AppendixA}
+Parameters used in the various equations. 
 
-Parameters used in equations. 
-
+\section{Golden Model}
 \begin{table}[htbp]
     \small % or \footnotesize to make it more compact
     \centering
-    Golden Model
     \begin{tabularx}{\textwidth}{l l X}
         \toprule
         \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
@@ -29,8 +27,15 @@ Parameters used in equations.
         $t$ & time & time value \\
         \bottomrule
     \end{tabularx}\newline
+    \caption{Golden model parameters with variables, names, and descriptions. Subscripts on parameters indicate relationships; for example, $e_{b, r}$ is nonzero if there is an edge connecting bacteria $b$ to resource $r$ in the network, zero otherwise.}
+    \label{tab:parameter_table_golden_model}
+\end{table}
 
-    SOBOL
+
+\section{SOBOL}
+\begin{table}[htbp]
+    \small % or \footnotesize to make it more compact
+    \centering
     \begin{tabularx}{\textwidth}{l l X}
         \toprule
         \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
@@ -47,17 +52,23 @@ Parameters used in equations.
         $S_i$ & First order sensitivity & Contribution of $X_i$ to output variance of $Y$ \\
         \bottomrule
     \end{tabularx} \newline
+    \caption{SOBOL parameter symbols, name, and description. }
+    \label{tab:parameter_table_SOBOL}
+\end{table}
 
-    Linear Regression
+\section{Linear Regression}
+\begin{table}[htbp]
+    \small % or \footnotesize to make it more compact
+    \centering
     \begin{tabularx}{\textwidth}{l l X}
         \toprule
         \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
         \midrule
-        $a$ & slope of linear regression line \\
-        $c$ & Intercept of linear regression line\\
-        $R^2$ & Coefficient of determination of linear regression fit, quality of regression \\
+        $a$ & Slope & Slope of the linear regression line \\
+        $c$ & Intercept & y-intercept of linear regression line\\
+        $R^2$ & Regression Coefficient & Coefficient of determination of linear regression fit, quality of regression \\
         \bottomrule
     \end{tabularx}
-    \caption{Model parameters with variables, names, and descriptions. Subscripts on parameters indicate relationships; for example, $e_{b, r}$ is nonzero if there is an edge connecting bacteria $b$ to resource $r$ in the network, zero otherwise.}
-    \label{tab:parameters}
+    \caption{Variable symbol, name, and description used for the linear regression}
+    \label{tab:parameter_table_linear_regression}
 \end{table}
