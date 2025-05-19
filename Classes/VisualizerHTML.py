@@ -54,7 +54,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
     Args:
         graph_data (dict): Ordered dictionary with the graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
         non_graph_data_vector (dict): Ordered dictionary with the non graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
-        non_graph_data_matrix (dict): Odered dictionary with the non graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
+        non_graph_data_matrix (dict): Ordered dictionary with the non graph data. The keys are the names of the data and the values are dictionaries with the data, row names, and column names. The data is a list of lists or a matrix. The row names are a list of strings and the column names are a list of strings.
         analysis (Analysis): Instance of the Analysis class. 
         initial_settings (dict): Dictionary with the initial settings. The keys are the names of the settings and the values are the values of the settings. The settings are solver type, min step size, max step size, cutoff value, dense output, relative tolerance, absolute tolerance, and simulation length.
     """
