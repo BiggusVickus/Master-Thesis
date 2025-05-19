@@ -8,11 +8,10 @@ The second part is the simulation framework that handles the data and runs the O
 The third part is a dashboard that runs in the browser. The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
 The final part allows for the user to download the simulation data to create their own custom graphs and analyses. 
 
-A flowchart acting as a bird eye view of interactions between the user and systems can be seen in \nameref{AppendixC}. 
-
+A flowchart showing the user-system interactions can be seen in \nameref{AppendixC}. 
 
 \subsection{Network Creation Tool}
-\label{sec:part1}
+\label{sec:network_creation_tool}
 The network creation tool is the first step that a user needs to use, and it revolves around using a GUI tool built to create and edit the graph representation of the agent interaction.
 Numerous interactions occur between agents in a microbial environment.
 However, not every agent can and will interact with one another.
@@ -27,10 +26,10 @@ There is an environment node that is used to store global environmental data, su
 The settings node holds information such as simulation length, max time step, and the type of ODE solver to use.
 The tool provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure.  
 
-Once the user is happy with the graph shape, they can export the network representation for use in \nameref{sec:part2}, \nameref{sec:part3}, and \nameref{sec:part4}. 
+Once the user is happy with the graph shape, they can export the network representation for use in \nameref{sec:simulation_framework}, \nameref{sec:visualization_framework}, and \nameref{sec:custom_visualization_and_framework}. 
 The most important part is that the user defines the shape and the attributes of the network, as that can't be edited in part 2 onwards. 
 It is possible go back to the network creation tool and upload the graph to the tool to be able to edit the network representation. \newline
-The user can edit the values of the attributes in \nameref{sec:part3}, so the parameter values do not have to be perfect. 
+The user can edit the values of the attributes in \nameref{sec:visualization_framework}, so the parameter values do not have to be perfect. 
 As such, the user does not need to keep on using the GUI tool to edit parameter values. 
 
 \Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the GUI tool. \Cref{fig:ss:example_network} shows an example network that can be created.
@@ -65,7 +64,7 @@ The user can self-decide which parameter values to give, and if and how the para
  \end{figure}
 
 \subsection{Simulation Framework}
-\label{sec:part2}
+\label{sec:simulation_framework}
 The user provides an ODE model and the network topography as input to the framework. 
 The simulation framework deals with handling the input, output, collecting and storing of the simulation input and output.
 The framework uses SciPy's \cite{virtanenSciPy10Fundamental2020} \textit{solve\_ivp()} numerical solver \cite{ dormandFamilyEmbeddedRungeKutta1980} to simulate the provided ODE equations and calculate the population levels through time.
@@ -88,7 +87,7 @@ The user might also be interested in modelling a resource reservoir, where resou
 2 hidden resource agents would be added to the system that would model the transfer of resources from the reservoir to the simulation environment. 
 
 \subsection{Visualization Dashboard}
-\label{sec:part3}
+\label{sec:visualization_framework}
 The third part involves analyzing and visualizing the simulation results on an interactive Dash Plotly \cite{DashDocumentationUser} dashboard. 
 The user can use a dashboard built using Plotly Dash to interact with the solver and network.
 The user can interact with the solver and network by changing parameter, environment, and setting values on the fly.
@@ -117,7 +116,7 @@ Data that is stored as a matrix, the data stored on edges between agents, is sto
 \paragraph{Environment and settings}
 The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -209,7 +208,7 @@ If the checkbox is checked, the new population count will be 508, 413.33, and 76
 These new values would be used as the new starting initial condition for a new simulation, and the run results will be appended to the previous run.
 As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -241,14 +240,14 @@ The parameter analysis settings tab as shown in \Cref{fig:ss:av:parameter_analys
 The values that can be tested and changed include all initial condition values, vector and matrix data, and environmental data.
 As input, the user can select 2 parameters of choice.
 After the parameter name selection, the user can manually choose which parameter values they want to test or test a range of values equally spaced by selecting the number of values to test.
-Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. \newline
+Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. 
 
 \Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each agent type.
 Each heatmap cell represents the input of 2 unique parameter values, and shows the population count for that parameter run at the time shown in the slider. 
 As the user slides the slider, the value inside the cell updates to correspond with the selected time. 
 Note that the heatmap color range resets for each heatmap, so similar colors across heatmaps and across time will not correspond to the same values.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -290,7 +289,7 @@ Using this data can be useful for understanding how a change in parameter value 
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name.
 For every re-run of the initial value analysis, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data across different parameters. 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -324,7 +323,7 @@ Steady states can be identified and classified as either stable, unstable, or as
 By comparing different starting points, it is possible to see if the system is chaotic or not.
 The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}. 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -386,7 +385,7 @@ An analysis of the final value of the simulation, the average population count, 
 The global and first sensitivity are shown next to one another, and each sub-row within a plot represents each agent type. 
 The proportion of the global and local sensitivity can be seen for each agent type and each parameter.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -428,8 +427,8 @@ Using Dask and the saved \textit{.parquet} file, the user can query for specific
     \label{fig:ss:av:ultimate_analysis_settings}
 \end{figure}
 
-\subsection{Custom Visualizations and Analyses}
-\label{sec:part4}
+\subsection{Custom Visualizations and Analyses} 
+\label{sec:custom_visualization_and_framework}
 The final part, an optional step, allows for the user to define a number of parameters they want to simulate and download the simulation data after running the simulations. 
 Downloading the data then allows the user to create their own custom visualizations without having to rerun the simulations, especially if there are many long and complex simulations. 
 The data can then be further processed and visualized as the user wishes. 
@@ -479,10 +478,10 @@ The adapted model accounts for the interactions of multiple agents.
 
 
 \section{Software Used and Packages}
-The program was created exclusively in Python, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}. \newline
+The program was created exclusively in Python \cite{Python}, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy \cite{NumPy} and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}. \newline
 
 The graphical tool uses Tkinter acting as the front end, handling the user inputs, while NetworkX \cite{hagbergExploringNetworkStructure2008} stores the graph and contains the attribute data. 
-The GUI tool also uses Matplotlib to create the figure of the graph to display to the user in the GUI tool. \newline
+The GUI tool also uses Matplotlib \cite{Matplotlib}to create the figure of the graph to display to the user in the GUI tool. \newline
 
 The simulation framework, the backend of the modelling, makes extensive usage of SciPy's \textit{solve\_ivp()} to create the ODE data. 
 It also makes light usage of NetworkX to load the graph, as it initially takes a graph as an input, and light usage of NumPy to setup the parameters at startup. \newline 
@@ -490,7 +489,7 @@ It also makes light usage of NetworkX to load the graph, as it initially takes a
 The visualization part makes heavily usage of Dash and Plotly. 
 Dash acts as the server and is used for displaying the HTML aspect of the frontend and dealing with any input and output. 
 Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like "log x-axis" form the frontend to the backend server. 
-In the backend, the various inputs are handled, like changing the input string “0.05, 0.1, 0.15, 0.2” into an iterable list [0.05, 0.1, 0.15, 0.2] that the simulation framework can iterate over to vary the parameter value.  \newline 
+In the backend, the various inputs are handled, like changing the input string “0.05, 0.1, 0.15, 0.2” into an iterable list [0.05, 0.1, 0.15, 0.2] that the simulation framework can iterate over to vary the parameter value. 
 
 If there are many simulations to run through, in the case of \nameref{sec:SOBOL_analysis} or \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called, where Joblib parallelizes the for-loop to compute the simulations in parallel. 
 Ultimate analysis uses Pandas to write the data to a \textit{.parquet} file. 

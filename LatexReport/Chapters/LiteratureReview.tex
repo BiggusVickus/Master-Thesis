@@ -48,8 +48,8 @@ The Trait-Based Model is a model that takes into account external factors such a
 where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
 
 \subsection{Agent-Based Models}
-Agent-based Models (ABM) model the system through space and time.
-An $x \times y \times z$ grid (often $z$ is left out for a 2D system) is created and split into smaller sub-cells containing resources and microbes.
+ABMs model the system through space and time.
+An $x \times y$ grid is created and split into smaller sub-cells containing resources and microbes.
 Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
 Resources diffuse through the system using a PDE solver for a Boundary Value Problem (BVP).
 Agents can move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as resource density, microbe density, or stochastic chance. \newline 
@@ -80,7 +80,7 @@ Phages are made up of multiple parts built like LEGO to complete the task of inf
 The aim of the phage is to find a suitable bacterial host and infect the host with viral DNA. 
 The DNA alters the host's metabolic pathways to its benefit and hijacks the cellular replication process to create new copies of the phage. 
 Eventually, the cell lyses, releasing the newly created phages into the environment to infect more bacteria. 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.25\linewidth}
         \centering
@@ -183,7 +183,7 @@ The bacteria don't want to be killed by the phages, so they adapt defenses such 
 As bacteria cells grow and divide, random point mutations can occur in the DNA. 
 These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to detect and  infect the cell. 
 Mutations might not always work, or they can have the opposite effect. 
-They can be partially effective if full effectiveness requires multiple steps to achieve, which can occasionally fail \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984} or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall. \newline
+They can be partially effective if full effectiveness requires multiple steps to achieve, which can occasionally fail \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984} or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall. 
 
 Bacteria can horizontally transfer DNA to other bacteria on contact. 
 There are three primary ways of this happening, which is visualized in \Cref{fig:horizontal_gene_transfer}. 
@@ -204,7 +204,7 @@ The old bacterial DNA will proceed to integrate with the new host cells DNA \cit
 
 All methods provide a way for the cell to mutate and change the fitness value of the cell.
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.7\linewidth]{Figures/horizontal_gene_transfer.png}
     \caption{The three main ways that a (dead) bacterium can horizontally transfer DNA and genes over to another bacterium \cite{tamangHorizontalGeneTransfer2023}.}
@@ -310,13 +310,14 @@ This is commonly seen in wildlife populations, where invading species can out co
 
 \section{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software currently exists with the intended goal of modelling phage-bacteria-resource dynamics. 
+
 Cocktail is a simple but yet complex software that models phages in a chemostat system \cite{nilssonCocktailComputerProgram2022}. 
 Simple as it has a defined set of parameters, and only considers one resource, one bacteria, and 2 phages, but complex due to the ability for the bacteria to gain phage resistance. 
 
 PhageDyn \cite{krysiak-baltynSimulationPhageDynamics2017} is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of wastewater treatment plants. 
 
 There are limitations to Cocktail and PhageDyn. 
-Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model two phages, one bacteria and one resource in a chemostat. 
+Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model a chemostat. 
 Constant resources are being added into a chemostat, with the constant removal of medium from the chemostat. 
 Phages A and B can infect the bacteria, and the bacteria can gain resistance to phage A, B, and AB. 
 The limitation of Cocktail is that the model can not easily be adapted. 
@@ -339,7 +340,7 @@ Model settings, such as if the model is deterministic or stochastic, and the ste
 After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_software_output}
 
 
-\begin{figure}[h!]
+\begin{figure}[!ht]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
