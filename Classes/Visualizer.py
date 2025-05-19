@@ -354,7 +354,7 @@ class Visualizer():
             unflattened_data.append(sum_up_columns(data_item, value["add_rows"]))
         return unflattened_data
     
-    def create_heatmap_figures(self, matrix_data, x_axis_data=None, y_axis_data=None, x_labels=None, y_labels=None):
+    def create_heatmap_figures(self, matrix_data, x_axis_data=None, y_axis_data=None, x_labels=None, y_labels=None, max_color_value=None):
         list_of_figs = []
         for i, name in zip(range(matrix_data.shape[2]), list(self.graph_data.keys()) + ["Bacteria Sum"]):
             df = pd.DataFrame(matrix_data[:, :, i], columns=y_axis_data, index=x_axis_data)
@@ -362,7 +362,9 @@ class Visualizer():
                 df, 
                 labels={'x': y_labels, 'y': x_labels}, 
                 text_auto=True, 
-                aspect="equal" 
+                aspect="equal", 
+                zmin=0, 
+                zmax=max_color_value,
             )
             fig.update_layout(
                 title=f"Parameter {x_labels} vs {y_labels} Analysis for {name}",
@@ -599,6 +601,7 @@ class Visualizer():
             State('parameter_analysis_range_2', 'value'),
             State('parameter_analysis_steps_1', 'value'),
             State('parameter_analysis_steps_2', 'value'),
+            State('standardize_color_value', 'value'),
             State('parameter_analysis_use_serial_transfer', 'value'),
             State('serial_transfer_value', 'value'),
             State('serial_transfer_bp_option', 'value'),
@@ -609,7 +612,7 @@ class Visualizer():
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def parameter_analysis(n_clicks, param_name_1, param_name_2, use_opt_1_or_opt_2, param_input_1, param_input_2, param_range_1, param_range_2, param_steps_1, param_steps_2, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def parameter_analysis(n_clicks, param_name_1, param_name_2, use_opt_1_or_opt_2, param_input_1, param_input_2, param_range_1, param_range_2, param_steps_1, param_steps_2, standardize_color_value, use_serial_transfer, serial_transfer_value, serial_transfer_bp_option, serial_transfer_frequency, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
             """_summary_
 
             Args:
@@ -657,6 +660,7 @@ class Visualizer():
             t_values_to_save = OrderedDict()
 
             # loop through each parameter value, and solve the system of ODEs, and save the final time point value for each parameter value
+            max_color_value = 0
             for param_value_1 in param_values_1:
                 for param_value_2 in param_values_2:
                     # if the parameter 1 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
@@ -696,22 +700,27 @@ class Visualizer():
                     t_values_to_save[(param_value_1, param_value_2)] = overall_t
                     # save the final value to the matrix
                     for i, data in enumerate(overall_y):
+                        max_color_value = max(max_color_value, max(data[0]))
                         matrix_output[param_values_1.index(param_value_1), param_values_2.index(param_value_2), i] = data[0][-1]
             self.copy_of_parameter_analysis_output = {"overall_y": y_values_to_save, "overall_t": t_values_to_save, "x_axis_data": param_values_1, "y_axis_data": param_values_2, "x_labels": param_name_1, "y_labels": param_name_2}
             # Update slider value range to new values 0 to overall_t[-1]
             slider_marks = {i: f"{i:.2f}" for i in np.linspace(0, overall_t[-1], 40)}
+            if not standardize_color_value:
+                max_color_value = None
+
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
-            return *self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2), overall_t[-1], slider_marks, overall_t[-1]
+            return *self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2, max_color_value=max_color_value), overall_t[-1], slider_marks, overall_t[-1]
 
         @callback(
             [Output({'type': 'plot_parameter_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],
             Output({'type': 'plot_parameter_analysis', 'index': "plot_parameter_analysis_bacteria_sum"}, 'figure', allow_duplicate=True),
             # Input('parameter_analysis_slider', 'drag_value'),
             Input('parameter_analysis_slider', 'value'),
-            Input('parameter_analysis_extrapolate', 'value'),
+            State('parameter_analysis_extrapolate', 'value'),
+            State('standardize_color_value', 'value'),
             prevent_initial_call=True
         )
-        def parameter_analysis_slider_update(slider_value, extrapolate):
+        def parameter_analysis_slider_update(slider_value, extrapolate, standardize_color_value):
             """_summary_
 
             Args:
@@ -737,6 +746,7 @@ class Visualizer():
             matrix_output = np.zeros((len(param_values_1), len(param_values_2), len(self.graph_data)+1))
             
             # loop through each set of parameter values, for the x, y point in the parameter analysis, and find the value at the time point closest to the slider value
+            max_color_value = 0 
             for param_value_1 in param_values_1:
                 for param_value_2 in param_values_2:
                     # get the data for the parameter values from the overall_y and overall_t dictionaries for the parameter values
@@ -744,6 +754,8 @@ class Visualizer():
                     temp_t = overall_t[(param_value_1, param_value_2)]
                     # loop thorugh each parameter value, and find the value at the time point closest to the slider value
                     for i, data in enumerate(temp_y):
+                        max_value_y = max(data[0])
+                        max_color_value = max(max_color_value, max_value_y)
                         # if extrapolate is selected, then the value is found by linearly interpolating between the two closest time points. Otherwise, the value is found by finding the left closest time point
                         if (extrapolate):
                             index_1 = np.searchsorted(temp_t, slider_value, side="left") - 1
@@ -760,9 +772,10 @@ class Visualizer():
                             value = data[0][index_1]
                         # save the value to the matrix
                         matrix_output[param_values_1.index(param_value_1), param_values_2.index(param_value_2), i] = value
-
+            if not standardize_color_value:
+                max_color_value = None
             # create a list of figures, where each figure is a heatmap of the final values for each parameter value
-            return self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2)
+            return self.create_heatmap_figures(matrix_output, x_axis_data=param_values_1, y_axis_data=param_values_2, x_labels=param_name_1, y_labels=param_name_2, max_color_value=max_color_value)
 
         @callback(
             [Output({'type': 'plot_initial_value_analysis', 'index': name}, 'figure', allow_duplicate=True) for name in self.graph_data.keys()],

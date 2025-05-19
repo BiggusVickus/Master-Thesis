@@ -359,6 +359,13 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value=[],
                         id='parameter_analysis_extrapolate'
                     ),
+                    dcc.Checklist(
+                        options=[
+                            {'label': 'Standardize color values', 'value': 'option1'},
+                        ],
+                        value=[],
+                        id='standardize_color_value'
+                    ),
                     html.Button("Run Parameter Analysis", id="run_parameter_analysis"),
                     dcc.Slider(
                         min=0,
