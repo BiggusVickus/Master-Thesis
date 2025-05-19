@@ -31,18 +31,18 @@ where $\cdots$.
  
 \subsection{Generalized Consumer-Resource Model}
 The generalized Consumer-Resource Model models the growth of a population and resource dynamics between a population of bacteria ${B}_i$ and a resource ${R}_i$. 
-\begin{align}
+\begin{align*}
     \frac{d{B}_i}{dt} &= r_i{B}_i \left(\sum_{\alpha} \Delta w_{i \alpha}C_{i \alpha}R_{\alpha}\right) - m_i {B}_i \\
     \frac{R_{\beta}}{dt} &= -\sum_i C_{i\beta}R_{\beta}{B_i} + \sum_{\alpha, i}D_{\beta\alpha}^{i}C_{i\alpha}R_{\beta}{B}_i \\
     \Delta w_{i\alpha} &= \sum_{\beta}D_{\beta \alpha}^{i}w_{\beta}
-\end{align}
+\end{align*}
 
 \subsection{Trait-Based Model}
 The Trait-Based Model is a model that takes into account external factors such as the temperature or pH of the system and can be modeled as follows: 
-\begin{align}
+\begin{align*}
     \frac{dB_i}{dt} &= \left(r_i - m_i\right) B_i \\
     r_i &= \frac{r_{i\alpha}^{max}R_\alpha}{R_\alpha + K_{i\alpha}}e^{S_i\left(T-T_{ref}\right)}
-\end{align}
+\end{align*}
 where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
 
 \subsection{Agent-Based Models}
@@ -58,18 +58,18 @@ Emergent behavior is behavior that arises from the interactions of various agent
 The behavior can be beneficial, neutral, or harmful, but it can not be predicted until it arises, \textit{if} it arises.
 Agents can have simple rules, but when interacting with other agents, behavior that hasn't been programmed can arise.
 Sometimes, people consider systems with emergent behaviors more complex than the sum of their parts. \newline
-\begin{align} 
+\begin{align*} 
     \frac{\delta R_\alpha(r, t)}{\delta t} = \nabla \left[D \left( R_\alpha, r\right) \nabla R_\alpha \left( r, t \right) \right], r = \left(x, y\right)
-\end{align}, where $r$ is a function of cell position $(x, y)$, and $t$ represents time. 
+\end{align*}, where $r$ is a function of cell position $(x, y)$, and $t$ represents time. 
 The cellular agents rules are as follows: 
-\begin{align} 
+\begin{align*} 
     \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
-\end{align} where if $i> \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
+\end{align*} where if $i > \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
 The system consumes resources and converts them into new sub-resource types with the following equation:
-\begin{align} 
+\begin{align*} 
     \frac{dR_\alpha}{dt} &= -\sum_i C_{i\alpha}R_\alpha I \\
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
-\end{align}
+\end{align*}
 
 \section{Phage Biology}
 \subsection{What Are Phages?}
