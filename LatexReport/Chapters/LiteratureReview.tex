@@ -22,28 +22,33 @@ The model can be further altered by using a normally distributed variable $\text
 Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
 
 \subsection{Generalized Lotka-Volterra Model}
-The Lotka-Volterra model, a first-order non-linear differential model, is a model that captures the dynamics between predators and prey, with phages being the predator and bacteria being the prey.
+The Lotka-Volterra model, a first-order non-linear differential model, captures the dynamics between predators and prey.
 Any population can be modelled as such:
 \[ 
     \frac{d{B}_i}{dt} = {B}_i \left(\left(r_i + \sum_{j}^{N} \alpha_{ij}{B}_j \right) - m_i\right)
 \]
-where $\cdots$.
+where $r_i$ is reproduction rate, $\alpha_{ij}$ is the devour rate of $B_i$ on $B_j$. If $\alpha_{ij}$ is negative, then $B_i$ has a negative effect on $B_j$, otherwise $B_i$ has a positive effect on $B_j$. $m_i$ is the removal rate of $B_i$. 
  
 \subsection{Generalized Consumer-Resource Model}
 The generalized Consumer-Resource Model models the growth of a population and resource dynamics between a population of bacteria ${B}_i$ and a resource ${R}_i$. 
-\begin{align*}
-    \frac{d{B}_i}{dt} &= r_i{B}_i \left(\sum_{\alpha} \Delta w_{i \alpha}C_{i \alpha}R_{\alpha}\right) - m_i {B}_i \\
-    \frac{R_{\beta}}{dt} &= -\sum_i C_{i\beta}R_{\beta}{B_i} + \sum_{\alpha, i}D_{\beta\alpha}^{i}C_{i\alpha}R_{\beta}{B}_i \\
-    \Delta w_{i\alpha} &= \sum_{\beta}D_{\beta \alpha}^{i}w_{\beta}
-\end{align*}
+\begin{align}
+    \frac{d{B}_i}{dt} &= r_i{B}_i \left(\sum_{\alpha} \Delta w_{i \alpha}C_{i \alpha}R_{\alpha}\right) - m_i {B}_i \label{eq:generalized_consumer_resource_model_1}\\
+    \frac{dR_{\beta}}{dt} &= -\sum_i C_{i\beta}R_{\beta}{B_i} + \sum_{\alpha, i}D_{\beta\alpha}^{i}C_{i\alpha}R_{\beta}{B}_i \label{eq:generalized_consumer_resource_model_2}\\
+    \Delta w_{i\alpha} &= \sum_{\beta}D_{\beta \alpha}^{i}w_{\beta} \nonumber
+\end{align}
+\Cref{eq:generalized_consumer_resource_model_1} describes the growth of population $B_i$ and \Cref{eq:generalized_consumer_resource_model_2} describes the resource dynamics and metabolism of resource $R_\beta$. 
+Resource $R_\alpha$ can become resource $R_\beta$ at rate $R_{\beta \alpha}^{i}$. Bacteria $B_i$ reproduces at rate $r_i$ dependent on the concentration of resources $\sum_\alpha C_{i\alpha}$. Bacteria die out at rate $m_i$. 
+
 
 \subsection{Trait-Based Model}
-The Trait-Based Model is a model that takes into account external factors such as the temperature or pH of the system and can be modeled as follows: 
+The Trait-Based Model is a model that takes into account external factors such as the temperature or pH of the system and can be modeled as follows. 
 \begin{align*}
     \frac{dB_i}{dt} &= \left(r_i - m_i\right) B_i \\
-    r_i &= \frac{r_{i\alpha}^{max}R_\alpha}{R_\alpha + K_{i\alpha}}e^{S_i\left(T-T_{ref}\right)}
+    r_i &= \frac{r_{i\alpha}^{max}R_\alpha}{R_\alpha + K_{i\alpha}}e^{S_i\left(T-T_{ref_i}\right)}
 \end{align*}
-where $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
+where $r_i$ is influenced by the environment impact factor. $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
+The larger $S_i$ is, and the larger the difference $T$ is from $T_{ref_i}$, the stronger the effect will have on the growth rate of $r_i$. 
+$r_i$ follows the Monod equation, with $r_{i\alpha}^{max}$ being the maximum growth rate of bacteria $B_i$, $R_\alpha$ is the resource concentration, and $K_{i\alpha}$ is the affinity constant. 
 
 \subsection{Agent-Based Models}
 ABMs model the system through space and time.
@@ -58,18 +63,23 @@ Emergent behavior is behavior that arises from the interactions of various agent
 The behavior can be beneficial, neutral, or harmful, but it can not be predicted until it arises, \textit{if} it arises.
 Agents can have simple rules, but when interacting with other agents, behavior that hasn't been programmed can arise.
 Sometimes, people consider systems with emergent behaviors more complex than the sum of their parts. \newline
-\begin{align*} 
-    \frac{\delta R_\alpha(r, t)}{\delta t} = \nabla \left[D \left( R_\alpha, r\right) \nabla R_\alpha \left( r, t \right) \right], r = \left(x, y\right)
-\end{align*}, where $r$ is a function of cell position $(x, y)$, and $t$ represents time. 
-The cellular agents rules are as follows: 
-\begin{align*} 
+\begin{align} 
+    \label{eq:resource_diffusion}
+    \frac{\delta R_\alpha(\left(x, y\right), t)}{\delta t} = \nabla \left[D \left( R_\alpha, \left(x, y\right) \right) \nabla R_\alpha \left(\left(x, y\right), t \right) \right]
+\end{align}
+\Cref{eq:resource_diffusion} describes the diffusion of resource $R_\alpha$ through the matrix cells, dependent on the resource concentration $R_\alpha$ at cell location $(x, y)$. 
+The rules for cellular agents follow \Cref{eq:agent_rules}: 
+\begin{align} 
+    \label{eq:agent_rules}
     \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
-\end{align*} where if $i > \text{ threshold, }\frac{i}{2}$ expands into the neighboring grid cell with a probability $p$. 
-The system consumes resources and converts them into new sub-resource types with the following equation:
-\begin{align*} 
-    \frac{dR_\alpha}{dt} &= -\sum_i C_{i\alpha}R_\alpha I \\
+\end{align}, 
+where $i$ is a bacterial agent, where if $0 \leq \text{ threshold } \leq \frac{di}{dt} \leq 1$, some threshold, $\frac{\frac{di}{dt}}{2}$ expands into the neighboring grid cell with probability $p$. 
+Agent $i$ consumes resources and converts them into new resource with \Cref{eq:agent_consumption_and_conversion}. 
+\begin{align} 
+    \label{eq:agent_consumption_and_conversion}
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
-\end{align*}
+\end{align}
+
 
 \section{Phage Biology}
 \subsection{What Are Phages?}
@@ -82,32 +92,32 @@ Eventually, the cell lyses, releasing the newly created phages into the environm
     \centering
     \begin{subfigure}{0.25\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Sourced/phage_diagram.png}
+        \includegraphics[width=\linewidth]{Figures/phage_diagram.png}
         \caption{
             Phage body structure. 
             % (https://www.newyorker.com/tech/annals-of-technology/phage-killer-viral-dark-matter). 
         }
-        \label{fig:plots:sourced:phage_diagram}
+        \label{fig:figures:phage_diagram}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.3\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Sourced/phage_real.png}
+        \includegraphics[width=\linewidth]{Figures/phage_real.png}
         \caption{
             Phages infecting an \textit{E. coli} bacteria. 
             % (https://www.newyorker.com/tech/annals-of-technology/phage-killer-viral-dark-matter). 
         }
-        \label{fig:plots:sourced:phage_real}
+        \label{fig:figures:phage_real}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.35\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Sourced/phage_impression.png}
+        \includegraphics[width=\linewidth]{Figures/phage_impression.png}
         \caption{
             Artist representation of phages infecting a bacterium. 
             %(https://www.gettyimages.nl/detail/foto/bacteriophage-virus-attacking-a-bacterium-royalty-free-beeld/1179038792). 
         }
-        \label{fig:plots:sourced:phage_impression}
+        \label{fig:figures:phage_impression}
     \end{subfigure}
     \caption{Parts of a phage, a real life picture of phages infecting an \textit{E. coli} bacterium, and an artist's impression of phages infecting a bacterium. }
 \end{figure}
