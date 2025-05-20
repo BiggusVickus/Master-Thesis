@@ -26,23 +26,34 @@ class GraphMaker:
         color_map = []
         for node, attr in self.graph.nodes(data=True):
             if attr["node_type"] == "P":
-                color_map.append('yellow')
+                color_map.append("#83C9E1")
             elif attr["node_type"] == "R":
-                color_map.append('red')
-            elif attr["node_type"] == "E":
-                color_map.append('green')
+                color_map.append("#FF9C46")
             elif attr["node_type"] == "B":
-                color_map.append('orange')
+                color_map.append("#FF96FD")
+            elif attr["node_type"] == "S" or attr["node_type"] == "E":
+                color_map.append("#7CEC7C")
             else:
-                color_map.append('blue')
+                color_map.append('yellow')
         nx.draw_networkx_nodes(self.graph, pos, node_color=color_map, ax=ax)
         straight_edges = []
         curved_edges = []
-        for u, v, key in self.graph.edges(keys=True):
-            if (self.graph.nodes[u]["subset"] == self.graph.nodes[v]["subset"]):
-                curved_edges.append((u, v))
-            else: 
-                straight_edges.append((u, v))
+        if any(u == v for u, v in self.graph.edges()):
+            # If there are self-loops, use keys=True to handle MultiGraph edges
+            for u, v, keys in self.graph.edges(keys=True):
+                if u == v:
+                    curved_edges.append((u, v))
+                elif self.graph.nodes[u]["subset"] == self.graph.nodes[v]["subset"]:
+                    curved_edges.append((u, v))
+                else:
+                    straight_edges.append((u, v))
+        else:
+            # No self-loops, keys not needed
+            for u, v in self.graph.edges():
+                if self.graph.nodes[u]["subset"] == self.graph.nodes[v]["subset"]:
+                    curved_edges.append((u, v))
+                else:
+                    straight_edges.append((u, v))
         nx.draw_networkx_edges(self.graph, pos, edgelist=straight_edges, edge_color='black', ax=ax)
         nx.draw_networkx_edges(self.graph, pos, edgelist=curved_edges, edge_color='red', connectionstyle="arc3,rad=0.6", ax=ax)
         nx.draw_networkx_labels(self.graph, pos, ax=ax)
