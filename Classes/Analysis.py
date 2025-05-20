@@ -125,13 +125,13 @@ class Analysis():
         """
         return np.zeros(int(rows))
     
-    def initialize_new_parameter_from_edges(self, node_list1:list, node_list2:list, attribute_name:str, data_type = float) -> np.array:
+    def initialize_new_parameter_from_edges(self, attribute_name:str, node_list1:list, node_list2:list, data_type = float) -> np.array:
         """Returns a new matrix consisting of the data from the edges between the nodes in node_list1 and node_list2 for a listed attribute name. The data is stored in the matrix as the data_type given, in case the data is not a float. The data is extracted from the attribute_name given.
 
         Args:
+            attribute_name (str): The attribute name to be extracted from the edges
             node_list1 (list): List of nodes to be used as the rows of the matrix
             node_list2 (list): List of nodes to be used as the columns of the matrix
-            attribute_name (str): The attribute name to be extracted from the edges
             data_type (_type_, optional): Optional, the datatype to convert from string to. Defaults to float.
 
         Returns:
@@ -147,12 +147,12 @@ class Analysis():
                     matrix[node_list1.index(node1), node_list2.index(node2)] = data_type(data[attribute_name])
         return matrix
     
-    def initialize_new_parameter_from_node(self, node_list1:list, attribute_name:str, data_type = float) -> np.array:
+    def initialize_new_parameter_from_node(self, attribute_name:str, node_list1:list, data_type = float) -> np.array:
         """Initializes a new vector with the number of rows given by th elength of node_list1. The vector is initialized as a numpy array. The data is extracted from the attribute_name given from the nodes given in node_list1. The data is stored in the vector as the data_type given, in case the data is not a float. 
 
         Args:
+            attribute_name (str): name of the attribute to be extracted from the nodes
             node_list1 (list): List of nodes to be used as the rows of the vector
-            attribute_name (str): 
             data_type (type, optional): The datatype needed/wanted. Can be int for example. Defaults to float.
 
         Returns:

@@ -6,12 +6,19 @@ from tkinter import messagebox
 import networkx as nx
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import numpy as np
-np.random.seed(69)
+import time
 
 class GraphMaker:
-    def __init__(self, GUI):
+    def __init__(self, GUI, seed=None):
         self.GUI = GUI
         self.graph = nx.MultiGraph()
+        if seed is not None:
+            np.random.seed(seed)
+        else:
+            seed = int(1000 * time.time())% 2**32
+            np.random.seed(seed)
+        self.seed = seed
+        print(self.seed)
 
     def plot(self): 
         if not self.GUI:
@@ -88,18 +95,19 @@ class GraphMaker:
 
     def default_phage_data(self):
         string = ""
-        string += f'Initial_Population: {np.random.randint(10, 20)}\n'
+        string += f'Initial_Population: {np.random.randint(5, 15)}\n'
         return string
 
     def default_bacteria_data(self):
         string = ""
-        string += f"Initial_Population: {np.random.randint(90, 100)}\n"
-        string += f"tau: {np.random.uniform(0.1, 0.2)}\n"
+        string += f"Initial_Population: {np.random.randint(50, 100)}\n"
+        string += f"tau: {np.random.uniform(0.7, 3.1)}\n"
         return string
 
     def default_resource_data(self):
         string = ""
-        string += f"Initial_Concentration: {np.random.randint(90, 100)}\n"
+        string += f"Initial_Concentration: {np.random.randint(200, 400)}\n"
+        string += f"washin: 0\n"
         return string
     
     def default_node_data(self):
@@ -110,8 +118,8 @@ class GraphMaker:
     
     def default_p_b_data(self):
         string = ""
-        string += f"Burst_Size: {np.random.randint(10, 20)}\n"
-        string += f"r: {np.random.uniform(0.1, 0.2)}\n"
+        string += f"Burst_Size: {np.random.randint(10, 60)}\n"
+        string += f"r: {np.random.uniform(0.001, 0.15)}\n"
         return string
 
     def default_p_r_data(self):
@@ -122,9 +130,9 @@ class GraphMaker:
 
     def default_b_r_data(self):
         string = ""
-        string += f"v: {np.random.uniform(0.1, 0.2)}\n"
+        string += f"v: {np.random.uniform(0.8, 1.7)}\n"
         string += f"e: {np.random.uniform(0.1, 0.2)}\n"
-        string += f"K: {np.random.uniform(0.1, 0.2)}\n"
+        string += f"K: {np.random.uniform(10, 150)}\n"
         return string
     
     def default_r_r_data(self):
@@ -132,9 +140,6 @@ class GraphMaker:
 
     def default_edge_data(self):
         return ""
-    
-    def randomize_parameter_value(self, main_value, sigma = 1):
-        return np.random.normal(main_value, sigma)
 
     def add_node_to_graph(self, node_type, node_name, node_data = None):
         if node_type == None or node_name == None or node_type == "" or node_name == "":

@@ -1,8 +1,8 @@
 from Classes.GraphMaker import GraphMaker 
 
 class GraphMakerNonGUI(GraphMaker):
-    def __init__(self):
-        super().__init__(True)
+    def __init__(self, seed=None):
+        super().__init__(True, seed)
         self.setup_E_S_nodes()
     
     def setup_E_S_nodes(self):

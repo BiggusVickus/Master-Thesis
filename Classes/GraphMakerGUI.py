@@ -3,11 +3,11 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 import numpy as np
 from Classes.GraphMaker import GraphMaker 
-np.random.seed(69)
+import time
 
 class GraphMakerGUI(GraphMaker):
-    def __init__(self):
-        super().__init__(True)
+    def __init__(self, seed=None):
+        super().__init__(True, seed)
         self.window = Tk() 
         self.window.geometry("1000x1000")
         self.window.wm_title("GUI Tool For Creating Network Topography")
