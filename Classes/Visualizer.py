@@ -113,14 +113,19 @@ class Visualizer():
         num_graphs = len(self.graph_data.keys()) + 1
         cols = 3
         rows = (num_graphs // cols) + 1  # Calculate the number of rows needed
-        fig = make_subplots(rows=rows, cols=3, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum'], row_heights=[5000]*rows)
+        fig = make_subplots(rows=rows, cols=cols, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum'], row_heights=[5000]*rows)
         for i, dictionary in enumerate(self.graph_data.items()):
             name, dic = dictionary
             for j in range(len(unflattened_data[i])):
                 row = (i // cols) + 1
                 col = (i % cols) + 1
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}", hoverlabel=dict(namelength = -1)), row=row, col=col)
-        fig.update_layout(title=f"Graph of Each Population", xaxis=dict(title="Time"), yaxis=dict(title="Value"))
+        fig.update_layout(
+            title=f"Graph of Each Population",
+            xaxis=dict(title="Time"),
+            yaxis=dict(title="Value"),
+            font=dict(size=16)  # Set the font size for all text in the figure
+        )
         if log_y_scale:
             fig.update_yaxes(type="log")
 
@@ -146,6 +151,12 @@ class Visualizer():
             for j in range(len(unflattened_data[i])):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
+        fig.update_layout(
+            title=f"Absolute and Relative Population Levels, Bacteria Count Not Summed Up",
+            xaxis=dict(title="Time"),
+            yaxis=dict(title="Value"),
+            font=dict(size=16)  # Set the font size for all text in the figure
+        )
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
         if log_y_scale:
@@ -154,7 +165,7 @@ class Visualizer():
 
 
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels", "Relative Population Levels"), row_heights=[1000])
         np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
@@ -173,6 +184,12 @@ class Visualizer():
                 fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
         color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (relative)", stackgroup="one",  marker=dict(color=color), groupnorm='percent', hoverlabel=dict(namelength = -1)), row=1, col=2)
+        fig.update_layout(
+            title=f"Stacked Line Chart, Absolute and Relative Population Levels, Bacteria Count Summed Up ",
+            xaxis=dict(title="Time"),
+            yaxis=dict(title="Value"),
+            font=dict(size=16)  # Set the font size for all text in the figure
+        )
         fig.update_yaxes(type="linear", ticksuffix='%', row=1, col=2)
         fig.update_layout(hovermode="x unified")
         if log_y_scale:
@@ -238,7 +255,8 @@ class Visualizer():
                 tickangle=90
             ),
             yaxis_title="Value", 
-            hoverlabel=dict(namelength = -1)
+            hoverlabel=dict(namelength = -1),
+            font=dict(size=16)
         )
         if log_y_scale:
             fig.update_yaxes(type="log")
@@ -1176,7 +1194,6 @@ class Visualizer():
             batch_size = 1000 * os.cpu_count()  # Number of simulations to run before saving intermediate results
             total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
             for batch_index in range(total_batches):
-                print(f"Running batch {batch_index + 1}/{total_batches}...")
                 rows = []
                 start_index = batch_index * batch_size
                 end_index = min(start_index + batch_size, len(iter_items))
