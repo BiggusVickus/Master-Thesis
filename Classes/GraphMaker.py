@@ -67,9 +67,8 @@ class GraphMaker:
 
     def default_environment_data(self):
         string = ""
-        string += f"Temperature: 25\n"
-        string += f"pH: 7\n"
         string += f"M: 4\n"
+        string += f"washout: 0\n"
         return string
     
     def default_settings_data(self):
@@ -84,35 +83,23 @@ class GraphMaker:
         string += f"rtol: 0.001\n"
         string += f"atol: 0.000001\n"
         string += f"t_start: 0\n"
-        string += f"simulation_length: 30\n"
+        string += f"simulation_length: 15\n"
         return string
 
     def default_phage_data(self):
         string = ""
         string += f'Initial_Population: {np.random.randint(10, 20)}\n'
-        # string += f'Washout_Rate: {self.randomize_parameter_value(0.1)}\n'
         return string
 
     def default_bacteria_data(self):
         string = ""
         string += f"Initial_Population: {np.random.randint(90, 100)}\n"
-        # string += f"Growth_Rate: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Death_Rate: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Minimal_Temperature: {self.randomize_parameter_value(20)}\n"
-        # string += f"Optimal_Temperature: {self.randomize_parameter_value(25)}\n"
-        # string += f"Maximal_Temperature: {self.randomize_parameter_value(30)}\n"
-        # string += f"Minimal_pH: {self.randomize_parameter_value(6)}\n"
-        # string += f"Optimal_pH: {self.randomize_parameter_value(7)}\n"
-        # string += f"Maximal_pH: {self.randomize_parameter_value(8)}\n"
         string += f"tau: {np.random.uniform(0.1, 0.2)}\n"
         return string
 
     def default_resource_data(self):
         string = ""
         string += f"Initial_Concentration: {np.random.randint(90, 100)}\n"
-        # string += f"Decay_Rate: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Replenishment_Rate: {self.randomize_parameter_value(0.1)}\n"
-        string += f"e: {np.random.uniform(0.1, 0.2)}\n"
         return string
     
     def default_node_data(self):
@@ -124,10 +111,6 @@ class GraphMaker:
     def default_p_b_data(self):
         string = ""
         string += f"Burst_Size: {np.random.randint(10, 20)}\n"
-        # string += f"Adsorption_Rate_Phage_to_Bacteria: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Adsorption_Rate_Bacteria_to_Phage: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Lysis_Rate: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Carying_Capacity: {self.randomize_parameter_value(100)}\n"
         string += f"r: {np.random.uniform(0.1, 0.2)}\n"
         return string
 
@@ -139,9 +122,8 @@ class GraphMaker:
 
     def default_b_r_data(self):
         string = ""
-        # string += f"Uptake_Rate: {self.randomize_parameter_value(0.1)}\n"
-        # string += f"Release_Rate: {self.randomize_parameter_value(0.1)}\n"
         string += f"v: {np.random.uniform(0.1, 0.2)}\n"
+        string += f"e: {np.random.uniform(0.1, 0.2)}\n"
         string += f"K: {np.random.uniform(0.1, 0.2)}\n"
         return string
     
@@ -183,13 +165,13 @@ class GraphMaker:
             }.get(node_type, lambda: None)()
         if node_type == "P":
             self.graph.nodes[node_name]['subset'] = "0"
-        if node_type == "B":
+        elif node_type == "B":
             self.graph.nodes[node_name]['subset'] = "1"
-        if node_type == "R":
+        elif node_type == "R":
             self.graph.nodes[node_name]['subset'] = "2"
-        if node_type == "E":
-            self.graph.nodes[node_name]['subset'] = "3"
-        if node_type == "S":
+        elif node_type == "E" or node_type == "S":
+            self.graph.nodes[node_name]['subset'] = "4"
+        else:
             self.graph.nodes[node_name]['subset'] = "3"
 
         self.graph.nodes[node_name]['data'] = node_data
