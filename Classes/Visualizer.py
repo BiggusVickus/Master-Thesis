@@ -134,7 +134,7 @@ class Visualizer():
 
 
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Not Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Not Summed Up)", "Relative Population Levels (Bacteria Not Summed Up)"), row_heights=[1000])
         np.random.seed(1)  # Set the random seed for reproducibility
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
@@ -154,7 +154,7 @@ class Visualizer():
 
 
 
-        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Sm)", "Relative Population Levels (Bacteria Sum)"), row_heights=[1000])
+        fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Summed Up)", "Relative Population Levels (Bacteria Summed Up)"), row_heights=[1000])
         np.random.seed(1)
         for i, (name, dic) in enumerate(self.graph_data.items()):
             for j in range(len(unflattened_data[i])):
