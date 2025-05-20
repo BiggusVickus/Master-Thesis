@@ -108,7 +108,7 @@ class GraphMakerGUI(GraphMaker):
                     if edge[i].strip() == "" :
                         continue
                     edge_tuples.append((edge[0], edge[i]))
-            error_text = GraphMaker.mass_create_edges(self, edge_tuples)
+            error_text += GraphMaker.mass_create_edges(self, edge_tuples)
             self.plot()
             if error_text != "":
                 error_text = "Found issues with these edges, others have been successfully added: \n\n" + error_text
@@ -129,7 +129,9 @@ class GraphMakerGUI(GraphMaker):
     
     def import_graph_from_file(self):
         file_name = simpledialog.askstring("Import Grpah File", "Full location of file to import:")
-        return super().import_graph_from_file(file_name)
+        error_text = super().import_graph_from_file(file_name)
+        self.plot()
+        return error_text
     
     def edit_node_attributes(self):
         node_name = simpledialog.askstring("Edit Node Attribute", "Which node do you want to edit?").strip()
