@@ -106,7 +106,7 @@ system = System('simple_graph.gexf')
 phage_nodes = system.get_nodes_of_type('P')
 bacteria_nodes = system.get_nodes_of_type('B')
 resource_nodes = system.get_nodes_of_type('R')
-environemnt_nodes = system.get_nodes_of_type('E')
+environment_nodes = system.get_nodes_of_type('E')
 
 R0 = system.initialize_new_parameter_from_node("Initial_Concentration", resource_nodes)
 U0 = system.initialize_new_parameter_from_node("Initial_Population", bacteria_nodes)

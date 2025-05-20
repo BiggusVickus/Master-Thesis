@@ -1124,22 +1124,25 @@ class Visualizer():
             State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_partition_data', 'index': ALL}, 'value'),
             State({'type': 'ultimate_analysis_input_opt_1_or_2', 'index': ALL}, 'id'),
+            State({'type': 'ultimate_analysis_include_original', 'index': ALL}, 'value'),
             State({'type': 'edit_graphing_data', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_vectors', 'index': ALL}, 'data'),
             State({'type': 'edit_non_graphing_data_matrices', 'index': ALL}, 'data'),
             State('environment_data', 'data'),
             prevent_initial_call=True
         )
-        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, partition_data, input_ids, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
+        def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, partition_data, input_ids, include_original, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
 
             partition_data = [partition[0] for partition in partition_data if partition is not None]
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
             list_of_param_values = []
             param_names_to_run = []
-            for input, ranges, steps, use_opt_1_or_opt_2, id in zip(input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, input_ids):
+            for input, ranges, steps, use_opt_1_or_opt_2, id, original in zip(input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, input_ids, include_original):
                 try:
                     param_values = split_comma_minus(input, ranges, steps, use_opt_1_or_opt_2)
+                    if original:
+                        param_values.append(np.inf)
                     list_of_param_values.append(param_values)
                     param_names_to_run.append(id['index'])
                 except:
@@ -1170,7 +1173,7 @@ class Visualizer():
             pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.pickle', 'wb'))
             
             parallel = ParallelComputing()
-            batch_size = 500 * os.cpu_count()  # Number of simulations to run before saving intermediate results
+            batch_size = 1000 * os.cpu_count()  # Number of simulations to run before saving intermediate results
             total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
             for batch_index in range(total_batches):
                 print(f"Running batch {batch_index + 1}/{total_batches}...")

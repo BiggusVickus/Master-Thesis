@@ -1,4 +1,6 @@
 from joblib import Parallel, delayed
+import numpy as np
+from copy import deepcopy
 
 class ParallelComputing:
     """
@@ -10,7 +12,7 @@ class ParallelComputing:
 
     
     def run_parallel(self, iter_items, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data):
-        results = Parallel(n_jobs=-1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, vector_items_of_name, matrix_items_of_names, initial_condition, analysis, other_parameters_to_pass, environment_data) for x in iter_items)
+        results = Parallel(n_jobs=-1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, deepcopy(vector_items_of_name), deepcopy(matrix_items_of_names), deepcopy(initial_condition), analysis, other_parameters_to_pass, deepcopy(environment_data)) for x in iter_items)
         results_t, results_y = zip(*results)
         return results_t, results_y
     
@@ -22,6 +24,8 @@ class ParallelComputing:
         for key, value in graph_data.items():
             items_of_name += [key] * value["data"].size
         for param_name, param_value in zip(unique_param_names, param_combination):
+            if param_value == np.inf:
+                continue
             if param_name in items_of_name:
                 indexes = [i for i, item in enumerate(items_of_name) if item == param_name]
                 for index in indexes:

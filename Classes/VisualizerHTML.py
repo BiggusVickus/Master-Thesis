@@ -611,21 +611,22 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                             ),
                             dcc.Checklist(
                                 options=[
-                                    {'label': 'Include parameter in simulation', 'value': 'option1'},
-                                ],
-                                value=['option1'],
-                                id={"type": "ultimate_analysis_include_parameter", "index": name}
-                            ),
-                            dcc.Checklist(
-                                options=[
                                     {'label': 'Partition data on this attribute', 'value': name},
                                 ],
                                 id={"type": "ultimate_analysis_partition_data", "index": name}
                             ),
+                            dcc.Checklist(
+                                options=[
+                                    {'label': 'Include original parameter values in simulation', 'value': name},
+                                ],
+                                id={"type": "ultimate_analysis_include_original", "index": name}
+                            ),
                         ]) for name in both_params
                     ],
                     html.Div("", id="ultimate_analysis_text", style={"color": "red", "font-weight": "bold"}),
-                    html.Button("Run Ultimate Anlaysis ", id="run_ultimate_analysis"),
+                    html.Br(),
+                    html.H4(["Please double check the input values and checkboxes before starting, simulation time can take a while for many inputs"]),
+                    html.Button("Run Ultimate Analysis ", id="run_ultimate_analysis"),
                 ]),
             ]),
         ])
