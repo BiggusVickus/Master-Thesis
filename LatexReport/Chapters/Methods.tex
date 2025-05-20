@@ -58,6 +58,8 @@ The user can self-decide which parameter values to give, and if and how the para
         \includegraphics[width=\linewidth]{Screenshots/example_network.png}
         \caption{
             An arbitrary $3\times2\times3$ network with each node representing a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
+            Although not shown, edges between agent types and self loops are technically allowed. 
+            This network topography will be used later in the report in the \nameref{Methods} and \nameref{AER} sections
         }
         \label{fig:ss:example_network}
     \end{subfigure} 
@@ -78,13 +80,14 @@ Each bacteria agent $b_i$ would contain two hidden sub-agents, called sub-agent 
 It is possible to create further sub-agents, by having a bacteria go through $M$ stages of infection. 
 So each infected agent has sub-agent $b_{i_{\text{infected}_k}}$, where $1 \leq k \leq M$. 
 
-In the network model you would explicitly create a $2\times 3 \times 2$ network, but when passing the network to the simulation framework, you would tell the framework to model the subagents. 
+In the network model you would explicitly create a $3\times 2 \times 3$ network, but when passing the network to the simulation framework, you would tell the framework to model the subagents. 
 The user's ODE model has to correctly model each (hidden) agent and correctly handle the changes in states. 
 
-Even though the user might submit a $2 \times 3 \times 2$ model, if the user follows the uninfected and infected classification, where each bacterium goes through $4$ stages, the ODE model and framework will explicitly be modelling 2 phages, 15 bacteria (3 uninfected + $3\cdot 4=12$ infected bacteria), and 2 resources. 
+Even though the user might submit a $3 \times 2 \times 3$ model, if the user follows the uninfected and infected classification, where each bacterium goes through $4$ stages, the ODE model and framework will explicitly be modelling 3 phages, 10 bacteria (2 uninfected + $2\cdot 4=10$ infected bacteria), and 3 resources. 
 
-The user might also be interested in modelling a resource reservoir, where resources go from an external reservoir not accessible by the bacteria to the simulation environment accessible by the bacteria. 
-2 hidden resource agents would be added to the system that would model the transfer of resources from the reservoir to the simulation environment. 
+The user might also be interested in modelling a resource reservoir in a chemostat, where resources go from an external reservoir not accessible by the bacteria to the virtual chemostat ready to be consumed by the bacteria. 
+3 hidden resource agents would be added to the system, where the resources would model the transfer of resources from the reservoir to the simulation environment. 
+The provided ODE model will have to correctly model and transfer the resources from $R_{i_{\text{reservoir}}}$ to $R_{j_{\text{chemostat}}}$. 
 
 \subsection{Visualization Dashboard}
 \label{sec:visualization_framework}
