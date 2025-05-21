@@ -26,7 +26,7 @@ There is an environment node that is used to store global environmental data, su
 The settings node holds information such as simulation length, max time step, and the type of ODE solver to use.
 The tool provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure.  
 
-Once the user is happy with the graph shape, they can export the network representation for use in \nameref{sec:simulation_framework}, \nameref{sec:visualization_framework}, and \nameref{sec:custom_visualization_and_framework}. 
+Once the user is happy with the graph shape, they can export the network representation for use in \nameref{sec:simulation_framework}, \nameref{sec:visualization_framework}, and \nameref{sec:custom_visualizations_and_framework}. 
 The most important part is that the user defines the shape and the attributes of the network, as that can't be edited in part 2 onwards. 
 It is possible go back to the network creation tool and upload the graph to the tool to be able to edit the network representation. \newline
 The user can edit the values of the attributes in \nameref{sec:visualization_framework}, so the parameter values do not have to be perfect. 
@@ -418,7 +418,7 @@ The proportion of the global and local sensitivity can be seen for each agent ty
 \label{sec:ultimate_analysis}
 The Ultimate Analysis section does not produce any visualizations or analysis, but instead allows for the user to define which initial conditions and parameter values they want to run a simulation on.
 The solver will iterate over every single parameter input possibility and save the results in a \textit{.parquet} file.
-Similarly to the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values.
+Similarly settings in the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values (\Cref{fig:ss:av:ultimate_analysis_settings}).
 \newline
 Using Dask and the saved \textit{.parquet} file, the user can query for specific runs, for example runs where a parameter value was greater than 0.05, and use the simulation data to create their own plots.
 \begin{figure}
@@ -431,7 +431,7 @@ Using Dask and the saved \textit{.parquet} file, the user can query for specific
 \end{figure}
 
 \subsection{Custom Visualizations and Analyses} 
-\label{sec:custom_visualization_and_framework}
+\label{sec:custom_visualizations_and_framework}
 The final part, an optional step, allows for the user to define a number of parameters they want to simulate and download the simulation data after running the simulations. 
 Downloading the data then allows the user to create their own custom visualizations without having to rerun the simulations, especially if there are many long and complex simulations. 
 The data can then be further processed and visualized as the user wishes. 
@@ -454,7 +454,7 @@ In this report, the default model, called the “Golden model“ \cite{gengUsing
     \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
     \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
     g(R, v, K) &= \frac{v\cdot R}{R + K}
-\end{align}where $R$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
+\end{align} where $R$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
 The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
 The cell growth process is described by $g(R)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
 The consumption rate of a resource by a bacteria is $e$. \newline

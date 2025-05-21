@@ -28,6 +28,7 @@ Any population can be modelled as such:
     \frac{d{B}_i}{dt} = {B}_i \left(\left(r_i + \sum_{j}^{N} \alpha_{ij}{B}_j \right) - m_i\right)
 \]
 where $r_i$ is reproduction rate, $\alpha_{ij}$ is the devour rate of $B_i$ on $B_j$. If $\alpha_{ij}$ is negative, then $B_i$ has a negative effect on $B_j$, otherwise $B_i$ has a positive effect on $B_j$. $m_i$ is the removal rate of $B_i$. 
+The interactions can be seen in \Cref{fig:lotka_volterra_model}
  
 \subsection{Generalized Consumer-Resource Model}
 The generalized Consumer-Resource Model models the growth of a population and resource dynamics between a population of bacteria ${B}_i$ and a resource ${R}_i$. 
@@ -37,7 +38,10 @@ The generalized Consumer-Resource Model models the growth of a population and re
     \Delta w_{i\alpha} &= \sum_{\beta}D_{\beta \alpha}^{i}w_{\beta} \nonumber
 \end{align}
 \Cref{eq:generalized_consumer_resource_model_1} describes the growth of population $B_i$ and \Cref{eq:generalized_consumer_resource_model_2} describes the resource dynamics and metabolism of resource $R_\beta$. 
-Resource $R_\alpha$ can become resource $R_\beta$ at rate $R_{\beta \alpha}^{i}$. Bacteria $B_i$ reproduces at rate $r_i$ dependent on the concentration of resources $\sum_\alpha C_{i\alpha}$. Bacteria die out at rate $m_i$. 
+Resource $R_\alpha$ can become resource $R_\beta$ at rate $R_{\beta \alpha}^{i}$. 
+Bacteria $B_i$ reproduces at rate $r_i$ dependent on the concentration of resources $\sum_\alpha C_{i\alpha}$. 
+Bacteria die out at rate $m_i$. 
+For a visual, see \Cref{fig:consumer_resource_model}
 
 
 \subsection{Trait-Based Model}
@@ -49,11 +53,12 @@ The Trait-Based Model is a model that takes into account external factors such a
 where $r_i$ is influenced by the environment impact factor. $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
 The larger $S_i$ is, and the larger the difference $T$ is from $T_{ref_i}$, the stronger the effect will have on the growth rate of $r_i$. 
 $r_i$ follows the Monod equation, with $r_{i\alpha}^{max}$ being the maximum growth rate of bacteria $B_i$, $R_\alpha$ is the resource concentration, and $K_{i\alpha}$ is the affinity constant. 
+\Cref{fig:trait_based_model} shows the agent interactions in detail. 
 
 \subsection{Agent-Based Models}
 ABMs model the system through space and time.
 An $x \times y$ grid is created and split into smaller sub-cells containing resources and microbes.
-Each cell acts as its own tiny environment, where resources and microbes interact within the environment, but not with the neighboring cells.
+Each cell acts as its own tiny environment, where resources and microbes interact within the cell, but not with the neighboring cells.
 Resources diffuse through the system using a PDE solver for a Boundary Value Problem (BVP).
 Agents can move into neighboring grids with a probability $p$, where $p$ can depend on any number of parameters such as resource density, microbe density, or stochastic chance. \newline 
 ABMs are useful when simulating many individual elements interacting in a system.
@@ -68,7 +73,7 @@ Sometimes, people consider systems with emergent behaviors more complex than the
     \frac{\delta R_\alpha(\left(x, y\right), t)}{\delta t} = \nabla \left[D \left( R_\alpha, \left(x, y\right) \right) \nabla R_\alpha \left(\left(x, y\right), t \right) \right]
 \end{align}
 \Cref{eq:resource_diffusion} describes the diffusion of resource $R_\alpha$ through the matrix cells, dependent on the resource concentration $R_\alpha$ at cell location $(x, y)$. 
-The rules for cellular agents follow \Cref{eq:agent_rules}: 
+The rules for cellular agents follow \Cref{eq:agent_rules}. 
 \begin{align} 
     \label{eq:agent_rules}
     \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
@@ -79,12 +84,54 @@ Agent $i$ consumes resources and converts them into new resource with \Cref{eq:a
     \label{eq:agent_consumption_and_conversion}
     \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
 \end{align}
+\Cref{fig:agent_based_model} shows how the agents interact with other agents in their cell. 
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/lotka_volterra_model.png}
+        \caption{
+            Lotka Volterra model.
+        }
+        \label{fig:lotka_volterra_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/consumer_resource_model.png}
+        \caption{
+            Consumer Resource model.
+        }
+        \label{fig:consumer_resource_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/trait_based_model.png}
+        \caption{
+            Trait Based model. 
+        }
+        \label{fig:trait_based_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/agent_based_model.png}
+        \caption{
+            Agent Based model. 
+        }
+        \label{fig:agent_based_model}
+    \end{subfigure}
+    \caption{Different models and how the bacterial agents interact with itself, one another, resources and the environment. All figures sourced from \citet{vandenbergEcologicalModellingApproaches2022}}
+\end{figure}
 
 
 \section{Phage Biology}
 \subsection{What Are Phages?}
 Phages are small bundles of proteins that contain viral DNA. 
 Phages are made up of multiple parts built like LEGO to complete the task of infecting a bacterium. 
+\Cref{fig:figures:phage_diagram} shows the body parts of a phage. 
 The aim of the phage is to find a suitable bacterial host and infect the host with viral DNA. 
 The DNA alters the host's metabolic pathways to its benefit and hijacks the cellular replication process to create new copies of the phage. 
 Eventually, the cell lyses, releasing the newly created phages into the environment to infect more bacteria. 
@@ -319,6 +366,58 @@ Although the host cell still undergoes lysis, no infectious phages are released.
 SIE can affect the speed and development of phage and bacterial populations. A phage restricting other phages from infecting the bacteria creates a competitive environment and can out-compete and dominate the other population. 
 This is commonly seen in wildlife populations, where invading species can out compete other species by consuming resources faster than local species, breeding at a faster rate than other species, and having no natural predators. 
 
+\section{Bacteria and Phages in the Lab}
+Researchers around the world are running lab experiments to gain further knowledge of the interactions between phages and bacteria. 
+The aim is to better understand how phages work and interact with bacteria at a molecular, host, and population level. 
+
+A researcher might run the experiment in a liquid medium containing water, carbon and nitrogen sources, and other chemicals such as anti-foaming or pH control chemicals. 
+This liquid medium, often referred to as broth, allows for the cultivation of bacteria in a well-mixed environment, enabling researchers to monitor bacterial growth and phage infection dynamics over time. 
+By adjusting parameters such as nutrient concentration, temperature, agitation speed, and pH, researchers can simulate different environmental conditions and observe their effects on phage-bacteria interactions. 
+Samples can be taken at various time points to measure bacterial density, phage titer, and resource depletion, providing quantitative data for model validation and hypothesis testing. 
+If measured frequently enough, the researcher can get an ODE-like curve out, where each line shows the population levels at that time. 
+Researchers can create a mathematical interpretation of the curves and run algorithms such as curve fitting and simulated annealing to find and tune the ODE model parameters. 
+The tuned ODE parameter values tell the researcher the reaction rate speeds, the burst size of the cell, and cell latent period \cite{gengUsingBacterialPopulation2024, mullaExtremeDiversityPhage2024}. 
+Chemostats and batch cultures are commonly used setups, with chemostats allowing for continuous input of fresh medium and removal of waste, maintaining steady-state conditions ideal for studying long-term dynamics.
+
+Petri dishes are another commonly used way to grow bacterial colonies. 
+Agar, a jelly-like substance derived from seaweed, is commonly used as a solid growth medium in petri dishes. 
+It provides a stable surface for bacteria to grow and form visible colonies. 
+By adding nutrients and other supplements to the agar, researchers can tailor the medium to support the growth of specific bacterial strains or to test the effects of different environmental conditions. 
+When phages are introduced to a bacterial lawn on agar, clear zones called plaques appear where phages have infected and lysed the bacteria, allowing for quantification and observation of phage activity. 
+As a cell lyses, it releases phages into the surrounding. 
+The phages can diffuse through the system, infecting neighboring cells. 
+A small plaque of size 2-3mm can be created, where there are no bacteria. 
+
+Bacteria density can be measured optically using light. 
+In the case of liquid cultures, as the bacteria grow and die, the solution will get more cloudy. 
+By shining a light through a control vial with no bacteria growth and through a vial with bacteria growth, the change in light refraction and intensity can be measured. 
+A researcher might also be interested in using a mass spectrometer to measure the density of phages and nutrients at specific time points. 
+
+With petri dishes, it is harder to measure the bacterial growth. 
+Bacteria are usually mixed with phages in a heated liquid agar solution, and poured onto a petri dish. 
+It might be possible to scrape the bacteria off of the dish into a liquid to measure the optical density (OD), but the results are not always consistent. 
+A computer vision algorithm might be able to quantify the change in color on the petri dish, by comparing the photo of the bacterial lawn with a reference photo with no bacteria growth. 
+Or it can compare the area of growth with area of no growth, where phages are present. 
+However the results are sensitive to camera settings, such as exposure and sharpness. 
+Lighting can have a big factor in the analysis such as if there are shadows from an object over the plate, or if there is residual sunlight entering the room, making the room brighter or darker. 
+It would be easier to measure the change in plaque size, assuming the camera and petri dish stay in the same position for every picture. 
+\Cref{fig:phage_petri_dish} shows a sample bacterial lawn with phage plaques. 
+If one were to zoom in, \Cref{fig:figures:phage_real} shows stained phages infecting a bacterium. 
+
+Measuring OD is inaccurate and can only accurately measure up to an OD of 0.1. Even though using a special spectrophotometer allows consistent results, the results are dependent on the medium, the length of travel through the medium, bacteria size and density. 
+THe device and measurements need to be calibrated to ensure proper results. 
+Changing methods to using \textit{cells/ml} over OD can be used to directly compare results across experiments, labs, and bacteria colonies \cite{miraEstimatingMicrobialPopulation2022}. 
+
+
+
+\begin{figure}[H]
+    \includegraphics[width=0.7\textwidth]{Figures/phage_petri_dish.jpeg}
+    \centering
+    \caption{Bacteria lawn, the dots on the petri dish show no bacteria growth due to the presence of phages. Photo courtesy of S. Flickinger. }
+    \label{fig:phage_petri_dish}
+\end{figure}
+
+
 \section{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software programs modelling phage-bacteria-resource interactions already exists. 
 
@@ -329,7 +428,7 @@ The bacteria models resistance to phage A, B, and AB.
 The user controls the parameter values such as resistance rate to A, B, and AB, resource concentration and outflow, and phage adsorption rate. 
 There is an also an option to periodically add more phages. 
 Model settings, such as if the model is deterministic or stochastic, and the step size is also controllable \cite{nilssonCocktailComputerProgram2022}. 
-After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_software_output}
+After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_plot}
 
 \subsection{PhageDyn}
 PhageDyn is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of industrial wastewater treatment plants \cite{krysiak-baltynSimulationPhageDynamics2017}. 
@@ -337,7 +436,7 @@ The aim of PhageDyn is to model phage dynamics in multi-reactor models.
 Existing models are not applicable to a complex multi-reactor wastewater treatment plant model, which is why \citet{krysiak-baltynSimulationPhageDynamics2017} decided to create PhageDyn to determine how phages can be used to reduce foaming caused by bacteria in wastewater treatment plants \cite{heardEffectFilamentousBacteria2008}. 
 It should be noted that PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics into models of wastewater treatment plants. 
 And in order for PhageDyn to work, an activated copy of GPS-X is required \cite{krysiak-baltynSimulationPhageDynamics2017}. 
-\Cref{fig:PhageDyn_software_output} shows the output that PhageDyn provides. 
+\Cref{fig:phadedyn_plot} shows the output that PhageDyn provides. 
 
 \subsection{Cocktail and PhageDyn Limitations}
 However there are limitations to Cocktail and PhageDyn. 
@@ -366,7 +465,7 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
             Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. 
             Figure D) A system modelling the interactions with phage A and B. 
         }
-        \label{fig:cocktail_software_output}
+        \label{fig:cocktail_plot}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\linewidth}
@@ -384,7 +483,7 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
             Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. 
             A change in phage concentration shows a decrease in heterotrophic and foaming biomass \cite{krysiak-baltynSimulationPhageDynamics2017}. 
         }
-        \label{fig:PhageDyn_software_output}
+        \label{fig:phagedyn_plot}
     \end{subfigure}
     \caption{Example output from Cocktail and PhageDyn respectively. For PhageDyn, concentration of heterotrophic biomass in an aerobic plug flow across four situations.
         See \citet{nilssonCocktailComputerProgram2022} and \cite{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. 

@@ -95,13 +95,12 @@ class System(Analysis):
 
         flattened_y1 = self.flatten_lists_and_matrices(new_N, new_U, new_I, new_P)
         flattened_y1 = self.prevent_negative_numbers(Y, flattened_y1)
-        print(flattened_y1)
         return flattened_y1
 
 
 # graph = GraphMakerGUI(seed=0)
-system = System('simple_graph.gexf')
-# system = System('complex_graph.gexf')
+# system = System('simple_graph.gexf')
+system = System('complex_graph.gexf')
 
 phage_nodes = system.get_nodes_of_type('P')
 bacteria_nodes = system.get_nodes_of_type('B')
