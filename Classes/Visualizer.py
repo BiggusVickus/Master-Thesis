@@ -1188,7 +1188,11 @@ class Visualizer():
                 'agent_names': item_names,
             }
             timestamp = int(datetime.datetime.now().timestamp())
-            pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.pickle', 'wb'))
+
+            output_dir = f"SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/"
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/simulation_results_{timestamp}.pickle', 'wb'))
             
             parallel = ParallelComputing()
             batch_size = 1000 * os.cpu_count()  # Number of simulations to run before saving intermediate results
@@ -1215,9 +1219,9 @@ class Visualizer():
                 batch_df['y_values'] = batch_df['y_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
                 # Save the DataFrame to a Parquet file
                 if os.path.exists(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet"):
-                    batch_df.to_parquet(f'SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=partition_data)
+                    batch_df.to_parquet(f'SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/simulation_results_{timestamp}.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=partition_data)
                 else:
-                    batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=partition_data)
+                    batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=partition_data)
                 # Clear the batch DataFrame to free up memory
                 del batch_df
                 del rows
@@ -1230,6 +1234,6 @@ class Visualizer():
                 gc.collect()  # Force garbage collection to free up memory
 
                 print(f"Batch {batch_index + 1}/{total_batches} completed and saved.")
-            return f"Finished simulation, simulation results saved to SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet"
+            return f"Finished simulation, simulation results (.parquet file and .pickle file) saved to SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/"
         # run the app
         self.app.run(debug=True)
