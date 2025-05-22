@@ -1067,7 +1067,7 @@ class Visualizer():
                 'names': names,
                 'bounds': bounds,
             }) 
-            problem_spec_copy = problem_spec.deepcopy()
+            problem_spec_copy = problem_spec.copy()
             SOBOL_2nd_order = True if SOBOL_2nd_order else False
             param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order, seed=int(seed))
             parallel = ParallelComputing()
@@ -1108,8 +1108,6 @@ class Visualizer():
                 "parameter_value_bounds": bounds,
                 "problem_spec": problem_spec_copy,
                 "t_eval_steps": t_eval_steps,
-                "t_values": t_values,
-                "y_values": y_values,
                 "y_final": Y_final,
                 "y_avg": Y_avg,
                 "y_var": Y_var,
@@ -1130,7 +1128,14 @@ class Visualizer():
                 "other_parameters": self.other_parameters_to_pass,
             }
             timestamp = int(datetime.datetime.now().timestamp())
-            with open(f"SimulationResults/SensitivityAnalysis/SOBOL_analysis_{timestamp}.pickle", "wb") as f:
+            output_dir = f"SimulationResults/SensitivityAnalysis/SOBOLAnalysis{timestamp}/"
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            with open(f"SimulationResults/SensitivityAnalysis/SOBOLAnalysis{timestamp}/SOBOL_analysis_limited_data_{timestamp}.pickle", "wb") as f:
+                pickle.dump(dictionary_results, f)
+            dictionary_results["t_values"] = t_values
+            dictionary_results["y_values"] = y_values
+            with open(f"SimulationResults/SensitivityAnalysis/SOBOLAnalysis{timestamp}/SOBOL_analysis_full_data_{timestamp}.pickle", "wb") as f:
                 pickle.dump(dictionary_results, f)
             return self.SOBOL_figure(final_analyzed, avg_analyzed, var_analyzed, SOBOL_2nd_order, names)
         
