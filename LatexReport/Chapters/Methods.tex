@@ -432,15 +432,15 @@ Using Dask and the saved \textit{.parquet} file, the user can query for specific
 
 \subsection{Custom Visualizations and Analyses} 
 \label{sec:custom_visualizations_and_framework}
-The final part, an optional step, allows for the user to define a number of parameters they want to simulate and download the simulation data after running the simulations. 
-Downloading the data then allows the user to create their own custom visualizations without having to rerun the simulations, especially if there are many long and complex simulations. 
-The data can then be further processed and visualized as the user wishes. 
+The final part, an optional step, allows the user to define a number of parameters they want to simulate and download the simulation results. 
+The user can use this data to create their own custom visualizations without having to rerun the simulations, especially if there are many simulations. 
+The data can be further processed and visualized as the user wishes. 
 
 Depending on the provided model, different behavior might appear. 
-As the dashboard can not create a graph for every situation, or analyze every situation, \nameref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
-For example the model can describe cyclic behavior. 
+As the dashboard can not create a graph for every situation, or be easily adapted to analyze every situation, \nameref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
+For example the agents in a model can exhibit cyclic behavior. 
 A custom visualization that the could be created for this cyclic model would be to perform a Fourier transformation on the curve to obtain the predominant frequencies. 
-A change in parameter values could change the frequencies, so it would be easy to quantify how a change in parameter value affects the frequency output. 
+A change in parameter values would change the frequencies of the curve, so it would be easy to quantify how a change in parameter value affects the frequency output. 
 If dampening occurs, then a change in amplitude can also be measured, and compared to the change in frequency, allowing the user to identify if the frequency-dampening relationship is correlated or not. 
 
 \section{The Golden Model}
