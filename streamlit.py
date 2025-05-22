@@ -1,4 +1,3 @@
-from os import system
 import numpy as np
 from Classes.Analysis import Analysis
 from Classes.GraphMakerGUI import GraphMakerGUI
@@ -9,19 +8,17 @@ class System(Analysis):
         super().__init__(graph_location)
 
     def odesystem(self, t, Y, *params):
-        # start simple, bacteria-resource, see how the bacteria and resources grow/shrink, bacteria should hit carrying capacity, resource should reach 0, not negative, etc
-        graph_object, phage_nodes, bacteria_nodes, resource_nodes, M, tau_vector, washin_vector, e_matrix, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
-        graph = graph_object.graph
         def g(N, v, K):
             return (N * v) / (N + K)
-
-        Y = self.check_cutoff(Y)
-        
+        graph_object, phage_nodes, bacteria_nodes, resource_nodes, M, tau_vector, washin_vector, e_matrix, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
+        graph = graph_object.graph
+        Y = self.check_cutoff(Y)        
         N, U, I, P = self.unflatten_initial_matrix(Y, [len(resource_nodes), len(bacteria_nodes), (len(bacteria_nodes), M), len(phage_nodes)])
         new_N = np.zeros_like(N)
         new_U = np.zeros_like(U)
         new_I = np.zeros_like(I)
         new_P = np.zeros_like(P)
+        
         #update N vector
         for resource in resource_nodes:
             n_index = resource_nodes.index(resource)
@@ -38,8 +35,6 @@ class System(Analysis):
                     sum += e * g(N[n_index], v, K) * (U_b + I_b)
             new_N[n_index] = -sum - N[n_index] * environment['washout'] + washin
         
-        # update U vector, i, and j are flipped relative to what is seen in update N vector for v, K, and r matrices because of how the row and columns are defined in the graph
-        # dont sum U in left and right, because we are looking at an individual bacteria
         for uninfected in bacteria_nodes:
             u_index = bacteria_nodes.index(uninfected)
             p_sum = 0
@@ -97,9 +92,7 @@ class System(Analysis):
         flattened_y1 = self.prevent_negative_numbers(Y, flattened_y1)
         return flattened_y1
 
-
-# graph = GraphMakerGUI(seed=0)
-# system = System('simple_graph.gexf')
+graph = GraphMakerGUI(seed=0)
 system = System('complex_graph.gexf')
 
 phage_nodes = system.get_nodes_of_type('P')
