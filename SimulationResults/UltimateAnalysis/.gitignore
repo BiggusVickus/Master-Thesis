@@ -1,2 +1,6 @@
-*/
-*.pickle
+# Ignore everything
+*
+
+# Except these UA simulation folders 
+!tau_r/
+!tau_r/**
