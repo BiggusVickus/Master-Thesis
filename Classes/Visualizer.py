@@ -1067,6 +1067,7 @@ class Visualizer():
                 'names': names,
                 'bounds': bounds,
             }) 
+            problem_spec_copy = problem_spec.deepcopy()
             SOBOL_2nd_order = True if SOBOL_2nd_order else False
             param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order, seed=int(seed))
             parallel = ParallelComputing()
@@ -1081,9 +1082,10 @@ class Visualizer():
             # Y_time = np.zeros((len(param_samples), len(data_size)+1, t_eval_steps))
             # Set numpy print options to display the whole array
             new_list_y_values = []
-            for i, (t_value, y_value) in enumerate(zip(t_values, y_values)): 
+            t_values = t_values[0]
+            for i, y_value in enumerate(y_values): 
                 overall_y = self.analysis.unflatten_initial_matrix(y_value, data_size)
-                overall_y = self.save_data(overall_y, t_value)
+                overall_y = self.save_data(overall_y, t_values)
                 overall_y.append([optical_density(deepcopy(overall_y), graph_data_keys)])
                 new_list_y_values.append(overall_y)
                 for j, data in enumerate(overall_y):
@@ -1104,7 +1106,7 @@ class Visualizer():
                 "number_variables": number_variables,
                 "parameter_names": names,
                 "parameter_value_bounds": bounds,
-                "problem_spec": problem_spec,
+                "problem_spec": problem_spec_copy,
                 "t_eval_steps": t_eval_steps,
                 "t_values": t_values,
                 "y_values": y_values,
@@ -1120,7 +1122,6 @@ class Visualizer():
                 "SOBOL_number_samples_tested": 2**SOBOL_number_samples,
                 "data_size": data_size,
                 "graph_data_keys": graph_data_keys,
-                # "analysis": self.analysis,
                 "graph_data": self.graph_data,
                 "non_graph_data_vector": self.non_graph_data_vector,
                 "non_graph_data_matrix": self.non_graph_data_matrix,
