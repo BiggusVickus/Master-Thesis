@@ -25,6 +25,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
     \centering
     \begin{subfigure}{1\linewidth}
         \centering
+        \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
         \caption{
             Linear y-axis for a "good" plot. 
@@ -34,6 +35,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
     \hfill
     \begin{subfigure}{1\linewidth}
         \centering
+        \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
         \caption{
             Logarithmic y-axis for a "good" plot. 
@@ -62,6 +64,7 @@ The first thing that can be noticed is how the bar plots across the final value,
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
+        \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Final.png}
         \caption{
             The total and first order sensitivity for the golden model for the final Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
@@ -71,6 +74,7 @@ The first thing that can be noticed is how the bar plots across the final value,
     \hfill
     \begin{subfigure}{0.49\linewidth}
         \centering
+        \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Average.png}
         \caption{
             The total and first order sensitivity for the golden model for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
@@ -80,11 +84,37 @@ The first thing that can be noticed is how the bar plots across the final value,
     \hfill
     \begin{subfigure}{0.49\linewidth}
         \centering
+        \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Variance.png}
         \caption{
             The total and first order sensitivity for the golden model for the variance of Resource, Uninfected, Infected, Phage, and Total Bacteria value. 
         }
         \label{fig:created:SOBOL_variance}
     \end{subfigure}
-    \caption{The SOBOL analysis for the $1\times 1 \times 1$ golden model. }
+    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. Data was saved from the dashboard and replotted using Matplotlib.}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Peak.png}
+        \caption{
+            The total and first order sensitivity for the golden model for 95\% of the max value reached of the Resource, Uninfected, Infected, Phage, and Total Bacteria population count. 
+        }
+        \label{fig:created:SOBOL_peak}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Peak_Time.png}
+        \caption{
+            The total and first order sensitivity for the golden model for the time at which 95\% of the max value occurred of the Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
+        }
+        \label{fig:created:SOBOL_peak_time}
+    \end{subfigure}
+    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. The SOBOL data was saved from the dashboard and a custom SOBOL analysis was created. }
 \end{figure}
