@@ -47,7 +47,18 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
 
 
 \section{SOBOL Sensitivity Analysis}
-\begin{figure}[h!]
+With any model, it is important to understand how a change in parameter value affects the change in output. 
+Some models will have parameters that are more important and affect the model output more than other parameters. 
+A SOBOL analysis was run on the golden model for three different analyses. 
+\Cref{fig:created:SOBOL_average} shows the impact that the parameter had on the final value of the population at $t=15$. 
+\Cref{fig:created:SOBOL_average} and \Cref{fig:created:SOBOL_variance} likewise show the impact that the parameters had on the average value and variance of the population throughout the simulation respectively. 
+The parameters that were tested include all the parameters listed in the extended golden model, except for $M$. 
+$M$, the number of stages that the infection goes through, can not be tested as $M$ hardcodes the number of infection stages that the bacteria has to go through. 
+The hardcoding is done before the simulation framework starts. As such, it is not possible to change $M$. 
+
+The first thing that can be noticed is how the bar plots across the final value, average, and variance analyses have very similar values. 
+
+\begin{figure}
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
