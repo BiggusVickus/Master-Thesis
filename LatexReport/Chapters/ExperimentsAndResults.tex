@@ -2,18 +2,30 @@
 \label{AER}
 
 \section{What Does A Good Curve Look Like?}
-Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve would look like a mountain. 
+Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve would look like a mountain, with a clear rise, peak, and fall in population levels. 
 For a given initial condition, the bacteria start to consume resources and replicate leading to exponential growth. 
-The phages start to infect the bacteria and eventually the bacteria start to die. 
-A clear peak with the bacteria should be noticed. 
+The phages start to infect the bacteria and eventually the bacteria start to die, releasing new phages. 
+The new phages infect more bacteria, putting pressure on the bacteria growth. 
+Eventually, more bacteria are being infected than being created, causing the decline in bacteria population. 
 \Cref{fig:created:a_good_curve_linear} shows an example of a good curve. 
 \Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic y-axis. 
+
+As the bacteria population grow, the resource consumption speeds up until there are trace amount of resources left at $t=8$. 
+The uninfected and infected bacteria exhibit exponential growth, peaking at 1617 at $t=3.99$ and 3463 at $t=5.27$ respectively. 
+The delay in the uninfected to infected bacteria's peak is due to the infection stages and latent period of the phage infection. 
+The bacteria sum do not have as stark of a peak in comparison to the uninfected and infected bacteria, due to the graph measuring all bacteria populations, but the peak of 3805 at $t=4.89$ is still clear. 
+The phages saw a significant increase in population count at around $t=4$, coinciding with the peak in uninfected bacteria. 
+At this point in time, the infection rate is larger than the bacteria replication rate, so the bacteria are starting to die out even though there are still sufficient resources remaining. 
+At around $t=4$ is when the the resource consumption rate inflects. 
+The rate at which the resources are being consumed starts to slow down, showing a decreasing sigmoid shape. 
+The total bacteria population reached a peak of 3805 at $t=4.89$, a 76.1x increase in population count from the initial 50 starting uninfected bacteria. 
+The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase in population count. 
 
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/a_good_plot_linear.png}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
         \caption{
             Linear y-axis for a "good" plot. 
         }
@@ -22,23 +34,14 @@ A clear peak with the bacteria should be noticed.
     \hfill
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/a_good_plot_logarithmic.png}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
         \caption{
             Logarithmic y-axis for a "good" plot. 
         }
         \label{fig:created:a_good_curve_logarithmic}
     \end{subfigure}
-    \caption{
-        This is what a "good" growth curve looks like. 
-        As the bacteria population grows, the resource consumption speeds up until there are no resources remaining. 
-        The uninfected and infected bacteria exhibit an exponential increase in growth until the phages start to infect the bacteria at around $t=4$. 
-        At $t=4$ there is a noticeable increase in bacteria infections, coinciding with the peak in uninfected bacteria population at $t=4$. 
-        Notice the peak in infected bacteria is at around $t=4.5$ due to the latent period infection rate. 
-        The uninfected bacteria started at population of 50, and grew to a max of 1,423 at $t=3.91$. 
-        The infected bacteria started at 0 and reached a peak at 784 at $t=5.05$
-        The bacteria sum do not have as stark of a peak in comparison to the uninfected and infected bacteria, due to the graph measuring all bacteria populations, but the peak of 1588 at $t=3.99$ is still noticeable. 
-        The phages saw an increase in population count from 10 to a maximum of 10464, a 1000x increase. 
-    }
+    \label{fig:created:a_good_curve}
+    \caption{The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}}
 \end{figure}
 
 

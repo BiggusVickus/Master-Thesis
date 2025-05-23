@@ -15,7 +15,7 @@ Parameters used in the various equations.
         $I_{b_i}$ & Infected Bacteria agent & Infected population for bacteria $b$ at stage $1, \dots, i, \dots, M$  \\
         $B_b$ & Bacteria agent & Total bacteria population for bacteria $b$, assuming $B_b = U_b + \sum_{i=1}^M I_{b_i}$ \\
         $R_r$ & Resource agent & Resource $r$ concentration\\
-        $e_{b, r}$ & Consumption rate& \\
+        $e_{b, r}$ & Consumption rate& Rate at which resources are consumed\\
         $\beta_{p, b}$ & Burst size & Lytic burst size for phage $p$ and bacteria $b$\\
         $r_{p, b}$ & Successful phage/cell encounter & Probability of a successful bacteria $b$ infection from phage $p$\\
         $\tau_{b}$ & Latent period & Time it takes bacteria $b$ to go through one infection stage\\
@@ -27,12 +27,39 @@ Parameters used in the various equations.
         $t$ & time & time value \\
         \bottomrule
     \end{tabularx}\newline
-    \caption{Golden model parameters with variables, names, and descriptions. Subscripts on parameters indicate relationships; for example, $e_{b, r}$ is nonzero if there is an edge connecting bacteria $b$ to resource $r$ in the network, zero otherwise.}
+    \caption{
+        Golden model parameters with variables, names, and descriptions. 
+        Subscripts on parameters indicate relationships; for example, $e_{b, r}$ is nonzero if there is an edge connecting bacteria $b$ to resource $r$ in the network, zero otherwise.
+    }
     \label{tab:parameter_table_golden_model}
 \end{table}
 
 
-\section{SOBOL}
+\section{Simple Golden Model}
+\begin{table}[htbp]
+    \small % or \footnotesize to make it more compact
+    \centering
+    \begin{tabularx}{\textwidth}{l l X}
+        \toprule
+        \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
+        \midrule
+        $Y$ & Univariate parameter output & univariate model output, such as mean $\mu$ or variance $\sigma$ \\
+        $X$ & Input vector & Vector of size $d$, input vector to $f$\\
+        $X_i$ & Parameter input & Value of vector $X$ at position $i=1, \dots, d$ \\
+        $d$ & Input size & Size of input vector $X$\\
+        $X_{\sim i}$ & Parameter input & All values of $X$ that are not $X_i$ \\
+        $f$ & Function $f$& Arbitrary black-box function describing model \\
+        $N$ & Samples & Number of samples, power of 2, $2^x$ \\
+        $D$ & Parameter input size & Number of parameters inputted into SOBOL, $d$ \\
+        $S_{T_i}$ & Global sensitivity & Contribution of $X_i$ to output variance of $Y$ due to interactions with other variables  \\
+        $S_i$ & First order sensitivity & Contribution of $X_i$ to output variance of $Y$ \\
+        \bottomrule
+    \end{tabularx} \newline
+    \caption{SOBOL parameter symbols, name, and description. }
+    \label{tab:parameter_table_SOBOL}
+\end{table}
+
+\section{Complex Golden Model}
 \begin{table}[htbp]
     \small % or \footnotesize to make it more compact
     \centering
