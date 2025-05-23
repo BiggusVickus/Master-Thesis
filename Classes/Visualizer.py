@@ -1115,6 +1115,7 @@ class Visualizer():
                 "final_analyzed": final_analyzed,
                 "avg_analyzed": avg_analyzed,
                 "var_analyzed": var_analyzed,
+                "param_samples": param_samples,
                 "SOBOL_2nd_order": SOBOL_2nd_order,
                 "SOBOL_number_samples": SOBOL_number_samples,
                 "SOBOL_number_samples_tested": 2**SOBOL_number_samples,
