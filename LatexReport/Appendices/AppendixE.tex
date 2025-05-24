@@ -16,7 +16,7 @@
     \begin{tabularx}{\textwidth}{l l}
         \toprule
         Vector Data\\
-        \textbf{tau} & \textbf{washin}\\
+        \bm{$\tau$} & \bm{$w^i$}\\
         \midrule
         2.14 & 0 \\
         \bottomrule
@@ -24,7 +24,7 @@
     \begin{tabularx}{\textwidth}{l l l l l}
         \toprule
         Matrix Data\\
-        \textbf{e} & \textbf{v} & \textbf{K} & \textbf{r} & \textbf{B} \\
+        \bm{$e$} & \bm{$v$} & \bm{$K$} & \bm{$r$} & \bm{$\beta$} \\
         \midrule
         0.03 & 1.2 & 10 & 0.01 & 20 \\
         \bottomrule
@@ -32,7 +32,7 @@
     \begin{tabularx}{\textwidth}{l l}
         \toprule
         Environment Data\\
-        \textbf{M} & \textbf{washout}\\
+        \bm{$M$} & \bm{$w^o$}\\
         \midrule
         4 & 0 \\
         \bottomrule
@@ -41,4 +41,54 @@
         The parameter values used for \Cref{fig:created:a_good_curve}. 
     }
     \label{tab:appendixE:a_good_curve}
+\end{table}
+
+\section{SOBOL Analysis}
+\begin{table}[htbp]
+    \small % or \footnotesize to make it more compact
+    \centering
+    \begin{tabularx}{\textwidth}{l l l}
+        \toprule
+        Initial Condition\\
+        \textbf{Resources} & \textbf{Uninfected Bacteria} & \textbf{Phages} \\
+        \midrule
+        100-500 & 1-100 & 1-50 \\ 
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l}
+        \toprule
+        Vector Data\\
+        \bm{$\tau$} & \bm{$w^i$}\\
+        \midrule
+        0.5-3.5 & 0-100 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l l l l}
+        \toprule
+        Matrix Data\\
+        \bm{$e$} & \bm{$v$} & \bm{$K$} & \bm{$r$} & \bm{$\beta$} \\
+        \midrule
+        0.05-0.25 & 0.8-1.9 & 10-250 & 0.001-0.2 & 0-100 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l}
+        \toprule
+        Environment Data\\
+        \bm{$w^o$}\\
+        \midrule
+        0-0.1 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l l l}
+        \toprule
+        Other Data\\
+        \textbf{Seed Value} & \textbf{2nd Order} & \textbf{Number Samples} & \textbf{Simulations Run}\\
+        \midrule
+        0 & False & 15 & $2^{15}(11+2) = 425984$\\
+        \bottomrule
+    \end{tabularx}\newline
+    \caption{
+        The parameter values used for the SOBOL sensitivity analysis in \Cref{fig:created:SOBOL_1} and \Cref{fig:created:SOBOL_2}. 
+    }
+    \label{tab:appendixE:SOBOL_analysis_values}
 \end{table}

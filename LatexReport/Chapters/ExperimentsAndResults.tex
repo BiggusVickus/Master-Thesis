@@ -1,8 +1,8 @@
 \chapter{Experiments and results}
 \label{AER}
 
-\section{What Does A Good Curve Look Like?}
-Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve would look like a mountain, with a clear rise, peak, and fall in population levels. 
+\section{A Good Curve}
+Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve looks like a mountain, with a clear rise, peak, and fall in population levels. 
 For a given initial condition, the bacteria start to consume resources and replicate leading to exponential growth. 
 The phages start to infect the bacteria and eventually the bacteria start to die, releasing new phages. 
 The new phages infect more bacteria, putting pressure on the bacteria growth. 
@@ -42,21 +42,24 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         }
         \label{fig:created:a_good_curve_logarithmic}
     \end{subfigure}
-    \label{fig:created:a_good_curve}
     \caption{The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}}
+    \label{fig:created:a_good_curve}
 \end{figure}
 
 
 
 \section{SOBOL Sensitivity Analysis}
+\label{sec:SOBOL_sensitivity_ananlysis}
 With any model, it is important to understand how a change in parameter value affects the change in output. 
 Some models will have parameters that are more important and affect the model output more than other parameters. 
 A SOBOL analysis was run on the golden model for three different analyses. 
 \Cref{fig:created:SOBOL_average} shows the impact that the parameter had on the final value of the population at $t=15$. 
 \Cref{fig:created:SOBOL_average} and \Cref{fig:created:SOBOL_variance} likewise show the impact that the parameters had on the average value and variance of the population throughout the simulation respectively. 
-The parameters that were tested include all the parameters listed in the extended golden model, except for $M$. 
+The parameters that were tested include all the parameters listed in the extended golden model, except for Uninfected Bacteria and $M$. 
+Uninfected Bacteria was left out as it doesn't make sense to already add infected bacteria to the system
 $M$, the number of stages that the infection goes through, can not be tested as $M$ hardcodes the number of infection stages that the bacteria has to go through. 
-The hardcoding is done before the simulation framework starts. As such, it is not possible to change $M$. 
+The hardcoding is done before the simulation framework starts. 
+As such, it is not possible to change $M$. 
 
 The first thing that can be noticed is how the bar plots across the final value, average, and variance analyses have very similar values. 
 
@@ -65,7 +68,7 @@ The first thing that can be noticed is how the bar plots across the final value,
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Final.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Final.png}
         \caption{
             The total and first order sensitivity for the golden model for the final Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
         }
@@ -75,7 +78,7 @@ The first thing that can be noticed is how the bar plots across the final value,
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Average.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average.png}
         \caption{
             The total and first order sensitivity for the golden model for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
         }
@@ -85,22 +88,22 @@ The first thing that can be noticed is how the bar plots across the final value,
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Variance.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Variance.png}
         \caption{
             The total and first order sensitivity for the golden model for the variance of Resource, Uninfected, Infected, Phage, and Total Bacteria value. 
         }
         \label{fig:created:SOBOL_variance}
     \end{subfigure}
-    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. Data was saved from the dashboard and replotted using Matplotlib.}
+    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. Data was saved from the dashboard and replotted using Matplotlib. The values used for this SOBOL test can be found in \ref{tab:appendixE:SOBOL_analysis_values}}
+    \label{fig:created:SOBOL_1}
 \end{figure}
-
 
 \begin{figure}
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Peak.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak.png}
         \caption{
             The total and first order sensitivity for the golden model for 95\% of the max value reached of the Resource, Uninfected, Infected, Phage, and Total Bacteria population count. 
         }
@@ -110,11 +113,13 @@ The first thing that can be noticed is how the bar plots across the final value,
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1747923579_Peak_Time.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_Time.png}
         \caption{
             The total and first order sensitivity for the golden model for the time at which 95\% of the max value occurred of the Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
         }
         \label{fig:created:SOBOL_peak_time}
-    \end{subfigure}
-    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. The SOBOL data was saved from the dashboard and a custom SOBOL analysis was created. }
+        \end{subfigure}
+    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. The SOBOL data was saved from the dashboard and a custom SOBOL analysis was created. The values used for this SOBOL test can be found in \ref{tab:appendixE:SOBOL_analysis_values}
+    }
+    \label{fig:created:SOBOL_2}
 \end{figure}

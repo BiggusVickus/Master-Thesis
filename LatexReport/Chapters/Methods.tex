@@ -367,10 +367,9 @@ SOBOL accepts a list of parameter names and a list of range of values to sample 
 If no values are added, the parameter is not included in the simulation and the default value is instead used. 
 The user then needs to select the number of samples to run, using the formula $2^x$, where $x$ is the number they input, and $2^x$ is the number of samples that SOBOL will create and run.
 The larger $x$ is, the more accurate the SOBOL analysis results will be, but the more simulations would need to be run. \newline
-If the user wants to analyze the second order interactions, then the model will run the system $N(2D+2)$ times with the randomly sampled input values, where $N$ is a multiple of 2, and $D$ is the number of parameters being tested.
 Otherwise, if 2nd order is not chosen, the model is run $N(D+2)$ times.
+If the user wants to analyze the second order interactions, then the model will run the system $N(2D+2)$ times with the randomly sampled input values, where $N$ is a multiple of 2, and $D$ is the number of parameters being tested.
 Due to the randomness of the sampling method, the user can, but does not need to, submit a seed value. 
-
 
 Three SOBOL analyses are included by default in the dashboard, as shown in \Cref{fig:ss:av:SOBOL_analysis_run}.
 An analysis of the final value of the simulation, the average population count, and the variance in population count.
