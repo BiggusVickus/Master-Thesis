@@ -39,7 +39,6 @@
 \PassOptionsToPackage{hyphens}{url}
 \usepackage{hyperref}
 \usepackage{array}
-\usepackage{amsmath}
 \usepackage[svgnames]{xcolor}
 \usepackage{textcomp}
 \usepackage[font=small,labelfont=bf]{caption}
@@ -50,6 +49,21 @@
 \usepackage{booktabs}    
 \usepackage{listings}
 \usepackage{bm}
+\usepackage{aliascnt}
+
+\newaliascnt{eqfloat}{equation}
+\newfloat{eqfloat}{h}{eqflts}
+\floatname{eqfloat}{Equation}
+\newcommand*{\ORGeqfloat}{}
+\let\ORGeqfloat\eqfloat
+\def\eqfloat{%
+  \let\ORIGINALcaption\caption
+  \def\caption{%
+    \addtocounter{equation}{-1}%
+    \ORIGINALcaption
+  }%
+  \ORGeqfloat
+}
 
 % styling used for code color in appendix D
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -77,6 +91,7 @@
 % For better horizontal rules
 \DeclareMathOperator*{\argmin}{arg\,min} 
 \DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareCaptionType{equ}[][]
 \hypersetup{urlcolor=black, colorlinks=true} % Colors hyperlinks in blue - change to black if annoying
 \title{\ttitle} % Defines the thesis title - don't touch this
 \begin{document}

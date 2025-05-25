@@ -48,54 +48,76 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
 
 
 
-\section{SOBOL Sensitivity Analysis}
-\label{sec:SOBOL_sensitivity_ananlysis}
-With any model, it is important to understand how a change in parameter value affects the change in output. 
-Some models will have parameters that are more important and affect the model output more than other parameters. 
-A SOBOL analysis was run on the golden model for three different analyses. 
+\section{SOBOL Sensitivity Analysis Results}
+\label{sec:SOBOL_sensitivity_analysis_results}
+It is important to understand how a change in parameter value affects the change in output of a model. 
+Models will have parameters that are more important and have a larger effect on the model output than other parameters. 
+
 \Cref{fig:created:SOBOL_average} shows the impact that the parameter had on the final value of the population at $t=15$. 
-\Cref{fig:created:SOBOL_average} and \Cref{fig:created:SOBOL_variance} likewise show the impact that the parameters had on the average value and variance of the population throughout the simulation respectively. 
+\Cref{fig:created:SOBOL_average} and \Cref{fig:created:SOBOL_variance} show the impact that the parameters had on the average value and variance of the population throughout the simulation respectively. 
 The parameters that were tested include all the parameters listed in the extended golden model, except for Uninfected Bacteria and $M$. 
 Uninfected Bacteria was left out as it doesn't make sense to already add infected bacteria to the system
 $M$, the number of stages that the infection goes through, can not be tested as $M$ hardcodes the number of infection stages that the bacteria has to go through. 
 The hardcoding is done before the simulation framework starts. 
 As such, it is not possible to change $M$. 
 
-The first thing that can be noticed is how the bar plots across the final value, average, and variance analyses have very similar values. 
+What can immediately be noticed in \Cref{fig:created:SOBOL_default} is how the plots all look very similar. 
+There might be some minor differences from bar to bar across plots, but the difference is imperceptible. 
+SOBOL has some difficulty assigning a good sensitivity score to each parameter for the $ST$ and $S1$ tests. 
+Resources, Uninfected, Phages, and Bacteria had more consistent results as seen by the smaller error bars. 
+
+For the resources, the washin $\omega^i$ rate had the biggest influence on the final, average and variance value. 
+Without a washin or washout rate, the resources would have most likely have been consumed by the time the simulation ended at $t=15$. 
+The final values for resources, Uninfected, Infected, and Phages would often be something similar to (0, 0, 0, 10000), where all the resources were consumed and bacteria died out due to the phages, leaving only the phages remaining. 
+So often the final value of the resources would be 0, no matter that the parameter values were. 
+With the addition of the washin, new resources were constantly being re-added. 
+Once the bacteria died out, the resources could accumulate, with the accumulation dependent on the rate of the washin rate, hence why the washin rate has such a large impact on the final, average, and variance of population value for the resources. 
+
+The uninfected and infected populations had consistent outputs for the parameter inputs, where many parameter values were has an $ST \equiv 0.25$ for the Infected population. 
+And since $ST_i >> S1_i$ for the uninfected and infected bacteria, the bacteria population are really dependent on higher order interactions. 
+And looking at the golden model, this makes intuitive sense. 
+The uninfected bacteria interact with $v$, $K$, $r$, $\omega^o$, while the infected bacteria interact with $\tau$ ($M$ is not included as it was left out of the analysis). 
+These are 5 direct parameter interactions with more higher order interactions dependent on $\beta$, as the larger $\beta$ is, the faster the phage population can grow, the faster the bacteria become infected and die.   
+
+
 
 \begin{figure}
     \centering
-    \begin{subfigure}{0.49\linewidth}
+    \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Final.png}
         \caption{
-            The total and first order sensitivity for the golden model for the final Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
+            The $ST$ and $S1$ sensitivity for the final Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
         }
         \label{fig:created:SOBOL_final}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.49\linewidth}
+    \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average.png}
         \caption{
-            The total and first order sensitivity for the golden model for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
+            The $ST$ and $S1$ order sensitivity for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
         }
         \label{fig:created:SOBOL_average}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.49\linewidth}
+    \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Variance.png}
         \caption{
-            The total and first order sensitivity for the golden model for the variance of Resource, Uninfected, Infected, Phage, and Total Bacteria value. 
+            The $ST$ and $S1$ order sensitivity for the variance of Resource, Uninfected, Infected, Phage, and Total Bacteria. 
         }
         \label{fig:created:SOBOL_variance}
     \end{subfigure}
-    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. Data was saved from the dashboard and replotted using Matplotlib. The values used for this SOBOL test can be found in \ref{tab:appendixE:SOBOL_analysis_values}}
-    \label{fig:created:SOBOL_1}
+    \caption{
+        The three default SOBOL analyses from the dashboard for the $1\times 1 \times 1$ golden model. 
+        The data was saved from the dashboard and replotted using Matplotlib for a nicer plot and layout. 
+        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
+        }
+    \label{fig:created:SOBOL_default}
 \end{figure}
 
 \begin{figure}
@@ -119,7 +141,11 @@ The first thing that can be noticed is how the bar plots across the final value,
         }
         \label{fig:created:SOBOL_peak_time}
         \end{subfigure}
-    \caption{The default SOBOL analysis from the dashboard for the $1\times 1 \times 1$ golden model. The SOBOL data was saved from the dashboard and a custom SOBOL analysis was created. The values used for this SOBOL test can be found in \ref{tab:appendixE:SOBOL_analysis_values}
+    \caption{
+        The three default SOBOL analyses from the dashboard for the $1\times 1 \times 1$ golden model. 
+        The data was saved from the dashboard and replotted using Matplotlib for a nicer plot and layout. 
+        The same values used in \Cref{fig:created:SOBOL_default} were used here, and a custom analysis was run on the saved data to create these plots. 
+        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
     }
-    \label{fig:created:SOBOL_2}
+    \label{fig:created:SOBOL_custom}
 \end{figure}

@@ -10,6 +10,73 @@ The final part allows the user to download the simulation data to create their o
 
 A flowchart showing the user-system interactions can be seen in \nameref{AppendixC}. 
 
+\section{The Golden Model}
+\label{sec:golden_model}
+In this report, the default model, called the “Golden model“ \cite{gengUsingBacterialPopulation2024} that will be used for all simulations is as follows:
+
+% \begin{equ}[!ht]
+%     \begin{equation}
+%         \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{i=1}^{M} I_M) \mathcolor{red}{+ w^i -w^o \cdot R}\\
+%         \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P \mathcolor{red}{-w^o \cdot U}\\
+%         \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \mathcolor{red}{-w^o \cdot I_1}\\
+%         \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \mathcolor{red}{-w^o \cdot I_k}\text{ for } k=2, \dots, M \\
+%         \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \mathcolor{red}{-w^o \cdot P} \\
+%         g(R, v, K) &= \frac{v\cdot R}{R + K}
+%     \end{equation}
+%     \caption{Caption of the equation}
+% \end{equ} 
+
+\begin{eqfloat}
+    \begin{align}
+        \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{i=1}^{M} I_M) \mathcolor{red}{+ w^i -w^o \cdot R}\\
+        \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P \mathcolor{red}{-w^o \cdot U}\\
+        \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \mathcolor{red}{-w^o \cdot I_1}\\
+        \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \mathcolor{red}{-w^o \cdot I_k}\text{ for } k=2, \dots, M \\
+        \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \mathcolor{red}{-w^o \cdot P} \\
+        g(R, v, K) &= \frac{v\cdot R}{R + K}
+        \label{eq:golden_model}
+    \end{align}
+    \caption{
+        The golden model taken from \citet{gengUsingBacterialPopulation2024}. 
+        The text in red has been added to model adding (the wash-in) fresh resources ($\omega^i$) 
+        and the removal (wash-out) of agents $\omega^o$. By default these values are 0.
+        A summary of the parameter meanings can be found at \Cref{tab:parameter_table_simple_golden_model}. 
+    }
+\end{eqfloat}
+
+where $R$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. 
+
+The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
+The cell growth process is described by $g(R, v, K)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
+The consumption rate of a resource by a bacteria is $e$. 
+
+Once infected by a phage, the bacteria goes from $U$ to $I_1$. 
+The bacteria goes through $M$ stages of infection $I_1, \dots, I_M$ before lysing, where the bacteria goes from state $I_k$ to state $I_{k+1}$ with equal transition rate $\frac{M}{\tau}$. The probability of a successful infection of a cell is $r$. 
+After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst size of the phage. 
+
+However this model is specifically designed for a $1\times 1 \times 1$ model. 
+In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be slightly adapted. 
+There are other changes that can be made, to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all agents are washed out at a constant rate. 
+
+\subsection{The Adapted Golden Model}
+\label{sec:adapted_golden_model}
+The adapted model accounts for the interactions of multiple agents. 
+\begin{eqfloat}
+    \begin{align}
+        \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b, r} \cdot g(R_r, v_{b, r}, K_{b, r})\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_r - w^o \cdot R_r\\
+        \frac{dU_b}{dt} &= U_b \cdot \sum_{r \in R} g(R_r, v_{b, r}, K_{b, r}) - U_b \cdot \sum_{p \in P} r_{p, b} \cdot P_p - w^o \cdot U_b\\
+        \frac{dI_{b_1}}{dt} &= U_b \cdot \sum_{p \in P}r_{p, b} \cdot P_p - \frac{M}{\tau_b}\cdot I_{b_1} - w^o \cdot I_{b_1}\\
+        \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) - w^o \cdot I_{b_k}\text{ for } k=2, \dots, M \\
+        \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{b_i})\cdot P_p - w^o \cdot P_p\\
+        g(R_r, v_{b, r}, K_{b, r}) &= \frac{v_{b, r} \cdot R_r}{R_r + K_{b, r}}
+        \label{eq:adapted_golden_model}
+    \end{align}. 
+    \caption{
+        Probability of phage infection $r_{p, b}$ is not to be confused with $R_r$, short for Resource $r$. 
+        The interactions are a sum of all interactions due to all interactions taking place at the same time. 
+    }
+\end{eqfloat}
+
 \subsection{Network Creation Tool}
 \label{sec:network_creation_tool}
 The network creation tool is the first step that a user needs to use, and it revolves around using a GUI tool built to create and edit the graph representation of the agent interaction.
@@ -279,6 +346,10 @@ The middle plot takes each run and calculates the “percentage from the max val
 This value is considered the time of peak, and is used to fix some issues that can arise where the population plateaus or only keeps on rising.
 The initial value is plotted on the x-axis, with the time at which the max value is reached on the y-axis.
 Using the plotted data, a linear or log fit can be created.
+
+The $R^2$ value, or coefficient of determination, is calculated as $R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2}$
+where $y_i$ is the observed values, $\hat{y}_i$ is the predicted values, and $\bar{y}$ is the mean of the observed values.
+
 Using this data can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum.
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name.
 For every re-run of the initial value analysis, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data across different parameters. 
@@ -343,23 +414,31 @@ The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_s
     \caption{Phase Portrait}
 \end{figure}
 
-\paragraph{SOBOL Analysis}
-\label{sec:SOBOL_analysis}
+\paragraph{SOBOL Sensitivity Analysis}
+\label{sec:SOBOL_sensitivity_analysis}
 SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output by changing the parameter values of the model and measuring the change in model output.
-SOBOL quantifies how much variance in the output can be attributed to a specific parameter and can measure the effect of global, first, and second order sensitivity. 
+SOBOL quantifies how much variance in the output can be attributed to a specific parameter and can measure the effect of global/total ($ST$), first ($S1$), and second order sensitivity ($S2$). 
+Global, also called total sensitivity, is the summation of all higher order interactions. 
+First order $Si$, or local sensitivity, is the measurement of the effect that parameter $i$ has on the variance of the output. 
+Second order is the measurement of parameter $i$ interacting with parameter $j$, nad how the interaction attributes to the output variance. 
+Etc for third order and higher. 
+When $ST_i >> S1_i$ then parameter $i$ depends on interactions with other parameters, while when $ST_i \equiv S1_i$, then $i$ doesn't interact much with and depend on other parameters.
+It should be stated that $ST_i \geq S1_i$. 
+
 When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ is an input vector of $d$ elements, and $Y$ is a univariate model output.
 $X$ is assumed to be independently and uniformly distributed within a hypercube $X_i \in [0, 1]$ for $i=1, \dots d$.
 The first order sensitivity measures the output variance of the main affect of parameter $X_i$.
 Measuring the effect of varying $X_i$ averaged over other input parameters, and standardized to provide a fractional contribution to the overall output variance.
 The first order sensitivity is described as
 \[
-    S_i = \frac{V_i}{\textit{Var}(Y)}
+    S1_i = \frac{V_i}{\textit{Var}(Y)}
 \] where $V_i = \textit{Var}_{X_i}(\mathbb{E}_{X_{\sim i}}[Y|X_i])$ and where $X_{\sim i}$ represents all the parameters that are not $X_i$.
+All parameters are summarized in \Cref{tab:parameter_table_SOBOL}
 
 The second order index measures the impact of input $X_i$ interacting with $X_j$. For many inputs, this becomes unwieldy to analyze.
 The global sensitivity is used to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$'s interaction with other variables.
 \[
-    S_{T_i} = \frac{\mathbb{E}_{X_{\sim i}}[\textit{Var}_{X_i}(Y|X_{\sim i}))}{\textit{Var}(Y)} = 1 - \frac{\textit{Var}_{X_i}(\mathbb{E}_{X_i}[Y|X_{\sim i}])}{\textit{Var}(Y)}
+    S1_i = \frac{\mathbb{E}_{X_{\sim i}}[\textit{Var}_{X_i}(Y|X_{\sim i}))}{\textit{Var}(Y)} = 1 - \frac{\textit{Var}_{X_i}(\mathbb{E}_{X_i}[Y|X_{\sim i}])}{\textit{Var}(Y)}
 \]
 SOBOL can analyze various univariate outputs.
 This could be either the average value of an agent population, the variance in population count, the time at the peak of an agent count, the final population value, etc. \newline
@@ -375,6 +454,15 @@ Three SOBOL analyses are included by default in the dashboard, as shown in \Cref
 An analysis of the final value of the simulation, the average population count, and the variance in population count.
 The global and first sensitivity are shown next to one another, and each sub-row within a plot represents each agent type. 
 The proportion of the global and local sensitivity can be seen for each agent type and each parameter.
+
+It can be argued that the final, average, and variance value of the run is not a useful statistic to measure and run a SOBOL analysis on. 
+One might give the reasoning that the population value at time $t$ depends on the previous time step $t-1$. 
+Thus the average and variance of the value is not completely random and is semi dependent on the previous value. 
+Another argument is that the simple golden model doesn't exhibit complex behavior unlike the output exhibited in \Cref{fig:cocktail_plot}. 
+
+Making a dashboard that can be used for different inputs is hard to make. Predicting the type of plots that a user might be interested in, and the type of behavior the user wants to analyze is impossible to predict. 
+Therefore, three simple and easy to understand default SOBOL analysis methods are provided that aims to capture the simple dynamics of the system. 
+Upon completion of a SOBOL analysis, the original simulation data is stored to the disk as a \textit{.pickle} file so that the user can use the data and run their own SOBOL analyses. 
 
 \begin{figure}[!ht]
     \centering
@@ -429,43 +517,6 @@ A custom visualization that the could be created for this cyclic model would be 
 A change in parameter values would change the frequencies of the curve, so it would be easy to quantify how a change in parameter value affects the frequency output. 
 If dampening occurs, then a change in amplitude can also be measured, and compared to the change in frequency, allowing the user to identify if the frequency-dampening relationship is correlated or not. 
 
-\section{The Golden Model}
-\label{sec:golden_model}
-In this report, the default model, called the “Golden model“ \cite{gengUsingBacterialPopulation2024} that will be used for all simulations is as follows:
-
-\begin{align}
-    \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{i=1}^{M} I_M)\\
-    \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P\\
-    \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \\
-    \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
-    \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \\
-    g(R, v, K) &= \frac{v\cdot R}{R + K}
-\end{align} where $R$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. \newline
-The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
-The cell growth process is described by $g(R)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
-The consumption rate of a resource by a bacteria is $e$. \newline
-Once infected by a phage, the bacteria goes from $U$ to $I_1$. 
-The bacteria goes through $M$ stages of infection $I_1, \dots, I_M$ before lysing, where the bacteria goes from state $I_k$ to state $I_{k+1}$ with equal transition rate $\frac{M}{\tau}$. The probability of a successful infection of a cell is $r$. \newline
-After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst size of the phage. 
-
-However this model is specifically designed for a $1\times 1 \times 1$ model. 
-In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be adapted. 
-There are other changes that can be made, to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where phages, bacteria, and resources are being washed out. 
-
-\subsection{The Adapted Golden Model}
-\label{sec:adapted_golden_model}
-The adapted model accounts for the interactions of multiple agents. 
-
-\begin{align}
-    \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b, r} \cdot g(R_r, v_{b, r}, K_{b, r})\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_r - w^o \cdot R_r\\
-    \frac{dU_b}{dt} &= U_b \cdot \sum_{r \in R} g(R_r, v_{b, r}, K_{b, r}) - U_b \cdot \sum_{p \in P} r_{p, b} \cdot P_p - w^o \cdot U_b\\
-    \frac{dI_{b_1}}{dt} &= U_b \cdot \sum_{p \in P}r_{p, b} \cdot P_p - \frac{M}{\tau_b}\cdot I_{b_1} - w^o \cdot I_{b_1}\\
-    \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) - w^o \cdot I_{b_k}\text{ for } k=2, \dots, M \\
-    \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p, b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p, b}\cdot(U_b + \sum_{i=1}^{M} I_{b_i})\cdot P_p - w^o \cdot P_p\\
-    g(R_r, v_{b, r}, K_{b, r}) &= \frac{v_{b, r} \cdot R_r}{R_r + K_{b, r}}
-\end{align}. 
-
-
 \section{Software Used and Packages}
 The program was created exclusively in Python \cite{Python}, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy \cite{NumPy} and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}.
 
@@ -480,12 +531,14 @@ Dash acts as the server and is used for displaying the HTML aspect of the fronte
 Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like "log x-axis" form the frontend to the backend server. 
 In the backend, the various inputs are handled, like changing the input string “0.05, 0.1, 0.15, 0.2” into an iterable list [0.05, 0.1, 0.15, 0.2] that the simulation framework can iterate over to vary the parameter value. 
 
-If there are many simulations to run through, in the case of \nameref{sec:SOBOL_analysis} or \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called, where Joblib parallelizes the for-loop to compute the simulations in parallel. 
+If there are many simulations to run through, in the case of \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called, where Joblib parallelizes the for-loop to compute the simulations in parallel. 
+
 Ultimate analysis uses Pandas to write the data to a \textit{.parquet} file. 
-Parquet offers data compression and efficient memory usage. 
-To effectively load the data saved from the ultimate analysis section, the user can use Dask to query and load the \textit{.parquet} file into memory. \newline 
+Pandas parquet offers efficient data compression, efficient memory usage and when combined with Dask, efficient querying functionalities in a Dataframe format that many data scientists would be familiar with. 
+
 SOBOL uses the SALib library to sample and analyze the parameter input. 
-Both the ultimate analysis and SOBOL also save a \textit{.pickle} file containing a dictionary with the parameter values tested,and other important information regarding the simulation in question. \newline
+Both ultimate analysis and SOBOL save a \textit{.pickle} file containing a dictionary with the parameter values tested, setting values, and other important information regarding the simulation. 
+
 \nameref{sec:initial_value_analysis} uses SciPy's \textit{curve\_fit()} function to curve fit the points in the middle plot (\Cref{fig:ss:av:initial_value_analysis_run}). 
 
 Other packages that are used include collections, copy, warnings, itertools, os, datetime, json, gc, and time. 
