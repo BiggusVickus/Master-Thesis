@@ -42,11 +42,12 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         }
         \label{fig:created:a_good_curve_logarithmic}
     \end{subfigure}
-    \caption{The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}}
+    \caption{
+        The log plot allows to see behavior happening at values near 0. 
+        The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}. 
+    }
     \label{fig:created:a_good_curve}
 \end{figure}
-
-
 
 \section{SOBOL Sensitivity Analysis Results}
 \label{sec:SOBOL_sensitivity_analysis_results}
@@ -63,23 +64,53 @@ As such, it is not possible to change $M$.
 
 What can immediately be noticed in \Cref{fig:created:SOBOL_default} is how the plots all look very similar. 
 There might be some minor differences from bar to bar across plots, but the difference is imperceptible. 
-SOBOL has some difficulty assigning a good sensitivity score to each parameter for the $ST$ and $S1$ tests. 
-Resources, Uninfected, Phages, and Bacteria had more consistent results as seen by the smaller error bars. 
+Since the plots all look similar, only an analysis on the final value will be done. 
 
-For the resources, the washin $\omega^i$ rate had the biggest influence on the final, average and variance value. 
-Without a washin or washout rate, the resources would have most likely have been consumed by the time the simulation ended at $t=15$. 
-The final values for resources, Uninfected, Infected, and Phages would often be something similar to (0, 0, 0, 10000), where all the resources were consumed and bacteria died out due to the phages, leaving only the phages remaining. 
-So often the final value of the resources would be 0, no matter that the parameter values were. 
+\subsection{Final Value Analysis}
+\subsubsection{Resources}
+The $\omega^i$/washin rate had the largest influence on the final, average and variance value. 
+Without a washin rate, the resources will most likely have been consumed by the time the simulation ended at $t=15$. 
+The final values for Resources, Uninfected, Infected, and Phages would often be something similar to (0, 0, 0, 10000) at $t=15$, where all the resources were consumed and the bacteria died out due to the phages, leaving only the phages remaining. 
+The final value of the resources would often be 0, no matter what parameter values were used, with $\omega^i, \omega^o = 0$. 
 With the addition of the washin, new resources were constantly being re-added. 
 Once the bacteria died out, the resources could accumulate, with the accumulation dependent on the rate of the washin rate, hence why the washin rate has such a large impact on the final, average, and variance of population value for the resources. 
+The final value would then be dependent on when the bacteria died out, allowing the resources to accumulate, and the $\omega^i - \omega^0\cdot R$ rate. 
+Resources were less dependent on higher order interactions, unlike the uninfected, infected, phages, and total bacteria sum. 
 
-The uninfected and infected populations had consistent outputs for the parameter inputs, where many parameter values were has an $ST \equiv 0.25$ for the Infected population. 
-And since $ST_i >> S1_i$ for the uninfected and infected bacteria, the bacteria population are really dependent on higher order interactions. 
-And looking at the golden model, this makes intuitive sense. 
-The uninfected bacteria interact with $v$, $K$, $r$, $\omega^o$, while the infected bacteria interact with $\tau$ ($M$ is not included as it was left out of the analysis). 
-These are 5 direct parameter interactions with more higher order interactions dependent on $\beta$, as the larger $\beta$ is, the faster the phage population can grow, the faster the bacteria become infected and die.   
+\subsubsection{Uninfected}
+The uninfected bacteria population sensitivities depend on many higher order interactions between the parameters as $ST_i >> S1_i$. 
+The uninfected are highly dependent on $\beta$/B\_matrix and initial phage population, as the initial phage population will determine how many bacteria become infected, and how quickly the phages can proliferate through the bacteria population. 
+Surprisingly, $r$/r\_matrix did not have as big of an influence on the uninfected as $\beta$ did, even though the infection rate is dependent on $r$. 
+The larger or smaller $r$ is, the faster or slower the infection rate is. If $r$ is really small, the infection rate would take forever, potentially allowing the bacteria to keep a stable population. 
+$r$ is equally as important at explaining the final value as $\tau$/tau\_vector, washin, $e$/e\_matrix, and washout of sensitivity around 0.25. 
 
+\subsubsection{Infected}
+Since $ST_i >> S1_i$ for the infected bacteria, where $S1_i \approx 0$ for nearly all of the parameters, the infected bacteria heavily depend on many interactions happening at the same time. 
+This makes intuitive sense after looking at \nameref{sec:golden_model}. 
+The infected (and uninfected) bacteria directly interact with $R$, $U$, $P$, $v$, $K$, $r$, $\tau$, and $\omega^o$, ($M$ is not included as it was left out of the analysis). 
+So due to the high coupling of parameters, the infected (and also the uninfected) have large global sensitivities compared to the local sensitivity. 
 
+However SOBOL had some difficulties assigning a good sensitivity score to each parameter for the $ST$ and $S1$ tests as noticed by the slightly larger error bars in the infected than the uninfected or resources. 
+This is most likely due to the infected bacteria going through multiple stages of infection, causing a delay and uncertain behavior in the final value, despite the ODE model being deterministic. 
+
+\subsubsection{Phages}
+The most important factor for the final phage value is $r$, followed by $\beta$, $\omega^o$ and $P$. 
+The $r$ value allows the phages to infect the uninfected. 
+When $r$ is decreased, the final phage population is counterintuitively higher than when $r$ is larger. 
+The behavior is counterintuitive because one would expect that a higher infection rate would lead to more infections and thus more phages. 
+With a higher $r$ value, more phages are being removed from the phage population and infecting the bacteria. 
+It can be seen as a way of "more phages are needed to infect a bacterium", therefore getting less phages out as a result as more phages are needed to infect a single bacteria. 
+
+Washout has a noticeable influence on the phage population, as not the phage population is being reduced at a rate proportional to the washout rate. 
+The larger the washout rate, the larger the drawdown of phages. 
+When the infected all die out, the phage population wont grow anymore. 
+Given the phage population at that point in time, the phage removal rate is proportional to the washout rate. 
+
+\subsubsection{Total Bacteria}
+Total bacteria is the sum of both uninfected and infected bacteria, so it makes sense for total bacteria to have similar values to uninfected and infected bacteria. 
+Apparently the uninfected bacteria have a stronger influence on the output variance than the infected bacteria. 
+The total bacteria sensitivities resemble the sensitivities of the uninfected bacteria more than the infected bacteria. 
+It would have been expected for the total bacteria to resemble more of an average between the uninfected and infected. 
 
 \begin{figure}
     \centering
@@ -115,10 +146,21 @@ These are 5 direct parameter interactions with more higher order interactions de
     \caption{
         The three default SOBOL analyses from the dashboard for the $1\times 1 \times 1$ golden model. 
         The data was saved from the dashboard and replotted using Matplotlib for a nicer plot and layout. 
+        The results between the final, average, and variance value are nearly identical. 
         The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
         }
     \label{fig:created:SOBOL_default}
 \end{figure}
+
+\subsection{Custom SOBOL Analysis - Peak Value and Peak Time}
+Due to the similarity of the final, average, and variance value, a custom SOBOL analysis that isn't included in the dashboard might result in a different SOBOL analysis result. 
+As such, the peak value and the time of the peak of the population is measured. 
+The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
+The time of the peak is measured at the point in time that the population reaches 95\% of the maximum value. 
+This removes unintended side effects of the simulation. 
+For populations that are only increasing in value, this prevents the measured peak from bunching up at the end of the simulation, skewing the data. 
+As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
+For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
 
 \begin{figure}
     \centering
@@ -144,7 +186,7 @@ These are 5 direct parameter interactions with more higher order interactions de
     \caption{
         The three default SOBOL analyses from the dashboard for the $1\times 1 \times 1$ golden model. 
         The data was saved from the dashboard and replotted using Matplotlib for a nicer plot and layout. 
-        The same values used in \Cref{fig:created:SOBOL_default} were used here, and a custom analysis was run on the saved data to create these plots. 
+        The same randomly selected data used in \Cref{fig:created:SOBOL_default} was used here, and a custom analysis was run on the saved data to create these plots. 
         The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
     }
     \label{fig:created:SOBOL_custom}

@@ -12,20 +12,10 @@ A flowchart showing the user-system interactions can be seen in \nameref{Appendi
 
 \section{The Golden Model}
 \label{sec:golden_model}
-In this report, the default model, called the “Golden model“ \cite{gengUsingBacterialPopulation2024} that will be used for all simulations is as follows:
+The default model, the “Golden model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between Resources, Uninfected bacteria, Infected bacteria, and Phages. 
+All plots and simulations will use this model by default, unless stated otherwise. 
 
-% \begin{equ}[!ht]
-%     \begin{equation}
-%         \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{i=1}^{M} I_M) \mathcolor{red}{+ w^i -w^o \cdot R}\\
-%         \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P \mathcolor{red}{-w^o \cdot U}\\
-%         \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \mathcolor{red}{-w^o \cdot I_1}\\
-%         \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \mathcolor{red}{-w^o \cdot I_k}\text{ for } k=2, \dots, M \\
-%         \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \mathcolor{red}{-w^o \cdot P} \\
-%         g(R, v, K) &= \frac{v\cdot R}{R + K}
-%     \end{equation}
-%     \caption{Caption of the equation}
-% \end{equ} 
-
+\subsection{The Golden Model}
 \begin{eqfloat}
     \begin{align}
         \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{i=1}^{M} I_M) \mathcolor{red}{+ w^i -w^o \cdot R}\\
@@ -37,10 +27,11 @@ In this report, the default model, called the “Golden model“ \cite{gengUsing
         \label{eq:golden_model}
     \end{align}
     \caption{
-        The golden model taken from \citet{gengUsingBacterialPopulation2024}. 
-        The text in red has been added to model adding (the wash-in) fresh resources ($\omega^i$) 
-        and the removal (wash-out) of agents $\omega^o$. By default these values are 0.
-        A summary of the parameter meanings can be found at \Cref{tab:parameter_table_simple_golden_model}. 
+        The golden model sourced from \citet{gengUsingBacterialPopulation2024}. 
+        The text in red has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of agents ($\omega^o$). 
+        The washin is not dependent on the current resource population, as it is a constant rate being added. 
+        By default these values are 0.
+        A summary of the parameters can be found at \Cref{tab:parameter_table_simple_golden_model}. 
     }
 \end{eqfloat}
 
@@ -56,11 +47,15 @@ After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst
 
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be slightly adapted. 
-There are other changes that can be made, to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all agents are washed out at a constant rate. 
+There are other changes that can be made to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all agents are washed out at a constant rate. 
+These changes are highlighted in \Cref{eq:golden_model} in \textcolor{red}{red}. 
 
 \subsection{The Adapted Golden Model}
 \label{sec:adapted_golden_model}
-The adapted model accounts for the interactions of multiple agents. 
+\Cref{eq:adapted_golden_model} accounts for the interactions of multiple agents. 
+Each agent is a sum of all interactions. 
+When resource $R_1$ is being consumed by bacteria $B_1$ and $B_2$, $R_1$ is reduced by the sum of the resources used by $B_1$ and $B_2$. 
+Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, then the uninfected $B_1$ population is reduced by the sum of infections from $P_1$ and $P_2$. 
 \begin{eqfloat}
     \begin{align}
         \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b, r} \cdot g(R_r, v_{b, r}, K_{b, r})\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_r - w^o \cdot R_r\\
@@ -422,7 +417,7 @@ Global, also called total sensitivity, is the summation of all higher order inte
 First order $Si$, or local sensitivity, is the measurement of the effect that parameter $i$ has on the variance of the output. 
 Second order is the measurement of parameter $i$ interacting with parameter $j$, nad how the interaction attributes to the output variance. 
 Etc for third order and higher. 
-When $ST_i >> S1_i$ then parameter $i$ depends on interactions with other parameters, while when $ST_i \equiv S1_i$, then $i$ doesn't interact much with and depend on other parameters.
+When $ST_i >> S1_i$ then parameter $i$ depends on interactions with other parameters, while when $ST_i \approx S1_i$, then $i$ doesn't interact much with and depend on other parameters.
 It should be stated that $ST_i \geq S1_i$. 
 
 When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ is an input vector of $d$ elements, and $Y$ is a univariate model output.

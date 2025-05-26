@@ -31,3 +31,4 @@ venv/
 package-lock.json
 node_modules/
 package.json
+.venv
