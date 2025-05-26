@@ -55,16 +55,15 @@ It is important to understand how a change in parameter value affects the change
 Models will have parameters that are more important and have a larger effect on the model output than other parameters. 
 
 \Cref{fig:created:SOBOL_average} shows the impact that the parameter had on the final value of the population at $t=15$. 
-\Cref{fig:created:SOBOL_average} and \Cref{fig:created:SOBOL_variance} show the impact that the parameters had on the average value and variance of the population throughout the simulation respectively. 
+THe average value and variance of population value were intentionally left out of the analysis, despite being a part of the dashboard because the SOBOL sensitivity values are almost identical to the final sensitivity values. 
+There were some very minor differences from bar to bar across plots, but the difference was imperceptible. 
+Since the plots all look similar, only an analysis on the final value, \Cref{fig:created:SOBOL_final} will be done. 
+
 The parameters that were tested include all the parameters listed in the extended golden model, except for Uninfected Bacteria and $M$. 
 Uninfected Bacteria was left out as it doesn't make sense to already add infected bacteria to the system
 $M$, the number of stages that the infection goes through, can not be tested as $M$ hardcodes the number of infection stages that the bacteria has to go through. 
 The hardcoding is done before the simulation framework starts. 
 As such, it is not possible to change $M$. 
-
-What can immediately be noticed in \Cref{fig:created:SOBOL_default} is how the plots all look very similar. 
-There might be some minor differences from bar to bar across plots, but the difference is imperceptible. 
-Since the plots all look similar, only an analysis on the final value will be done. 
 
 \subsection{Final Value Analysis}
 \subsubsection{Resources}
@@ -127,67 +126,39 @@ It would have been expected for the total bacteria to resemble more of an averag
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak.png}
         \caption{
-            The $ST$ and $S1$ order sensitivity for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
+            The $ST$ and $S1$ sensitivity for the peak value of the Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
         }
-        \label{fig:created:SOBOL_average}
+        \label{fig:created:SOBOL_peak}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Variance.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_Time.png}
         \caption{
-            The $ST$ and $S1$ order sensitivity for the variance of Resource, Uninfected, Infected, Phage, and Total Bacteria. 
+            The $ST$ and $S1$ sensitivity for the peak time value for the Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
         }
-        \label{fig:created:SOBOL_variance}
+        \label{fig:created:SOBOL_peak_time}
     \end{subfigure}
     \caption{
-        The three default SOBOL analyses from the dashboard for the $1\times 1 \times 1$ golden model. 
-        The data was saved from the dashboard and replotted using Matplotlib for a nicer plot and layout. 
-        The results between the final, average, and variance value are nearly identical. 
+        SOBOL analyses for the average, peak, and peak time. 
+        The data was saved from the dashboard and plotted using Matplotlib. 
+        The average and variance analysis results were left out for nearly identical results to the final value. 
         The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
-        }
-    \label{fig:created:SOBOL_default}
+        The same data used in \Cref{fig:created:SOBOL_peak} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+    }
+    \label{fig:created:SOBOL_analyses}
 \end{figure}
 
 \subsection{Custom SOBOL Analysis - Peak Value and Peak Time}
 Due to the similarity of the final, average, and variance value, a custom SOBOL analysis that isn't included in the dashboard might result in a different SOBOL analysis result. 
-As such, the peak value and the time of the peak of the population is measured. 
+the peak value and the time of the peak of the population is measured and analyzed. 
 The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
 The time of the peak is measured at the point in time that the population reaches 95\% of the maximum value. 
 This removes unintended side effects of the simulation. 
 For populations that are only increasing in value, this prevents the measured peak from bunching up at the end of the simulation, skewing the data. 
 As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
 For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
-
-\begin{figure}
-    \centering
-    \begin{subfigure}{0.49\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak.png}
-        \caption{
-            The total and first order sensitivity for the golden model for 95\% of the max value reached of the Resource, Uninfected, Infected, Phage, and Total Bacteria population count. 
-        }
-        \label{fig:created:SOBOL_peak}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_Time.png}
-        \caption{
-            The total and first order sensitivity for the golden model for the time at which 95\% of the max value occurred of the Resource, Uninfected, Infected, Phage, and Total Bacteria population value. 
-        }
-        \label{fig:created:SOBOL_peak_time}
-        \end{subfigure}
-    \caption{
-        The three default SOBOL analyses from the dashboard for the $1\times 1 \times 1$ golden model. 
-        The data was saved from the dashboard and replotted using Matplotlib for a nicer plot and layout. 
-        The same randomly selected data used in \Cref{fig:created:SOBOL_default} was used here, and a custom analysis was run on the saved data to create these plots. 
-        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
-    }
-    \label{fig:created:SOBOL_custom}
-\end{figure}
+The 95\% rule does fail when there is cyclical behavior, as the resource washin can influence the final value of the resources. 

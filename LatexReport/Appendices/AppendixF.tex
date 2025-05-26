@@ -1,0 +1,35 @@
+\chapter{Appendix F: Extra Plots and Figured}
+\label{AppendixF}
+
+\section{Extra SOBOL Analyses}
+\label{sec:AppendixF:extra_SOBOL_analyses}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average.png}
+        \caption{
+            The $ST$ and $S1$ sensitivity for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
+        }
+        \label{fig:created:SOBOL_average}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Variance.png}
+        \caption{
+            The $ST$ and $S1$ sensitivity for the variance of the Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
+        }
+        \label{fig:created:SOBOL_variance}
+    \end{subfigure}
+    \caption{
+        SOBOL analyses for the average, peak, and peak time. 
+        The data was saved from the dashboard and plotted using Matplotlib. 
+        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
+        The same data used in \Cref{fig:created:fig:created:SOBOL_analyses} was used for \Cref{fig:created:SOBOL_average} and \Cref{fig:created:SOBOL_variance}. 
+    }
+    \label{fig:created:SOBOL_extra}
+\end{figure}
