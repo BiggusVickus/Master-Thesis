@@ -1,11 +1,68 @@
-\chapter{Experiments and results}
+\chapter{Experiments and Results}
 \label{AER}
 
 \section{Effect of Changing A Parameter Value}
+\begin{table}
+    \small % or \footnotesize to make it more compact
+    \centering
+    \begin{tabularx}{\textwidth}{l l X}
+        \toprule
+        \textbf{Parameter} & \textbf{Tested Value} & \textbf{Description of Behavior} \\
+        \midrule
+        $R$ (400) & 500 & More uninfected and infected, slightly more phages\\
+         & 300 & Slightly less uninfected and infected, earlier resource depletion\\
 
+        \midrule
+        $U$ (50) & 70 & Slightly more phages and uninfected and infected bacteria\\
+         & 30 & Less uninfected and infected bacteria, slower resource depletion, not all resources used, slightly less phages \\
+
+        \midrule
+        $P$ (10) & 20 & Less resources consumed, less uninfected, bacteria peaks earlier, slightly less phages\\
+         & 5 & Resources consumed faster, more uninfected, infected, and phages\\
+
+        \midrule
+        $\tau$ (2.14) & 10 & Faster resource depletion, faster bacteria peak, plateau, then fall in population. more uninfected and infected, less phages\\
+         & 0.5& Barely any resource consumption, little bacteria growth and uninfected, more phages\\
+
+        \midrule
+        $\omega^i$ (0) & 15 & Slightly more bacteria, resource replenish after bacteria die out\\
+
+        \midrule
+        $e$ (0.03) & 0.1 & Faster resource depletion, sharper decline in uninfected, less infected and phages \\
+         & 0.01 & Less resource consumption, slightly more bacteria\\
+
+        \midrule
+        $v$ (1.2) & 1.8 & More phages, significantly more bacteria, earlier and sharp peak in uninfected, , \\
+         & 1 & Less phages and bacteria, less resource consumption, earlier bacteria peak\\
+
+        \midrule
+        $K$ (10) & 100 & Less resource consumption, less bacteria and phages, earlier bacteria peak\\
+         & 1 & Faster resource depletion and sudden stop instead of gradual slowdown, earlier bacteria peak\\
+
+        \midrule
+        $r$ (0.01) & 0.1 & Less consumption, less infected and phages, earlier peak in bacteria\\
+         & 0.001 & Faster resource consumption rate, more infected and phages, delay in bacteria peak, sharp bacteria peak, small plateau in bacteria count before drop\\
+
+        \midrule
+        $\beta$ (20) & 50 & More phages, earlier bacteria peak, less resources consumed, less bacteria\\
+         & 10 & Faster resource consumption, more uninfected, less pahges, sharper bacteria peak\\
+
+        \midrule
+        $\omega^o$ (0) & 0.02 & Faster resource depletion, more bacteria and sharper peak, later peak, and less phages. \\
+
+        \bottomrule
+    \end{tabularx}
+    \caption{
+        A table that compares how moving one individual parameter value up or down relative to the "\nameref{sec:results:a_good_curve}" changes the general shape of the curve. 
+        This table is not meant to be exhaustive, cover edge cases, or extreme cases, or cover every exact detail and change in the population graph, but just to give an idea of how a change in parameter influences the graph shape, such as the rate of resource depletion, maximum number of bacteria and phages, and change in peak time. 
+        Reference parameter values are provided in the parentheses, from \Cref{tab:appendixE:a_good_curve}. 
+    }
+    \label{tab:effect_of_parameter}
+\end{table}
 
 
 \section{A Good Curve}
+\label{sec:results:a_good_curve}
 Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve looks like a mountain, with a clear rise, peak, and fall in population levels. 
 For a given initial condition, the bacteria start to consume resources and replicate leading to exponential growth. 
 The phages start to infect the bacteria and eventually the bacteria start to die, releasing new phages. 
