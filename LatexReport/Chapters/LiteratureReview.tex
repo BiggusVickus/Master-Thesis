@@ -435,7 +435,7 @@ The bacteria models resistance to phage A, B, and AB.
 The user controls the parameter values such as resistance rate to A, B, and AB, resource concentration and outflow, and phage adsorption rate. 
 There is an also an option to periodically add more phages. 
 Model settings, such as if the model is deterministic or stochastic, and the step size is also controllable \cite{nilssonCocktailComputerProgram2022}. 
-After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:cocktail_plot}
+After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:sourced:cocktail_plot}
 
 \subsection{PhageDyn}
 PhageDyn is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of industrial wastewater treatment plants \cite{krysiak-baltynSimulationPhageDynamics2017}. 
@@ -443,7 +443,7 @@ The aim of PhageDyn is to model phage dynamics in multi-reactor models.
 Existing models are not applicable to a complex multi-reactor wastewater treatment plant model, which is why \citet{krysiak-baltynSimulationPhageDynamics2017} decided to create PhageDyn to determine how phages can be used to reduce foaming caused by bacteria in wastewater treatment plants \cite{heardEffectFilamentousBacteria2008}. 
 It should be noted that PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics into models of wastewater treatment plants. 
 And in order for PhageDyn to work, an activated copy of GPS-X is required \cite{krysiak-baltynSimulationPhageDynamics2017}. 
-\Cref{fig:phadedyn_plot} shows the output that PhageDyn provides. 
+\Cref{fig:sourced:phagedyn_plot} shows the output that PhageDyn provides. 
 
 \subsection{Cocktail and PhageDyn Limitations}
 However there are limitations to Cocktail and PhageDyn. 
@@ -472,7 +472,7 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
             Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. 
             Figure D) A system modelling the interactions with phage A and B. 
         }
-        \label{fig:cocktail_plot}
+        \label{fig:sourced:cocktail_plot}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\linewidth}
@@ -490,9 +490,10 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
             Figure D) Biomass concentration with a less virulent and low adsorption rate phage, co-existence with biomass reached. 
             A change in phage concentration shows a decrease in heterotrophic and foaming biomass \cite{krysiak-baltynSimulationPhageDynamics2017}. 
         }
-        \label{fig:phagedyn_plot}
+        \label{fig:sourced:phagedyn_plot}
     \end{subfigure}
     \caption{Example output from Cocktail and PhageDyn respectively. For PhageDyn, concentration of heterotrophic biomass in an aerobic plug flow across four situations.
         See \citet{nilssonCocktailComputerProgram2022} and \citet{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. 
     }
+    \label{fig:sourced:cocktail_and_phagedyn}
 \end{figure}

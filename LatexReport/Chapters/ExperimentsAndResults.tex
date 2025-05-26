@@ -54,7 +54,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
 It is important to understand how a change in parameter value affects the change in output of a model. 
 Models will have parameters that are more important and have a larger effect on the model output than other parameters. 
 
-\Cref{fig:created:SOBOL_average} shows the impact that the parameter had on the final value of the population at $t=15$. 
+\Cref{fig:created:SOBOL_final} shows the impact that the parameter had on the final value of the population at $t=15$. 
 THe average value and variance of population value were intentionally left out of the analysis, despite being a part of the dashboard because the SOBOL sensitivity values are almost identical to the final sensitivity values. 
 There were some very minor differences from bar to bar across plots, but the difference was imperceptible. 
 Since the plots all look similar, only an analysis on the final value, \Cref{fig:created:SOBOL_final} will be done. 
@@ -118,7 +118,7 @@ It would have been expected for the total bacteria to resemble more of an averag
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Final.png}
         \caption{
-            The $ST$ and $S1$ sensitivity for the final Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
+            Final population value. 
         }
         \label{fig:created:SOBOL_final}
     \end{subfigure}
@@ -128,7 +128,7 @@ It would have been expected for the total bacteria to resemble more of an averag
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak.png}
         \caption{
-            The $ST$ and $S1$ sensitivity for the peak value of the Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
+            Peak population value. 
         }
         \label{fig:created:SOBOL_peak}
     \end{subfigure}
@@ -138,7 +138,7 @@ It would have been expected for the total bacteria to resemble more of an averag
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_Time.png}
         \caption{
-            The $ST$ and $S1$ sensitivity for the peak time value for the Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
+            Time at peak population. 
         }
         \label{fig:created:SOBOL_peak_time}
     \end{subfigure}
@@ -147,14 +147,15 @@ It would have been expected for the total bacteria to resemble more of an averag
         The data was saved from the dashboard and plotted using Matplotlib. 
         The average and variance analysis results were left out for nearly identical results to the final value. 
         The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
-        The same data used in \Cref{fig:created:SOBOL_peak} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+        The same data used in \Cref{fig:created:SOBOL_final} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+        The plot of the average and variance analysis can be found at \Cref{fig:created:SOBOL_average_extra} and \Cref{fig:created:SOBOL_variance_extra}
     }
     \label{fig:created:SOBOL_analyses}
 \end{figure}
 
 \subsection{Custom SOBOL Analysis - Peak Value and Peak Time}
-Due to the similarity of the final, average, and variance value, a custom SOBOL analysis that isn't included in the dashboard might result in a different SOBOL analysis result. 
-the peak value and the time of the peak of the population is measured and analyzed. 
+Due to the similarity of the final, average, and variance value as seen in \Cref{fig:created:SOBOL_final}, \Cref{fig:created:SOBOL_average_extra}, and \Cref{fig:created:SOBOL_variance_extra} a custom SOBOL analysis that isn't included in the dashboard might result in a different SOBOL analysis result. 
+To create the custom SOBOL analyses, the peak value and the time of the peak of the population is measured and analyzed. 
 The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
 The time of the peak is measured at the point in time that the population reaches 95\% of the maximum value. 
 This removes unintended side effects of the simulation. 
@@ -162,3 +163,11 @@ For populations that are only increasing in value, this prevents the measured pe
 As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
 For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
 The 95\% rule does fail when there is cyclical behavior, as the resource washin can influence the final value of the resources. 
+
+The results of the SOBOL peak and time of peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+Although some of the bars between the final, peak, and time of peak values are the same, some are different. 
+But overall, similar values can be seen across the the final, peak, and time of peak analyses. 
+The peak infected values are more certain compared to the final infected values, which could be due to the 95\% rule removing some of the noise of the simulation. 
+The time of peak values have less error compared to the final and peak value. 
+This is due to the restricted range of vlaues. The time of peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
+The final and peak values can fall anywhere between 0 and any value, depending on the initial condition and how high the 
