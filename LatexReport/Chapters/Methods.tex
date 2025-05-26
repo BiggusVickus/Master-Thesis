@@ -28,7 +28,7 @@ All plots and simulations will use this model by default, unless stated otherwis
     \end{align}
     \caption{
         The golden model sourced from \citet{gengUsingBacterialPopulation2024}. 
-        The text in red has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of agents ($\omega^o$). 
+        The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of agents ($\omega^o$). 
         The washin is not dependent on the current resource population, as it is a constant rate being added. 
         By default these values are 0.
         A summary of the parameters can be found at \Cref{tab:parameter_table_simple_golden_model}. 
@@ -54,8 +54,8 @@ These changes are highlighted in \Cref{eq:golden_model} in \textcolor{red}{red}.
 \label{sec:adapted_golden_model}
 \Cref{eq:adapted_golden_model} accounts for the interactions of multiple agents. 
 Each agent is a sum of all interactions. 
-When resource $R_1$ is being consumed by bacteria $B_1$ and $B_2$, $R_1$ is reduced by the sum of the resources used by $B_1$ and $B_2$. 
-Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, then the uninfected $B_1$ population is reduced by the sum of infections from $P_1$ and $P_2$. 
+For example, $B_0$ is independently infected by $P_1$ and $P_2$, thus the uninfected $B_0$ lose $r_{1, 0} \cdot P_1 \cdot B_0 + r_{2, 0} \cdot P_2 \cdot B_0$ uninfected bacteria. 
+Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, the uninfected $B_1$ population is reduced by the sum of infections from $P_1$ and $P_2$. 
 \begin{eqfloat}
     \begin{align}
         \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b, r} \cdot g(R_r, v_{b, r}, K_{b, r})\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_r - w^o \cdot R_r\\
@@ -138,9 +138,9 @@ The second output is an array containing the population count at each time step 
 
 In order to facilitate more complex model behavior, "hidden" agents can be added to the simulation, where the hidden agents represent states that a "visible" agent can be in. 
 Such an example would be the distinction between uninfected and infected bacteria. 
-Each bacteria agent $b_i$ would contain two hidden sub-agents, called sub-agent states, an uninfected sub-agent state $b_{i_\text{uninfected}}$ and infected sub-agent state $b_{i_\text{infected}}$. 
-It is possible to create further sub-agents, by having a bacteria go through $M$ stages of infection. 
-So each infected agent has sub-agent $b_{i_{\text{infected}_k}}$, where $1 \leq k \leq M$. 
+Each bacteria agent $B_b$ would contain two hidden sub-agents, called sub-agent states, an uninfected state sub-agent $U_b$, and infected state sub-agent $I_b$. 
+It is possible to further create sub-agents, by having a bacteria go through $M$ stages of infection. 
+So each infected agent would have sub-agent $I_{b_k}$ where $1 \leq k \leq M$. 
 
 In the network model you would explicitly create a $3\times 2 \times 3$ network, but when passing the network to the simulation framework, you would tell the framework to model the subagents. 
 The user's ODE model has to correctly model each (hidden) agent and correctly handle the changes in states. 
@@ -149,7 +149,8 @@ Even though the user might submit a $3 \times 2 \times 3$ model, if the user fol
 
 The user might also be interested in modelling a resource reservoir in a chemostat, where resources go from an external reservoir not accessible by the bacteria to the virtual chemostat ready to be consumed by the bacteria. 
 3 hidden resource agents would be added to the system, where the resources would model the transfer of resources from the reservoir to the simulation environment. 
-The provided ODE model will have to correctly model and transfer the resources from $R_{i_{\text{reservoir}}}$ to $R_{j_{\text{chemostat}}}$. 
+The provided ODE model will have to correctly model and transfer the resources from $R_{r_{\text{reservoir}}}$ to $R_{r_{\text{chemostat}}}$, where $R_{r_{\text{reservoir}}}$ is unaccessible by the bacteria and $R_{r_{\text{chemostat}}}$ is accessible by the bacteria. 
+It is then up to the user to determine how the resources are transferred, if the resources are added at constant intervals or continuously. 
 
 \subsection{Visualization Dashboard}
 \label{sec:visualization_framework}
@@ -159,7 +160,6 @@ The user can interact with the solver and network by changing parameter, environ
 This allows the user to quickly change parameter values and test different situations.
 The dashboard includes various starter plots that allow the user to test the model.
 As output, the dashboard will show interactive plots so that the user can analyze the system. 
-
 
 The dashboard allows the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections.
 The first section allows for the user to edit the network parameters and setting values on the fly to quickly iterate through different conditions and to fine-tune parameter selection without having to rebuild the network using the GUI tool.
@@ -181,7 +181,7 @@ Data that is stored as a matrix, the data stored on edges between agents, is sto
 \paragraph{Environment and settings}
 The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively.
 
-\begin{figure}[!ht]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -268,7 +268,7 @@ If the checkbox is checked, the new population count will be 508, 413.33, and 76
 These new values would be used as the new starting initial condition for a new simulation, and the run results will be appended to the previous run.
 As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}.
 
-\begin{figure}[!ht]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -305,7 +305,7 @@ Each heatmap cell represents the input of 2 unique parameter values, and shows t
 As the user slides the slider, the value inside the cell updates to correspond with the selected time. 
 Note that the heatmap color range resets for each heatmap, so similar colors across heatmaps and across time will not correspond to the same values.
 
-\begin{figure}[!ht]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -349,7 +349,7 @@ Using this data can be useful for understanding how a change in parameter value 
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name.
 For every re-run of the initial value analysis, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data across different parameters. 
 
-\begin{figure}[!ht]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -383,7 +383,7 @@ Steady states can be identified and classified as either stable, unstable, or as
 By comparing different starting points, it is possible to see if the system is chaotic or not.
 The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}. 
 
-\begin{figure}[!ht]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
@@ -459,7 +459,7 @@ Making a dashboard that can be used for different inputs is hard to make. Predic
 Therefore, three simple and easy to understand default SOBOL analysis methods are provided that aims to capture the simple dynamics of the system. 
 Upon completion of a SOBOL analysis, the original simulation data is stored to the disk as a \textit{.pickle} file so that the user can use the data and run their own SOBOL analyses. 
 
-\begin{figure}[!ht]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering

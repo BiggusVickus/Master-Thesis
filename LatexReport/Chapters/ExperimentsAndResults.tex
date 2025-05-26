@@ -1,6 +1,10 @@
 \chapter{Experiments and results}
 \label{AER}
 
+\section{Effect of Changing A Parameter Value}
+
+
+
 \section{A Good Curve}
 Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve looks like a mountain, with a clear rise, peak, and fall in population levels. 
 For a given initial condition, the bacteria start to consume resources and replicate leading to exponential growth. 
@@ -111,7 +115,7 @@ Apparently the uninfected bacteria have a stronger influence on the output varia
 The total bacteria sensitivities resemble the sensitivities of the uninfected bacteria more than the infected bacteria. 
 It would have been expected for the total bacteria to resemble more of an average between the uninfected and infected. 
 
-\begin{figure}
+\begin{figure}[h!]
     \centering
     \begin{subfigure}{0.32\linewidth}
         \centering
@@ -147,7 +151,7 @@ It would have been expected for the total bacteria to resemble more of an averag
         The data was saved from the dashboard and plotted using Matplotlib. 
         The average and variance analysis results were left out for nearly identical results to the final value. 
         The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
-        The same data used in \Cref{fig:created:SOBOL_final} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+        The data used in \Cref{fig:created:SOBOL_final} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
         The plot of the average and variance analysis can be found at \Cref{fig:created:SOBOL_average_extra} and \Cref{fig:created:SOBOL_variance_extra}
     }
     \label{fig:created:SOBOL_analyses}
@@ -155,19 +159,36 @@ It would have been expected for the total bacteria to resemble more of an averag
 
 \subsection{Custom SOBOL Analysis - Peak Value and Peak Time}
 Due to the similarity of the final, average, and variance value as seen in \Cref{fig:created:SOBOL_final}, \Cref{fig:created:SOBOL_average_extra}, and \Cref{fig:created:SOBOL_variance_extra} a custom SOBOL analysis that isn't included in the dashboard might result in a different SOBOL analysis result. 
-To create the custom SOBOL analyses, the peak value and the time of the peak of the population is measured and analyzed. 
+To create the custom SOBOL analyses, the peak value and the time at the peak of the population is measured and analyzed. 
 The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
-The time of the peak is measured at the point in time that the population reaches 95\% of the maximum value. 
+The time at peak is measured at the point in time that the population reaches 95\% of the maximum value. 
 This removes unintended side effects of the simulation. 
 For populations that are only increasing in value, this prevents the measured peak from bunching up at the end of the simulation, skewing the data. 
 As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
 For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
 The 95\% rule does fail when there is cyclical behavior, as the resource washin can influence the final value of the resources. 
 
-The results of the SOBOL peak and time of peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
-Although some of the bars between the final, peak, and time of peak values are the same, some are different. 
-But overall, similar values can be seen across the the final, peak, and time of peak analyses. 
+The results of the SOBOL peak and time at peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+Although some of the bars between the final, peak, and time at peak values are the same, some are different. 
+But overall, similar values can be seen across the the final, peak, and time at peak analyses. 
 The peak infected values are more certain compared to the final infected values, which could be due to the 95\% rule removing some of the noise of the simulation. 
-The time of peak values have less error compared to the final and peak value. 
-This is due to the restricted range of vlaues. The time of peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
-The final and peak values can fall anywhere between 0 and any value, depending on the initial condition and how high the 
+The time at peak values have less error compared to the final and peak value. 
+This is due to the restricted range of values. The time at peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
+The final and peak values can fall anywhere between 0 and any value, depending on the initial condition and how high the population can rise, and how fast the population can fall, if the population count falls. 
+
+The tau value in the time at peak had a relatively large influence on on the time at peak value for infected and phage population, which will be covered in \nameref{sec:results:initial_value_analysis}. 
+
+\subsection{SOBOL Analysis - Without Washin and Washout}
+In many of the plots, the washin and washout rate had a large influence on the final, peak, and time at peak value. 
+\Cref{fig:created:SOBOL_no_wi_wo_extra} ran the same input as \Cref{fig:created:SOBOL_analyses}, but left the washin and washout rate out. 
+The sensitivity plots for the final, average, variance, peak, and time at peak plots look different form one another. 
+The final resource value depended heavily on the washin and washout rate, but without the washin and washout, the final resource depended heavily on the initial resource population. 
+Since $S1 \approx ST$, the resource parameter does not depend on other higher order interactions. 
+
+The peak value for the resources without washin and washout only depended on the initial resource consumption. 
+Since there was no washin, no resources could be added, so the peak for the resources was always at $t=0$, and was dependent on the initial resource value. 
+The time at peak value is always 0 as the resources are only being depleted, so no matter the change in parameter values, the parameter had no effect on the peak time, so SOBOL gives a value of 0 to every parameter for the resources. 
+$\beta$ consistently had a large effect on the final, average, variance, peak, and time of peak value as 
+
+
+\section{Initial Value Analysis Results}
