@@ -31,7 +31,7 @@ All plots and simulations will use this model by default, unless stated otherwis
         The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of agents ($\omega^o$). 
         The washin is not dependent on the current resource population, as it is a constant rate being added. 
         By default these values are 0.
-        A summary of the parameters can be found at \Cref{tab:parameter_table_simple_golden_model}. 
+        A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golden_model}. 
     }
 \end{eqfloat}
 
@@ -163,14 +163,14 @@ As output, the dashboard will show interactive plots so that the user can analyz
 
 The dashboard allows the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections.
 The first section allows for the user to edit the network parameters and setting values on the fly to quickly iterate through different conditions and to fine-tune parameter selection without having to rebuild the network using the GUI tool.
-The second section allows for the user to see how the population count evolves over time for a given initial condition and parameter values, allowing to quickly test the network input.
+The second section allows for the user to see how the population count evolves over time for a given IC and parameter values, allowing to quickly test the network input.
 The final section allows for the user to run more advanced analyses on the network, for example, by changing multiple parameter values and visualizing the output. 
 
 \subsubsection{Editing Network and Parameter Values}
 \label{sec:editing_network_and_parameter_values}
 The editing network and parameter value contain five separate sections.
 \paragraph{Initial Condition}
-The initial condition settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
+The IC settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
 Each agent type has a table containing the initial population count. 
 Extra hidden agents can be included. 
 When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria agent starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}.  
@@ -188,7 +188,7 @@ The environment data and settings data also have their own tab, \Cref{fig:ss:ds:
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
         \caption{
-            The tab where the user can edit the initial conditions of the agents.
+            The tab where the user can edit the ICs of the agents.
         }
         \label{fig:ss:ds:initial_condition}
     \end{subfigure}
@@ -246,7 +246,7 @@ Once queried, the user can create their own graphs and plots as they have access
 
 \paragraph{Serial Transfer}
 \label{sec:serial_transfer}
-Serial transfer is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and resources, possibly with phages, and transfers the old media into a solution containing new media.
+Serial transfer (ST) is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and resources, possibly with phages, and transfers the old media into a solution containing new media.
 At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out.
 However, usually only resources are added during the transfer process.
 An example would be an experiment starts with 50ml of solution.
@@ -258,14 +258,14 @@ As the bacteria grow, they consume the resources found in the solution.
 However eventually the resources run out, and the bacteria die out due to a lack of resources.
 By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
 
-The implementation of serial transfer is slightly different.
+The implementation of ST is slightly different.
 A user can select a number which will divide the population count of the agents by that number (\Cref{fig:ss:av:serial_transfer_settings}).
-Then the program takes the initial condition values defined for the resources the initial condition in \Cref{sec:editing_network_and_parameter_values} and adds those values to the resources respectively.
-By selecting a checkbox, the values as defined in the initial condition box for phages and bacteria in \Cref{sec:editing_network_and_parameter_values} can optionally be added as well.
-As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen serial transfer value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively.
-Then, if the initial condition for the resources, bacteria, and phages in \Cref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively.
+Then the program takes the IC values defined for the resources the IC in \Cref{sec:editing_network_and_parameter_values} and adds those values to the resources respectively.
+By selecting a checkbox, the values as defined in the IC box for phages and bacteria in \Cref{sec:editing_network_and_parameter_values} can optionally be added as well.
+As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen ST value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively.
+Then, if the IC for the resources, bacteria, and phages in \Cref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively.
 If the checkbox is checked, the new population count will be 508, 413.33, and 76.66 respectively.
-These new values would be used as the new starting initial condition for a new simulation, and the run results will be appended to the previous run.
+These new values would be used as the new starting IC for a new simulation, and the run results will be appended to the previous run.
 As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}.
 
 \begin{figure}[h!]
@@ -275,7 +275,7 @@ As output, new graphs are created showing the runs appended to one another, with
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_settings.png}
         \caption{
-            The section where the user can set up the serial transfer.
+            The section where the user can set up the ST.
         }
         \label{fig:ss:av:serial_transfer_settings}
     \end{subfigure}
@@ -285,7 +285,7 @@ As output, new graphs are created showing the runs appended to one another, with
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_run.png}
         \caption{
-            The output plots of serial transfer. 
+            The output plots of ST. 
         }
         \label{fig:ss:av:serial_transfer_run}
     \end{subfigure}
@@ -294,11 +294,11 @@ As output, new graphs are created showing the runs appended to one another, with
 
 \paragraph{Parameter Analysis}
 \label{sec:parameter_analysis}
-The parameter analysis settings tab as shown in \Cref{fig:ss:av:parameter_analysis_settings} allows the user to choose two parameters and individually run the model with the varying input values.
-The values that can be tested and changed include all initial condition values, vector and matrix data, and environmental data.
+The parameter analysis (PA) settings tab as shown in \Cref{fig:ss:av:parameter_analysis_settings} allows the user to choose two parameters and individually run the model with the varying input values.
+The values that can be tested and changed include all IC values, vector and matrix data, and environmental data.
 As input, the user can select 2 parameters of choice.
 After the parameter name selection, the user can manually choose which parameter values they want to test or test a range of values equally spaced by selecting the number of values to test.
-Finally, the user can optionally run a serial transfer, where the serial transfer uses the settings found on the Serial Transfer tab. 
+Finally, the user can optionally run a ST, where the ST uses the settings found on the ST tab. 
 
 \Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each agent type.
 Each heatmap cell represents the input of 2 unique parameter values, and shows the population count for that parameter run at the time shown in the slider. 
@@ -312,7 +312,7 @@ Note that the heatmap color range resets for each heatmap, so similar colors acr
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/parameter_analysis_settings.png}
         \caption{
-            The options available for the parameter analysis. 
+            The options available for the PP. 
         }
         \label{fig:ss:av:parameter_analysis_settings}
     \end{subfigure}
@@ -332,7 +332,7 @@ Note that the heatmap color range resets for each heatmap, so similar colors acr
 
 \paragraph{Initial Value Analysis}
 \label{sec:initial_value_analysis}
-The initial value analysis settings tab as shown in \Cref{fig:ss:av:initial_value_analysis_settings} allows the user to choose a single parameter and vary the value of that parameter, visualizing how a change in parameter value affects the population count of the agents.
+The initial value analysis (IVA) settings tab as shown in \Cref{fig:ss:av:initial_value_analysis_settings} allows the user to choose a single parameter and vary the value of that parameter, visualizing how a change in parameter value affects the population count of the agents.
 
 \Cref{fig:ss:av:initial_value_analysis_run} shows the plots that the user receives.
 For each agent type, there are three plots made.
@@ -347,7 +347,7 @@ where $y_i$ is the observed values, $\hat{y}_i$ is the predicted values, and $\b
 
 Using this data can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum.
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name.
-For every re-run of the initial value analysis, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data across different parameters. 
+For every re-run of the IVA, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data across different parameters. 
 
 \begin{figure}[h!]
     \centering
@@ -356,7 +356,7 @@ For every re-run of the initial value analysis, the slope, intercept and $R^2$ v
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/initial_value_analysis_settings.png}
         \caption{
-            The settings for the initial value analysis tab. 
+            The settings for the IVA tab. 
         }
         \label{fig:ss:av:initial_value_analysis_settings}
         \vspace*{\fill}
@@ -367,21 +367,21 @@ For every re-run of the initial value analysis, the slope, intercept and $R^2$ v
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/initial_value_analysis_run.png}
         \caption{
-            An example initial value analysis output. 
+            An example IVA output. 
         }
         \label{fig:ss:av:initial_value_analysis_run}
         \vspace*{\fill}
     \end{subfigure}
-    \caption{Initial value analysis}
+    \caption{The IVA settings and output. }
 \end{figure}
 
 \paragraph{Phase Portrait}
 \label{sec:phase_portrait}
-The phase portrait plot allows for the user to analyze how an agent population evolves with respect to the other agent population through time.
-Phase portraits indicate how one population increases while the other decreases, and vice versa.
+The phase portrait (PP) plot allows for the user to analyze how an agent population evolves with respect to the other agent population through time.
+PPs indicate how one population increases while the other decreases, and vice versa.
 Steady states can be identified and classified as either stable, unstable, or as saddle points.
 By comparing different starting points, it is possible to see if the system is chaotic or not.
-The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}. 
+The setup for the PP can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}. 
 
 \begin{figure}[h!]
     \centering
@@ -390,8 +390,8 @@ The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_s
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_settings.png}
         \caption{
-            The user can select two starting values for the initial condition, but they can't choose vector, matrix, or environment settings due to the plot showing the development of agent populations against other agent populations.
-            As typical, the user can select their own values or auto-generate values between two values, as well as use a serial transfer option.
+            The user can select two starting values for the IC, but they can't choose vector, matrix, or environment settings due to the plot showing the development of agent populations against other agent populations.
+            As typical, the user can select their own values or auto-generate values between two values, as well as use a ST option.
             There is also an option to take the logarithm of the x and/or y-axis. 
         }
         \label{fig:ss:av:phase_portrait_settings}
@@ -402,11 +402,11 @@ The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_s
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_run.png}
         \caption{
-            An example run of a phase portrait.
+            An example run of a PP.
         }
         \label{fig:ss:av:phase_portrait_run}
     \end{subfigure}
-    \caption{Phase Portrait}
+    \caption{PP settings and output. }
 \end{figure}
 
 \paragraph{SOBOL Sensitivity Analysis}
@@ -417,8 +417,8 @@ Global, also called total sensitivity, is the summation of all higher order inte
 First order $Si$, or local sensitivity, is the measurement of the effect that parameter $i$ has on the variance of the output. 
 Second order is the measurement of parameter $i$ interacting with parameter $j$, nad how the interaction attributes to the output variance. 
 Etc for third order and higher. 
-When $ST_i >> S1_i$ then parameter $i$ depends on interactions with other parameters, while when $ST_i \approx S1_i$, then $i$ doesn't interact much with and depend on other parameters.
-It should be stated that $ST_i \geq S1_i$. 
+If $ST_i >> S1_i$, then parameter $i$ depends on higher order interactions with other parameters, while when $ST_i \approx S1_i$, then $i$ doesn't interact much with and depend on other parameters.
+It should be stated that $ST_i \geq S1_i$ and that $ST_i$ can be greater than 1, while $S1_i <= 1$. 
 
 When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ is an input vector of $d$ elements, and $Y$ is a univariate model output.
 $X$ is assumed to be independently and uniformly distributed within a hypercube $X_i \in [0, 1]$ for $i=1, \dots d$.
@@ -428,7 +428,7 @@ The first order sensitivity is described as
 \[
     S1_i = \frac{V_i}{\textit{Var}(Y)}
 \] where $V_i = \textit{Var}_{X_i}(\mathbb{E}_{X_{\sim i}}[Y|X_i])$ and where $X_{\sim i}$ represents all the parameters that are not $X_i$.
-All parameters are summarized in \Cref{tab:parameter_table_SOBOL}
+All parameters are summarized in \Cref{tab:appendixA:parameter_table_SOBOL}
 
 The second order index measures the impact of input $X_i$ interacting with $X_j$. For many inputs, this becomes unwieldy to analyze.
 The global sensitivity is used to analyze the global sensitivity without evaluating $2^d-1$ indices, and measures the contribution to the output variance of $X_i$, including all variance due to $X_i$'s interaction with other variables.
@@ -453,7 +453,7 @@ The proportion of the global and local sensitivity can be seen for each agent ty
 It can be argued that the final, average, and variance value of the run is not a useful statistic to measure and run a SOBOL analysis on. 
 One might give the reasoning that the population value at time $t$ depends on the previous time step $t-1$. 
 Thus the average and variance of the value is not completely random and is semi dependent on the previous value. 
-Another argument is that the simple golden model doesn't exhibit complex behavior unlike the oscilalting behavior exhibited in \Cref{fig:sourced:cocktail_and_phagedyn}. 
+Another argument is that the simple golden model doesn't exhibit complex behavior unlike the oscillating behavior exhibited in \Cref{fig:sourced:cocktail_and_phagedyn}. 
 
 Making a dashboard that can be used for different inputs is hard to make. Predicting the type of plots that a user might be interested in, and the type of behavior the user wants to analyze is impossible to predict. 
 Therefore, three simple and easy to understand default SOBOL analysis methods are provided that aims to capture the simple dynamics of the system. 
@@ -480,12 +480,12 @@ Upon completion of a SOBOL analysis, the original simulation data is stored to t
         }
         \label{fig:ss:av:SOBOL_analysis_run}
     \end{subfigure}
-    \caption{SOBOL variance analysis}
+    \caption{SOBOL variance analysis settings and output. }
 \end{figure}
 
 \paragraph{Ultimate Analysis}
 \label{sec:ultimate_analysis}
-The Ultimate Analysis section does not produce any visualizations or analysis, but instead allows for the user to define which initial conditions and parameter values they want to run a simulation on.
+The Ultimate Analysis section does not produce any visualizations or analysis, but instead allows for the user to define which ICs and parameter values they want to run a simulation on.
 The solver will iterate over every single parameter input possibility and save the results in a \textit{.parquet} file.
 Similarly settings in the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values (\Cref{fig:ss:av:ultimate_analysis_settings}).
 \newline

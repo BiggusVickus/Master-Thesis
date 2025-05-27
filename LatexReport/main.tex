@@ -50,7 +50,13 @@
 \usepackage{listings}
 \usepackage{bm}
 \usepackage{aliascnt}
+\usepackage{algpseudocode}
 
+\floatstyle{ruled}
+\newfloat{listing}{htbp}{lop}
+\floatname{listing}{Algorithm}
+
+\newsavebox{\codebox}
 \newaliascnt{eqfloat}{equation}
 \newfloat{eqfloat}{h}{eqflts}
 \floatname{eqfloat}{Equation}
@@ -235,15 +241,25 @@ Length 200-400 words.
 \acknowledgements{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
 
 % Thank the people that have helped, supervisors family etc.
-I would like to thank my parents for eternally loving me and for financially supporting me through my Bachelor and Master studies, for without them, I wouldn't know where my life would be right now. 
+I would like to thank my parents for loving me despite some of my faults, and for supporting me through my Bachelor and Master studies even if they don't exactly know what I am studying. Without them, I wouldn't know where my life would be right now, and I certainly would be a different person if it were not for them. 
+
+
+
 Thank you to Dr. Matti Gralka for the weekly meetings and teaching me everything about phages and bacteria. 
 Every meeting was always insightful, productive, and informative. 
 I will forever be amazed at how he can remember which paper talks about which topic, and how he always had a paper for every topic. 
-Thank you to Sofia Blaszczyk for finding this opening and suggesting that I email Dr. Gralka for an introductory meeting, and for acting as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy}, and watching my cringe screen recordings that I sent her at 2am showcasing various demos of my code. 
-If I hadn't followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses “Introduction Computational Sciences“ and “Numerical Linear Algebra“ in my Bachelors, I would not have been interested in Computational Sciences and would not have found the MSc Computational Sciences program, as Computational Sciences fits my interests and skill sets better than any other program I could have taken. 
-For they have forever altered my career trajectory. 
+
+Thank you to Sofia Blaszczyk for finding the Master thesis opening and suggesting that I email Dr. Gralka for an introductory meeting. 
+She acted as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy}, and watched my cringe screen recordings that I sent her at 2am showcasing various demos of my project. 
+If she wouldn't have found this opening, I wouldn't know what I would be doing as my thesis. 
+
+If I hadn't followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses “Introduction Computational Sciences“ and “Numerical Linear Algebra“ in my Bachelors, I would not have been interested in Computational Sciences. 
+I would not have found the MSc Computational Sciences program, as Computational Sciences fits my interests and skill sets better than any other program I could have taken. 
+For Rik and Martijn have forever altered my career trajectory. 
+
 Thank you to Sarah Flickinger for showing me the research that she has been doing in the lab. 
 She allowed me to really connect my research and models to real life, reminding me that what I am doing has real life use cases than just a purely theoretical or programming challenge. 
+
 And finally, thank you to all of my friends for keeping me sane and helping me through both of my programs. 
 }
 \clearpage % Start a new page
@@ -256,16 +272,20 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 
 \lhead{\emph{Contents}} % Set the left side page header to "Contents"
 \tableofcontents % Write out the Table of Contents
+\lhead{}
 
 \lhead{\emph{List of Figures}} % Set the left side page header to "List of Figures"
 \listoffigures % Write out the List of Figures
+\lhead{}
 
 \lhead{\emph{List of Tables}} % Set the left side page header to "List of Tables"
 \listoftables % Write out the List of Tables
+\lhead{}
 
 \lhead{\emph{List of Algorithms}} % Set the left side page header to "List of Algorithms"
 \addtotoc{List of Algorithms}
 \listofalgorithms % Write out the List of Tables
+\lhead{}
 
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
@@ -287,15 +307,22 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
     \textbf{DNA} & \textbf{D}eoxyribo\textbf{N}ucleic \textbf{A}cid \\
     \textbf{FSD} & \textbf{F}luctuating \textbf{S}election \textbf{D}ynamics \\ 
     \textbf{GUI} & \textbf{G}raphical \textbf{U}ser \textbf{I}nterface \\ 
+    \textbf{IC} & \textbf{I}nitial \textbf{C}ondition \\
+    \textbf{IVA} & \textbf{I}nitial \textbf{V}alue \textbf{A}nalysis \\ 
     \textbf{OD} & \textbf{O}ptical \textbf{D}ensity \\ 
     \textbf{ODE} & \textbf{O}rdinary \textbf{D}ifferential \textbf{E}quation \\
+    \textbf{PA} & \textbf{P}arameter \textbf{A}nalysis \\
     \textbf{PDE} & \textbf{P}artial \textbf{D}ifferential \textbf{E}quation \\ 
+    \textbf{PP} & \textbf{P}hase \textbf{P}ortrait \\
     \textbf{RNA} & \textbf{R}ibo\textbf{N}ucleic \textbf{A}cid\\
     \textbf{SIE} & \textbf{S}uper\textbf{I}nfection \textbf{E}xclusion \\
     \textbf{SNP} & \textbf{S}ingle \textbf{N}ucleotide \textbf{P}olymorphism \\
+    \textbf{ST} & \textbf{S}erial \textbf{T}ransfer\\ 
     \textbf{TAB} & \textbf{T}ail \textbf{A}ssembly \textbf{B}locker \\
+    \textbf{UA} & \textbf{U}ltimate \textbf{A}nalysis \\
     \textbf{UvA} & \textbf{U}niversitiet \textbf{v}an \textbf{A}msterdam\\
-    }
+}
+\lhead{}
 
 %----------------------------------------------------------------------------------------
 %	PHYSICAL CONSTANTS/OTHER DEFINITIONS
@@ -363,19 +390,32 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 
 \lhead{\emph{Introduction}}
 \input{Chapters/Introduction} %Set out your thesis and state your research question (5-8 pages)
+\newpage
+
 \lhead{\emph{Literature Review}}
 \input{Chapters/LiteratureReview} %Related literature and material (8-12 pages)
+\newpage
+
 \lhead{\emph{Methods}}
 \input{Chapters/Methods} %Details of your approach (10-15 pages)
+\newpage
+
 \lhead{\emph{Experiments and Results}}
 \input{Chapters/ExperimentsandResults} %Evaluation/testing of your hypothesis (10-15 pages)
+\newpage
+
 \lhead{\emph{Discussion}}
 \input{Chapters/Discussion} %Evaluation/testing of your hypothesis (5-8 pages)
+\newpage
+
 \lhead{\emph{Conclusions and Future Work}}
 \input{Chapters/ConclusionsandFutureWork} % (5-6 pages)
+\newpage
+
 \lhead{\emph{Ethics and Datamanagemnt}}
-\lhead{\emph{}}
 \input{Chapters/EthicsandDatamanagemnt}
+\newpage
+% \lhead{}
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
@@ -388,18 +428,29 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-% \lhead{\emph{Appendix A}}
-% \input{Appendices/AppendixA}
-% \lhead{\emph{Appendix B}}
-% \input{Appendices/AppendixB}
-% \lhead{\emph{Appendix C}}
-% \input{Appendices/AppendixC}
-% \lhead{\emph{Appendix D}}
-% \input{Appendices/AppendixD}
-% \lhead{\emph{Appendix E}}
-% \input{Appendices/AppendixE.tex}
-% \lhead{\emph{Appendix F}}
-% \input{Appendices/AppendixF.tex}
+\lhead{\emph{Appendix A}}
+\input{Appendices/AppendixA}
+\newpage
+
+\lhead{\emph{Appendix B}}
+\input{Appendices/AppendixB}
+\newpage 
+
+\lhead{\emph{Appendix C}}
+\input{Appendices/AppendixC}
+\newpage 
+
+\lhead{\emph{Appendix D}}
+\input{Appendices/AppendixD}
+\newpage 
+
+\lhead{\emph{Appendix E}}
+\input{Appendices/AppendixE.tex}
+\newpage 
+
+\lhead{\emph{Appendix F}}
+\input{Appendices/AppendixF.tex}
+\newpage
 
 \addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
 
@@ -409,9 +460,9 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-\label{References}
+\label{Bibliography}
 
-\lhead{\emph{References}} % Change the page header to say "Bibliography"
+\lhead{\emph{Bibliography}} % Change the page header to say "Bibliography"
 
 \bibliographystyle{unsrtnat} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
 

@@ -1,7 +1,14 @@
 \chapter{Experiments and Results}
 \label{AER}
 
-\section{Effect of Changing A Parameter Value}
+\section{Graph Behavior}
+\Cref{tab:results:graph_behavior} elaborates how a change in parameter value changes the shape and population level of the agents. 
+"\nameref{sec:results:a_good_curve}", whose agent and parameter default values can be found in the first column of \Cref{tab:results:graph_behavior} and in \Cref{tab:appendixE:a_good_curve} are used as a reference. 
+Each parameter was individually changed to a higher and lower value from the reference value, and the changes were noted in \Cref{tab:results:graph_behavior}. 
+It should be noted that \Cref{tab:results:graph_behavior} provides illustrative examples rather than an exhaustive analysis. The observed behaviors reflect typical trends when varying each parameter in the indicated direction, but may not generalize to all possible values and cases, or the magnitude of the change. 
+The results can also not be generalized to cases where two parameters values are changed at a time. 
+\Cref{tab:results:graph_behavior} can be used in conjunction with \nameref{sec:SOBOL_sensitivity_analysis_results} to gain a better idea of how sensitive the output is to that specific parameter. 
+
 \begin{table}
     \small % or \footnotesize to make it more compact
     \centering
@@ -45,7 +52,7 @@
 
         \midrule
         $\beta$ (20) & 50 & More phages, earlier bacteria peak, less resources consumed, less bacteria\\
-         & 10 & Faster resource consumption, more uninfected, less pahges, sharper bacteria peak\\
+         & 10 & Faster resource consumption, more uninfected, less phages, sharper bacteria peak\\
 
         \midrule
         $\omega^o$ (0) & 0.02 & Faster resource depletion, more bacteria and sharper peak, later peak, and less phages. \\
@@ -57,14 +64,14 @@
         This table is not meant to be exhaustive, cover edge cases, or extreme cases, or cover every exact detail and change in the population graph, but just to give an idea of how a change in parameter influences the graph shape, such as the rate of resource depletion, maximum number of bacteria and phages, and change in peak time. 
         Reference parameter values are provided in the parentheses, from \Cref{tab:appendixE:a_good_curve}. 
     }
-    \label{tab:effect_of_parameter}
+    \label{tab:results:graph_behavior}
 \end{table}
 
 
 \section{A Good Curve}
 \label{sec:results:a_good_curve}
 Assuming a very simple model, with no washin or washout rate, a good bacteria growth curve looks like a mountain, with a clear rise, peak, and fall in population levels. 
-For a given initial condition, the bacteria start to consume resources and replicate leading to exponential growth. 
+For a given IC, the bacteria start to consume resources and replicate leading to exponential growth. 
 The phages start to infect the bacteria and eventually the bacteria start to die, releasing new phages. 
 The new phages infect more bacteria, putting pressure on the bacteria growth. 
 Eventually, more bacteria are being infected than being created, causing the decline in bacteria population. 
@@ -134,7 +141,7 @@ The final values for Resources, Uninfected, Infected, and Phages would often be 
 The final value of the resources would often be 0, no matter what parameter values were used, with $\omega^i, \omega^o = 0$. 
 With the addition of the washin, new resources were constantly being re-added. 
 Once the bacteria died out, the resources could accumulate, with the accumulation dependent on the rate of the washin rate, hence why the washin rate has such a large impact on the final, average, and variance of population value for the resources. 
-The final value would then be dependent on when the bacteria died out, allowing the resources to accumulate, and the $\omega^i - \omega^0\cdot R$ rate. 
+The final value would be dependent on when the bacteria died out, in turn allowing the resources to accumulate at a rate proportional to $\omega^i - \omega^0\cdot R$. 
 Resources were less dependent on higher order interactions, unlike the uninfected, infected, phages, and total bacteria sum. 
 
 \subsubsection{Uninfected}
@@ -231,9 +238,9 @@ But overall, similar values can be seen across the the final, peak, and time at 
 The peak infected values are more certain compared to the final infected values, which could be due to the 95\% rule removing some of the noise of the simulation. 
 The time at peak values have less error compared to the final and peak value. 
 This is due to the restricted range of values. The time at peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
-The final and peak values can fall anywhere between 0 and any value, depending on the initial condition and how high the population can rise, and how fast the population can fall, if the population count falls. 
+The final and peak values can fall anywhere between 0 and any value, depending on the IC and how high the population can rise, and how fast the population can fall, \textit{if} the population count falls. 
 
-The tau value in the time at peak had a relatively large influence on on the time at peak value for infected and phage population, which will be covered in \nameref{sec:results:initial_value_analysis}. 
+% The tau value in the time at peak had a relatively large influence on on the time at peak value for infected and phage population, which will be covered in \nameref{sec:results:initial_value_analysis}. 
 
 \subsection{SOBOL Analysis - Without Washin and Washout}
 In many of the plots, the washin and washout rate had a large influence on the final, peak, and time at peak value. 
@@ -249,3 +256,6 @@ $\beta$ consistently had a large effect on the final, average, variance, peak, a
 
 
 \section{Initial Value Analysis Results}
+\label{sec:results:initial_value_analysis}
+
+The IVA section of the dashboard allows the user to visualize how a change in parameter value affects the population growth of the agents. 
