@@ -107,7 +107,7 @@ class Visualizer():
             overall_t (np.array): Array of time values for the simulation.
 
         Returns:
-            list: Returns a list of figures, which are the main figures for the simulation. One for the simple populaiotn evolution, one for the absolute and relative population levels, one for the absolute and relative population levels with bacteria summed up, and one for the ending values of the inoculation and serial transfer simulation.
+            list: Returns a list of figures, which are the main figures for the simulation. One for the simple population evolution, one for the absolute and relative population levels, one for the absolute and relative population levels with bacteria summed up, and one for the ending values of the inoculation and serial transfer simulation.
         """
         list_of_figs = []
         num_graphs = len(self.graph_data.keys()) + 1
@@ -288,14 +288,11 @@ class Visualizer():
             list_max_x = []
             list_max_y = []
             for j in range(len(simulation_output)):
-                color = uniform_color_gradient_maker(j, len(simulation_output))
-                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color), hoverlabel = dict(namelength = -1)), row=1, col=1)
                 max_x, max_y = determine_max_value_offset(time_output[j], simulation_output[j][i][0], offset)
                 list_max_x.append(max_x)
                 list_max_y.append(max_y)
             if log_axis:
                 fig.update_yaxes(type="log", row=1, col=1)
-
             if graph_axis_scale == "linear-linear (linear)": # linear
                 popt, _ = curve_fit(lin_func, param_values, list_max_x)
                 predictions = np.array([lin_func(x, *popt) for x in param_values])
@@ -311,22 +308,6 @@ class Visualizer():
             corr_matrix = np.corrcoef(list_max_x, predictions)
             corr = corr_matrix[0,1]
             r_squared = corr**2
-            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Measured time of collapse", hovertemplate=f"%{{y}}<br>SV of {param_name}: %{{x}}<br>", hoverlabel = dict(namelength = -1), marker=dict(size=10)), row=1, col=2)
-            fig.add_trace(
-                go.Scatter(
-                    x=param_values, 
-                    y=predictions, 
-                    mode="lines", 
-                    name="Fitted Curve",
-                    hovertemplate=f"<br>SV of {param_name}: %{{x}}<br>Fitted time of collapse: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}", 
-                    hoverlabel = dict(namelength = -1) 
-                ), 
-                row=1, col=2
-            )
-            fig.update_xaxes(title_text="Time", row=1, col=1)
-            fig.update_yaxes(title_text="Value", row=1, col=1)
-            fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)
-            fig.update_yaxes(title_text="Time max value reached", row=1, col=2)
             if name not in self.initial_value_plot:
                 self.initial_value_plot[name] = {
                     'data': [[popt[0], popt[1], r_squared]],
@@ -351,6 +332,27 @@ class Visualizer():
                     ), 
                     row=1, col=3
                 )
+
+
+            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Measured time of collapse", hovertemplate=f"%{{y}}<br>SV of {param_name}: %{{x}}<br>", hoverlabel = dict(namelength = -1), marker=dict(size=10)), row=1, col=2)
+            fig.add_trace(
+                go.Scatter(
+                    x=param_values, 
+                    y=predictions, 
+                    mode="lines", 
+                    name="Fitted Curve",
+                    hovertemplate=f"<br>SV of {param_name}: %{{x}}<br>Fitted time of collapse: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}", 
+                    hoverlabel = dict(namelength = -1) 
+                ), 
+                row=1, col=2
+            )
+            for j in range(len(simulation_output)):
+                color = uniform_color_gradient_maker(j, len(simulation_output))
+                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color), hoverlabel = dict(namelength = -1)), row=1, col=1)
+            fig.update_xaxes(title_text="Time", row=1, col=1)
+            fig.update_yaxes(title_text="Value", row=1, col=1)
+            fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)
+            fig.update_yaxes(title_text="Time max value reached", row=1, col=2)
             fig.update_layout(hovermode="x unified")
             list_of_figs.append(fig)
         return list_of_figs
