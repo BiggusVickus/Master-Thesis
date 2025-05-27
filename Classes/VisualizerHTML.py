@@ -66,10 +66,10 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
     return html.Div([
             # main title and area for main, basic plots. 1 for the basic plot, 1 for the bacteria not sum stacked lineplot, 1 for the bacteria summed up stacked lineplot, and 1 for the serial transfer end values plot
             html.H1("Line Chart"),
-            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data"}), 
-            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_total_sum"}), 
-            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum_graph"}), 
-            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_serial_transfer_end_values"}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data"}, config={'toImageButtonOptions': {'filename': 'basic_plot_line_chart'}}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_total_sum"}, config={'toImageButtonOptions': {'filename': 'basic_plot_total_sum'}}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_data_bacteria_sum_graph"}, config={'toImageButtonOptions': {'filename': 'basic_plot_bacteria_sum'}}), 
+            dcc.Graph(id={"type": "plot_basic_graph_data", "index": "plot_basic_graph_serial_transfer_end_values"}, config={'toImageButtonOptions': {'filename': 'basic_plot_serial_transfer_end_values'}}), 
             # break, formatting, and button to save and rerun the model
             html.Div(style={'margin': '60px'}),
             html.Hr(),
@@ -377,10 +377,10 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     ),
                     html.Div(children = [
                         *[
-                            dcc.Graph(id={"type": "plot_parameter_analysis", "index": name}, style={'display': 'inline-block'}) for name in graph_data.keys()
+                            dcc.Graph(id={"type": "plot_parameter_analysis", "index": name}, style={'display': 'inline-block'}, config={'toImageButtonOptions': {'filename': 'parameter_analysis_{}'.format(name.replace(' ', '_'))}}) for name in graph_data.keys()
                         ], 
-                        dcc.Graph(id={"type": "plot_parameter_analysis", "index": "plot_parameter_analysis_bacteria_sum"}, style={'display': 'inline-block'}),
-                    ],style={'margin': '60px'}), 
+                        dcc.Graph(id={"type": "plot_parameter_analysis", "index": "plot_parameter_analysis_bacteria_sum"}, style={'display': 'inline-block'}, config={'toImageButtonOptions': {'filename': 'parameter_analysis_bacteria_sum'}}),
+                    ], style={'margin': '60px'}), 
                 ]),
                 
                 # tab for the initial value analysis, which is similar to the parameter analysis but for a single parameter
@@ -449,9 +449,9 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     html.Button("Clear Bar Chart", id="clear_bar_chart"),
                     html.Div(style={'margin': '60px'}),
                     *[
-                        dcc.Graph(id={"type": "plot_initial_value_analysis", "index": name}) for name in graph_data.keys()
+                        dcc.Graph(id={"type": "plot_initial_value_analysis", "index": name}, config={'toImageButtonOptions': {'filename': 'initial_value_analysis_{}'.format(name.replace(' ', '_'))}}) for name in graph_data.keys()
                     ],
-                    dcc.Graph(id={"type": "plot_initial_value_analysis", "index": "plot_initial_value_analysis_bacteria_sum"})
+                    dcc.Graph(id={"type": "plot_initial_value_analysis", "index": "plot_initial_value_analysis_bacteria_sum"}, config={'toImageButtonOptions': {'filename': 'initial_value_analysis_bacteria_sum'}}),
                 ]),
                 dcc.Tab(label='Phase Portrait', children=[
                     html.H4(["Note: Choose 2 parameters of choice. The program will run a simulation and plot a phase portrait of the two parameters. The phase portrait will show the relationship between the two parameters over time."]),
@@ -530,7 +530,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     ),
                     html.Button("Run Phase Portrait", id="run_phase_portrait"),
                     html.Div(style={'margin': '60px'}),
-                    dcc.Graph(id="plot_phase_portrait")
+                    dcc.Graph(id="plot_phase_portrait", config={'toImageButtonOptions': {'filename': 'phase_portrait'}})
                 ]),
 
                 dcc.Tab(label='SOBOL Analysis', children=[
@@ -571,9 +571,9 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     ),
                     html.Br(),
                     html.Button("Run SOBOL Analysis", id="run_SOBOL_analysis"),
-                    dcc.Graph(id="SOBOL_analysis_final_value"),
-                    dcc.Graph(id="SOBOL_analysis_average_value"),
-                    dcc.Graph(id="SOBOL_analysis_variance"),
+                    dcc.Graph(id="SOBOL_analysis_final_value", config={'toImageButtonOptions': {'filename': 'SOBOL_analysis_final_value'}}),
+                    dcc.Graph(id="SOBOL_analysis_average_value", config={'toImageButtonOptions': {'filename': 'SOBOL_analysis_average_value'}}),
+                    dcc.Graph(id="SOBOL_analysis_variance", config={'toImageButtonOptions': {'filename': 'SOBOL_analysis_variance'}}),
                     # dcc.Graph(id="SOBOL_analysis_time"), 
                 ]),
 
