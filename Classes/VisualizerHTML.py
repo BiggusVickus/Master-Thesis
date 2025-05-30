@@ -429,7 +429,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                         value="",
                         id='initial_value_analysis_run_name'
                     ),
-                    html.H4(["Choose a scale for the graph (linear or log graph)"]),
+                    html.H4(["Choose a scale for the second graph (linear or log graph)"]),
                     dcc.Dropdown(['log-linear (log)', 'linear-linear (linear)'], id='initial_value_analysis_graph_scale', value = 'log-linear (log)'),
                     dcc.Input(
                         value="0.95",
@@ -439,7 +439,7 @@ def html_code(graph_data, non_graph_data_vector, non_graph_data_matrix, analysis
                     ),
                     dcc.Checklist(
                         options=[
-                            {'label': 'Log y axis IVA plot', 'value': 'option1'},
+                            {'label': 'Log first graph y-axis', 'value': 'option1'},
                         ],
                         value=['option1'],
                         id='initial_value_analysis_log_axis'

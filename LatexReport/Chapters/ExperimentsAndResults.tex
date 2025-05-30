@@ -111,7 +111,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         \label{fig:created:a_good_curve_logarithmic}
     \end{subfigure}
     \caption{
-        The log plot allows to see behavior happening at values near 0. 
+        The log plot allows to see behavior happening at values near 0 and to plot data on a logarithmic scale. 
         The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}. 
     }
     \label{fig:created:a_good_curve}
@@ -154,7 +154,7 @@ $r$ is equally as important at explaining the final value as $\tau$/tau\_vector,
 \subsubsection{Infected}
 Since $ST_i >> S1_i$ for the infected bacteria, where $S1_i \approx 0$ for nearly all of the parameters, the infected bacteria heavily depend on many interactions happening at the same time. 
 This makes intuitive sense after looking at \nameref{sec:golden_model}. 
-The infected (and uninfected) bacteria directly interact with $R$, $U$, $P$, $v$, $K$, $r$, $\tau$, and $\omega^o$, ($M$ is not included as it was left out of the analysis). 
+The infected (and uninfected) bacteria directly interact with $R$, $U$, $P$, $v$, $K$, $r$, $\tau$, and $\omega^o$ ($M$ is not included as it was left out of the analysis). 
 So due to the high coupling of parameters, the infected (and also the uninfected) have large global sensitivities compared to the local sensitivity. 
 
 However SOBOL had some difficulties assigning a good sensitivity score to each parameter for the $ST$ and $S1$ tests as noticed by the slightly larger error bars in the infected than the uninfected or resources. 
@@ -184,7 +184,7 @@ It would have been expected for the total bacteria to resemble more of an averag
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Final.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Final.png}
         \caption{
             Final population value. 
         }
@@ -194,7 +194,7 @@ It would have been expected for the total bacteria to resemble more of an averag
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Peak.png}
         \caption{
             Peak population value. 
         }
@@ -204,7 +204,7 @@ It would have been expected for the total bacteria to resemble more of an averag
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_Time.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Peak_Time.png}
         \caption{
             Time at peak population. 
         }
@@ -230,7 +230,8 @@ This removes unintended side effects of the simulation.
 For populations that are only increasing in value, this prevents the measured peak from bunching up at the end of the simulation, skewing the data. 
 As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
 For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
-The 95\% rule does fail when there is cyclical behavior, as the resource washin can influence the final value of the resources. 
+The 95\% rule can fail under certain situations, such as when there is cyclic behavior. 
+See \nameref{sec:appendixF:why_95} for a more detailed explanation on why the 95\% rule is used. 
 
 The results of the SOBOL peak and time at peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
 Although some of the bars between the final, peak, and time at peak values are the same, some are different. 
@@ -239,8 +240,6 @@ The peak infected values are more certain compared to the final infected values,
 The time at peak values have less error compared to the final and peak value. 
 This is due to the restricted range of values. The time at peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
 The final and peak values can fall anywhere between 0 and any value, depending on the IC and how high the population can rise, and how fast the population can fall, \textit{if} the population count falls. 
-
-% The tau value in the time at peak had a relatively large influence on on the time at peak value for infected and phage population, which will be covered in \nameref{sec:results:initial_value_analysis}. 
 
 \subsection{SOBOL Analysis - Without Washin and Washout}
 In many of the plots, the washin and washout rate had a large influence on the final, peak, and time at peak value. 
@@ -259,3 +258,42 @@ $\beta$ consistently had a large effect on the final, average, variance, peak, a
 \label{sec:results:initial_value_analysis}
 
 The IVA section of the dashboard allows the user to visualize how a change in parameter value affects the population growth of the agents. 
+
+In Figure 1 of \citet{mullaExtremeDiversityPhage2024}, they vary the initial concentration of bacteria and measure the time until bacterial collapse. 
+The initial concentration value and time of collapse is plotted on the x and y-axis with a tight linear regression fit on the data. 
+The observed logarithmic decrease suggests that the phage kinetics is adsorption-limited meaning that 
+\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates this graph. 
+
+\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot}, even considered a "good" curve, shows interesting behavior that diverges from that of \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}. 
+Then though the behavior should be similar, changing other parameter values can alter how a parameter works. 
+It would be expected that for10 initial uninfected bacteria and less the bacteria sum peak time would follow the linear regression line, but at around 100 uninfected bacteria and less, the peak curve goes horizontal. 
+This suggests that something is restricting the bacterial growth. 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_UB_50_500_a_good_plot.png}
+        \caption{
+            IVA for \Cref{tab:appendixE:a_good_curve}. 
+            Replicates Figure 1 of \citet{mullaExtremeDiversityPhage2024}. 
+        }
+        \label{fig:created:initial_value_analysis_UB_50_500_a_good_plot}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_UB_50_500_a_good_plot_2.png}
+        \caption{
+            IVA for \Cref{tab:appendixE:a_good_curve_2}. 
+            For uninfected bacteria less than 100, the phage-bacteria interaction is resource limited. 
+            For 100 and higher, it is adsorption limited. 
+        }
+        \label{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}
+    \end{subfigure}
+    \caption{
+        Varying initial Uninfected Bacteria concentration, from 50 to 500, with 30 unique values tested over two different instances of "good" curves. 
+        Even with two "good" curves, even varying the default parameter values a tiny bit can have a large influence on how changing the initial bacteria concentration can have an influence on the dynamics of the system, changing the behavior of the peak time. 
+        The default values for Figure a) and b) can be found at \Cref{tab:appendixE:a_good_curve} and \Cref{tab:appendixE:a_good_curve_2}. 
+    }
+\end{figure}

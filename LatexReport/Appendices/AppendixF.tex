@@ -4,12 +4,12 @@
 \section{Extra SOBOL Analyses}
 \label{sec:AppendixF:extra_SOBOL_analyses}
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Average.png}
         \caption{
             The $ST$ and $S1$ sensitivity for the average Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
         }
@@ -19,7 +19,7 @@
     \begin{subfigure}{0.49\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Variance.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Variance.png}
         \caption{
             The $ST$ and $S1$ sensitivity for the variance of the Resource, Uninfected, Infected, Phage, and Total Bacteria population. 
         }
@@ -36,12 +36,12 @@
 
 
 \subsection{SOBOL Analysis Without Washin and Washout}
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Average.png}
         \caption{
             Final value, no washin and washout. 
         }
@@ -51,7 +51,7 @@
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Average_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Average_(no_wi_and_wo).png}
         \caption{
             Average value, no washin and washout. 
         }
@@ -61,7 +61,7 @@
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Variance_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Variance_(no_wi_and_wo).png}
         \caption{
             Variance of population value, no washin and washout. 
         }
@@ -71,7 +71,7 @@
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Peak_(no_wi_and_wo).png}
         \caption{
             Peak population value, no washin and washout. 
         }
@@ -81,7 +81,7 @@
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL_analysis_1748084143_Peak_Time_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1748084143_Peak_Time_(no_wi_and_wo).png}
         \caption{
             Time of peak value, no washin and washout. 
         }
@@ -110,9 +110,15 @@ The user can thus conclude that for this instance, larger $e$ values will cause 
 
 \Cref{fig:appendixF:IVA_uninfected_bacteria_95} and \Cref{fig:appendixF:IVA_uninfected_bacteria_100} likewise show how the 95\% rule can improve analysis of the change in peak time. 
 \Cref{fig:appendixF:IVA_uninfected_bacteria_100} shows how apparently the peak is reached at set time values. 
-Due to how \textit{solve\_ivp()} from SciPy works, it automatically chooses time values that it thinks would best capture the dynamics of the system without calculating too many steps and becoming computationally intensive. 
-The user can control these steps by decreasing the absolute and relative error bounds, as well as by minimizing the time steps. 
+Due to how \textit{solve\_ivp()} from SciPy works, it automatically chooses time values that it thinks would best capture the dynamics of the system without calculating too many steps. 
+The user can control the step size by decreasing the absolute and relative error bounds, as well as by minimizing the time steps. 
 The user can also provide their own time range with the number of steps to run, increasing the control of the time values chosen. 
+It takes about 0.02321 seconds to run a simulation for 15 time units, where 200 time steps are selected and solved by the solver. 
+Comparatively, a simulation with 1000 time units and 1000000 (a 5000x increase in samples) equidistant time samples takes about 1.71651 seconds to run, a 73.95562258x increase in time spent computing the simulation. 
+The total time taken to run the whole method call, a call to the simple graph maker at the top of the dashboard took 1.76130 seconds vs 17.70634 seconds. 
+
+
+
 Alternatively instead of controlling the solver, the user can use the 95\% rule.
 Although some accuracy is lost. 
 Going from the 100\% rule to the 95\% rule, the solver still captures the peak values and the dynamics, but the accuracy is lost. 
@@ -126,7 +132,7 @@ The solver can more accurately calculate the population values and calculate the
 Comparing the 100\% rule without the custom time values with the 100\% rule with the custom time values shows the same time values were calculated. 
 in both, the $e=0.25$ resulted in a time of peak at 3.2 and for $e=0.05$, the time of peak occurred at $t=3.95$. 
 This is in stark comparison to the 95\% rule vs 100\% rule without the custom time, showing a difference of $0.15$ time units. 
-The custom time values also preserved the shape of the curve $e$-value vs time curve, being almost identical to that of the 95\% rule.
+The custom time values also preserved the shape of the curve $e$-value vs time curve, being almost identical to that of the 95\% rule as seen in \Cref{fig:appendixF:IVA_uninfected_bacteria_95} and \Cref{fig:appendixF:IVA_uninfected_bacteria_100_own_time}. 
 
 Another issue that arises with the custom time is that it doesn't solve the issue seen with the phages, where the time of peak is at $t=15$. 
 
@@ -138,7 +144,7 @@ The user can use their own custom time values, to ensure that they get high qual
     \centering
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/initial_value_analysis_Phages_95.png}
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_Phages_95.png}
         \caption{
             IVA for phage population, 95\% rule
         }
@@ -147,7 +153,7 @@ The user can use their own custom time values, to ensure that they get high qual
     \hfill
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/initial_value_analysis_Phages_100.png}
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_Phages_100.png}
         \caption{
             IVA for phage population, 100\% rule.  
         }
@@ -156,7 +162,7 @@ The user can use their own custom time values, to ensure that they get high qual
     \hfill
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/initial_value_analysis_Uninfected_Bacteria_95.png}
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_Uninfected_Bacteria_95.png}
         \caption{
             IVA for uninfected population, 95\% rule. 
         }
@@ -165,7 +171,7 @@ The user can use their own custom time values, to ensure that they get high qual
     \hfill 
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/initial_value_analysis_Uninfected_Bacteria_100.png}
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_Uninfected_Bacteria_100.png}
         \caption{
             IVA for uninfected population, 100\% rule. 
         }
@@ -173,15 +179,16 @@ The user can use their own custom time values, to ensure that they get high qual
     \end{subfigure}
     \begin{subfigure}{1\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/initial_value_analysis_Uninfected_Bacteria_100_own_time.png}
+        \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_Uninfected_Bacteria_100_own_time.png}
         \caption{
-            IVA for uninfected population, 100\% rule, with own provided time, 1000 time steps sampled. 
+            IVA for uninfected population, 100\% rule, 1000 equidistant time steps. 
         }
         \label{fig:appendixF:IVA_uninfected_bacteria_100_own_time}
     \end{subfigure}
     \caption{
         Testing the 95\% rule vs the 100\% rule, where the time at the absolute peak is taken and plotted in the second plot. 
         A comparison of phages and uninfected bacteria is shown. 
+        Verification of the graph shape between the 95\% rule graph and a frequent time step with 100\% rule can be seen between c) and e). 
         The $e$ value is changed, ranging from 0.05 to 0.25. 
     }
     \label{fig:appendixF:IVA_95_vs_100}

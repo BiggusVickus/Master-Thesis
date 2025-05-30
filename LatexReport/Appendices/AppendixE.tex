@@ -2,7 +2,8 @@
 \label{AppendixE}
 
 \section{A Good Curve}
-\begin{table}[htbp]
+\label{sec:appendixE:a_good_curve}
+\begin{table}[ht!]
     \small % or \footnotesize to make it more compact
     \centering
     \begin{tabularx}{\textwidth}{l l l l}
@@ -43,8 +44,81 @@
     \label{tab:appendixE:a_good_curve}
 \end{table}
 
+\section{A Good Curve 2}
+\label{sec:appendixE:a_good_curve_2}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
+        \caption{
+            Linear y-axis for a "good" plot. 
+        }
+        \label{fig:created:a_good_curve_linear_2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
+        \caption{
+            Logarithmic y-axis for a "good" plot. 
+        }
+        \label{fig:created:a_good_curve_logarithmic_2}
+    \end{subfigure}
+    \caption{
+        The log plot allows to see behavior happening at values near 0 and to plot data on a logarithmic scale. 
+        The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}. 
+    }
+    \label{fig:created:a_good_curve_2}
+\end{figure}
+
+\begin{table}[h!]
+    \small % or \footnotesize to make it more compact
+    \centering
+    \begin{tabularx}{\textwidth}{l l l l}
+        \toprule
+        IC\\
+        \textbf{Resources} & \textbf{Uninfected Bacteria} & \textbf{Infected Bacteria} & \textbf{Phages} \\
+        \midrule
+        200 & 50 & (0, 0, 0, 0) & 10 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l}
+        \toprule
+        Vector Data\\
+        \bm{$\tau$} & \bm{$\omega^i$}\\
+        \midrule
+        0.7 & 0 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l l l l}
+        \toprule
+        Matrix Data\\
+        \bm{$e$} & \bm{$v$} & \bm{$K$} & \bm{$r$} & \bm{$\beta$} \\
+        \midrule
+        0.12 & 1 & 10 & 0.001 & 10 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l}
+        \toprule
+        Environment Data\\
+        \bm{$M$} & \bm{$\omega^o$}\\
+        \midrule
+        4 & 0 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \caption{
+        Another set of "good" curves. 
+        The linear and logarithmic plot of this data can be seen in \Cref{fig:created:a_good_curve_2}
+    }
+    \label{tab:appendixE:a_good_curve_2}
+\end{table}
+
 \section{SOBOL Analysis}
-\begin{table}[htbp]
+\begin{table}[h!]
     \small % or \footnotesize to make it more compact
     \centering
     \begin{tabularx}{\textwidth}{l l l}
@@ -88,7 +162,7 @@
         \bottomrule
     \end{tabularx}\newline
     \caption{
-        The parameter values used for the SOBOL sensitivity analysis in \Cref{fig:created:SOBOL_analyses}. 
+        The parameter values used for the SOBOL sensitivity analysis in \Cref{fig:created:SOBOL_analyses}, \Cref{fig:created:SOBOL_extra} and \Cref{fig:created:SOBOL_no_wi_wo_extra}. 
     }
     \label{tab:appendixE:SOBOL_analysis_values}
 \end{table}

@@ -284,7 +284,15 @@ class Visualizer():
         """
         list_of_figs = []
         for i, name in enumerate(list(self.graph_data.keys()) + ["Bacteria Sum"]):
-            fig = make_subplots(rows=1, cols=3, subplot_titles=(f"IVA for {name}", f"SV vs Time of Max Value for {name}", "Slope and Intercept Comparison"))
+            fig = make_subplots(
+                rows=1, 
+                cols=3, 
+                subplot_titles=(
+                    f"<span style='font-size:24px'>IVA for {name}</span>", 
+                    f"<span style='font-size:24px'>SV vs Time of Max Value for {name}</span>", 
+                    "<span style='font-size:24px'>Slope and Intercept Comparison</span>"
+                )
+            )
             list_max_x = []
             list_max_y = []
             for j in range(len(simulation_output)):
@@ -332,9 +340,24 @@ class Visualizer():
                     ), 
                     row=1, col=3
                 )
-
-
-            fig.add_trace(go.Scatter(x=param_values, y=list_max_x, mode="markers", name="Measured time of collapse", hovertemplate=f"%{{y}}<br>SV of {param_name}: %{{x}}<br>", hoverlabel = dict(namelength = -1), marker=dict(size=10)), row=1, col=2)
+            list_of_colors = []
+            for j in range(len(simulation_output)):
+                list_of_colors.append(uniform_color_gradient_maker(j, len(simulation_output)))
+            fig.add_trace(
+                go.Scatter(
+                    x=param_values, 
+                    y=list_max_x, 
+                    mode="markers", 
+                    name="Measured time of collapse", 
+                    hovertemplate=f"%{{y}}<br>SV of {param_name}: %{{x}}<br>", 
+                    hoverlabel=dict(namelength=-1), 
+                    marker=dict(size=10, color=list_of_colors)
+                ), 
+                row=1, col=2
+            )
+            fig.update_layout(
+                font=dict(size=16)  # Set the font size for all text in the figure
+            )
             fig.add_trace(
                 go.Scatter(
                     x=param_values, 
