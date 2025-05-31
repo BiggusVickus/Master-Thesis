@@ -18,7 +18,6 @@ class GraphMaker:
             seed = int(1000 * time.time())% 2**32
             np.random.seed(seed)
         self.seed = seed
-        print(self.seed)
 
     def plot(self): 
         if not self.GUI:
@@ -330,7 +329,8 @@ class GraphMaker:
             return self.error_message("Node name not found")
         node1 = node1.strip()
         node2 = node2.strip()
-        self.graph.edges[node1, node2]['data'] = user_input
+        edge_attributes = self.graph[node1][node2]
+        edge_attributes[0]['data'] = user_input
 
     def error_message(self, message, throw_error = True, message_type = "Error"):
         if (self.GUI):

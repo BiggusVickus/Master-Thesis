@@ -168,8 +168,8 @@ class GraphMakerGUI(GraphMaker):
         
         if not self.graph.has_edge(node1, node2):
             return messagebox.showerror("Error", "Edge does not exist.")
-        edge_attributes = self.graph.edges[node1, node2]['data']
-
+        edge_attributes = self.graph[node1][node2]
+        edge_attributes = edge_attributes[0]['data']
         new_window = tk.Toplevel(self.window)
         new_window.title("Edit Edge Atrribute of " + node1 + " and " + node2)
         text_widget = tk.Text(new_window, height=10, width=50)
