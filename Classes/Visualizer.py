@@ -969,7 +969,7 @@ class Visualizer():
             param_samples = itertools.product(starting_x, starting_y)
             param_samples_list = list(deepcopy(param_samples))
             names = [param_name_1, param_name_2]
-            results = parallel.run_parallel(param_samples, names, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+            results = parallel.run_parallel(param_samples, names, self.graph_data, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
             t_values, y_values = results[:2]
             length_data_size = [length["data"].size for length in self.graph_data.values()]
             for i, (overall_t, overall_y) in enumerate(zip(t_values, y_values)):
@@ -1096,7 +1096,7 @@ class Visualizer():
             SOBOL_2nd_order = True if SOBOL_2nd_order else False
             param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order, seed=int(seed))
             parallel = ParallelComputing()
-            results = parallel.run_parallel(param_samples, names, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+            results = parallel.run_parallel(param_samples, names, self.graph_data, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
             t_values, y_values = results[:2]
             data_size = [length["data"].size for length in self.graph_data.values()]
             graph_data_keys = list(self.graph_data.keys())
@@ -1126,6 +1126,11 @@ class Visualizer():
                 avg_analyzed.append(analyze(problem_spec, Y_final[:, i], calc_second_order=SOBOL_2nd_order))
                 var_analyzed.append(analyze(problem_spec, Y_final[:, i], calc_second_order=SOBOL_2nd_order))
 
+# elif param_name in self.non_graph_data_vector:
+#                     non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_value_1
+#                 elif param_name in self.non_graph_data_matrix:
+#                     non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = param_value_1
+#                 elif param_name in self.analysis.environment_data:
             dictionary_results = {
                 "seed": seed,
                 "number_variables": number_variables,
@@ -1145,10 +1150,12 @@ class Visualizer():
                 "SOBOL_number_samples": SOBOL_number_samples,
                 "SOBOL_number_samples_tested": 2**SOBOL_number_samples,
                 "data_size": data_size,
-                "graph_data_keys": graph_data_keys,
-                "graph_data": self.graph_data,
-                "non_graph_data_vector": self.non_graph_data_vector,
-                "non_graph_data_matrix": self.non_graph_data_matrix,
+                "graph_data_keys": list(self.graph_data.keys()), 
+                "vector_data_keys": list(self.non_graph_data_vector.keys()),
+                "matrix_data_keys": list(self.non_graph_data_matrix.keys()),
+                "initial_condition": initial_condition,
+                "non_graphing_data_vectors": non_graphing_data_vectors, 
+                "non_graphing_data_matrices": non_graphing_data_matrices, 
                 "settings": self.settings,
                 "environment_data": self.analysis.environment_data,
                 "other_parameters": self.other_parameters_to_pass,
@@ -1209,9 +1216,9 @@ class Visualizer():
                 'parameter_names_used': param_names_to_run,
                 'param_values_list_combination': list_of_param_values,
                 'partition_data': partition_data,
-                'initial_condition_data': self.graph_data,
-                'vector_data': self.non_graph_data_vector,
-                'matrix_data': self.non_graph_data_matrix,
+                'initial_condition_data': initial_condition,
+                'vector_data': non_graphing_data_vectors,
+                'matrix_data': non_graphing_data_matrices,
                 'settings': self.settings,
                 'environment_data': self.analysis.environment_data,
                 'other_parameters': self.other_parameters_to_pass,
@@ -1235,7 +1242,7 @@ class Visualizer():
                 end_index = min(start_index + batch_size, len(iter_items))
                 batch_param_values = iter_items[start_index:end_index]
                 # Run the simulations for the current batch
-                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, self.non_graph_data_vector, self.non_graph_data_matrix, initial_condition, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
                 # Save intermediate results to a Parquet file
                 t_results, y_results = batch_results[:2]
                 del batch_results

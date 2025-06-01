@@ -131,7 +131,7 @@ The parameters that were tested include all the parameters listed in the extende
 Uninfected Bacteria was left out as it doesn't make sense to already add infected bacteria to the system
 $M$, the number of stages that the infection goes through, can not be tested as $M$ hardcodes the number of infection stages that the bacteria has to go through. 
 The hardcoding is done before the simulation framework starts. 
-As such, it is not possible to change $M$. 
+As such, it is not possible to change $M$ without rerunning the program from the very start. 
 
 \subsection{Final Value Analysis}
 \subsubsection{Resources}
@@ -268,6 +268,7 @@ The observed logarithmic decrease suggests that the phage kinetics is adsorption
 Then though the behavior should be similar, changing other parameter values can alter how a parameter works. 
 It would be expected that for10 initial uninfected bacteria and less the bacteria sum peak time would follow the linear regression line, but at around 100 uninfected bacteria and less, the peak curve goes horizontal. 
 This suggests that something is restricting the bacterial growth. 
+The lack of resources is actually restricting the bacteria growth. 
 
 \begin{figure}
     \centering
