@@ -1,6 +1,12 @@
 # Ignore everything
-*
+**
 
-# Except these UA simulation folders 
-!tau_r/
-!tau_r/**
+# Except directories (so .gitignore works recursively)
+!*/
+
+# Don't ignore pickle files
+!*.pickle
+
+# Don't include AGoodPlot directory
+!AGoodPlot/**
+!tau_beta

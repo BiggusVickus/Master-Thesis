@@ -16,6 +16,7 @@ class ParallelComputing:
     
     def process_combinations(self, param_combination, unique_param_names, graph_data, initial_condition, vector_data, vector_names, matrix_data, matrix_names, analysis, other_parameters_to_pass, environment_data):
         items_of_name = []
+        print(f"Processing combination: {param_combination}")
         for key, value in graph_data.items():
             items_of_name += [key] * value["data"].size
         for param_name, param_value in zip(unique_param_names, param_combination):
