@@ -285,7 +285,7 @@ As output, new graphs are created showing the runs appended to one another, with
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/serial_transfer_run.png}
         \caption{
-            The output plots of ST. 
+            The ST output plots. 
         }
         \label{fig:ss:av:serial_transfer_run}
     \end{subfigure}
@@ -312,7 +312,7 @@ Note that the heatmap color range resets for each heatmap, so similar colors acr
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/parameter_analysis_settings.png}
         \caption{
-            The options available for the PP. 
+            The available phase portrait settings. 
         }
         \label{fig:ss:av:parameter_analysis_settings}
     \end{subfigure}
@@ -322,7 +322,7 @@ Note that the heatmap color range resets for each heatmap, so similar colors acr
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/parameter_analysis_run.png}
         \caption{
-            The output that the user can expect
+            The expected parameter anlaysis output. 
         }
         \label{fig:ss:av:parameter_analysis_run}
     \end{subfigure}
@@ -377,11 +377,12 @@ For every re-run of the IVA, the slope, intercept and $R^2$ value is stored in t
 
 \paragraph{Phase Portrait}
 \label{sec:phase_portrait}
-The phase portrait (PP) plot allows for the user to analyze how an agent population evolves with respect to the other agent population through time.
-PPs indicate how one population increases while the other decreases, and vice versa.
-Steady states can be identified and classified as either stable, unstable, or as saddle points.
+The phase portrait plot allows the user to analyze how an agent population evolves with respect to the other agent population through time.
+Phase portraits indicate how one population increases while the other decreases, and vice versa.
+Steady states can be identified and classified as either stable, unstable, or as saddle points. 
+It is also possible to visually identify attractor and repeller points by seeing where the population values trend towards. 
 By comparing different starting points, it is possible to see if the system is chaotic or not.
-The setup for the PP can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}. 
+The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_settings}, and a sample output can be seen in \Cref{fig:ss:av:phase_portrait_run}. 
 
 \begin{figure}[h!]
     \centering
@@ -402,11 +403,11 @@ The setup for the PP can be seen in \Cref{fig:ss:av:phase_portrait_settings}, an
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_run.png}
         \caption{
-            An example run of a PP.
+            An example phase portrait run. 
         }
         \label{fig:ss:av:phase_portrait_run}
     \end{subfigure}
-    \caption{PP settings and output. }
+    \caption{Phase portrait settings and output. }
 \end{figure}
 
 \paragraph{SOBOL Sensitivity Analysis}
