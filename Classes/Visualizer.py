@@ -969,7 +969,9 @@ class Visualizer():
             param_samples = itertools.product(starting_x, starting_y)
             param_samples_list = list(deepcopy(param_samples))
             names = [param_name_1, param_name_2]
-            results = parallel.run_parallel(param_samples, names, self.graph_data, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+            vector_names = [name for name in self.non_graph_data_vector.keys()]
+            matrix_names = [name for name in self.non_graph_data_matrix.keys()]
+            results = parallel.run_parallel(param_samples, names, self.graph_data, initial_condition, non_graphing_data_vectors, vector_names, non_graphing_data_matrices, matrix_names, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
             t_values, y_values = results[:2]
             length_data_size = [length["data"].size for length in self.graph_data.values()]
             for i, (overall_t, overall_y) in enumerate(zip(t_values, y_values)):
@@ -1236,13 +1238,15 @@ class Visualizer():
             parallel = ParallelComputing()
             batch_size = 1000 * os.cpu_count()  # Number of simulations to run before saving intermediate results
             total_batches = len(iter_items) // batch_size + (1 if len(iter_items) % batch_size != 0 else 0)
+            vector_names = [name for name in self.non_graph_data_vector.keys()]
+            matrix_names = [name for name in self.non_graph_data_matrix.keys()]
             for batch_index in range(total_batches):
                 rows = []
                 start_index = batch_index * batch_size
                 end_index = min(start_index + batch_size, len(iter_items))
                 batch_param_values = iter_items[start_index:end_index]
                 # Run the simulations for the current batch
-                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, initial_condition, non_graphing_data_vectors, vector_names, non_graphing_data_matrices, matrix_names, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
                 # Save intermediate results to a Parquet file
                 t_results, y_results = batch_results[:2]
                 del batch_results
