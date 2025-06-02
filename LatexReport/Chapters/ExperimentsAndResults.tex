@@ -266,7 +266,7 @@ The observed logarithmic decrease suggests that the phage kinetics is adsorption
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot}, even considered a "good" curve, shows interesting behavior that diverges from that of \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}. 
 Then though the behavior should be similar, changing other parameter values can alter how a parameter works. 
-It would be expected that for10 initial uninfected bacteria and less the bacteria sum peak time would follow the linear regression line, but at around 100 uninfected bacteria and less, the peak curve goes horizontal. 
+It would be expected that for 100 initial uninfected bacteria and less the bacteria sum peak time would follow the linear regression line, but at around 100 uninfected bacteria and less, the peak curve goes horizontal. 
 This suggests that something is restricting the bacterial growth. 
 The lack of resources is actually restricting the bacteria growth. 
 
@@ -313,15 +313,13 @@ If the initial resources was 255 or below, the phages would proliferate.
 The initial resource values span from 100 to 500, and the initial phage values range from 25.5 to 26.5, each with 100 unique values sampled.
 It shows if a set of initial conditions allowed the phages to proliferate (red boxes) or if the phages died (white boxes). 
 A boundary between the dead and proliferating phages can be curve-fit. 
-The curve follows a logarithmic $y=21.484\cdot ln(x+3.353)-21.810$ with an $R^2$ value of 0.995. 
+The curve follows a logarithmic $y=21.484\cdot ln(x+3.353)-21.810$ with an $R^2$ value of 0.994. 
 There appears to be a non-linear tradeoff between initial resources and phages when there is washout. 
 The washout non-linearly affects if the phages proliferate or not. 
 
 Phage populations are coupled to bacteria populations hwo are in turn coupled to resource populations. 
 By varying the initial resource concentration, the bacteria growth rate is affected, in turn affecting the phage population, with a non-linear effect. 
-There is diminishing returns, where increasing initial phage populations wont drastically increase the max phage value reached, but is more dependent on the initial resource concentration. 
-However, more initial resources will be required in order to ensure the phage population proliferates. 
-This comes at a great benefit as phages are harder to store than resources, and resources are easier to come by than phages. 
+
 
 
 \begin{figure}[]
@@ -345,7 +343,7 @@ This comes at a great benefit as phages are harder to store than resources, and 
             While the color appears uniform along the vertical axis, each cell is actually a slightly different value. 
             The phage-resource proliferation boundary follows a fitted Monod equation.
         }
-        \label{fig:created:phase_portrait_resource_phage_max_phage_proliferate}
+        \label{fig:created:phase_portrait_resources_phage}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\linewidth}
@@ -358,7 +356,7 @@ This comes at a great benefit as phages are harder to store than resources, and 
     \end{subfigure}
     \caption{
         Varying initial resources and initial phages and the resulting curve and proliferation. 
-        The boundary of proliferation follows a logarithmic curve. 
+        The clear phage proliferation boundary follows a shifted Monod curve. 
         Proliferation is defined as when the phage population reached at least 2 times the initial starting population. 
         This simulation values used can be found in \Cref{tab:appendixE:a_good_curve_2}, but with washout set to 0.02 instead of 0. 
     }
