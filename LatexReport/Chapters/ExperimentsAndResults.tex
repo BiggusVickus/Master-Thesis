@@ -309,7 +309,7 @@ Both regions of phages exhibit consistent behavior, of either going to 0 or prol
 If the phage population started at exactly 25.98, if the initial resources was 260 or above, the phages died out. 
 If the initial resources was 255 or below, the phages would proliferate. 
 
-\Cref{fig:created:phase_portrait_resource_phage_max_phage_proliferate} simulates a wider range of values. 
+\Cref{fig:created:phase_portrait_resources_phage} simulates a wider range of values. 
 The initial resource values span from 100 to 500, and the initial phage values range from 25.5 to 26.5, each with 100 unique values sampled.
 It shows if a set of initial conditions allowed the phages to proliferate (red boxes) or if the phages died (white boxes). 
 A boundary between the dead and proliferating phages can be curve-fit. 
@@ -318,10 +318,9 @@ There appears to be a non-linear tradeoff between initial resources and phages w
 The washout non-linearly affects if the phages proliferate or not. 
 
 Phage populations are coupled to bacteria populations hwo are in turn coupled to resource populations. 
-By varying the initial resource concentration, the bacteria growth rate is affected, in turn affecting the phage population, where the effect is non linear. 
-There is diminishing returns, where increasing initial phage populations doesn't drastically increase the max phage value reached, but is rather a function of the initial resource concentration. 
+By varying the initial resource concentration, the bacteria growth rate is affected, in turn affecting the phage population, with a non-linear effect. 
+There is diminishing returns, where increasing initial phage populations wont drastically increase the max phage value reached, but is more dependent on the initial resource concentration. 
 However, more initial resources will be required in order to ensure the phage population proliferates. 
-TODO: ASK MATTI ABOUT PRICE OF PHAGES VS RESOURCES/NUTRIENTS (IN GENERAL)
 This comes at a great benefit as phages are harder to store than resources, and resources are easier to come by than phages. 
 
 
@@ -340,12 +339,30 @@ This comes at a great benefit as phages are harder to store than resources, and 
     \hfill
     \begin{subfigure}{0.49\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Plots/Created/PP/phase_portrait_resources_phage_max_phage_proliferate.png}
+        \includegraphics[width=\linewidth]{Plots/Created/PP/phase_portrait_resources_phage.png}
         \caption{
             Phage population proliferation as a function of initial resource and phage concentrations. 
-            While the color appears uniform along the vertical axis, each cell represents a slightly different value. 
+            While the color appears uniform along the vertical axis, each cell is actually a slightly different value. 
         }
         \label{fig:created:phase_portrait_resource_phage_max_phage_proliferate}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/PP/phase_portrait_resources_phage_2.png}
+        \caption{
+            
+        }
+        \label{fig:created:phase_portrait_resources_phage_2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/PP/phase_portrait_resources_phage.png}
+        \caption{
+            Monod equation
+        }
+        \label{fig:created:monod_equation}
     \end{subfigure}
     \caption{
         Varying initial resources and initial phages and the resulting curve and proliferation. 
