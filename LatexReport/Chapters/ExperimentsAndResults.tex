@@ -145,14 +145,14 @@ The final value would be dependent on when the bacteria died out, in turn allowi
 Resources were less dependent on higher order interactions, unlike the uninfected, infected, phages, and total bacteria sum. 
 
 \subsubsection{Uninfected}
-The uninfected bacteria population sensitivities depend on many higher order interactions between the parameters as $ST_i >> S1_i$. 
+The uninfected bacteria population sensitivities depend on many higher order interactions between the parameters as $ST_i \gg S1_i$. 
 The uninfected are highly dependent on $\beta$/B\_matrix and initial phage population, as the initial phage population will determine how many bacteria become infected, and how quickly the phages can proliferate through the bacteria population. 
 Surprisingly, $r$/r\_matrix did not have as big of an influence on the uninfected as $\beta$ did, even though the infection rate is dependent on $r$. 
 The larger or smaller $r$ is, the faster or slower the infection rate is. If $r$ is really small, the infection rate would take forever, potentially allowing the bacteria to keep a stable population. 
 $r$ is equally as important at explaining the final value as $\tau$/tau\_vector, washin, $e$/e\_matrix, and washout of sensitivity around 0.25. 
 
 \subsubsection{Infected}
-Since $ST_i >> S1_i$ for the infected bacteria, where $S1_i \approx 0$ for nearly all of the parameters, the infected bacteria heavily depend on many interactions happening at the same time. 
+Since $ST_i \gg S1_i$ for the infected bacteria, where $S1_i \approx 0$ for nearly all of the parameters, the infected bacteria heavily depend on many interactions happening at the same time. 
 This makes intuitive sense after looking at \nameref{sec:golden_model}. 
 The infected (and uninfected) bacteria directly interact with $R$, $U$, $P$, $v$, $K$, $r$, $\tau$, and $\omega^o$ ($M$ is not included as it was left out of the analysis). 
 So due to the high coupling of parameters, the infected (and also the uninfected) have large global sensitivities compared to the local sensitivity. 
@@ -367,9 +367,9 @@ By varying the initial resource concentration, the bacteria growth rate is affec
 \section{Plotting Parameter Change - $3\times 2\times 3$ Model}
 \Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0}, and \Cref{fig:created:r_beta_washout_0}, show a 7x7 matrix of different $r$ and $\beta$ initial conditions for a $3\times2\times3$ model. 
 For each simulation, if $r$ or $\beta$ is equal to a value not equal to $inf$, as identified by the title above each subfigure, then each value of $r$ or $\beta$ has that value.
+All phage initial values started at 10. This was specifically chosen 
 If $r$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
-As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix}\textcolor{red}{0.200} & 0.200 \\ 0.200 & \textcolor{red}{0.200} \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
-It is important that in the user-implemented ODE model, the user needs to check if an edge exists between two nodes first before calculating the new values. 
-The values 
+As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix} NaN & 0.200 \\ 0.200 & NaN \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
+When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix} NaN & 0.11695 \\ 0.144459 & NaN \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 
 
-When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix}0 & 0.11695 \\ 0.144459 & 0 \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 
+For the cells that don't have an edge between $p$ and $b$ or between $b$ and $r$, the data is represented as $NaN$, short for "Not a Number", \textit{np.NaN}, 

@@ -27,8 +27,8 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-% \documentclass[11pt, oneside, draft]{Thesis} % The default font size and one-sided printing (no margin offsets)
-\documentclass[11pt, oneside, final]{Thesis} % The default font size and one-sided printing (no margin offsets)
+\documentclass[11pt, oneside, draft]{Thesis} % The default font size and one-sided printing (no margin offsets)
+% \documentclass[11pt, oneside, final]{Thesis} % The default font size and one-sided printing (no margin offsets)
 
 \graphicspath{{Images/}} % Specifies the directory where pictures are stored
 
@@ -241,65 +241,62 @@ Length 200-400 words.
 
 \setstretch{1.3} % Reset the line-spacing to 1.3 for body text (if it has changed)
 
-\acknowledgements{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
-
-% Thank the people that have helped, supervisors family etc.
-I would like to thank my parents for loving me despite some of my faults, and for supporting me through my Bachelor and Master studies even if they don't exactly know what I am studying. Without them, I wouldn't know where my life would be right now, and I certainly would be a different person if it were not for them. 
-
+\acknowledgements{
+    \addtocontents{toc}{\vspace{1em}} 
+    I would like to thank my parents for loving me despite some of my faults, and for supporting me through my Bachelor and Master studies even if they don't exactly know what I am studying. Without them, I wouldn't know where my life would be right now, and I certainly would be a different person if it were not for them. 
 
 
-Thank you to Dr. Matti Gralka for the weekly meetings and teaching me everything about phages and bacteria. 
-Every meeting was always insightful, productive, and informative. 
-I will forever be amazed at how he can remember which paper talks about which topic, and how he always had a paper for every topic. 
 
-Thank you to Sofia Blaszczyk for finding the Master thesis opening and suggesting that I email Dr. Gralka for an introductory meeting. 
-She acted as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy}, and watched my cringe screen recordings that I sent her at 2am showcasing various demos of my project. 
-If she wouldn't have found this opening, I wouldn't know what I would be doing as my thesis. 
+    Thank you to Dr. Matti Gralka for the weekly meetings and teaching me everything about phages and bacteria. 
+    Every meeting was always insightful, productive, and informative. 
+    I will forever be amazed at how he can remember which paper talks about which topic, and how he always had a paper for every topic. 
 
-If I hadn't followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses “Introduction Computational Sciences“ and “Numerical Linear Algebra“ in my Bachelors, I would not have been interested in Computational Sciences. 
-I would not have found the MSc Computational Sciences program, as Computational Sciences fits my interests and skill sets better than any other program I could have taken. 
-For Rik and Martijn have forever altered my career trajectory. 
+    Thank you to Sofia Blaszczyk for finding the Master thesis opening and suggesting that I email Dr. Gralka for an introductory meeting. 
+    She acted as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy}, and watched my cringe screen recordings that I sent her at 2am showcasing various demos of my project. 
+    If she wouldn't have found this opening, I wouldn't know what I would be doing as my thesis. 
 
-Thank you to Sarah Flickinger for showing me the research that she has been doing in the lab. 
-She allowed me to really connect my research and models to real life, reminding me that what I am doing has real life use cases than just a purely theoretical or programming challenge. 
+    If I hadn't followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses “Introduction Computational Sciences“ and “Numerical Linear Algebra“ in my Bachelors, I would not have been interested in Computational Sciences. 
+    I would not have found the MSc Computational Sciences program, as Computational Sciences fits my interests and skill sets better than any other program I could have taken. 
+    For Rik and Martijn have forever altered my career trajectory. 
 
-And finally, thank you to all of my friends for keeping me sane and helping me through both of my programs. 
+    Thank you to Sarah Flickinger for showing me the research that she has been doing in the lab. 
+    She allowed me to really connect my research and models to real life, reminding me that what I am doing has real life use cases than just a purely theoretical or programming challenge. 
+
+    And finally, thank you to all of my friends for keeping me sane and helping me through both of my programs. 
 }
-\clearpage % Start a new page
+\clearpage 
 
 %----------------------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
 %----------------------------------------------------------------------------------------
 
-\pagestyle{fancy} % The page style headers have been "empty" all this time, now use the "fancy" headers as defined before to bring them back
+\pagestyle{fancy} 
 
-\lhead{\emph{Contents}} % Set the left side page header to "Contents"
-\tableofcontents % Write out the Table of Contents
+\lhead{\emph{Contents}} 
+\tableofcontents 
 \lhead{}
 
-\lhead{\emph{List of Figures}} % Set the left side page header to "List of Figures"
-\listoffigures % Write out the List of Figures
+\lhead{\emph{List of Figures}} 
+\listoffigures 
 \lhead{}
 
-\lhead{\emph{List of Tables}} % Set the left side page header to "List of Tables"
-\listoftables % Write out the List of Tables
+\lhead{\emph{List of Tables}}
+\listoftables
 \lhead{}
 
-\lhead{\emph{List of Algorithms}} % Set the left side page header to "List of Algorithms"
+\lhead{\emph{List of Algorithms}}
 \addtotoc{List of Algorithms}
-\listofalgorithms % Write out the List of Tables
+\listofalgorithms
 \lhead{}
 
 %----------------------------------------------------------------------------------------
 %	ABBREVIATIONS
 %----------------------------------------------------------------------------------------
 
-\clearpage % Start a new page
-
-\setstretch{1.5} % Set the line spacing to 1.5, this makes the following tables easier to read
-
-\lhead{\emph{Abbreviations}} % Set the left side page header to "Abbreviations"
-\listofsymbols{ll} % Include a list of Abbreviations (a table of two columns)
+\clearpage 
+\setstretch{1.5}
+\lhead{\emph{Abbreviations}}
+\listofsymbols{ll}
 {
     \textbf{ABM} & \textbf{A}gent \textbf{B}ased \textbf{M}odelling \\ 
     \textbf{ARD} & \textbf{A}rms \textbf{R}ace \textbf{D}ynamic \\ 
@@ -312,6 +309,7 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
     \textbf{GUI} & \textbf{G}raphical \textbf{U}ser \textbf{I}nterface \\ 
     \textbf{IC} & \textbf{I}nitial \textbf{C}ondition \\
     \textbf{IVA} & \textbf{I}nitial \textbf{V}alue \textbf{A}nalysis \\ 
+    \textbf{NAN} & \textbf{N}ot \textbf{A} \textbf{N}umber \\ 
     \textbf{OD} & \textbf{O}ptical \textbf{D}ensity \\ 
     \textbf{ODE} & \textbf{O}rdinary \textbf{D}ifferential \textbf{E}quation \\
     \textbf{PA} & \textbf{P}arameter \textbf{A}nalysis \\
@@ -330,7 +328,7 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 %	PHYSICAL CONSTANTS/OTHER DEFINITIONS
 %----------------------------------------------------------------------------------------
 
-\clearpage % Start a new page
+\clearpage 
 
 %\lhead{\emph{Physical Constants}} % Set the left side page header to "Physical Constants"
 
@@ -344,9 +342,9 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 %	SYMBOLS
 %----------------------------------------------------------------------------------------
 
-\clearpage % Start a new page
+\clearpage
 
-% \lhead{\emph{Symbols}} % Set the left side page header to "Symbols"
+% \lhead{\emph{Symbols}} 
 
 % A table of Symbols and Parameter Values can be viewed in \nameref{AppendixA} and \nameref{AppendixE}. 
 % \listofnomenclature{lll} % Include a list of Symbols (a three column table)
@@ -365,22 +363,16 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 %	DEDICATION
 %----------------------------------------------------------------------------------------
 
-\setstretch{1.3} % Return the line spacing back to 1.3
-
-\pagestyle{empty} % Page style needs to be empty for this page
-
-\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+\setstretch{1.3} 
+\pagestyle{empty} 
+\addtocontents{toc}{\vspace{2em}} 
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
 %----------------------------------------------------------------------------------------
 
-\mainmatter % Begin numeric (1,2,3...) page numbering
-
-\pagestyle{fancy} % Return the page headers back to the "fancy" style
-
-% Include the chapters of the thesis as separate tex files from the Chapters folder
-% Change the file names if you prefer
+\mainmatter
+\pagestyle{fancy}
 
 %This structure provides a bare bones essentials of the thesis and some indicative length
 %This structure may not fit your thesis perfectly, but be sure to include these components somehow.
@@ -390,61 +382,58 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 % But a thesis of 20 pages, or 100 pages may suggest you've been to brief or too verbose.
 %NOTE - there is not strict limit/minimum.
 
-% \lhead{\emph{Introduction}}
-% \input{Chapters/Introduction} %Set out your thesis and state your research question (5-8 pages)
-% \newpage
+\lhead{\emph{Introduction}}
+\input{Chapters/Introduction} %Set out your thesis and state your research question (5-8 pages)
+\newpage
 
-% \lhead{\emph{Literature Review}}
-% \input{Chapters/LiteratureReview} %Related literature and material (8-12 pages)
-% \newpage
+\lhead{\emph{Literature Review}}
+\input{Chapters/LiteratureReview} %Related literature and material (8-12 pages)
+\newpage
 
-% \lhead{\emph{Methods}}
-% \input{Chapters/Methods} %Details of your approach (10-15 pages)
-% \newpage
+\lhead{\emph{Methods}}
+\input{Chapters/Methods} %Details of your approach (10-15 pages)
+\newpage
 
 \lhead{\emph{Experiments and Results}}
 \input{Chapters/ExperimentsandResults} %Evaluation/testing of your hypothesis (10-15 pages)
 \newpage
 
-% \lhead{\emph{Discussion}}
-% \input{Chapters/Discussion} %Evaluation/testing of your hypothesis (5-8 pages)
-% \newpage
+\lhead{\emph{Discussion}}
+\input{Chapters/Discussion} %Evaluation/testing of your hypothesis (5-8 pages)
+\newpage
 
-% \lhead{\emph{Conclusions and Future Work}}
-% \input{Chapters/ConclusionsandFutureWork} % (5-6 pages)
-% \newpage
+\lhead{\emph{Conclusions and Future Work}}
+\input{Chapters/ConclusionsandFutureWork} % (5-6 pages)
+\newpage
 
-% \lhead{\emph{Ethics and Datamanagemnt}}
-% \input{Chapters/EthicsandDatamanagemnt}
-% \newpage
-% \lhead{}
+\lhead{\emph{Ethics and Datamanagemnt}}
+\input{Chapters/EthicsandDatamanagemnt}
+\newpage
+\lhead{}
 
 %----------------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
 %----------------------------------------------------------------------------------------
 
-%\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+\addtocontents{toc}{\vspace{2em}}
 
-%\appendix % Cue to tell LaTeX that the following 'chapters' are Appendices
+\appendix
 
-% Include the appendices of the thesis as separate files from the Appendices folder
-% Uncomment the lines as you write the Appendices
+\lhead{\emph{Appendix A}}
+\input{Appendices/AppendixA}
+\newpage
 
-% \lhead{\emph{Appendix A}}
-% \input{Appendices/AppendixA}
-% \newpage
+\lhead{\emph{Appendix B}}
+\input{Appendices/AppendixB}
+\newpage 
 
-% \lhead{\emph{Appendix B}}
-% \input{Appendices/AppendixB}
-% \newpage 
+\lhead{\emph{Appendix C}}
+\input{Appendices/AppendixC}
+\newpage 
 
-% \lhead{\emph{Appendix C}}
-% \input{Appendices/AppendixC}
-% \newpage 
-
-% \lhead{\emph{Appendix D}}
-% \input{Appendices/AppendixD}
-% \newpage 
+\lhead{\emph{Appendix D}}
+\input{Appendices/AppendixD}
+\newpage 
 
 \lhead{\emph{Appendix E}}
 \input{Appendices/AppendixE.tex}
@@ -454,19 +443,16 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 \input{Appendices/AppendixF.tex}
 \newpage
 
-\addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
+\addtocontents{toc}{\vspace{2em}}
 
-\backmatter
  
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
+\backmatter
 \label{Bibliography}
-
-\lhead{\emph{Bibliography}} % Change the page header to say "Bibliography"
-
-\bibliographystyle{unsrtnat} % Use the "unsrtnat" BibTeX style for formatting the Bibliography
-
-\bibliography{References,References2} % The references (bibliography) information are stored in the file named "Bibliography.bib"
+\lhead{\emph{Bibliography}}
+\bibliographystyle{unsrtnat}
+\bibliography{References,References2} 
 \end{document} 

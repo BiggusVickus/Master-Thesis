@@ -232,14 +232,14 @@
         \midrule
         \scalebox{1}{$
             \begin{bmatrix}
-                0.15680 & 0.10871 & 0 \\
-                0 & 0 & 0.18009 \\
+                0.15680 & 0.10871 & NaN \\
+                NaN & NaN & 0.18009 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                1.27601 & 0.86393 & 0 \\
-                0 & 0 & 1.22625 \\
+                1.27601 & 0.86393 & NaN \\
+                NaN & NaN & 1.22625 \\
             \end{bmatrix}
         $} \\
         \bottomrule
@@ -249,21 +249,21 @@
         \midrule
         \scalebox{1}{$
             \begin{bmatrix}
-                139.58353 & 12.83058 & 0 \\
-                0 & 0 & 82.86684 \\
+                139.58353 & 12.83058 & NaN \\
+                NaN & NaN & 82.86684 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                0 & 0.11695 \\
-                0.144459 & 0 \\
+                NaN & 0.11695 \\
+                0.144459 & NaN \\
                 0.11895 & 0.13065 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                0 & 15 \\
-                34 & 0 \\
+                NaN & 15 \\
+                34 & NaN \\
                 11 & 57 \\
             \end{bmatrix}
         $}\\
@@ -279,7 +279,7 @@
     \end{tabularx}\newline
     \caption{
         The parameter values used for the $3\times2\times3$ network model rounded to 5 decimal points. 
-        In the matrix data, if a value is 0, then the edge does not exist between $p$ and $b$ or between $b$ and $r$, depending on the subscript. 
+        If there is no edge between agents, then in the matrix representation of the parameter, $NaN$, short for Not a Number, is stored in the matrix data. 
     }
     \label{tab:appendixE:complex_model}
 \end{table}

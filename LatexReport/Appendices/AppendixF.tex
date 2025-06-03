@@ -192,7 +192,6 @@ The user can use their own custom time values, to ensure that they get high qual
         The $e$ value is changed, ranging from 0.05 to 0.25. 
     }
     \label{fig:appendixF:IVA_95_vs_100}
-
 \end{figure}
 
 \section{Varying $r$ and $\beta$ In A $3\times 2\times 3$ System}
@@ -200,9 +199,11 @@ The user can use their own custom time values, to ensure that they get high qual
 In each sub-figure, the values of $r$ and $\beta$ are varied as follows: $r = 0.5, 1.1, 1.7, 2.3, 2.9, 3.5,$ inf; $\beta = 0, 20, 40, 60, 80, 100,$ inf. 
 "inf" in the figures, represented as \textit{np.inf} in the code, the representation of $\infty$,  represents the original parameter values used in the IC, vector data, or matrix data. 
 Each figure shows the effect of varying the washout rate, with values set to 0, 0.02, and 0.05, respectively.
+All initial phage values were set to 10. 
+This was done to really show how the different interactions with the bacteria, and the value of the parameters affected the phage growth. 
 The default values for the parameters can be found in \Cref{tab:appendixE:complex_model}. 
 \begin{figure}[]
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/tau_beta_washout_0.png}
+    \includegraphics[width=1\textwidth]{Plots/Created/UA/r_beta_washout_0.png}
     \centering
     \caption{
         Washout $\omega^o=0$. 
@@ -211,7 +212,7 @@ The default values for the parameters can be found in \Cref{tab:appendixE:comple
 \end{figure}
 
 \begin{figure}[]
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/tau_beta_washout_0.02.png}
+    \includegraphics[width=1\textwidth]{Plots/Created/UA/r_beta_washout_0.02.png}
     \centering
     \caption{
         Washout $\omega^o=0.02$. 
@@ -220,7 +221,7 @@ The default values for the parameters can be found in \Cref{tab:appendixE:comple
 \end{figure}
 
 \begin{figure}[]
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/tau_beta_washout_0.05.png}
+    \includegraphics[width=1\textwidth]{Plots/Created/UA/r_beta_washout_0.05.png}
     \centering
     \caption{
         Washout $\omega^o=0.05$. 
