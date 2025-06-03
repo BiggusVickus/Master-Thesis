@@ -511,6 +511,23 @@ class Visualizer():
             final_time = solved_system.t[-1]
         return overall_y, overall_t
     
+    def set_values(self, param_name, param_value, items_of_name, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices):
+        if param_name in self.graph_data:
+            indices = [i for i, item in enumerate(items_of_name) if item == param_name]
+            for index in indices:
+                initial_condition[index] = param_value
+        elif param_name in self.non_graph_data_vector:
+            idx = list(self.non_graph_data_vector.keys()).index(param_name)
+            mask = ~np.isnan(non_graphing_data_vectors[idx])
+            non_graphing_data_vectors[idx][mask] = param_value
+        elif param_name in self.non_graph_data_matrix:
+            idx = list(self.non_graph_data_matrix.keys()).index(param_name)
+            mask = ~np.isnan(non_graphing_data_matrices[idx])
+            non_graphing_data_matrices[idx][mask] = param_value
+        elif param_name in self.analysis.environment_data:
+            self.analysis.environment_data[param_name] = param_value
+        return initial_condition, non_graphing_data_vectors, non_graphing_data_matrices
+    
     def run(self):
         """Runs the Dash application. The Dash application is a web application that displays the simulation results in a user-friendly way, and allows interactivity with the data, and plotting of the data. The Dash application is run on the local host, and can be accessed from the web browser. Needs to ahve the data loaded properly in using the add_graph_data, add_non_graph_data_vector, add_non_graph_data_matrix, and add_other_parameters methods. 
         """
@@ -707,26 +724,8 @@ class Visualizer():
             for param_value_1 in param_values_1:
                 for param_value_2 in param_values_2:
                     # if the parameter 1 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
-                    if param_name_1 in self.graph_data:
-                        index = items_of_name.index(param_name_1)
-                        initial_condition[index] = param_value_1
-                    elif param_name_1 in self.non_graph_data_vector:
-                        non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_1)][0] = param_value_1
-                    elif param_name_1 in self.non_graph_data_matrix:
-                        non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_1)][0][0] = param_value_1
-                    elif param_name_1 in self.analysis.environment_data:
-                        self.analysis.environment_data[param_name_1] = param_value_1
-                    
-                    # if the parameter 2 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
-                    if param_name_2 in self.graph_data:
-                        index = items_of_name.index(param_name_2)
-                        initial_condition[index] = param_value_2
-                    elif param_name_2 in self.non_graph_data_vector:
-                        non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name_2)][0] = param_value_2
-                    elif param_name_2 in self.non_graph_data_matrix:
-                        non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name_2)][0][0] = param_value_2
-                    elif param_name_2 in self.analysis.environment_data:
-                        self.analysis.environment_data[param_name_2] = param_value_2
+                    initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.set_values(param_name_1, param_value_1, items_of_name, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices)
+                    initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.set_values(param_name_2, param_value_2, items_of_name, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices)
                     
                     # solve the system of ODEs, and save the final value and time value
                     solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
@@ -883,15 +882,7 @@ class Visualizer():
             # loop through each parameter value, and solve the system of ODEs, and save the final time point value for each parameter value
             for param_value_1 in param_values_1:
                 # if the parameter 1 is in the graph data, then the index is found, and the value is set to the parameter value. Otherwise, the value is set to the parameter value in the non graph data vector or matrix
-                if param_name in self.graph_data:
-                    index = items_of_name.index(param_name)
-                    initial_condition[index] = param_value_1
-                elif param_name in self.non_graph_data_vector:
-                    non_graphing_data_vectors[list(self.non_graph_data_vector.keys()).index(param_name)][0] = param_value_1
-                elif param_name in self.non_graph_data_matrix:
-                    non_graphing_data_matrices[list(self.non_graph_data_matrix.keys()).index(param_name)][0] = param_value_1
-                elif param_name in self.analysis.environment_data:
-                    self.analysis.environment_data[param_name] = param_value_1
+                initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.set_values(param_name, param_value_1, items_of_name, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices)
                 # solve the system of ODEs, and save the final value and time value
                 solved_system = self.analysis.solve_system(self.analysis.odesystem, initial_condition, self.analysis, *self.other_parameters_to_pass, *non_graphing_data_vectors, *non_graphing_data_matrices, self.analysis.environment_data)
                 overall_y = solved_system.y
@@ -1088,6 +1079,8 @@ class Visualizer():
                     SOBOL_analysis_id.pop(i)
             number_variables = len(SOBOL_analysis_values)
             names = [i['index'] for i in SOBOL_analysis_id]
+            vector_names = [name for name in self.non_graph_data_vector.keys()]
+            matrix_names = [name for name in self.non_graph_data_matrix.keys()]
             bounds = [[float(i.split('-')[0]), float(i.split('-')[1])] for i in SOBOL_analysis_values]
             problem_spec = ProblemSpec({
                 'num_vars': number_variables,
@@ -1098,7 +1091,7 @@ class Visualizer():
             SOBOL_2nd_order = True if SOBOL_2nd_order else False
             param_samples = sample(problem_spec, 2**SOBOL_number_samples, calc_second_order=SOBOL_2nd_order, seed=int(seed))
             parallel = ParallelComputing()
-            results = parallel.run_parallel(param_samples, names, self.graph_data, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
+            results = parallel.run_parallel(param_samples, names, self.graph_data, initial_condition, non_graphing_data_vectors, vector_names, non_graphing_data_matrices, matrix_names, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
             t_values, y_values = results[:2]
             data_size = [length["data"].size for length in self.graph_data.values()]
             graph_data_keys = list(self.graph_data.keys())
