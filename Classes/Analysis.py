@@ -102,7 +102,7 @@ class Analysis():
             dictionary[key] = new_value
         return dictionary        
     
-    def initialize_new_matrix(self, rows:int, columns:int):
+    def initialize_new_matrix(self, rows:int, columns:int, default_value:float = 0) -> np.array:
         """Initializes a new matrix of zeros with the given number of rows and columns. The matrix is initialized as a numpy array.
 
         Args:
@@ -112,9 +112,11 @@ class Analysis():
         Returns:
             np.array: 2D np array of size rows x columns
         """
-        return np.zeros((int(rows), int(columns)))
+        matrix = np.zeros((int(rows), int(columns)))
+        matrix[:, :] = default_value
+        return matrix
     
-    def initialize_new_vector(self, rows):
+    def initialize_new_vector(self, rows:int, default_value:float = 0) -> np.array:
         """Initializes a new vector of zeros with the given number of rows. The vector is initialized as a numpy array.
         
         Args:
@@ -123,7 +125,9 @@ class Analysis():
         Returns:
             np.array: 1D np array of size rows
         """
-        return np.zeros(int(rows))
+        vector = np.zeros(int(rows))
+        vector[:] = default_value # set all values to the default value
+        return vector
     
     def initialize_new_parameter_from_edges(self, attribute_name:str, node_list1:list, node_list2:list, data_type = float) -> np.array:
         """Returns a new matrix consisting of the data from the edges between the nodes in node_list1 and node_list2 for a listed attribute name. The data is stored in the matrix as the data_type given, in case the data is not a float. The data is extracted from the attribute_name given.
@@ -139,6 +143,7 @@ class Analysis():
         """
         # initialize the matrix with the number of rows and columns given by the length of the node lists
         matrix = np.zeros((len(node_list1), len(node_list2)))
+        matrix[:, :] = np.nan
         # loop through the nodes in node_list1 and node_list2, and check if there is an edge between them. If there is, get the data from the edge and store it in the matrix
         for node1 in node_list1:
             for node2 in node_list2:
@@ -160,6 +165,7 @@ class Analysis():
         """
         # create vector of length of node_list1
         vector = np.zeros(len(node_list1))
+        vector[:] = np.nan # set all values to nan, in case the data is not present in the node
         for node1 in node_list1: # loop through the nodes in node_list1
             data = self.turn_string_to_dictionary(self.graph.nodes[node1]['data']) # get the data from the node
             # check to see if the data is in the vector at the index of the node in node_list1

@@ -10,7 +10,7 @@ class ParallelComputing:
         pass
     
     def run_parallel(self, iter_items, unique_param_names, graph_data, initial_condition, vector_data, vector_names, matrix_data, matrix_names, analysis, other_parameters_to_pass, environment_data):
-        results = Parallel(n_jobs=1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, deepcopy(initial_condition), deepcopy(vector_data), vector_names, deepcopy(matrix_data), matrix_names, analysis, other_parameters_to_pass, deepcopy(environment_data)) for x in iter_items)
+        results = Parallel(n_jobs=-1)(delayed(self.process_combinations)(x, unique_param_names, graph_data, deepcopy(initial_condition), deepcopy(vector_data), vector_names, deepcopy(matrix_data), matrix_names, analysis, other_parameters_to_pass, deepcopy(environment_data)) for x in iter_items)
         results_t, results_y = zip(*results)
         return results_t, results_y
     
@@ -27,9 +27,13 @@ class ParallelComputing:
                 for index in indexes:
                     initial_condition[index] = param_value
             elif param_name in vector_names:
-                vector_data[vector_names.index(param_name)][:] = param_value
+                idx = vector_names.index(param_name)
+                mask = ~np.isnan(vector_data[idx])
+                vector_data[idx][mask] = param_value
             elif param_name in matrix_names:
-                matrix_data[matrix_names.index(param_name)][:][:] = param_value
+                idx = matrix_names.index(param_name)
+                mask = ~np.isnan(matrix_data[idx])
+                matrix_data[idx][mask] = param_value
             elif param_name in environment_data:
                 environment_data[param_name] = param_value
         solved_system = analysis.solve_system(analysis.odesystem, initial_condition, analysis, *other_parameters_to_pass, *vector_data, *matrix_data, environment_data)
