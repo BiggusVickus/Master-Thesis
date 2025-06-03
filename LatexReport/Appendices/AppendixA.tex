@@ -15,12 +15,12 @@ Parameters used in the various equations.
         $I_i / I_{b_i}$ & Infected Bacteria agent & Infected population for bacteria $b$ at stage $1, \dots, i, \dots, M$ \\
         $B / B_b$ & Bacteria agent & Total bacteria population for bacteria $b$, assuming $B_b = U_b + \sum_{i=1}^M I_{b_i}$ \\
         $R / R_r$ & Resource agent & Resource $r$ concentration\\
-        $e / e_{b r}$ & Consumption rate& Rate at which resources are consumed\\
-        $\beta / \beta_{p b}$ & Burst size & Lytic burst size for phage $p$ and bacteria $b$\\
-        $r / r_{p b}$ & Successful phage/cell encounter & Probability of a successful bacteria $b$ infection from phage $p$\\
-        $\tau / \tau_{b}$ & Latent period & Time it takes bacteria $b$ to go through one infection stage\\
+        $e / e_{b r}$ & Consumption rate& Rate at which resource r is consumed by bacteria b\\
+        $\beta / \beta_{p b}$ & Burst size (B matrix)& Lytic burst size for phage $p$ and bacteria $b$\\
+        $r / r_{p b}$ & Successful phage/cell encounter & Probability of a phage $p$ successfully infecting bacteria $b$\\
+        $\tau / \tau_{b}$ & Latent period (tau vector)& Time it takes bacteria $b$ to go through one infection stage\\
         $v / v_{b r}$ & Maximal growth rate & Growth rate of bacteria $b$ from resource $r$ \\
-        $K / K_{b r}$ & Monod Constant & Monod constant for bacteria $b$'s resource consumption rate dependent on resource $r$ concentration\\
+        $K / K_{b r}$ & Monod Constant & Monod constant representing the resource $r$ concentration at which bacteria $b$ grows at half its maximal rate\\
         $\omega^i / \omega^i_r$ & wash-in rate & Rate of resources $r$ being added\\
         $\omega^o / \omega^o$ & wash-out rate & Rate of agents being removed, acts on all agents equally\\
         $M$ & Number of infection stages & Number of infection stages that a bacteria goes through, all bacteria agents have the same value for $M$\\

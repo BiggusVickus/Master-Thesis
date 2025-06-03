@@ -11,7 +11,11 @@
         IC\\
         \textbf{Resources} & \textbf{Uninfected Bacteria} & \textbf{Infected Bacteria} & \textbf{Phages} \\
         \midrule
-        400 & 50 & (0, 0, 0, 0) & 10 \\
+        400 & 50 & \scalebox{1}{$
+            \begin{bmatrix}
+                0, 0, 0, 0 \\
+            \end{bmatrix}
+        $} & 10 \\
         \bottomrule
     \end{tabularx}\newline
     \begin{tabularx}{\textwidth}{l l}
@@ -83,7 +87,11 @@
         IC\\
         \textbf{Resources} & \textbf{Uninfected Bacteria} & \textbf{Infected Bacteria} & \textbf{Phages} \\
         \midrule
-        200 & 50 & (0, 0, 0, 0) & 10 \\
+        200 & 50 & \scalebox{1}{$
+            \begin{bmatrix}
+                0, 0, 0, 0 \\
+            \end{bmatrix}
+        $} & 10 \\
         \bottomrule
     \end{tabularx}\newline
     \begin{tabularx}{\textwidth}{l l}
@@ -165,4 +173,108 @@
         The parameter values used for the SOBOL sensitivity analysis in \Cref{fig:created:SOBOL_analyses}, \Cref{fig:created:SOBOL_extra} and \Cref{fig:created:SOBOL_no_wi_wo_extra}. 
     }
     \label{tab:appendixE:SOBOL_analysis_values}
+\end{table}
+
+\section{Complex Model}
+\label{sec:appendixE:complex_model}
+\begin{table}[h!]
+    \small % or \footnotesize to make it more compact
+    \centering
+    \begin{tabularx}{\textwidth}{l l l l}
+        \toprule
+        IC\\
+        \textbf{Resources} & \textbf{Uninfected Bacteria} & \textbf{Infected Bacteria} & \textbf{Phages} \\
+        \midrule
+        \scalebox{1}{$
+            \begin{bmatrix}
+                236, 287, 270 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                53, 69 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0, 0, 0, 0 \\
+                0, 0, 0, 0 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                10, 5, 8 \\
+            \end{bmatrix}
+        $} \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l}
+        \toprule
+        Vector Data\\
+        \bm{$\tau$} & \bm{$\omega^i$}\\
+        \midrule
+        \scalebox{1}{$
+            \begin{bmatrix}
+                2.73340, 2.25015 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0, 0, 0 \\
+            \end{bmatrix}
+        $} \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l l l l}
+        \toprule
+        Matrix Data\\
+        \bm{$e$} & \bm{$v$} & \bm{$K$} & \bm{$r$} & \bm{$\beta$} \\
+        \midrule
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0.15680, 0.10871, 0 \\
+                0, 0, 0.18009 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                1.27601, 0.86393, 0 \\
+                0, 0, 1.22625 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                139.58353, 12.83058, 0 \\
+                0, 0, 82.86684 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0, 0.11695 \\
+                0.144459, 0 \\
+                0.11895, 0.13065 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0, 15 \\
+                34, 0 \\
+                11, 57 \\
+            \end{bmatrix}
+        $} \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l}
+        \toprule
+        Environment Data\\
+        \bm{$M$} & \bm{$\omega^o$}\\
+        \midrule
+        4 & 0 \\
+        \bottomrule
+    \end{tabularx}\newline
+    \caption{
+        The parameter values used for the $3\times2\times3$ network model rounded to 5 decimal points. 
+        See \Cref{tab:appendixA:parameter_table_simple_golden_model} to see which parameter belongs to which agent. 
+    }
+    \label{tab:appendixE:complex_model}
 \end{table}

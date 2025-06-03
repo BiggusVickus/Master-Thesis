@@ -27,7 +27,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[11pt, oneside]{Thesis} % The default font size and one-sided printing (no margin offsets)
+\documentclass[11pt, oneside, draft]{Thesis} % The default font size and one-sided printing (no margin offsets)
 
 \graphicspath{{Images/}} % Specifies the directory where pictures are stored
 
@@ -51,10 +51,11 @@
 \usepackage{bm}
 \usepackage{aliascnt}
 \usepackage{algpseudocode}
-
+\usepackage{makecell}
 \floatstyle{ruled}
 \newfloat{listing}{htbp}{lop}
 \floatname{listing}{Algorithm}
+
 
 \newsavebox{\codebox}
 \newaliascnt{eqfloat}{equation}
