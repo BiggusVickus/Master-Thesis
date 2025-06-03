@@ -364,18 +364,12 @@ By varying the initial resource concentration, the bacteria growth rate is affec
 \end{figure}
 
 
-\section{Plotting Parameter Change}
-\Cref{fig:created:tau_beta_washout_0} shows a 7x7 matrix of different $\tau$ and $\beta$ initial conditions for a $3\times2\times3$ model. 
-For each simulation, if $\tau$ or $\beta$ is equal to a value, ie, they are not $inf$, then each value of $\tau$ or $\beta$ is that value.
-If $\tau$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
-As a small example for the $3\times 2\times 3$ model, $\tau = [2.73340, 2.25015]$ (rounded to 5 decimal points). 
-When $\tau=1.7$, then the simulation framework uses $\tau = [1.7, 1.7]$. 
-When $\tau=inf$, the simulation framework uses $\tau=[2.73340, 2.25015]$ as the data to simulate the interactions with. 
-\begin{figure}
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/tau_beta_washout_0.png}
-    \centering
-    \caption{
-        Changing tua and beta using $\tau = 0.5, 1.1, 1.7, 2.3, 2.9, 3.5, inf$ and $\beta = 0, 20, 40, 60, 80, 100, inf$, where $inf$ represents the original parameter values used in the IC, vector data, or matrix data. 
-    \label{fig:created:tau_beta_washout_0}
-    }
-\end{figure}
+\section{Plotting Parameter Change - $3\times 2\times 3$ Model}
+\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0}, and \Cref{fig:created:r_beta_washout_0}, show a 7x7 matrix of different $r$ and $\beta$ initial conditions for a $3\times2\times3$ model. 
+For each simulation, if $r$ or $\beta$ is equal to a value not equal to $inf$, as identified by the title above each subfigure, then each value of $r$ or $\beta$ has that value.
+If $r$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
+As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix}\textcolor{red}{0.200} & 0.200 \\ 0.200 & \textcolor{red}{0.200} \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
+It is important that in the user-implemented ODE model, the user needs to check if an edge exists between two nodes first before calculating the new values. 
+The values 
+
+When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix}0 & 0.11695 \\ 0.144459 & 0 \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 

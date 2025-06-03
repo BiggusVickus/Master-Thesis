@@ -27,7 +27,8 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[11pt, oneside, draft]{Thesis} % The default font size and one-sided printing (no margin offsets)
+% \documentclass[11pt, oneside, draft]{Thesis} % The default font size and one-sided printing (no margin offsets)
+\documentclass[11pt, oneside, final]{Thesis} % The default font size and one-sided printing (no margin offsets)
 
 \graphicspath{{Images/}} % Specifies the directory where pictures are stored
 
@@ -99,7 +100,8 @@
 \DeclareMathOperator*{\argmin}{arg\,min} 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareCaptionType{equ}[][]
-\hypersetup{urlcolor=black, colorlinks=true} % Colors hyperlinks in blue - change to black if annoying
+\hypersetup{colorlinks=true, filecolor=magenta, urlcolor=cyan, linkcolor=blue} % Colors hyperlinks in blue - change to black if annoying
+\urlstyle{same}
 \title{\ttitle} % Defines the thesis title - don't touch this
 \begin{document}
 \frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
@@ -388,33 +390,33 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 % But a thesis of 20 pages, or 100 pages may suggest you've been to brief or too verbose.
 %NOTE - there is not strict limit/minimum.
 
-\lhead{\emph{Introduction}}
-\input{Chapters/Introduction} %Set out your thesis and state your research question (5-8 pages)
-\newpage
+% \lhead{\emph{Introduction}}
+% \input{Chapters/Introduction} %Set out your thesis and state your research question (5-8 pages)
+% \newpage
 
-\lhead{\emph{Literature Review}}
-\input{Chapters/LiteratureReview} %Related literature and material (8-12 pages)
-\newpage
+% \lhead{\emph{Literature Review}}
+% \input{Chapters/LiteratureReview} %Related literature and material (8-12 pages)
+% \newpage
 
-\lhead{\emph{Methods}}
-\input{Chapters/Methods} %Details of your approach (10-15 pages)
-\newpage
+% \lhead{\emph{Methods}}
+% \input{Chapters/Methods} %Details of your approach (10-15 pages)
+% \newpage
 
 \lhead{\emph{Experiments and Results}}
 \input{Chapters/ExperimentsandResults} %Evaluation/testing of your hypothesis (10-15 pages)
 \newpage
 
-\lhead{\emph{Discussion}}
-\input{Chapters/Discussion} %Evaluation/testing of your hypothesis (5-8 pages)
-\newpage
+% \lhead{\emph{Discussion}}
+% \input{Chapters/Discussion} %Evaluation/testing of your hypothesis (5-8 pages)
+% \newpage
 
-\lhead{\emph{Conclusions and Future Work}}
-\input{Chapters/ConclusionsandFutureWork} % (5-6 pages)
-\newpage
+% \lhead{\emph{Conclusions and Future Work}}
+% \input{Chapters/ConclusionsandFutureWork} % (5-6 pages)
+% \newpage
 
-\lhead{\emph{Ethics and Datamanagemnt}}
-\input{Chapters/EthicsandDatamanagemnt}
-\newpage
+% \lhead{\emph{Ethics and Datamanagemnt}}
+% \input{Chapters/EthicsandDatamanagemnt}
+% \newpage
 % \lhead{}
 
 %----------------------------------------------------------------------------------------
@@ -428,21 +430,21 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-\lhead{\emph{Appendix A}}
-\input{Appendices/AppendixA}
-\newpage
+% \lhead{\emph{Appendix A}}
+% \input{Appendices/AppendixA}
+% \newpage
 
-\lhead{\emph{Appendix B}}
-\input{Appendices/AppendixB}
-\newpage 
+% \lhead{\emph{Appendix B}}
+% \input{Appendices/AppendixB}
+% \newpage 
 
-\lhead{\emph{Appendix C}}
-\input{Appendices/AppendixC}
-\newpage 
+% \lhead{\emph{Appendix C}}
+% \input{Appendices/AppendixC}
+% \newpage 
 
-\lhead{\emph{Appendix D}}
-\input{Appendices/AppendixD}
-\newpage 
+% \lhead{\emph{Appendix D}}
+% \input{Appendices/AppendixD}
+% \newpage 
 
 \lhead{\emph{Appendix E}}
 \input{Appendices/AppendixE.tex}
@@ -455,7 +457,7 @@ And finally, thank you to all of my friends for keeping me sane and helping me t
 \addtocontents{toc}{\vspace{2em}} % Add a gap in the Contents, for aesthetics
 
 \backmatter
-
+ 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------

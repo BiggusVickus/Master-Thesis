@@ -1,17 +1,32 @@
 \chapter{Ethics and Data Management}
 \label{edm}
-A new requirement for the thesis is that there must be a short section in which you reflect on the ethical aspects of your project. This requirement is related to one of the final objectives that a graduated student of the Master of Computational Science must meet: “The graduate of the program has insight into the social significance of Computational Science and the responsibilities of experts in this field within science and in society". You don't need to devote an entire chapter to this; a short section or paragraph is sufficient.
+\section{Ethical Considerations}
+There are some ethical considerations needed. 
+Phages can be used to treat bacterial infections, and may need to be safely administered under the supervision of a doctor, despite little to no side effects on the patient. 
+Trying to control phages either in food or in the environment by releasing a phage cocktail into waterways could potentially cause issues further down the line if the released solution contains unwanted chemicals. 
+An extra step in the food production will increase food costs and make food production harder to control. 
+The cost to create, maintain, and use phages at an industrial size can become costly and require a lot of energy. 
+Dumping phages into the ecosystem could potentially cause issues if the phage concoction includes resources for the bacteria to use, and can become costly for taxpayers. 
 
-I acknowledge that the thesis adheres to the ethical code (https://student.uva.nl/en/topics/ethics-in-research) and research data management policies (https://rdm.uva.nl/en) of UvA and IvI.
+\section{Data Management}
+All data and results can be found on \href{https://github.com/BiggusVickus/Master-Thesis}{GitHub}. 
+Some simulation data will have to be recreated as the \textit{.parquet} datafiles are too big for GitHub to store. 
+Measures have been taken to label and document the code, datasets, parameter configurations, and for example with \Cref{AppendixE}. 
+Any qualified researcher should be able to replicate, audit, use, and edit the computational experiments and code if needed. 
+This systematic approach to version control and storage aligns with best practices, ensuring that results are both traceable and verifiable. 
 
-The following table lists the data used in this thesis (including source codes). I confirm that the list is complete and the listed data are sufficient to reproduce the results of the thesis. If a prohibitive non-disclosure agreement is in effect at the time of submission "NDA" is written under "Availability" and "License" for the concerned data items.
+\section{Adherence to Codes and Principles}
+I acknowledge that the thesis adheres to the \href{https://student.uva.nl/en/topics/ethics-in-research}{ethical code} and \href{https://rdm.uva.nl/en}{research data management policies} of UvA and IvI.
 
-\begin{table}[]
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{\begin{tabular}[c]{@{}l@{}}Short description \\    (max. 10 words)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Availability \\    (e.g., URL, DOI)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}License \\    (e.g., MIT, GPL, Creative Commons)\end{tabular}} \\ \hline
-Example dataset 1                                                                        & \textless{}github url\textgreater   or Figshare                                      & GPL                                                                                               \\ \hline
-Example source code                                                                      & DOI (from Zenodo)                                                                    & MIT                                                                                               \\ \hline
-Example sensitive   data                                                                 & NDA                                                                                  & NDA                                                                                               \\ \hline
-\end{tabular}
-\end{table}
+The following table lists the data used in this thesis, with the source code. 
+I confirm that the list is complete and the listed data are sufficient to reproduce the results of the thesis. 
+
+\begin{table}[ht!]
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{\begin{tabular}[c]{@{}l@{}}Short description \\    (max. 10 words)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Availability \\    (e.g., URL, DOI)\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}License \\ \end{tabular}} \\ \hline
+        Dataset & \href{https://github.com/BiggusVickus/Master-Thesis/tree/main/SimulationResults}{Simulation Results} & MIT \\ \hline 
+        Source Code & \href{https://github.com/BiggusVickus/Master-Thesis}{Source Code} & MIT \\ \hline
+        Simulation Conditions & \Cref{AppendixE} and text under figures & \\ \hline
+    \end{tabular}
+\end{table} 

@@ -13,7 +13,7 @@
         \midrule
         400 & 50 & \scalebox{1}{$
             \begin{bmatrix}
-                0, 0, 0, 0 \\
+                0 & 0 & 0 & 0 \\
             \end{bmatrix}
         $} & 10 \\
         \bottomrule
@@ -89,7 +89,7 @@
         \midrule
         200 & 50 & \scalebox{1}{$
             \begin{bmatrix}
-                0, 0, 0, 0 \\
+                0 & 0 & 0 & 0 \\
             \end{bmatrix}
         $} & 10 \\
         \bottomrule
@@ -187,23 +187,23 @@
         \midrule
         \scalebox{1}{$
             \begin{bmatrix}
-                236, 287, 270 \\
+                236 & 287 & 270 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                53, 69 \\
+                53 & 69 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                0, 0, 0, 0 \\
-                0, 0, 0, 0 \\
+                0 & 0 & 0 & 0 \\
+                0 & 0 & 0 & 0 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                10, 5, 8 \\
+                10 & 5 & 8 \\
             \end{bmatrix}
         $} \\
         \bottomrule
@@ -211,57 +211,62 @@
     \begin{tabularx}{\textwidth}{l l}
         \toprule
         Vector Data\\
-        \bm{$\tau$} & \bm{$\omega^i$}\\
+        \bm{$\tau_b$} & \bm{$\omega^i_r$} \\
         \midrule
         \scalebox{1}{$
             \begin{bmatrix}
-                2.73340, 2.25015 \\
+                2.73340 & 2.25015 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                0, 0, 0 \\
+                0 & 0 & 0 \\
             \end{bmatrix}
         $} \\
         \bottomrule
     \end{tabularx}\newline
-    \begin{tabularx}{\textwidth}{l l l l l}
+    \begin{tabularx}{\textwidth}{l l}
         \toprule
         Matrix Data\\
-        \bm{$e$} & \bm{$v$} & \bm{$K$} & \bm{$r$} & \bm{$\beta$} \\
+        \bm{$e_{b r}$} & \bm{$v_{b r}$} \\
         \midrule
         \scalebox{1}{$
             \begin{bmatrix}
-                0.15680, 0.10871, 0 \\
-                0, 0, 0.18009 \\
+                0.15680 & 0.10871 & 0 \\
+                0 & 0 & 0.18009 \\
             \end{bmatrix}
         $} & 
         \scalebox{1}{$
             \begin{bmatrix}
-                1.27601, 0.86393, 0 \\
-                0, 0, 1.22625 \\
-            \end{bmatrix}
-        $} & 
-        \scalebox{1}{$
-            \begin{bmatrix}
-                139.58353, 12.83058, 0 \\
-                0, 0, 82.86684 \\
-            \end{bmatrix}
-        $} & 
-        \scalebox{1}{$
-            \begin{bmatrix}
-                0, 0.11695 \\
-                0.144459, 0 \\
-                0.11895, 0.13065 \\
-            \end{bmatrix}
-        $} & 
-        \scalebox{1}{$
-            \begin{bmatrix}
-                0, 15 \\
-                34, 0 \\
-                11, 57 \\
+                1.27601 & 0.86393 & 0 \\
+                0 & 0 & 1.22625 \\
             \end{bmatrix}
         $} \\
+        \bottomrule
+    \end{tabularx}\newline
+    \begin{tabularx}{\textwidth}{l l l}
+        \bm{$K_{b r}$} & \bm{$r_{p b}$} & \bm{$\beta_{p b}$} \\
+        \midrule
+        \scalebox{1}{$
+            \begin{bmatrix}
+                139.58353 & 12.83058 & 0 \\
+                0 & 0 & 82.86684 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0 & 0.11695 \\
+                0.144459 & 0 \\
+                0.11895 & 0.13065 \\
+            \end{bmatrix}
+        $} & 
+        \scalebox{1}{$
+            \begin{bmatrix}
+                0 & 15 \\
+                34 & 0 \\
+                11 & 57 \\
+            \end{bmatrix}
+        $}\\
         \bottomrule
     \end{tabularx}\newline
     \begin{tabularx}{\textwidth}{l l}
@@ -274,7 +279,7 @@
     \end{tabularx}\newline
     \caption{
         The parameter values used for the $3\times2\times3$ network model rounded to 5 decimal points. 
-        See \Cref{tab:appendixA:parameter_table_simple_golden_model} to see which parameter belongs to which agent. 
+        In the matrix data, if a value is 0, then the edge does not exist between $p$ and $b$ or between $b$ and $r$, depending on the subscript. 
     }
     \label{tab:appendixE:complex_model}
 \end{table}

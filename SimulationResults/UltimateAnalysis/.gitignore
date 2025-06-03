@@ -9,4 +9,4 @@
 
 # Don't include AGoodPlot directory
 !AGoodPlot/**
-!tau_beta
+!RBeta/**

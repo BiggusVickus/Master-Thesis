@@ -14,7 +14,7 @@ class System(Analysis):
         super().__init__(graph_location)
 
     def odesystem(self, t, Y, *params):
-        """The sytem of ODEs that represent the Golden Model.
+        """The system of ODEs that represent the Golden Model.
         Args:
             t (float): The time value that the solver is currently at.
             Y (np.array): The initial (for t=0)/current (for t>0) population values of the system. A 1D array of length equal to the number of variables in the system.
