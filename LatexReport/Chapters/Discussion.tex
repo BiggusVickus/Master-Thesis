@@ -1,2 +1,23 @@
 \chapter{Discussion}
 \label{Discussion}
+
+\section{Graph Behavior}
+\Cref{tab:results:graph_behavior} presents illustrative examples rather than a comprehensive analysis. 
+The behaviors shown represent typical trends observed when varying each parameter in the specified direction, but they may not apply to all possible values or reflect the magnitude of changes. 
+Additionally, these results do not necessarily generalize to scenarios where two parameters are varied simultaneously. 
+\Cref{tab:results:graph_behavior} should be interpreted alongside the local S1 sensitivities from \nameref{sec:SOBOL_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
+
+\section{A Good Curve}
+As the bacterial population grows, resource consumption accelerates until only trace amounts remain at $t=8$. 
+The delay between the peaks of uninfected and infected bacteria is due to the infection stages and the latent period of phage infection. 
+Each bacterium progresses from infection stage $k$ to $k+1$ at a rate of $\frac{M}{\tau}$. 
+Therefore, decreasing the number of infection steps $M$ or increasing the latent period $\tau$ amplifies this delay. 
+A longer latent period means it takes more time for bacteria to progress through the infection stages.
+
+At $t=4$, the infection rate surpasses the bacterial replication rate, causing the bacterial population to decline even though resources are still available. 
+This moment coincides with the rise of the phage population. 
+Observing the timing of these events and changes in graph behavior, as well as their relationships across different graphs, helps clarify the complex population dynamics and the interdependence of the populations that might not be obvious from reading the ODE model. 
+
+This becomes more difficult when the model goes from a $1\times1\times1$ system to a $p\times b \times r$ system. 
+Now up to any number of phages can interact with any number of bacteria, and any number of bacteria can interact with any number of resources at varying rates. 
+These varying rates will significantly influence the dynamics of the system, and make it hard to determine 

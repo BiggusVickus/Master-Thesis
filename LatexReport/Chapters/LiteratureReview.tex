@@ -497,3 +497,25 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
     }
     \label{fig:sourced:cocktail_and_phagedyn}
 \end{figure}
+
+\section{What Does Good Curve Behavior Look Like?}
+A good bacteria growth curve looks like a mountain, with a clear rise, peak, and fall in bacteria levels. 
+For a given IC, the bacteria start to consume resources and replicate leading to exponential growth. 
+The phages infect the bacteria and eventually the bacteria lyse, releasing new phages. 
+The new phages infect more bacteria, putting pressure on the bacteria growth. 
+Eventually, more bacteria are being infected than being created, causing the decline in bacteria population. 
+This decline can be quite sudden and quick. 
+
+Both bacteria and phage population exhibit exponential growth. 
+Similar to a classical predator-prey system, with the bacteria acting as the prey, and phages acting as the predator, the phage population lags behind the bacteria population.
+The difference in peak bacteria and phage population times can be measured and quantified. 
+
+If a bacteria colony starts at 100 bacteria, and grows at 4\% per minute, it will take about 112 minutes, or almost 2 hours for the colony to grow $100\times$. 
+\begin{align}
+    N &= Ae^rt \\ 
+    10000 &= 100e^{0.04t} \\
+    t &= frac{(ln(10000) - ln(100))}{0.04} \\
+    t = 115.13
+\end{align}
+
+With pressure from phages, and potentially slower production rate while infected, the bacteria population might only increase $40\times - 80\times$, and have a slower growth rate. 
