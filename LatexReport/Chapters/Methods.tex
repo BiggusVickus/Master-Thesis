@@ -18,11 +18,11 @@ All plots and simulations will use this model by default, unless stated otherwis
 \subsection{The Golden Model}
 \begin{eqfloat}
     \begin{align}
-        \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{i=1}^{M} I_M) \mathcolor{red}{+ w^i -w^o \cdot R}\\
+        \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{k=1}^{M} I_k) \mathcolor{red}{+ w^i -w^o \cdot R}\\
         \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P \mathcolor{red}{-w^o \cdot U}\\
         \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \mathcolor{red}{-w^o \cdot I_1}\\
         \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \mathcolor{red}{-w^o \cdot I_k}\text{ for } k=2, \dots, M \\
-        \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{i=1}^{M} I_M)\cdot P \mathcolor{red}{-w^o \cdot P} \\
+        \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{k=1}^{M} I_k)\cdot P \mathcolor{red}{-w^o \cdot P} \\
         g(R, v, K) &= \frac{v\cdot R}{R + K}
         \label{eq:golden_model}
     \end{align}
@@ -58,11 +58,11 @@ For example, $B_0$ is independently infected by $P_1$ and $P_2$, thus the uninfe
 Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, the uninfected $B_1$ population is reduced by the sum of infections from $P_1$ and $P_2$. 
 \begin{eqfloat}
     \begin{align}
-        \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b r} \cdot g(R_r, v_{b r}, K_{b r})\cdot (U_b + \sum_{i=1}^{M} I_{i_b}) + w^i_r - w^o \cdot R_r\\
+        \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b r} \cdot g(R_r, v_{b r}, K_{b r})\cdot (U_b + \sum_{k=1}^{M} I_{b_k}) + w^i_r - w^o \cdot R_r\\
         \frac{dU_b}{dt} &= U_b \cdot \sum_{r \in R} g(R_r, v_{b r}, K_{b r}) - U_b \cdot \sum_{p \in P} r_{p b} \cdot P_p - w^o \cdot U_b\\
         \frac{dI_{b_1}}{dt} &= U_b \cdot \sum_{p \in P}r_{p b} \cdot P_p - \frac{M}{\tau_b}\cdot I_{b_1} - w^o \cdot I_{b_1}\\
         \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) - w^o \cdot I_{b_k}\text{ for } k=2, \dots, M \\
-        \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{i=1}^{M} I_{b_i})\cdot P_p - w^o \cdot P_p\\
+        \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p\\
         g(R_r, v_{b r}, K_{b r}) &= \frac{v_{b r} \cdot R_r}{R_r + K_{b r}}
         \label{eq:adapted_golden_model}
     \end{align}. 

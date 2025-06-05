@@ -365,11 +365,68 @@ By varying the initial resource concentration, the bacteria growth rate is affec
 
 
 \section{Plotting Parameter Change - $3\times 2\times 3$ Model}
-\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0}, and \Cref{fig:created:r_beta_washout_0}, show a 7x7 matrix of different $r$ and $\beta$ initial conditions for a $3\times2\times3$ model. 
-For each simulation, if $r$ or $\beta$ is equal to a value not equal to $inf$, as identified by the title above each subfigure, then each value of $r$ or $\beta$ has that value.
+\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}, show a 7x7 matrix of different $r$ and $\beta$ initial conditions for a $3\times2\times3$ model, and each figure changes the washout rate from 0 to 0.02 to 0.05. 
+For each simulation, if $r$ or $\beta$ is equal to a value not equal to $inf$, as identified by the title above each sub-figure, then each value of $r$ or $\beta$ has that value.
 All phage initial values started at 10. This was specifically chosen 
 If $r$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
 As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix} NaN & 0.200 \\ 0.200 & NaN \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
 When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix} NaN & 0.11695 \\ 0.144459 & NaN \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 
-
 For the cells that don't have an edge between $p$ and $b$ or between $b$ and $r$, the data is represented as $NaN$, short for "Not a Number", \textit{np.NaN}, 
+
+The columns and rows of each figure makes it easy to compare how a change in parameter value affects the curve, while keeping the other parameter the same. 
+In $r, \beta, \omega^o=inf, inf, 0$, although not a "good curve" due to limited resource consumption and limited bacterial and phage growth, really shows how the different parameter values for each interaction uniquely affect the growth rate of each agent, especially the phage population (P0=blue, P1=green, and P2=purple). 
+Despite all phages starting at the same population level, within the first two or so time units, P1 has less phages than P0 and P2. 
+P2 has the fastest initial growth rate, as P2 has the most phages until $t=4$, at which point P1 has a larger phage population. 
+P2 reaches its peak population count before P0 or P1, but despite the slower initial growth, P0 and P1 eventually overtake P2 in total phage population. 
+P2 also actually reaches its peak before decreasing in population. 
+There are trace amounts of infected bacteria at the end of the simulation. 
+Since the phage population is reduced by $r_{pb}\cdot(U_b + \sum_{k=1}^M I_{b_k})$, and by specifically choosing the parameter values as used in \Cref{tab:appendixE:complex_model}, behavior that hasn't been seen in a $1\times 1\times 1$ system has been found. 
+The complete extinction of the bacteria has been delayed long enough such that at trace amounts, there is phage reduction despite bacteria still existing. 
+The peak times for P0, P1, and P2 are $t=6.33, 7.99, 4.52$, a difference of $3.47$ time units. 
+
+Contrast that with the phage population dynamics of that with $r, \beta, \omega^o = inf, 100, 0$, the phage populations do not show interesting dynamics. 
+The peak times are more similar and consistent to one another ($t=5.50, 7.01, 6.78$, a difference of $1.51$ time units). 
+The phage population curve all appear the same, with slightly slower growth rates. 
+There is no crossing of phage populations unlike with $r, \beta, \omega^o=inf, inf, 0$. 
+
+Losing the change in $\beta$ values really affected the dynamics fo the phage population. 
+The highlighted example demonstrated the dynamics and influence that multiple agents can have on the final output. 
+
+The top row of \Cref{fig:created:r_beta_washout_0.02} shows how the phages and resources died out relative to the top row of \Cref{fig:created:r_beta_washout_0}. 
+Even with a high burst value, the phages could not defeat the pressure from the washout. 
+But by changing the $r$ value from $r=0.001$ to $r=0.041$, the phages were able to save themselves and proliferate. 
+Using this knowledge, and the information gained from \nameref{sec:results:phase_portrait}, a 3D matrix of proliferation could theoretically be created and displayed. 
+
+\begin{figure}[]
+    \centering
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_inf_inf_0.png}
+        \caption{
+            $r, \beta, \omega^o = inf, inf, 0$, all initial phage condition=10. 
+        }
+        \label{fig:created:r_beta_washout_inf_inf_0}
+    \end{subfigure}
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_inf_100_0.png}
+        \caption{
+            $r, \beta, \omega^o = inf, 100, 0$, all initial phage condition=10. 
+        }
+        \label{fig:created:r_beta_washout_inf_100_0}
+    \end{subfigure}
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_inf_inf_0.02.png}
+        \caption{
+            $r, \beta, \omega^o = inf, inf, 0.02$, all initial phage condition=10. 
+        }
+        \label{fig:created:r_beta_washout_inf_inf_0.02}
+    \end{subfigure}
+    \caption{
+        Varying $r$, $\beta$, and $\omega^o$. 
+        All phage values set to 10 to show how the network connections and vector/matrix values affect phage growth. 
+        Selectively chosen sub-figures from \Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}. 
+        Chosen parameter values can be found in \nameref{tab:appendixE:complex_model}. 
+    }
+\end{figure}

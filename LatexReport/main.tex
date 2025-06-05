@@ -19,7 +19,6 @@
 % Note:
 % Make sure to edit document variables in the Thesis.cls file
 %
-%
 % Modified and Adapted by Michael Lees 2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -30,8 +29,7 @@
 \documentclass[11pt, oneside, draft]{Thesis} % The default font size and one-sided printing (no margin offsets)
 % \documentclass[11pt, oneside, final]{Thesis} % The default font size and one-sided printing (no margin offsets)
 
-\graphicspath{{Images/}} % Specifies the directory where pictures are stored
-
+\graphicspath{{Images/}} 
 \usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers' 
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{amsmath}
@@ -56,8 +54,6 @@
 \floatstyle{ruled}
 \newfloat{listing}{htbp}{lop}
 \floatname{listing}{Algorithm}
-
-
 \newsavebox{\codebox}
 \newaliascnt{eqfloat}{equation}
 \newfloat{eqfloat}{h}{eqflts}
@@ -69,7 +65,7 @@
   \def\caption{%
     \addtocounter{equation}{-1}%
     \ORIGINALcaption
-  }%
+  }
   \ORGeqfloat
 }
 
@@ -104,19 +100,17 @@
 \urlstyle{same}
 \title{\ttitle} % Defines the thesis title - don't touch this
 \begin{document}
-\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
-\setstretch{1.3} % Line spacing of 1.3
+\frontmatter 
+\setstretch{1.3} 
 
-% Define the page headers using the FancyHdr package and set up for one-sided printing
-\fancyhead{} % Clears all page headers and footers
-\rhead{\thepage} % Sets the right side header to show the page number
-\lhead{} % Clears the left side page header
+\fancyhead{} 
+\rhead{\thepage} 
+\lhead{}
 
 \pagestyle{fancy} % Finally, use the "fancy" page style to implement the FancyHdr headers
 
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % New command to make the lines in the title page
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 
 
-% PDF meta-data
 \hypersetup{pdftitle={\ttitle}}
 \hypersetup{pdfsubject=\subjectname}
 \hypersetup{pdfauthor=\authornames}
@@ -199,32 +193,21 @@ Date: \today\\
 %	QUOTATION PAGE
 %----------------------------------------------------------------------------------------
 
-\pagestyle{empty} % No headers or footers for the following pages
-
-\null\vfill % Add some space to move the quote down the page a bit
-
-% \textit{``What I cannot create, I do not understand.``}
+\pagestyle{empty}
+\null\vfill 
 \textit{``All models are wrong, but some are useful``}
-
-% \begin{flushright}
-%     Richard P. Feynman
-% \end{flushright}
 \begin{flushright}
     George E. P. Box
 \end{flushright}
-
-\vfill\vfill\vfill\vfill\vfill\vfill\null % Add some space at the bottom to position the quote just right
-
-\clearpage % Start a new page
+\vfill\vfill\vfill\vfill\vfill\vfill\null 
+\clearpage 
 
 %----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE
 %----------------------------------------------------------------------------------------
 
-\addtotoc{Abstract} % Add the "Abstract" page entry to the Contents
-
-\abstract{\addtocontents{toc}{\vspace{1em}} % Add a gap in the Contents, for aesthetics
-
+\addtotoc{Abstract} 
+\abstract{\addtocontents{toc}{\vspace{1em}} 
 Include your abstract here 
 Abstracts must include sufficient information for reviewers to judge the nature and significance
 of the topic, the adequacy of the investigative strategy, the nature of the results, and the
@@ -232,20 +215,16 @@ conclusions. The abstract should summarize the substantive results of the work a
 list topics to be discussed. 
 Length 200-400 words.
 }
-
-\clearpage % Start a new page
+\clearpage 
 
 %----------------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
 
-\setstretch{1.3} % Reset the line-spacing to 1.3 for body text (if it has changed)
-
+\setstretch{1.3} 
 \acknowledgements{
     \addtocontents{toc}{\vspace{1em}} 
     I would like to thank my parents for loving me despite some of my faults, and for supporting me through my Bachelor and Master studies even if they don't exactly know what I am studying. Without them, I wouldn't know where my life would be right now, and I certainly would be a different person if it were not for them. 
-
-
 
     Thank you to Dr. Matti Gralka for the weekly meetings and teaching me everything about phages and bacteria. 
     Every meeting was always insightful, productive, and informative. 
@@ -271,7 +250,6 @@ Length 200-400 words.
 %----------------------------------------------------------------------------------------
 
 \pagestyle{fancy} 
-
 \lhead{\emph{Contents}} 
 \tableofcontents 
 \lhead{}
@@ -416,9 +394,7 @@ Length 200-400 words.
 %----------------------------------------------------------------------------------------
 
 \addtocontents{toc}{\vspace{2em}}
-
 \appendix
-
 \lhead{\emph{Appendix A}}
 \input{Appendices/AppendixA}
 \newpage
@@ -444,7 +420,6 @@ Length 200-400 words.
 \newpage
 
 \addtocontents{toc}{\vspace{2em}}
-
  
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
