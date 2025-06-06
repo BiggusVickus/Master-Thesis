@@ -379,7 +379,7 @@ The aim is to better understand how phages work and interact with bacteria at a 
 
 A researcher might run the experiment in a liquid medium containing water, carbon and nitrogen sources, and other chemicals such as anti-foaming or pH control chemicals. 
 This liquid medium, often referred to as broth, allows for the cultivation of bacteria in a well-mixed environment, enabling researchers to monitor bacterial growth and phage infection dynamics over time. 
-By adjusting parameters such as nutrient concentration, temperature, agitation speed, and pH, researchers can simulate different environmental conditions and observe their effects on phage-bacteria interactions. 
+By adjusting parameters such as resource concentration, temperature, agitation speed, and pH, researchers can simulate different environmental conditions and observe their effects on phage-bacteria interactions. 
 Samples can be taken at various time points to measure bacterial density, phage titer, and resource depletion, providing quantitative data for model validation and hypothesis testing. 
 If measured frequently enough, the researcher can get an ODE-like curve out, where each line shows the population levels at that time. 
 Researchers can create a mathematical interpretation of the curves and run algorithms such as curve fitting and simulated annealing to find and tune the ODE model parameters. 
@@ -389,7 +389,7 @@ Chemostats and batch cultures are commonly used setups, with chemostats allowing
 Petri dishes are another commonly used way to grow bacterial colonies. 
 Agar, a jelly-like substance derived from seaweed, is commonly used as a solid growth medium in petri dishes. 
 It provides a stable surface for bacteria to grow and form visible colonies. 
-By adding nutrients and other supplements to the agar, researchers can tailor the medium to support the growth of specific bacterial strains or to test the effects of different environmental conditions. 
+By adding resources and other supplements to the agar, researchers can tailor the medium to support the growth of specific bacterial strains or to test the effects of different environmental conditions. 
 When phages are introduced to a bacterial lawn on agar, clear zones called plaques appear where phages have infected and lysed the bacteria, allowing for quantification and observation of phage activity. 
 As a cell lyses, it releases phages into the surrounding. 
 The phages can diffuse through the system, infecting neighboring cells. 
@@ -398,7 +398,7 @@ A small plaque of size 2-3mm can be created, where there are no bacteria.
 Bacteria density can be measured optically using light. 
 In the case of liquid cultures, as the bacteria grow and die, the solution will get more cloudy. 
 By shining a light through a control vial with no bacteria growth and through a vial with bacteria growth, the change in light refraction and intensity can be measured. 
-A researcher might also be interested in using a mass spectrometer to measure the density of phages and nutrients at specific time points. 
+A researcher might also be interested in using a mass spectrometer to measure the density of phages and resources at specific time points. 
 
 With petri dishes, it is harder to measure the bacterial growth. 
 Bacteria are usually mixed with phages in a heated liquid agar solution, and poured onto a petri dish. 
@@ -510,12 +510,12 @@ Both bacteria and phage population exhibit exponential growth.
 Similar to a classical predator-prey system, with the bacteria acting as the prey, and phages acting as the predator, the phage population lags behind the bacteria population.
 The difference in peak bacteria and phage population times can be measured and quantified. 
 
-If a bacteria colony starts at 100 bacteria, and grows at 4\% per minute, it will take about 112 minutes, or almost 2 hours for the colony to grow $100\times$. 
+If a bacteria colony starts at 100 bacteria, and grows at 4\% per minute, it will take about 112 minutes, or almost 2 hours for the colony to grow $100$ times. 
 \begin{align}
     N &= Ae^rt \\ 
     10000 &= 100e^{0.04t} \\
-    t &= frac{(ln(10000) - ln(100))}{0.04} \\
-    t = 115.13
+    t &= \frac{ln(10000) - ln(100)}{0.04} \\
+    t &= 115.13
 \end{align}
 
-With pressure from phages, and potentially slower production rate while infected, the bacteria population might only increase $40\times - 80\times$, and have a slower growth rate. 
+With pressure from phages, and potentially slower production rate while infected, the bacteria population might only increase $40\times - 80\times$, and might take longer to grow. 

@@ -341,13 +341,19 @@ The middle plot takes each run and calculates the “percentage from the max val
 This value is considered the time of peak, and is used to fix some issues that can arise where the population plateaus or only keeps on rising.
 The initial value is plotted on the x-axis, with the time at which the max value is reached on the y-axis.
 Using the plotted data, a linear or log fit can be created.
+In Figure 1 of \citet{mullaExtremeDiversityPhage2024}, they vary the initial bacteria concentration and measure the time until bacterial collapse. 
+The initial concentration and corresponding collapse time are plotted on logarithmic x and y axes, with a linear regression fitted to the log-transformed data.
+The observed logarithmic decrease suggests that the phage kinetics is adsorption-limited. 
+\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates this graph. 
 
 The $R^2$ value, or coefficient of determination, is calculated as $R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2}$
 where $y_i$ is the observed values, $\hat{y}_i$ is the predicted values, and $\bar{y}$ is the mean of the observed values.
 
-Using this data can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum.
-The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name.
-For every re-run of the IVA, the slope, intercept and $R^2$ value is stored in the bar chart, allowing comparison of the slope-intercept data across different parameters. 
+Using the IVA tool can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum.
+The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name. 
+For every re-run of the IVA, the slope, intercept and $R^2$ value is stored in the bar chart. 
+When executed with multiple parameters, this enables comparison of high-level results across various parameters and experimental conditions.
+The analysis can then be boiled down to the $R^2$, slope, and intercept line to describe how the parameter value affects the peak value and time. 
 
 \begin{figure}[h!]
     \centering
@@ -416,7 +422,7 @@ SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a
 SOBOL quantifies how much variance in the output can be attributed to a specific parameter and can measure the effect of global/total ($ST$), first ($S1$), and second order sensitivity ($S2$). 
 Global, also called total sensitivity, is the summation of all higher order interactions. 
 First order $Si$, or local sensitivity, is the measurement of the effect that parameter $i$ has on the variance of the output. 
-Second order is the measurement of parameter $i$ interacting with parameter $j$, nad how the interaction attributes to the output variance. 
+Second order is the measurement of parameter $i$ interacting with parameter $j$, and how the interaction attributes to the output variance. 
 Etc for third order and higher. 
 If $ST_i \gg S1_i$, then parameter $i$ depends on higher order interactions with other parameters, while when $ST_i \approx S1_i$, then $i$ doesn't interact much with and depend on other parameters.
 It should be stated that $ST_i \geq S1_i$ and that $ST_i$ can be greater than 1, while $S1_i <= 1$. 
@@ -453,12 +459,12 @@ The proportion of the global and local sensitivity can be seen for each agent ty
 
 It can be argued that the final, average, and variance value of the run is not a useful statistic to measure and run a SOBOL analysis on. 
 One might give the reasoning that the population value at time $t$ depends on the previous time step $t-1$. 
-Thus the average and variance of the value is not completely random and is semi dependent on the previous value. 
+Thus the average and variance of the value is not completely random and is semi-dependent on the previous value. 
 Another argument is that the simple golden model doesn't exhibit complex behavior unlike the oscillating behavior exhibited in \Cref{fig:sourced:cocktail_and_phagedyn}. 
 
 Making a dashboard that can be used for different inputs is hard to make. Predicting the type of plots that a user might be interested in, and the type of behavior the user wants to analyze is impossible to predict. 
 Therefore, three simple and easy to understand default SOBOL analysis methods are provided that aims to capture the simple dynamics of the system. 
-Upon completion of a SOBOL analysis, the original simulation data is stored to the disk as a \textit{.pickle} file so that the user can use the data and run their own SOBOL analyses. 
+Upon completion of a SOBOL analysis, the original simulation data is stored to the disk as a \textit{.pickle} file so that the user can reuse the data and run their own SOBOL analyses. 
 
 \begin{figure}[h!]
     \centering

@@ -20,4 +20,76 @@ Observing the timing of these events and changes in graph behavior, as well as t
 
 This becomes more difficult when the model goes from a $1\times1\times1$ system to a $p\times b \times r$ system. 
 Now up to any number of phages can interact with any number of bacteria, and any number of bacteria can interact with any number of resources at varying rates. 
-These varying rates will significantly influence the dynamics of the system, and make it hard to determine 
+These varying rates will significantly influence the dynamics of the system, and make it hard to determine what event caused what due to the rise in number of interactions.
+For a $1\times1\times1$ system, there are 2 interactions that can occur (assuming no self interactions, and that phages don\t interact with the resources). 
+With a $p\times b\times r$ system, there are $\mathcal{O}(p\cdot b + b\cdot r)$ interactions that can occur. 
+So for a $3\times2\times3$ system, there are at most 12 interactions occurring. 
+12 events can occur at the same time, making it hard to identify the cause of the event. 
+
+
+\section{SOBOL Sensitivity}
+\subsection{Final Value Analysis}
+\subsubsection{Resources}
+Without a washin rate, the resources will most likely have been consumed by the time the simulation ended at $t=15$. 
+Comparing \Cref{fig:created:SOBOL_final} with \Cref{fig:created:SOBOL_final_no_wi_wo_extra} shows how the addition of a washin and washout factor alters the final value of the resources. 
+The final values for Resources, Uninfected, Infected, and Phages would often be something similar to (0, 0, 0, 10000) at $t=15$, where all the resources were consumed and the bacteria died out due to the phages, leaving only the phages remaining. 
+The final value of the resources would often be 0, no matter what parameter values were used, with $\omega^i, \omega^o = 0$. 
+With the addition of the washin, new resources were constantly being re-added. 
+Once the bacteria died out, the resources could accumulate, with the accumulation dependent on the rate of the washin rate, hence why the washin rate has such a large impact on the final, average, and variance of population value for the resources. 
+The final value would be dependent on when the bacteria died out, in turn allowing the resources to accumulate at a rate proportional to $\omega^i - \omega^0\cdot R$. 
+Resources were less dependent on higher order interactions, unlike the uninfected, infected, phages, and total bacteria sum. 
+
+% The initial phage population will determine how many bacteria become infected, and how quickly the phages can proliferate through the bacteria population. 
+% Surprisingly, $r$/r\_matrix did not have as big of an influence on the uninfected as $\beta$ did, even though the infection rate is dependent on $r$. 
+% The larger or smaller $r$ is, the faster or slower the infection rate is. If $r$ is really small, the infection rate would take forever, potentially allowing the bacteria to keep a stable population. 
+% $r$ is equally as important at explaining the final value as $\tau$/tau\_vector, washin, $e$/e\_matrix, and washout of sensitivity around 0.25. 
+\subsubsection{Phages}
+The $r$ value allows the phages to infect the uninfected. 
+When $r$ is decreased, the final phage population is counterintuitively higher than when $r$ is larger. 
+The behavior is counterintuitive because one would expect that a higher infection rate would lead to more infections and thus more phages. 
+With a higher $r$ value, more phages are being removed from the phage population and infecting the bacteria. 
+It can be seen as a way of "more phages are needed to infect a bacterium", therefore getting less phages out as a result as more phages are needed to infect a single bacteria. 
+Washout has a noticeable influence on the phage population, as not the phage population is being reduced at a rate proportional to the washout rate. 
+The larger the washout rate, the larger the drawdown of phages. 
+When the infected all die out, the phage population wont grow anymore. 
+Given the phage population at that point in time, the phage removal rate is proportional to the washout rate. 
+
+\subsubsection{Total Bacteria}
+Total bacteria is the sum of both uninfected and infected bacteria, so it makes sense for total bacteria to have similar values to uninfected and infected bacteria. 
+Apparently the uninfected bacteria have a stronger influence on the output variance than the infected bacteria. 
+The total bacteria sensitivities resemble the sensitivities of the uninfected bacteria more than the infected bacteria. 
+It would have been expected for the total bacteria to resemble more of an average between the uninfected and infected. 
+
+
+\section{Initial Value Analysis}
+Then though the behavior should be similar, changing other parameter values can alter how a parameter works. 
+It would be expected that for 100 initial uninfected bacteria and less the bacteria sum peak time would follow the linear regression line, but at around 100 uninfected bacteria and less, the peak curve goes horizontal. 
+This suggests that something is restricting the bacterial growth. 
+The lack of resources is actually restricting the bacteria growth. 
+
+
+\section{Phase Portrait}
+There is non-linear tradeoff between initial resources and initial phages when there is washout included. 
+The washout non-linearly affects if the phages proliferate or not. 
+The higher the washout, the harder it would be for the phages to proliferate. 
+Phage populations are coupled to bacteria populations which are coupled to resource populations. 
+By varying the initial resource concentration, the bacteria growth rate is affected. 
+
+For low initial resource concentration values, values below $10$ the resource, the monod curve is below the half-velocity constant (the velocity $v$ is 1 and $K$ is 10). 
+The bacteria are restricted by the resources and can't grow quickly. 
+So more phages are needed to grow. 
+As N increases towards $K=10$, the bacteria can grow faster. 
+Since $K$ is small, a small change in $R$ causes a relatively large change in the monod rate. 
+This is noticed by the very steep downward line to the left of the minimum. 
+
+At around the minimum, the behavior changes. 
+At $R\equiv 6$, the monod rate reaches half of its max velocity. 
+It should be 10, but the washout must have an effect on the monod rate, artificially shifting the point where the half velocity occurs from $K=10$ to $K=6$. 
+
+As $R$ increases from $K$, the bacteria are not limited by the nutrients anymore and can grow faster. 
+However, as $R$ increases beyond $K$, each additional unit of $R$ results in a diminishing increase in the Monod rate, which asymptotically approaches its maximum velocity. 
+As bacteria grow according to the Monod equation $g(N, v, K)$, the phage population dynamics remain tightly coupled to bacterial growth. 
+More pahges
+Phage proliferation becomes a race against time. 
+If the phage growth rate is not fast enough to initially beat the washout removal rate, or the infected bacteria are washed out before lysing, the phages can not proliferate. 
+The bacteria grow at the monod rate, so 
