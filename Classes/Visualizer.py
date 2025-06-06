@@ -1226,7 +1226,7 @@ class Visualizer():
             output_dir = f"SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/"
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-            pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/simulation_results_{timestamp}.pickle', 'wb'))
+            pickle.dump(dictionary, open(f'SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/SimulationResults_{timestamp}.pickle', 'wb'))
             
             parallel = ParallelComputing()
             batch_size = 1000 * os.cpu_count()  # Number of simulations to run before saving intermediate results
@@ -1239,8 +1239,14 @@ class Visualizer():
                 end_index = min(start_index + batch_size, len(iter_items))
                 batch_param_values = iter_items[start_index:end_index]
                 # Run the simulations for the current batch
-                batch_results = parallel.run_parallel(batch_param_values, param_names_to_run, self.graph_data, initial_condition, non_graphing_data_vectors, vector_names, non_graphing_data_matrices, matrix_names, self.analysis, self.other_parameters_to_pass, self.analysis.environment_data)
-                # Save intermediate results to a Parquet file
+                batch_results = parallel.run_parallel(
+                    batch_param_values, param_names_to_run, self.graph_data,
+                    initial_condition, non_graphing_data_vectors, vector_names,
+                    non_graphing_data_matrices, matrix_names,
+                    self.analysis, self.other_parameters_to_pass,
+                    self.analysis.environment_data
+                )
+
                 t_results, y_results = batch_results[:2]
                 del batch_results
                 for param_values, t_values, y_values in zip(batch_param_values, t_results, y_results):
@@ -1251,14 +1257,30 @@ class Visualizer():
                     dic1['y_values'] = y_values
                     rows.append(dic1)
                 batch_df = pd.DataFrame(rows, columns=col_names)
-                batch_df['t_values'] = batch_df['t_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
-                batch_df['y_values'] = batch_df['y_values'].apply(lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x))
-                # Save the DataFrame to a Parquet file
-                if os.path.exists(f"SimulationResults/UltimateAnalysis/simulation_results_{timestamp}.parquet"):
-                    batch_df.to_parquet(f'SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/simulation_results_{timestamp}.parquet', engine='fastparquet', index=False, append=True, compression='snappy', partition_cols=partition_data)
-                else:
-                    batch_df.to_parquet(f"SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/simulation_results_{timestamp}.parquet", engine="fastparquet", index=False, compression="snappy", partition_cols=partition_data)
-                # Clear the batch DataFrame to free up memory
+                batch_df['t_values'] = batch_df['t_values'].apply(
+                    lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x)
+                )
+                batch_df['y_values'] = batch_df['y_values'].apply(
+                    lambda x: json.dumps(x.tolist() if isinstance(x, np.ndarray) else x)
+                )
+                for col in partition_data:
+                    if col not in batch_df.columns:
+                        batch_df[col] = "Unknown"
+                    else:
+                        batch_df[col] = batch_df[col].astype(str)
+                ordered_cols = partition_data + [col for col in batch_df.columns if col not in partition_data]
+                batch_df = batch_df[ordered_cols]
+                parquet_dir = f"SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}"
+                parquet_path = os.path.join(parquet_dir, f"SimulationResults_{timestamp}.parquet")
+                os.makedirs(parquet_dir, exist_ok=True)
+                batch_df.to_parquet(
+                    parquet_path,
+                    engine="fastparquet",
+                    index=False,
+                    compression="snappy",
+                    partition_cols=partition_data,
+                    append=os.path.exists(parquet_path),
+                )
                 del batch_df
                 del rows
                 del t_results
@@ -1267,7 +1289,7 @@ class Visualizer():
                 del param_values
                 del t_values
                 del y_values
-                gc.collect()  # Force garbage collection to free up memory
+                gc.collect()
 
                 print(f"Batch {batch_index + 1}/{total_batches} completed and saved.")
             return f"Finished simulation, simulation results (.parquet file and .pickle file) saved to SimulationResults/UltimateAnalysis/SimulationResults_{timestamp}/"
