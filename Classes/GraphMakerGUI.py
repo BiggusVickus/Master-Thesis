@@ -30,6 +30,7 @@ class GraphMakerGUI(GraphMaker):
         remove_node_button = self.create_button(self.remove_node, "Remove Node")
         add_edge_button = self.create_button(self.add_edge, "Add Edge")
         mass_create_edges_button = self.create_button(self.mass_create_edges, "Add Multiple Edges")
+        randomize_edges = self.create_button(self.randomize_edges, "Randomize P-B and B-R Edges")
         remove_edge_button = self.create_button(self.remove_edge, "Remove Edge")
         updateAttributesOfNodes = self.create_button(self.edit_node_attributes, "Edit Node Attributes")
         updateAttributesOfEdges = self.create_button(self.edit_edge_attributes, "Edit Edge Attributes")
@@ -42,6 +43,7 @@ class GraphMakerGUI(GraphMaker):
         remove_node_button.pack()
         add_edge_button.pack()
         mass_create_edges_button.pack()
+        randomize_edges.pack()
         remove_edge_button.pack()
         updateAttributesOfNodes.pack()
         updateAttributesOfEdges.pack()
@@ -88,6 +90,12 @@ class GraphMakerGUI(GraphMaker):
         B = simpledialog.askinteger("Add Bacteria Nodes", "Enter number of B nodes:")
         R = simpledialog.askinteger("Add Resource Nodes", "Enter number of R nodes:")
         super().mass_create_nodes(P, B, R)
+        self.plot()
+
+    def randomize_edges(self):
+        PB = simpledialog.askinteger("Number of P-B edges", "Enter number of P-B edges to randomly create:")
+        BR = simpledialog.askinteger("Number of B-R edges", "Enter number of B-R edges to randomly create:")
+        super().randomize_edge_connections(PB, BR)
         self.plot()
     
     def mass_create_edges(self):

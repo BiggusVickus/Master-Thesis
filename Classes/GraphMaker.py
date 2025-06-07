@@ -74,7 +74,7 @@ class GraphMaker:
     def default_environment_data(self):
         string = ""
         string += f"M: 4\n"
-        string += f"washout: 0\n"
+        string += f"washout: {np.random.uniform(0, 0.1)}\n"
         return string
     
     def default_settings_data(self):
@@ -94,19 +94,19 @@ class GraphMaker:
 
     def default_phage_data(self):
         string = ""
-        string += f'Initial_Population: {np.random.randint(5, 15)}\n'
+        string += f'Initial_Population: {np.random.randint(1, 50)}\n'
         return string
 
     def default_bacteria_data(self):
         string = ""
-        string += f"Initial_Population: {np.random.randint(50, 100)}\n"
-        string += f"tau: {np.random.uniform(0.7, 3.1)}\n"
+        string += f"Initial_Population: {np.random.randint(1, 100)}\n"
+        string += f"tau: {np.random.uniform(0.5, 3.5)}\n"
         return string
 
     def default_resource_data(self):
         string = ""
         string += f"Initial_Concentration: {np.random.randint(200, 400)}\n"
-        string += f"washin: 0\n"
+        string += f"washin: {np.random.uniform(0, 100)}\n"
         return string
     
     def default_node_data(self):
@@ -117,8 +117,8 @@ class GraphMaker:
     
     def default_p_b_data(self):
         string = ""
-        string += f"Burst_Size: {np.random.randint(10, 60)}\n"
-        string += f"r: {np.random.uniform(0.001, 0.15)}\n"
+        string += f"Burst_Size: {np.random.randint(1, 100)}\n"
+        string += f"r: {np.random.uniform(0.001, 0.2)}\n"
         return string
 
     def default_p_r_data(self):
@@ -129,9 +129,9 @@ class GraphMaker:
 
     def default_b_r_data(self):
         string = ""
-        string += f"v: {np.random.uniform(0.8, 1.7)}\n"
-        string += f"e: {np.random.uniform(0.1, 0.2)}\n"
-        string += f"K: {np.random.uniform(10, 150)}\n"
+        string += f"v: {np.random.uniform(0.8, 1.9)}\n"
+        string += f"e: {np.random.uniform(0.05, 0.25)}\n"
+        string += f"K: {np.random.uniform(10, 250)}\n"
         return string
     
     def default_r_r_data(self):
@@ -282,6 +282,40 @@ class GraphMaker:
                 continue
             self.add_edge(node1, node2, edge_data)
         return error_text
+    
+    def randomize_edge_connections(self, pb:int = 0, br:int = 0):
+        if type(pb) != int or type(br) != int:
+            return self.error_message("Number of edges must be an integer")
+        if pb < 0 or br < 0:
+            return self.error_message("Number of edges must be greater than or equal to 0")
+        #  delete all edges
+        self.graph.remove_edges_from(list(self.graph.edges))
+        #  get all nodes of each type
+        nodes_p = [node for node, attr in self.graph.nodes(data=True) if attr['node_type'] == 'P']
+        nodes_b = [node for node, attr in self.graph.nodes(data=True) if attr['node_type'] == 'B']
+        nodes_r = [node for node, attr in self.graph.nodes(data=True) if attr['node_type'] == 'R']
+
+        # Ensure enough nodes to connect
+        if pb > len(nodes_p) * len(nodes_b):
+            pb = len(nodes_p) * len(nodes_b)
+        if br > len(nodes_b) * len(nodes_r):
+            br = len(nodes_b) * len(nodes_r)
+
+        # Generate all possible pairs and sample without replacement
+        pb_pairs = [(p, b) for p in nodes_p for b in nodes_b]
+        br_pairs = [(b, r) for b in nodes_b for r in nodes_r]
+        np.random.shuffle(pb_pairs)
+        np.random.shuffle(br_pairs)
+        pb_pairs = pb_pairs[:pb]
+        br_pairs = br_pairs[:br]
+        print(pb_pairs)
+        print(br_pairs)
+
+        print(f"Creating {pb} P-B edges and {br} B-R edges")
+        for node1, node2 in pb_pairs:
+            self.add_edge(node1, node2)
+        for node1, node2 in br_pairs:
+            self.add_edge(node1, node2)
 
     def export_graph_to_file(self, file_name:str =None):
         if file_name == None or file_name == "":
