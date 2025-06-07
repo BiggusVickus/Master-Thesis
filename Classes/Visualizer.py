@@ -114,12 +114,19 @@ class Visualizer():
         cols = 3
         rows = (num_graphs // cols) + 1  # Calculate the number of rows needed
         fig = make_subplots(rows=rows, cols=cols, subplot_titles=[name for name in self.graph_data.keys()] + ['Bacteria Sum'], row_heights=[5000]*rows)
-        for i, dictionary in enumerate(self.graph_data.items()):
-            name, dic = dictionary
-            for j in range(len(unflattened_data[i])):
+        for i, (name, dictionary) in enumerate(self.graph_data.items()):
+            list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+            for j, item_name in enumerate(list_of_item_names):
                 row = (i // cols) + 1
                 col = (i % cols) + 1
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]}", hoverlabel=dict(namelength = -1)), row=row, col=col)
+                fig.add_trace(
+                    go.Scatter(
+                        x=overall_t, 
+                        y=unflattened_data[i][j], 
+                        mode="lines", 
+                        name=f"{item_name}", 
+                        hoverlabel=dict(namelength = -1)), 
+                        row=row, col=col)
         fig.update_layout(
             title=f"Graph of Each Population",
             xaxis=dict(title="Time"),
@@ -137,20 +144,21 @@ class Visualizer():
             fig.update_yaxes(type="log")
         list_of_figs.append(fig)
 
-
-
         fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels (Bacteria Not Summed Up)", "Relative Population Levels (Bacteria Not Summed Up)"), row_heights=[1000])
         np.random.seed(1)  # Set the random seed for reproducibility
-        for i, (name, dic) in enumerate(self.graph_data.items()):
-            for j in range(len(unflattened_data[i])):
+
+        for i, (name, dictionary) in enumerate(self.graph_data.items()):
+            list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+            for j, item_name in enumerate(list_of_item_names):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{item_name} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
 
         np.random.seed(1)
-        for i, (name, dic) in enumerate(self.graph_data.items()):
-            for j in range(len(unflattened_data[i])):
+        for i, (name, dictionary) in enumerate(self.graph_data.items()):
+            list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+            for j, item_name in enumerate(list_of_item_names):
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{item_name} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
         fig.update_layout(
             title=f"Absolute and Relative Population Levels, Bacteria Count Not Summed Up",
             xaxis=dict(title="Time"),
@@ -167,21 +175,24 @@ class Visualizer():
 
         fig = make_subplots(rows=1, cols=2, subplot_titles=(f"Absolute Population Levels", "Relative Population Levels"), row_heights=[1000])
         np.random.seed(1)
-        for i, (name, dic) in enumerate(self.graph_data.items()):
-            for j in range(len(unflattened_data[i])):
+        for i, (name, dictionary) in enumerate(self.graph_data.items()):
+            list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+            for j, item_name in enumerate(list_of_item_names):
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{item_name} (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
         color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (absolute)", stackgroup="one", marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=1)
         np.random.seed(1)
-        for i, (name, dic) in enumerate(self.graph_data.items()):
-            for j in range(len(unflattened_data[i])):
+
+        for i, (name, dictionary) in enumerate(self.graph_data.items()):
+            list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+            for j, item_name in enumerate(list_of_item_names):
                 if name.lower() in ["bacteria", "b", "u", "i", "infect", "uninf", "inf", "uninfect", "uninfected bacteria", "infected bacteria", "bacteria uninfected", "bacteria infected", "bacteria uninf", "bacteria infect"]:
                     continue
                 color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
-                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{dic['column_names'][j]} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
+                fig.add_trace(go.Scatter(x=overall_t, y=unflattened_data[i][j], mode="lines", name=f"{item_name} (relative)", stackgroup="one", groupnorm='percent', marker=dict(color=color), hoverlabel=dict(namelength = -1)), row=1, col=2)
         color = f"rgba({np.random.randint(0, 255)}, {np.random.randint(0, 255)}, {np.random.randint(0, 255)}, 0.8)"  # Generate a random color
         fig.add_trace(go.Scatter(x=overall_t, y=data_bacteria, mode="lines", name="Bacteria Sum (relative)", stackgroup="one",  marker=dict(color=color), groupnorm='percent', hoverlabel=dict(namelength = -1)), row=1, col=2)
         fig.update_layout(
@@ -200,14 +211,18 @@ class Visualizer():
         records = []
         x_pos = 0
         x_labels = []
-        group_gap = 0.01  # wider spacing between groups
-        intra_group_gap = 0.01  # small spacing between phages and resources
+        group_gap = 0.01 
+        intra_group_gap = 0.01 
 
         for group_label, group_data in self.ending_values_serial_transfer.items():
             group_names = group_data["group_names"]
+            # column_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
             column_names = group_data["column_names"]
             column_data = group_data["column_data"]
-
+            print('-------')
+            print(group_names, column_names, column_data)
+            print('-----')
+            
             for i, (group_name, col_names, col_vals) in enumerate(zip(group_names, column_names, column_data)):
                 xpos = x_pos + i * intra_group_gap
                 label = f"{group_label}<br>{group_name}"
@@ -505,7 +520,11 @@ class Visualizer():
                 data_bacteria = optical_density(deepcopy(overall_y_2), list(self.graph_data.keys()))
                 column_data.append([data_bacteria[-1]])
                 group_names = [name for name in self.graph_data.keys()] + ["Bacteria Sum"]
-                column_names = [self.graph_data[name]["column_names"] for name in self.graph_data.keys()] + [["Bacteria Sum"]]
+                column_names = []
+                for name, dictionary in self.graph_data.items():
+                    list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+                    column_names.append(list_of_item_names)
+                column_names.append(["Bacteria Sum"])
                 self.ending_values_serial_transfer["ST " + str(len(self.ending_values_serial_transfer))] = {'group_names': group_names, 'column_names': column_names, 'column_data': column_data}
             final_values = solved_system.y[:, -1]
             final_time = solved_system.t[-1]
@@ -581,7 +600,11 @@ class Visualizer():
             column_data.append([data_bacteria[-1]])
             self.ending_values_serial_transfer = {}
             group_names = [name for name in self.graph_data.keys()] + ["Bacteria Sum"]
-            column_names = [self.graph_data[name]["column_names"] for name in self.graph_data.keys()] + [["Bacteria Sum"]]
+            column_names = []
+            for name, dictionary in self.graph_data.items():
+                list_of_item_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
+                column_names.append(list_of_item_names)
+            column_names.append(["Bacteria Sum"])
             self.ending_values_serial_transfer["Initial Inoculation"] = {'group_names': group_names, 'column_names': column_names, 'column_data': column_data}
             list_of_figs = self.create_main_figures(overall_y, solved_system.t, main_figure_log_y_axis)
             return list_of_figs
