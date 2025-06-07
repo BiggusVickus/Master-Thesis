@@ -53,7 +53,11 @@ class System(Analysis):
                     U_b = U[b_index] # uninfected
                     I_b = np.sum(I[b_index]) # sum of all infected bacteria b agents
                     sum += e * g(R[r_index], v, K) * (U_b + I_b) 
-            new_R[r_index] = -sum - R[r_index] * environment['washout'] + washin # calculate the new value of the resource.
+            new_sum = -sum - R[r_index] * environment['washout'] + washin # calculate the new value of the resource.
+            if new_sum <= 0 and R[r_index] <= 0: # if the new sum is negative and the resource population is greater than 0, set it to 0
+                new_R[r_index] = 0
+            else:
+                new_R[r_index] = new_sum
         
         # update U vector
         for uninfected_bacteria in bacteria_nodes:
@@ -69,10 +73,16 @@ class System(Analysis):
                 if graph.has_edge(phage, uninfected_bacteria): # check if the edge between phage_p and bacteria_b exists.
                     p_sum += r_matrix[p_index, u_index] * P[p_index]
             # update the uninfected bacteria
-            new_U[u_index] = U[u_index] * g_sum - U[u_index] * p_sum - U[u_index] * environment['washout']
+            new_sum = U[u_index] * g_sum - U[u_index] * p_sum - U[u_index] * environment['washout']
+            if new_sum <= 0 and U[u_index] <= 0: # if the new sum is negative and the uninfected population is greater than 0, set it to 0
+                new_U[u_index] = 0
+            else:
+                new_U[u_index] = new_sum
 
         # update I vector
         for infected_bacteria in bacteria_nodes:
+            if (P[p_index] <= 0):
+                continue
             i_index = bacteria_nodes.index(infected_bacteria)
             for k_index in range(0, M):
                 if k_index == 0: # if we are at the first stage of infection
@@ -82,14 +92,22 @@ class System(Analysis):
                         if graph.has_edge(phage, infected_bacteria): # check if the edge between phage_p and bacteria_b exists.
                             p_sum += r_matrix[p_index, i_index] * P[p_index]
                         M_tau = 0 if tau_vector[i_index] == 0 else M / tau_vector[i_index]
-                    new_I[i_index, 0] = U[i_index] * p_sum - M_tau * I[i_index, 0] - environment['washout'] * U[i_index]
+                    new_sum = U[i_index] * p_sum - M_tau * I[i_index, 0] - environment['washout'] * U[i_index]
+                    if new_sum <= 0 and new_I[i_index, 0] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
+                        new_I[i_index, 0] = 0
+                    else:
+                        new_I[i_index, 0] = new_sum
                 else: # if we are at the other stages of infection
                     if(tau_vector[i_index] == 0): # prevent divide by 0 error
                         M_tau = 0
                     else:
                         m_tau = M / tau_vector[i_index] # get the value of M_tau
                     right = I[i_index, k_index - 1] - I[i_index, k_index]
-                    new_I[i_index, k_index] = m_tau * right - environment['washout'] * new_I[i_index, k_index] 
+                    new_sum = m_tau * right - environment['washout'] * new_I[i_index, k_index] 
+                    if new_sum < 0 and new_I[i_index, k_index] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
+                        new_I[i_index, k_index] = 0
+                    else:
+                        new_I[i_index, k_index] = new_sum
         
         # update P vector
         for phage in phage_nodes: # loop over the phage names
@@ -106,15 +124,21 @@ class System(Analysis):
                     left_sum += B_matrix[p_index, i_index] * M_tau * I[i_index, -1]
                     right_sum += r_matrix[p_index, i_index] * (U[i_index] + np.sum(I[i_index]))
             # update the phage value
-            new_P[p_index] = left_sum - right_sum * P[p_index] - environment['washout'] * P[p_index]
+            new_sum = left_sum - right_sum * P[p_index] - environment['washout'] * P[p_index]
+            if new_sum <= 0 and P[p_index] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
+                new_P[p_index] = 0
+            else:
+                new_P[p_index] = new_sum
+
         # flatten the new updated initial conditions, undoes the flattening done by unflatten_initial_matrix(). 
         flattened_y1 = self.flatten_lists_and_matrices(new_R, new_U, new_I, new_P)
         return flattened_y1
 
+
 # graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
 # system = System('simple_graph.gexf') # load the graph from the file.
 # system = System('a_good_curve.gexf') # load the graph from the file.
-system = System('a_good_curve_2.gexf') # load the graph from the file.
+# system = System('a_good_curve_2.gexf') # load the graph from the file.
 # system = System('complex_graph.gexf') # load the graph from the file.
 # system = System('a_good_curve_2 copy.gexf')
 
