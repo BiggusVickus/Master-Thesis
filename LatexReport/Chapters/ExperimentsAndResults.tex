@@ -202,7 +202,7 @@ This is due to the restricted range of values. The time at peak value can only f
 The final and peak values can fall anywhere between 0 and any value, depending on the IC and how high the population can rise, and how fast the population can fall, \textit{if} the population count falls. 
 
 \subsection{SOBOL Analysis - Without Washin and Washout}
-In many of the plots, the washin and washout rate had a large influence on the final, peak, and time at peak value. 
+In many of the plots, the washin and washout rate had a large influence on the final, peak, and time of peak value. 
 \Cref{fig:created:SOBOL_no_wi_wo_extra} ran the same input as \Cref{fig:created:SOBOL_analyses}, but left the washin and washout rate out. 
 The sensitivity plots for the final, peak, and time of peak plots look different from one another. 
 The final resource value depended heavily on the washin and washout rate, but without the washin and washout, the final resource depended heavily on the initial resource population. 
@@ -332,7 +332,8 @@ $\beta$ consistently had a large effect on the final, peak, and time of peak val
 \section{Plotting Parameter Change - $3\times 2\times 3$ Model}
 \Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}, show a 7x7 matrix of different $r$ and $\beta$ initial conditions for a $3\times2\times3$ model, and each figure changes the washout rate from 0 to 0.02 to 0.05. 
 For each simulation, if $r$ or $\beta$ is equal to a value not equal to $inf$, as identified by the title above each sub-figure, then each value of $r$ or $\beta$ has that value.
-All phage initial values started at 10. This was specifically chosen 
+All phage initial values started at 10. 
+This was specifically chosen to highlight how even though the phage values all start the same, and how two parameter values are controlled, the other parameter values and unequal network topogrpahy has an impact on the population values of the phages. 
 If $r$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
 As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix} NaN & 0.200 \\ 0.200 & NaN \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
 When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix} NaN & 0.11695 \\ 0.144459 & NaN \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 
