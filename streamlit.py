@@ -104,7 +104,7 @@ class System(Analysis):
                         m_tau = M / tau_vector[i_index] # get the value of M_tau
                     right = I[i_index, k_index - 1] - I[i_index, k_index]
                     new_sum = m_tau * right - environment['washout'] * new_I[i_index, k_index] 
-                    if new_sum < 0 and new_I[i_index, k_index] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
+                    if new_sum <= 0 and new_I[i_index, k_index] <= 0: # if the new sum is negative and the phage population is less than 0, set it to 0
                         new_I[i_index, k_index] = 0
                     else:
                         new_I[i_index, k_index] = new_sum
@@ -136,11 +136,11 @@ class System(Analysis):
 
 
 # graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
-# system = System('simple_graph.gexf') # load the graph from the file.
+system = System('simple_graph.gexf') # load the graph from the file.
 # system = System('a_good_curve.gexf') # load the graph from the file.
 # system = System('a_good_curve_2.gexf') # load the graph from the file.
 # system = System('complex_graph.gexf') # load the graph from the file.
-# system = System('a_good_curve_2 copy.gexf')
+# system = System('large_graph.gexf')
 
 phage_nodes = system.get_nodes_of_type('P') # get the phage nodes
 bacteria_nodes = system.get_nodes_of_type('B') # get the bacteria nodes
@@ -170,7 +170,7 @@ visualizer.add_graph_data("Resources", R0, resource_nodes)
 # create an uninfected 'hidden' agent
 visualizer.add_graph_data("Uninfected Bacteria", U0, bacteria_nodes)
 # create infected 'hidden' agent. provide row names, as well as column names.
-visualizer.add_graph_data("Infected Bacteria", I0, row_names=bacteria_nodes, column_names=[f"Infected B{i}" for i in range(int(4))], add_rows=4)
+visualizer.add_graph_data("Infected Bacteria", I0, column_names=[f"Infected Stage {i}" for i in range(int(system.M))], row_names=[f"Infected B{i}" for i in range(len(bacteria_nodes))], add_rows=int(system.M))
 visualizer.add_graph_data("Phages", P0, phage_nodes)
 
 # add the vector parameters to the visualizer, with a name, the parameter values, and the node names.
