@@ -1,0 +1,733 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2025-06-07">
+    <creator>NetworkX 3.4.2</creator>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static" name="">
+    <attributes mode="static" class="edge">
+      <attribute id="3" title="data" type="string" />
+      <attribute id="4" title="networkx_key" type="long" />
+    </attributes>
+    <attributes mode="static" class="node">
+      <attribute id="0" title="node_type" type="string" />
+      <attribute id="1" title="subset" type="string" />
+      <attribute id="2" title="data" type="string" />
+    </attributes>
+    <nodes>
+      <node id="E" label="E">
+        <attvalues>
+          <attvalue for="0" value="E" />
+          <attvalue for="1" value="4" />
+          <attvalue for="2" value="M: 4&#10;washout: 0.05488135039273248&#10;" />
+        </attvalues>
+      </node>
+      <node id="S" label="S">
+        <attvalues>
+          <attvalue for="0" value="S" />
+          <attvalue for="1" value="4" />
+          <attvalue for="2" value="solver_type: RK45&#10;t_eval_option: True&#10;t_eval_steps: 200&#10;min_step: 0.01&#10;max_step: 0.1&#10;cutoff_value: 0.000001&#10;dense_output: False&#10;rtol: 0.001&#10;atol: 0.000001&#10;t_start: 0&#10;simulation_length: 15&#10;" />
+        </attvalues>
+      </node>
+      <node id="P0" label="P0">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 1&#10;" />
+        </attvalues>
+      </node>
+      <node id="P1" label="P1">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 4&#10;" />
+        </attvalues>
+      </node>
+      <node id="P2" label="P2">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 4&#10;" />
+        </attvalues>
+      </node>
+      <node id="P3" label="P3">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 40&#10;" />
+        </attvalues>
+      </node>
+      <node id="P4" label="P4">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 10&#10;" />
+        </attvalues>
+      </node>
+      <node id="P5" label="P5">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 20&#10;" />
+        </attvalues>
+      </node>
+      <node id="P6" label="P6">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 22&#10;" />
+        </attvalues>
+      </node>
+      <node id="P7" label="P7">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 37&#10;" />
+        </attvalues>
+      </node>
+      <node id="P8" label="P8">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 24&#10;" />
+        </attvalues>
+      </node>
+      <node id="P9" label="P9">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 7&#10;" />
+        </attvalues>
+      </node>
+      <node id="P10" label="P10">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 25&#10;" />
+        </attvalues>
+      </node>
+      <node id="P11" label="P11">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 25&#10;" />
+        </attvalues>
+      </node>
+      <node id="P12" label="P12">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 13&#10;" />
+        </attvalues>
+      </node>
+      <node id="P13" label="P13">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 2&#10;" />
+        </attvalues>
+      </node>
+      <node id="P14" label="P14">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 39&#10;" />
+        </attvalues>
+      </node>
+      <node id="P15" label="P15">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 40&#10;" />
+        </attvalues>
+      </node>
+      <node id="P16" label="P16">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 24&#10;" />
+        </attvalues>
+      </node>
+      <node id="P17" label="P17">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 47&#10;" />
+        </attvalues>
+      </node>
+      <node id="P18" label="P18">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 25&#10;" />
+        </attvalues>
+      </node>
+      <node id="P19" label="P19">
+        <attvalues>
+          <attvalue for="0" value="P" />
+          <attvalue for="1" value="0" />
+          <attvalue for="2" value="Initial_Population: 18&#10;" />
+        </attvalues>
+      </node>
+      <node id="B0" label="B0">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 38&#10;tau: 3.0082362906121327&#10;" />
+        </attvalues>
+      </node>
+      <node id="B1" label="B1">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 73&#10;tau: 0.7613878991046221&#10;" />
+        </attvalues>
+      </node>
+      <node id="B2" label="B2">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 81&#10;tau: 2.997859536643814&#10;" />
+        </attvalues>
+      </node>
+      <node id="B3" label="B3">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 80&#10;tau: 3.1100364447404574&#10;" />
+        </attvalues>
+      </node>
+      <node id="B4" label="B4">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 83&#10;tau: 1.9208241358211313&#10;" />
+        </attvalues>
+      </node>
+      <node id="B5" label="B5">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 50&#10;tau: 1.8844380867587955&#10;" />
+        </attvalues>
+      </node>
+      <node id="B6" label="B6">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 20&#10;tau: 2.5366385903568807&#10;" />
+        </attvalues>
+      </node>
+      <node id="B7" label="B7">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 40&#10;tau: 2.4197630639825713&#10;" />
+        </attvalues>
+      </node>
+      <node id="B8" label="B8">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 10&#10;tau: 2.112119688347032&#10;" />
+        </attvalues>
+      </node>
+      <node id="B9" label="B9">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 33&#10;tau: 2.065544965250215&#10;" />
+        </attvalues>
+      </node>
+      <node id="B10" label="B10">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 24&#10;tau: 1.2936668363138808&#10;" />
+        </attvalues>
+      </node>
+      <node id="B11" label="B11">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 76&#10;tau: 2.7107545313868746&#10;" />
+        </attvalues>
+      </node>
+      <node id="B12" label="B12">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 29&#10;tau: 2.2053018466059457&#10;" />
+        </attvalues>
+      </node>
+      <node id="B13" label="B13">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 1&#10;tau: 1.4724230233796423&#10;" />
+        </attvalues>
+      </node>
+      <node id="B14" label="B14">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 6&#10;tau: 2.336287168167264&#10;" />
+        </attvalues>
+      </node>
+      <node id="B15" label="B15">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 18&#10;tau: 3.3312442355438723&#10;" />
+        </attvalues>
+      </node>
+      <node id="B16" label="B16">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 43&#10;tau: 1.578523701721358&#10;" />
+        </attvalues>
+      </node>
+      <node id="B17" label="B17">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 2&#10;tau: 2.5928935877817945&#10;" />
+        </attvalues>
+      </node>
+      <node id="B18" label="B18">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 42&#10;tau: 3.4094272032402464&#10;" />
+        </attvalues>
+      </node>
+      <node id="B19" label="B19">
+        <attvalues>
+          <attvalue for="0" value="B" />
+          <attvalue for="1" value="1" />
+          <attvalue for="2" value="Initial_Population: 12&#10;tau: 1.1311476832215228&#10;" />
+        </attvalues>
+      </node>
+      <node id="R0" label="R0">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 291&#10;washin: 75.06861412184563&#10;" />
+        </attvalues>
+      </node>
+      <node id="R1" label="R1">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 299&#10;washin: 36.37107709426226&#10;" />
+        </attvalues>
+      </node>
+      <node id="R2" label="R2">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 321&#10;washin: 3.8425426472734725&#10;" />
+        </attvalues>
+      </node>
+      <node id="R3" label="R3">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 268&#10;washin: 95.89492686245204&#10;" />
+        </attvalues>
+      </node>
+      <node id="R4" label="R4">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 247&#10;washin: 20.88767560948347&#10;" />
+        </attvalues>
+      </node>
+      <node id="R5" label="R5">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 331&#10;washin: 99.52995676778876&#10;" />
+        </attvalues>
+      </node>
+      <node id="R6" label="R6">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 380&#10;washin: 25.329160253978213&#10;" />
+        </attvalues>
+      </node>
+      <node id="R7" label="R7">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 343&#10;washin: 47.46975022884129&#10;" />
+        </attvalues>
+      </node>
+      <node id="R8" label="R8">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 386&#10;washin: 15.896958364551972&#10;" />
+        </attvalues>
+      </node>
+      <node id="R9" label="R9">
+        <attvalues>
+          <attvalue for="0" value="R" />
+          <attvalue for="1" value="2" />
+          <attvalue for="2" value="Initial_Concentration: 341&#10;washin: 67.47523222590208&#10;" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="P0" target="B15" id="0">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 11&#10;r: 0.034546704558203876&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P1" target="B17" id="1">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 29&#10;r: 0.05043427955151124&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P1" target="B1" id="2">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 44&#10;r: 0.19380395585105&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P2" target="B6" id="3">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 26&#10;r: 0.14201315881137389&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P2" target="B5" id="4">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 86&#10;r: 0.00588095204961973&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P3" target="B16" id="5">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 77&#10;r: 0.10103919861303659&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P4" target="B10" id="6">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 68&#10;r: 0.12550168685144175&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P5" target="B0" id="7">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 83&#10;r: 0.19404493969634917&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P5" target="B19" id="8">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 67&#10;r: 0.04177981370498065&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P5" target="B13" id="9">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 93&#10;r: 0.07838461865140452&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P6" target="B12" id="10">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 39&#10;r: 0.002568936598179635&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P7" target="B3" id="11">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 54&#10;r: 0.1248239807091192&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P8" target="B7" id="12">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 30&#10;r: 0.04087250006629761&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P9" target="B7" id="13">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 20&#10;r: 0.04844424290388755&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P10" target="B5" id="14">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 77&#10;r: 0.024024943432091637&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P10" target="B8" id="15">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 22&#10;r: 0.0586653993081952&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P11" target="B18" id="16">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 46&#10;r: 0.18490759455753197&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P11" target="B13" id="17">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 71&#10;r: 0.17795743102446906&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P11" target="B0" id="18">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 51&#10;r: 0.07034672181766592&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P11" target="B5" id="19">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 21&#10;r: 0.07797860355989918&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P12" target="B10" id="20">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 92&#10;r: 0.05147486232710773&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P12" target="B17" id="21">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 90&#10;r: 0.13471947097856865&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P13" target="B11" id="22">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 73&#10;r: 0.08567601984873104&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P14" target="B3" id="23">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 90&#10;r: 0.05505890075362303&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P14" target="B2" id="24">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 1&#10;r: 0.12485450128463497&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P14" target="B4" id="25">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 39&#10;r: 0.030505459787377936&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P15" target="B3" id="26">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 16&#10;r: 0.12816644951382467&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P15" target="B12" id="27">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 51&#10;r: 0.18450018089167142&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P15" target="B18" id="28">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 86&#10;r: 0.12979213412491317&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P16" target="B9" id="29">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 30&#10;r: 0.08115058517496357&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P17" target="B7" id="30">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 41&#10;r: 0.0960516540724068&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P18" target="B13" id="31">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 29&#10;r: 0.1054691180085986&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P18" target="B14" id="32">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 7&#10;r: 0.007016816343190535&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P19" target="B15" id="33">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 24&#10;r: 0.1759677178432341&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="P19" target="B9" id="34">
+        <attvalues>
+          <attvalue for="3" value="Burst_Size: 38&#10;r: 0.1969416929708921&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B0" target="R2" id="35">
+        <attvalues>
+          <attvalue for="3" value="v: 1.8774796222690044&#10;e: 0.08493167707900115&#10;K: 88.71712021793913&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B1" target="R1" id="36">
+        <attvalues>
+          <attvalue for="3" value="v: 1.480708785065514&#10;e: 0.07669229418698689&#10;K: 245.33923186894776&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B1" target="R3" id="37">
+        <attvalues>
+          <attvalue for="3" value="v: 1.2910338570315232&#10;e: 0.23157511887086524&#10;K: 48.45531191683438&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B1" target="R9" id="38">
+        <attvalues>
+          <attvalue for="3" value="v: 1.6138723096120111&#10;e: 0.22961247144274705&#10;K: 171.41975471116513&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B2" target="R7" id="39">
+        <attvalues>
+          <attvalue for="3" value="v: 1.7589643082310422&#10;e: 0.1505441522290648&#10;K: 231.36351563119192&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B3" target="R9" id="40">
+        <attvalues>
+          <attvalue for="3" value="v: 0.8659387280745307&#10;e: 0.06221570741335747&#10;K: 227.85590979640946&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B4" target="R4" id="41">
+        <attvalues>
+          <attvalue for="3" value="v: 1.3818339219339715&#10;e: 0.11088927286947566&#10;K: 249.51094031888164&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B5" target="R6" id="42">
+        <attvalues>
+          <attvalue for="3" value="v: 0.9069672181956672&#10;e: 0.13840712754598505&#10;K: 134.78856989700117&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B7" target="R1" id="43">
+        <attvalues>
+          <attvalue for="3" value="v: 1.3659640176286323&#10;e: 0.12358551610740827&#10;K: 119.56477390303729&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B7" target="R5" id="44">
+        <attvalues>
+          <attvalue for="3" value="v: 1.1712251199406638&#10;e: 0.24409873871919552&#10;K: 42.02546361894497&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B7" target="R9" id="45">
+        <attvalues>
+          <attvalue for="3" value="v: 0.9064843484962116&#10;e: 0.11867834575818322&#10;K: 151.8464562089179&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B8" target="R9" id="46">
+        <attvalues>
+          <attvalue for="3" value="v: 1.1300318114235226&#10;e: 0.08209352877752021&#10;K: 222.71311986077438&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B9" target="R5" id="47">
+        <attvalues>
+          <attvalue for="3" value="v: 1.865115051323727&#10;e: 0.2339565621556317&#10;K: 18.648116182856675&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B9" target="R9" id="48">
+        <attvalues>
+          <attvalue for="3" value="v: 1.5661094591177505&#10;e: 0.09947975110783075&#10;K: 19.507725419084252&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B10" target="R8" id="49">
+        <attvalues>
+          <attvalue for="3" value="v: 1.5633520520280022&#10;e: 0.0681771464064819&#10;K: 64.66228036908663&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B11" target="R0" id="50">
+        <attvalues>
+          <attvalue for="3" value="v: 1.3955188731328492&#10;e: 0.23466121357783265&#10;K: 209.17536846480238&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B12" target="R7" id="51">
+        <attvalues>
+          <attvalue for="3" value="v: 1.1984079648333283&#10;e: 0.1441297898427819&#10;K: 100.77884198163082&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B14" target="R3" id="52">
+        <attvalues>
+          <attvalue for="3" value="v: 0.8185588407070437&#10;e: 0.18929648614029004&#10;K: 205.28287592844723&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B14" target="R4" id="53">
+        <attvalues>
+          <attvalue for="3" value="v: 1.3607879162837424&#10;e: 0.11679297391936183&#10;K: 199.8016391745772&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B15" target="R4" id="54">
+        <attvalues>
+          <attvalue for="3" value="v: 0.9922492045770339&#10;e: 0.12782693542023715&#10;K: 238.51424735090097&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B16" target="R8" id="55">
+        <attvalues>
+          <attvalue for="3" value="v: 1.4604314608074036&#10;e: 0.16774792199405764&#10;K: 241.06487676165818&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B18" target="R0" id="56">
+        <attvalues>
+          <attvalue for="3" value="v: 1.5272292626589095&#10;e: 0.13805275056589839&#10;K: 28.356824567268497&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="B19" target="R3" id="57">
+        <attvalues>
+          <attvalue for="3" value="v: 1.2513317189591382&#10;e: 0.17465893460402615&#10;K: 222.8705874921802&#10;" />
+          <attvalue for="4" value="0" />
+        </attvalues>
+      </edge>
+    </edges>
+  </graph>
+</gexf>
