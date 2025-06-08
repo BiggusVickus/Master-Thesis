@@ -1270,7 +1270,6 @@ class Visualizer():
                 )
 
                 t_results, y_results = batch_results[:2]
-                del batch_results
                 for param_values, t_values, y_values in zip(batch_param_values, t_results, y_results):
                     dic1 = {}
                     for i, (name, param_value) in enumerate(zip(param_names_to_run, param_values)):
