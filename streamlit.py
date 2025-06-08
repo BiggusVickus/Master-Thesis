@@ -54,7 +54,7 @@ class System(Analysis):
                     I_b = np.sum(I[b_index]) # sum of all infected bacteria b agents
                     sum += e * g(R[r_index], v, K) * (U_b + I_b) 
             new_sum = -sum - R[r_index] * environment['washout'] + washin # calculate the new value of the resource.
-            if new_sum <= 0 and R[r_index] <= 0: # if the new sum is negative and the resource population is greater than 0, set it to 0
+            if new_sum <= 0 and R[r_index] <= self.cutoff_value: # if the new sum is negative and the resource population is greater than 0, set it to 0
                 new_R[r_index] = 0
             else:
                 new_R[r_index] = new_sum
@@ -93,7 +93,7 @@ class System(Analysis):
                             p_sum += r_matrix[p_index, i_index] * P[p_index]
                         M_tau = 0 if tau_vector[i_index] == 0 else M / tau_vector[i_index]
                     new_sum = U[i_index] * p_sum - M_tau * I[i_index, 0] - environment['washout'] * U[i_index]
-                    if new_sum <= 0 and new_I[i_index, 0] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
+                    if new_sum <= 0 and I[i_index, 0] <= 0: # if the new sum is negative and the infected population is greater than 0, set it to 0
                         new_I[i_index, 0] = 0
                     else:
                         new_I[i_index, 0] = new_sum
@@ -103,8 +103,8 @@ class System(Analysis):
                     else:
                         m_tau = M / tau_vector[i_index] # get the value of M_tau
                     right = I[i_index, k_index - 1] - I[i_index, k_index]
-                    new_sum = m_tau * right - environment['washout'] * new_I[i_index, k_index] 
-                    if new_sum <= 0 and new_I[i_index, k_index] <= 0: # if the new sum is negative and the phage population is less than 0, set it to 0
+                    new_sum = m_tau * right - environment['washout'] * I[i_index, k_index] 
+                    if new_sum <= 0 and I[i_index, k_index] <= 0: # if the new sum is negative and the infected population is less than 0, set it to 0
                         new_I[i_index, k_index] = 0
                     else:
                         new_I[i_index, k_index] = new_sum
