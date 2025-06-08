@@ -1207,8 +1207,7 @@ class Visualizer():
             prevent_initial_call=True
         )
         def run_ultimate_analysis(n_clicks, input_values, input_ranges, input_steps, use_opt_1_or_opt_2s, partition_data, input_ids, include_original, graphing_data, non_graphing_data_vectors, non_graphing_data_matrices, environment_data):
-
-            partition_data = [partition[0] for partition in partition_data if partition is not None]
+            partition_data = [partition[0] for partition in partition_data if partition and partition[0]]
             _, initial_condition, non_graphing_data_vectors, non_graphing_data_matrices = self.create_numpy_lists(graphing_data, non_graphing_data_vectors, non_graphing_data_matrices)
             self.analysis.environment_data = self.analysis.update_environment_data(environment_data[0])
             list_of_param_values = []
@@ -1304,6 +1303,7 @@ class Visualizer():
                     partition_cols=partition_data,
                     append=os.path.exists(parquet_path),
                 )
+                del batch_results
                 del batch_df
                 del rows
                 del t_results
