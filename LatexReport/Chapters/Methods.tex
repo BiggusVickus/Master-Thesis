@@ -57,12 +57,26 @@ The user can self-decide which parameter values to give, and if and how the para
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/example_network.png}
         \caption{
-            An arbitrary $3\times2\times3$ and $1\times 1 \times 1$ network with each node representing a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
-            Although not used here, edges between the same agent types and self loops are allowed. 
-            This network topography along with a $1 \times 1 \times 1$ network will be used in the \nameref{Methods} and \nameref{AER} sections. 
+            A $3\times2\times3$ and $1\times 1 \times 1$ network. 
         }
         \label{fig:ss:example_network}
     \end{subfigure} 
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Screenshots/large_network.png}
+        \caption{
+            A $20\times20\times10$ network. 
+        }
+        \label{fig:ss:example_network}
+    \end{subfigure} 
+
+    \caption{
+        This network topography along with a $1 \times 1 \times 1$ network will be used in the \nameref{Methods} and \nameref{AER} sections. 
+            The parameter values for the networks can be found at \Cref{tab:appendixE:a_good_curve}, \Cref{tab:appendixE:complex_model} and \Cref{tab:appendixE:SOBOL_analysis_values}
+        Each node represents a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
+        Although not shown and used here, edges between the same agent types and self loops are allowed. 
+    }
  \end{figure}
 
 \subsection{Simulation Framework}
@@ -522,6 +536,8 @@ Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, the unin
         The interactions are a sum of all interactions due to all interactions taking place at the same time. 
     }
 \end{eqfloat}
+
+\
 
 
 \section{Software Used and Packages}
