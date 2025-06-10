@@ -8,7 +8,8 @@ Data are presented as means ± standard deviations and supported by appropriate 
 
 \section{Graph Behavior}
 \Cref{tab:results:graph_behavior} elaborates how a change in parameter value changes the shape and population level of the agents. 
-\nameref{sec:results:a_good_curve}, whose agent and parameter default values can be found in the first column of \Cref{tab:results:graph_behavior} and in \Cref{tab:appendixE:a_good_curve} are used as a reference graph. 
+\Cref{fig:created:a_good_curve_linear} is used as the reference graph to compare the graphs. 
+The default values for \Cref{fig:created:a_good_curve_linear} can be found in \Cref{tab:appendixE:a_good_curve}.  
 Each parameter was individually changed to a higher and lower value from the reference value, and the changes are noted in \Cref{tab:results:graph_behavior}. 
 
 \begin{table}
@@ -62,54 +63,12 @@ Each parameter was individually changed to a higher and lower value from the ref
         \bottomrule
     \end{tabularx}
     \caption{
-        A table that compares how moving one individual parameter value up or down relative to the "\nameref{sec:results:a_good_curve}" changes the general shape of the curve. 
+        A table that compares how moving one individual parameter value up or down relative to \Cref{fig:created:a_good_curve_linear} changes the general shape of the curve. 
         This table is not meant to be exhaustive, cover edge cases, or extreme cases, or cover every exact detail and change in the population graph, but just to give an idea of how a change in parameter influences the graph shape, such as the rate of resource depletion, maximum number of bacteria and phages, and change in peak time. 
         Reference parameter values used to compare the produced curves are included in the parentheses, taken from \Cref{tab:appendixE:a_good_curve}. 
     }
     \label{tab:results:graph_behavior}
 \end{table}
-
-
-\section{A Good Curve}
-\label{sec:results:a_good_curve}
-\Cref{fig:created:a_good_curve_linear} shows an example of a good curve for a $1\times1\times1$ system. 
-\Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic curve instead. 
-The resources have been almost consumed by $t=8$, coinciding with the time at which the phages population starts to peak and which the bacteria population is quickly approaching 0. 
-The uninfected and infected bacteria exhibit exponential growth, peaking at 1617 at $t=3.99$ and 3463 at $t=5.27$ respectively. 
-The bacteria sum do not have as stark of a peak in comparison to the uninfected and infected bacteria, due to the graph measuring all bacteria populations, but the peak of 3805 at $t=4.89$ is still clear. 
-The phages saw a significant increase in population count at around $t=4$, coinciding with the peak in uninfected bacteria. 
-At around $t=4$ is when the the resource really start to deplete. 
-At $t=5$ is when the resource consumption rate starts to slow down, showing a decreasing sigmoid shape. 
-The total bacteria population reached a peak of 3805 at $t=4.89$, a 76.1x increase in population count from the initial 50 starting uninfected bacteria. 
-The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase in population count. 
-\begin{figure}[h!]
-    \centering
-    \begin{subfigure}{1\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
-        \caption{
-            Linear y-axis for a "good" plot. 
-        }
-        \label{fig:created:a_good_curve_linear}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{1\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
-        \caption{
-            Logarithmic y-axis for a "good" plot. 
-        }
-        \label{fig:created:a_good_curve_logarithmic}
-    \end{subfigure}
-    \caption{
-        Growth population of a $1\times1\times1$ system. 
-        The log plot allows to see behavior happening at values approaching and to plot data on a logarithmic scale. 
-        The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}. 
-    }
-    \label{fig:created:a_good_curve}
-\end{figure}
 
 \section{SOBOL Sensitivity Analysis Results}
 \label{sec:SOBOL_sensitivity_analysis_results}
@@ -141,7 +100,7 @@ The other parameters had little to no effect on the final phage value.
 The sum of uninfected and infected bacteria depended heavily on higher order interactions as $ST_i \gg S1_i$. 
 Although not shown, the bar plots for the total bacteria resembled that of the bar-plots for the uninfected bacteria, and less that of the infected bacteria. 
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.32\linewidth}
         \centering

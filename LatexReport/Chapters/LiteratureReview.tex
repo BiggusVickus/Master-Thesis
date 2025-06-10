@@ -498,24 +498,65 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
     \label{fig:sourced:cocktail_and_phagedyn}
 \end{figure}
 
-\section{What Does Good Curve Behavior Look Like?}
-A good bacteria growth curve looks like a mountain, with a clear rise, peak, and fall in bacteria levels. 
-For a given IC, the bacteria start to consume resources and replicate leading to exponential growth. 
-The phages infect the bacteria and eventually the bacteria lyse, releasing new phages. 
-The new phages infect more bacteria, putting pressure on the bacteria growth. 
-Eventually, more bacteria are being infected than being created, causing the decline in bacteria population. 
-This decline can be quite sudden and quick. 
+\section{Growth Curves Typically Seen in a Lab}
+\label{sec:literaturereview:growth_curves_typically_seen_in_a_lab}
 
-Both bacteria and phage population exhibit exponential growth. 
-Similar to a classical predator-prey system, with the bacteria acting as the prey, and phages acting as the predator, the phage population lags behind the bacteria population.
-The difference in peak bacteria and phage population times can be measured and quantified. 
+When choosing parameter values it is important to choose parameter values that could realistically be found in real life systems and be replicated in the lab. 
+Bacteria populations can double every 20-30 minutes, so if the growth rate is set to that it takes 1 day to double, the parameter choice is not good. 
+There are various features that a researcher will be looking for in a lab. 
+A combination of these features results in a graph being called "good". 
+There is a clear exponential rise in bacteria growth, and can expect to grow 40-100x in the span of a few hours. 
+At a certain point in time, the bacteria population stop growing and start dying, almost as fast as they were growing. 
+The shape should have a clear and pronounced growth, peak, and death. 
 
-If a bacteria colony starts at 100 bacteria, and grows at 4\% per minute, it will take about 112 minutes, or almost 2 hours for the colony to grow $100$ times. 
-\begin{align}
-    N &= Ae^rt \\ 
-    10000 &= 100e^{0.04t} \\
-    t &= \frac{ln(10000) - ln(100)}{0.04} \\
-    t &= 115.13
-\end{align}
+Phage populations also exhibit exponential growth, but with a delay in growth. 
+The phage population will peak a few hours after the bacteria population reached its peak. 
+If there is no phage death or removal, the phage population will eventually reach a plateau when every bacteria has died. 
 
-With pressure from phages, and potentially slower production rate while infected, the bacteria population might only increase $40\times - 80\times$, and might take longer to grow. 
+
+
+\Cref{fig:created:a_good_curve_linear} shows an example of a curve for a $1\times1\times1$ system that would typically be seen in a lab. 
+\Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic curve instead. 
+Those specific plots can be classed as a "good curve" due to the plots exhibiting a clear growth, peak, and death cycle as explained in 
+
+The resources have been consumed by $t=8$, coinciding with the time at which the phages population starts to peak and which the total bacteria population is quickly approaching 0. 
+Once the resources reach 0, no more bacteria are being created. 
+
+The uninfected and infected bacteria exhibit exponential growth, peaking at 1617 uninfected bacteria at $t=3.99$ and 3463 infected bacteria at $t=5.27$ respectively. 
+At around $t=4$ is when the the resource really start to deplete as that is the peak of the uninfected bacteria. 
+At $t=5$ is when the resource consumption rate starts to slow down as from then on more bacteria are being killed than being created. 
+This effect creates a decreasing sigmoid shape in the resource concentration. 
+The bacteria sum do not have as stark of a peak in comparison to the uninfected and infected bacteria, due to the graph measuring all bacteria populations, but the peak of 3805 at $t=4.89$ is still clear and pronounced.
+
+The phages saw a significant increase in population count at around $t=4$, coinciding with the peak in uninfected bacteria. 
+There is a delay between the peak of bacteria at $t=5$ and when the phag epopulation reahces its effective max population at $t=10$. 
+The total bacteria population reached a peak of 3805 at $t=4.89$, a 76.1x increase in population count from the initial 50 starting uninfected bacteria. 
+The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase in population count from its initial 10 phages. 
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
+        \caption{
+            Linear y-axis for a "good" plot. 
+        }
+        \label{fig:created:a_good_curve_linear}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
+        \caption{
+            Logarithmic y-axis for a "good" plot. 
+        }
+        \label{fig:created:a_good_curve_logarithmic}
+    \end{subfigure}
+    \caption{
+        Growth population of a $1\times1\times1$ system. 
+        The log plot allows to see behavior happening at values approaching and to plot data on a logarithmic scale. 
+        The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}. 
+    }
+    \label{fig:created:a_good_curve}
+\end{figure}
