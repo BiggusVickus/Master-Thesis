@@ -416,7 +416,7 @@ The proportion of the global and local sensitivity can be seen for each agent ty
 It can be argued that the final, average, and variance value of the run is not a useful statistic to measure and run a SOBOL analysis on. 
 One might give the reasoning that the population value at time $t$ depends on the previous time step $t-1$. 
 Thus the average and variance of the value is not completely random and is semi-dependent on the previous value. 
-Another argument is that the simple golden model doesn't exhibit complex behavior unlike the oscillating behavior exhibited in \Cref{fig:sourced:cocktail_and_phagedyn}. 
+Another argument is that the simple Golding model doesn't exhibit complex behavior unlike the oscillating behavior exhibited in \Cref{fig:sourced:cocktail_and_phagedyn}. 
 
 Making a dashboard that can be used for different inputs is hard to make. Predicting the type of plots that a user might be interested in, and the type of behavior the user wants to analyze is impossible to predict. 
 Therefore, three simple and easy to understand default SOBOL analysis methods are provided that aims to capture the simple dynamics of the system. 
@@ -475,12 +475,12 @@ A custom visualization that the could be created for this cyclic model would be 
 A change in parameter values would change the frequencies of the curve, so it would be easy to quantify how a change in parameter value affects the frequency output. 
 If dampening occurs, then a change in amplitude can also be measured, and compared to the change in frequency, allowing the user to identify if the frequency-dampening relationship is correlated or not. 
 
-\section{The Golden Model}
-\label{sec:golden_model}
-The default model, the “Golden model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between Resources, Uninfected bacteria, Infected bacteria, and Phages. 
-All plots and simulations will use this model by default, unless stated otherwise. 
+\section{The Golding Model}
+\label{sec:golding_model}
+The default model, the “Golding model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between Resources, Uninfected bacteria, Infected bacteria, and Phages. 
+All plots and simulations will use this model. 
 
-\subsection{The Golden Model}
+\subsection{The Golding Model}
 \begin{eqfloat}
     \begin{align}
         \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{k=1}^{M} I_k) \mathcolor{red}{+ w^i -w^o \cdot R}\\
@@ -489,14 +489,14 @@ All plots and simulations will use this model by default, unless stated otherwis
         \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \mathcolor{red}{-w^o \cdot I_k}\text{ for } k=2, \dots, M \\
         \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{k=1}^{M} I_k)\cdot P \mathcolor{red}{-w^o \cdot P} \\
         g(R, v, K) &= \frac{v\cdot R}{R + K}
-        \label{eq:golden_model}
+        \label{eq:golding_model}
     \end{align}
     \caption{
-        The golden model sourced from \citet{gengUsingBacterialPopulation2024}. 
+        The Golding model sourced from \citet{gengUsingBacterialPopulation2024}. 
         The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of agents ($\omega^o$). 
         The washin is not dependent on the current resource population, as it is a constant rate being added. 
         By default these values are 0.
-        A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golden_model}. 
+        A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golding_model}. 
     }
 \end{eqfloat}
 
@@ -513,14 +513,13 @@ After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be slightly adapted. 
 There are other changes that can be made to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all agents are washed out at a constant rate. 
-These changes are highlighted in \Cref{eq:golden_model} in \textcolor{red}{red}. 
+These changes are highlighted in \Cref{eq:golding_model} in \textcolor{red}{red}. 
 
-\subsection{The Adapted Golden Model}
-\label{sec:adapted_golden_model}
-\Cref{eq:adapted_golden_model} accounts for the interactions of multiple agents. 
-Each agent is a sum of all interactions. 
-For example, $B_0$ is independently infected by $P_1$ and $P_2$, thus the uninfected $B_0$ lose $r_{1, 0} \cdot P_1 \cdot B_0 + r_{2, 0} \cdot P_2 \cdot B_0$ uninfected bacteria. 
-Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, the uninfected $B_1$ population is reduced by the sum of infections from $P_1$ and $P_2$. 
+\subsection{The Adapted Golding Model}
+\label{sec:adapted_golding_model}
+\Cref{eq:adapted_golding_model} accounts for the interactions of multiple agents, and assumes the interactions occur independent of one another. 
+Each updated population count is a sum of all interactions occurring independently of one another. 
+
 \begin{eqfloat}
     \begin{align}
         \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b r} \cdot g(R_r, v_{b r}, K_{b r})\cdot (U_b + \sum_{k=1}^{M} I_{b_k}) + w^i_r - w^o \cdot R_r\\
@@ -529,32 +528,31 @@ Likewise, if bacteria $B_1$ is being infected by phage $P_1$ and $P_2$, the unin
         \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) - w^o \cdot I_{b_k}\text{ for } k=2, \dots, M \\
         \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p\\
         g(R_r, v_{b r}, K_{b r}) &= \frac{v_{b r} \cdot R_r}{R_r + K_{b r}}
-        \label{eq:adapted_golden_model}
-    \end{align}. 
+        \label{eq:adapted_golding_model}
+    \end{align} 
     \caption{
         Probability of phage infection $r_{p b}$ is not to be confused with $R_r$, short for Resource $r$. 
         The interactions are a sum of all interactions due to all interactions taking place at the same time. 
     }
 \end{eqfloat}
 
-\
-
-
 \section{Software Used and Packages}
 The program was created exclusively in Python \cite{Python}, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy \cite{NumPy} and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}.
 
-The graphical tool uses Tkinter acting as the front end, handling the user inputs, while NetworkX \cite{hagbergExploringNetworkStructure2008} stores the graph and contains the attribute data. 
-The GUI tool also uses Matplotlib \cite{Matplotlib}to create the figure of the graph to display to the user in the GUI tool.
+The graphical tool uses Tkinter acting as the front end, handling the user inputs, while NetworkX \cite{hagbergExploringNetworkStructure2008} stores the graph and contains the attribute data of the edges and nodes. 
+The GUI tool also uses Matplotlib \cite{Matplotlib} to create the figure of the graph to display to the user in the GUI tool.
 
 The simulation framework, the backend of the modelling, makes extensive usage of SciPy's \textit{solve\_ivp()} to create the ODE data. 
-It also makes light usage of NetworkX to load the graph, as it initially takes a graph as an input, and light usage of NumPy to setup the parameters at startup. 
+It also makes light usage of NetworkX to load the graph and parameter values, as it initially takes a graph as an input. 
+NumPy is used to set the parameters up at program startup. 
 
-The visualization part makes heavily usage of Dash and Plotly. 
+The visualization part makes heavy usage of Dash and Plotly. 
 Dash acts as the server and is used for displaying the HTML aspect of the frontend and dealing with any input and output. 
 Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like "log x-axis" form the frontend to the backend server. 
-In the backend, the various inputs are handled, like changing the input string “0.05, 0.1, 0.15, 0.2” into an iterable list [0.05, 0.1, 0.15, 0.2] that the simulation framework can iterate over to vary the parameter value. 
+In the backend, the various inputs are handled, like changing the input string \textit{“0.05, 0.1, 0.15, 0.2”} into an iterable list \textit{[0.05, 0.1, 0.15, 0.2]} that the simulation framework can iterate over to vary the parameter value. 
 
-If there are many simulations to run through, in the case of \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called, where Joblib parallelizes the for-loop to compute the simulations in parallel. 
+If there are many simulations to run through, in the case of \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called. 
+Joblib parallelizes the computations on multiple CPUs to speed up computing time. 
 
 Ultimate analysis uses Pandas to write the data to a \textit{.parquet} file. 
 Pandas parquet offers efficient data compression, efficient memory usage and when combined with Dask, efficient querying functionalities in a Dataframe format that many data scientists would be familiar with. 

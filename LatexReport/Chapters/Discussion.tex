@@ -30,29 +30,23 @@ So for a $3\times2\times3$ system, there are at most 12 interactions occurring.
 \section{SOBOL Sensitivity}
 \subsection{Final Value Analysis}
 \subsubsection{Resources}
-Without a washin rate, the resources will most likely have been consumed by the time the simulation ended at $t=15$. 
-Comparing \Cref{fig:created:SOBOL_final} with \Cref{fig:created:SOBOL_final_no_wi_wo_extra} shows how the addition of a washin and washout factor alters the final value of the resources. 
-The final values for Resources, Uninfected, Infected, and Phages would often be something similar to (0, 0, 0, 10000) at $t=15$, where all the resources were consumed and the bacteria died out due to the phages, leaving only the phages remaining. 
-The final value of the resources would often be 0, no matter what parameter values were used, with $\omega^i, \omega^o = 0$. 
-With the addition of the washin, new resources were constantly being re-added. 
-Once the bacteria died out, the resources could accumulate, with the accumulation dependent on the rate of the washin rate, hence why the washin rate has such a large impact on the final, average, and variance of population value for the resources. 
-The final value would be dependent on when the bacteria died out, in turn allowing the resources to accumulate at a rate proportional to $\omega^i - \omega^0\cdot R$. 
-Resources were less dependent on higher order interactions, unlike the uninfected, infected, phages, and total bacteria sum. 
+For most simulations, all resources no matter the initial value, will have been used up before the end of the simulation. 
+So on average, the final value for resources will be 0. 
+This explains why the resource sensitivity is so high. 
+There are some combinations of parameters that when chosen, will result in not all the resources being used up. 
+For example, with \Cref{tab:appendixE:a_good_curve_2}, if $r=0.2$, not all the resources have been used up. 
+Every parameter affects how the bacteria and phage population grows in some way, which influences the consumption rate of resources, which determines the final resource value. 
+Of the other parameters, $\tau$ has the biggest influence because $\tau$ determines how fast the bacteria will go through the infection process. 
+The longer it takes, the longer it takes for the phage population to grow, allowing more bacteria to grow and consume resources. 
 
-The initial phage population will determine how many bacteria become infected, and how quickly the phages can proliferate through the bacteria population. 
-Surprisingly, $r$/r\_matrix did not have as big of an influence on the uninfected as $\beta$ did, even though the infection rate is dependent on $r$. 
-The larger or smaller $r$ is, the faster or slower the infection rate is. If $r$ is really small, the infection rate would take forever, potentially allowing the bacteria to keep a stable population. 
-$r$ is equally as important at explaining the final value as $\tau$/tau\_vector, washin, $e$/e\_matrix, and washout of sensitivity around 0.25. 
 \subsubsection{Phages}
-The $r$ value allows the phages to infect the uninfected. 
-When $r$ is decreased, the final phage population is counterintuitively higher than when $r$ is larger. 
-The behavior is counterintuitive because one would expect that a higher infection rate would lead to more infections and thus more phages. 
-With a higher $r$ value, more phages are being removed from the phage population and infecting the bacteria. 
-It can be seen as a way of "more phages are needed to infect a bacterium", therefore getting less phages out as a result as more phages are needed to infect a single bacteria. 
-Washout has a noticeable influence on the phage population, as not the phage population is being reduced at a rate proportional to the washout rate. 
-The larger the washout rate, the larger the drawdown of phages. 
-When the infected all die out, the phage population wont grow anymore. 
-Given the phage population at that point in time, the phage removal rate is proportional to the washout rate. 
+The $r$ value allows the phages to infect the uninfected bacteria. 
+$r$, the adsorption rate of phages to bacteria, can be interpreted as the efficiency of infection. 
+The smaller the value, the more efficient the infection process is, and fewer phages it requires to infect a bacterium. 
+With a larger $r$ value, more phages are being used to infect a bacterium. 
+$\beta$ still has an influence on the final phage population. 
+The more phages that are created for every lysed bacterium, the more phages are available in the system. 
+But large $r$ values will require more phages to infect 
 
 \subsubsection{Total Bacteria}
 Total bacteria is the sum of both uninfected and infected bacteria, so it makes sense for total bacteria to have similar values to uninfected and infected bacteria. 
@@ -60,6 +54,16 @@ Apparently the uninfected bacteria have a stronger influence on the output varia
 The total bacteria sensitivities resemble the sensitivities of the uninfected bacteria more than the infected bacteria. 
 It would have been expected for the total bacteria to resemble more of an average between the uninfected and infected. 
 
+\subsection{Peak Value Analysis}
+\subsubsection{Resources}
+
+\subsubsection{Phages}
+\subsubsection{Total Bacteria}
+
+\subsection{Time of Peak Analysis}
+\subsubsection{Resources}
+\subsubsection{Phages}
+\subsubsection{Total Bacteria}
 
 \section{Initial Value Analysis}
 The behavior between \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} should be similar, however the change in parameter values altered the simulation to introduce a region in behavior change. 
@@ -103,6 +107,7 @@ If the phage growth rate is not fast enough to initially beat the washout remova
 
 \subsection{3D Plot}
 It is not possible to see inside the matrix, but using the color on the outside can give some insights into the behavior happening inside the matrix. 
+Even with the added bacteria, the phage proliferation boundary is still heavily dependent on the initial phages and initial resources, and less so on bacteria. 
 
 
 \section{Plotting Parameter Change}

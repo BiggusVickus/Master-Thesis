@@ -3,23 +3,22 @@
 
 \section{Methods of Modelling Phages and Bacteria}
 There are numerous ways to model the interactions between phages and bacteria.
-Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry methods.
-On the other end of the spectrum, a different type of model can be built where populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs).
+Models can be built at a molecular level, where the model simulates the mechanical and chemical behavior of a phage as it interacts with the surface of a bacterium using computational chemistry and physics methods.
+On the other end of the spectrum, populations of phages, bacteria, and resources can be modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDEs).
 DDEs are similar to ODEs, except where when ODEs are calculating the values of the equations at time $t$ using time $t-1$, DDEs can, but don't have to, use the value of the equation at time $t-\tau$, where $1 \leq \tau \leq t$. 
-DDEs are a generalized version of ODEs and are significantly harder to analyze and find stability conditions than ODEs due to the dependence on the past \cite{liExploringComplicatedBehaviors2023}. \newline
-One way to introduce DDE like behavior is to force agents to go through stages, causing a delay in other events. 
+DDEs are a generalized version of ODEs and are significantly harder to analyze and find stability conditions than ODEs due to the dependence on the past \cite{liExploringComplicatedBehaviors2023}. 
+
+One way to introduce a delay to populations is to force populations to go through stages, causing a delay in other events. 
 For example, in the paper \citet{gengUsingBacterialPopulation2024}, infected bacteria go through $M$ stages of infection, before lysing. 
-The more stages there are, the longer the delay in seeing a rise in phage population. By changing the value of $\tau$ in the model proposed by \citet{gengUsingBacterialPopulation2024}, the throughput of bacteria going from stage $i$ to stage $i+1$ of infection increases, thus seeing a larger rise in phage population. 
+The more stages there are, the longer the delay in seeing a rise in phage population. 
+By decreasing $\tau$ (the latent period) in the model proposed by \citet{gengUsingBacterialPopulation2024} (see \Cref{sec:golding_model}), the throughput of bacteria going from stage $i$ to stage $i+1$ of infection increases, thus seeing a larger rise in phage population. 
 
 Each type of model has its pros and cons.
-With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is in general much more complex.
+With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is much more complex.
 However, more information can be gained from the simulations and can guide research in creating phages for a certain type of bacteria.
-The ODE method is simpler and easier to set up, however it can only capture large population dynamics.
-Certain assumptions about the community interactions have to be made.
-For example, $\omega$ percent of the bacteria population is washed out.
-The model can be made more complicated, by modelling each stage of the phage replication and lysis process, or instead of assuming exponential growth, there is a maximum carrying capacity of the population.
-The model can be further altered by using a normally distributed variable $\textbf{N}(\mu=\omega, \sigma=1)$ to account for noise when measuring the data. 
-Ensuring the use of a seed value will ensure that each run of the model results in the same output. 
+The ODE method is simpler to understand and easier to set up, but it can only capture large population dynamics.
+Certain assumptions about the community interactions also have to be made, such as the constant washout of the bacteria. 
+Each model can be further developed, for example by adding temperature and pH dependence, bacteria releasing nutrients, or if the bacteria concentration is above a certain threshold, the infection rate is lowered to model phages struggling to diffuse through a biofilm. 
 
 \subsection{Generalized Lotka-Volterra Model}
 The Lotka-Volterra model, a first-order non-linear differential model, captures the dynamics between predators and prey.
@@ -209,17 +208,21 @@ The injected DNA is called a plasmid, genetic structure usually in the shape of 
 
 \subsubsection{Lysogenic Cycle}
 The lysogenic cycle describes the process in which the viral DNA of the phage evades detection, integrates into the cell's DNA, replicates with the cell, and inducts from the DNA. 
-Phages that have integrated into the host's DNA are called prophages. 
-\paragraph{Repression of DNA}
+Prophages are phages that have integrated into the host's DNA. 
+
+\paragraph{Repression of Phage DNA Detection}
 As phages are viruses, they need to evade viral detection methods such as Cyclic oligonucleotide-based anti-phage signalling systems (CBASS). 
 CBASS triggers effector proteins that cause cell death, preventing phage replication and lysis \cite{banhBacterialCGASSenses2023}. 
-Two big benefits of programmed cell death is that the cell death slows the growth of phages and the dead cells release resources into the environment, allowing other bacteria to recycle the resources and grow \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. \newline
+Two big benefits of programmed cell death is that the cell death slows the growth of phages and the dead cells release resources into the environment, allowing other bacteria to recycle the resources and grow \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
+
 CRISPR-Cas is another method that bacteria can use to detect the presence of phage DNA. 
 CRISPR-Cas is an adaptive immune system in bacteria that defends against phages by acquiring foreign DNA sequences (spacers) into its CRISPR array, transcribing them into CRISPR RNAs (crRNAs), and using these crRNAs with Cas proteins to identify and degrade foreign DNA \cite{levyCRISPRAdaptationBiases2015}. 
+
+
 \paragraph{Phage DNA Integration Into Bacteria DNA}
-The DNA of the phage is able to integrate into the bacteria's DNA. 
-Prophages can alter the fitness of the cell, by changing metabolic routes and other cellular structures and functions to better survive under resource limitations or by increasing resistance against other phages. 
-By altering the fitness of the cell, the prophage can wait until better conditions are met for a lytic approach to be favorable \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
+Phage DNA integrates into the bacterial genome as a prophage. 
+This can alter host fitness by modifying metabolic pathways and cellular functions or increasing resistance to other phages, allowing the prophage to persist until conditions favor entry into the lytic cycle \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}.
+
 \paragraph{Cellular Replication}
 The cell undergoes division multiple times, copying the prophage DNA into the cell copies. 
 However prophages are still at risk of being discovered and excised by restriction enzymes \cite{sharpMolecularEvolutionBacteriophages1986}. 
@@ -236,9 +239,9 @@ Phenotypic reconfiguration of the host is frequently facilitated by auxiliary me
 \paragraph{Assembly of Phage Parts}
 Phage parts self-assemble by using various protein-protein and protein-nucleic interactions, along with other forms of interactions such as hydrogen bonding and hydrophobic/philic interactions \cite{aksyukBacteriophageAssembly2011}. 
 \paragraph{Lysis of the Bacterial Cell}
-Internal pressure buildup causes the cell wall to explode, releasing phages, resources, and other organic matter into the environment. 
-Genetic material from one bacteria can be transferred to other bacterial cells via phages, driving bacterial evolution. 
-
+Phages produce holin proteins that trigger and degrade the cell wall, releasing the phages and internally stored resources into the environment. 
+Holins accumulate in the membrane until a specific time preprogrammed in the protein tells it to destroy the cell wall. 
+The protein faces intense evolutionary pressure to control the length of the lytic cycle and ensure lysis at the optimal time \cite{wangHolinsProteinClocks2000}. 
 
 \section{Bacterial Defense Against Phages} 
 There is a constant battle between phages and bacteria. 
@@ -246,50 +249,32 @@ The bacteria don't want to be killed by the phages, so they adapt defenses such 
 
 \subsection{Mutations in Bacterial DNA (Genetic (Co-)Evolution)}
 As bacteria cells grow and divide, random point mutations can occur in the DNA. 
-These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to detect and  infect the cell. 
-Mutations might not always work, or they can have the opposite effect. 
-They can be partially effective if full effectiveness requires multiple steps to achieve, which can occasionally fail \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984} or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall. 
+These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to detect and infect the cell. 
+Mutations can be partially effective if full effectiveness requires multiple steps to achieve. 
+Mutations can fail or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984} . 
 
+\subsection{Horizontally Transferring DNA}
 Bacteria can horizontally transfer DNA to other bacteria on contact. 
-There are three primary ways of this happening, which is visualized in \Cref{fig:horizontal_gene_transfer}. 
-
-The first method is via conjugation, where a donor cell donates DNA fragments using a mechanism called the F-factor or plasmid with a pilus. 
+A donor cell can donate DNA fragments using a mechanism called the F-factor or plasmid with a pilus. 
 The pilus acts as a tunnel between the donor cell and the recipient cell so that DNA can be transferred from the donor cell to the receiver cell. 
 This method of sharing DNA can also have the unintended side effect where one bacteria will directly infect another bacteria by transferring phage DNA. 
 
-The second method, called transformation, occurs when a cell takes up released DNA fragments from the environment. 
-Once inside the receiver cell, the donor DNA can integrate itself with the receiver DNA. 
-There is also the chance that the bacteria picks up viral DNA \cite{chenInsOutsDNA2005}. 
-
-The third method is via transduction. 
-When a phage is assembling in the cell just before lysis, the phage can accidentally collect a piece of the host's DNA instead of its own DNA. 
-The dying bacterium proceeds to lyse, releasing the phages. 
-The phage with the now dead hosts DNA can infect the next bacteria, injecting the DNA strand of the now dead cell into the new host cell. 
-The old bacterial DNA will proceed to integrate with the new host cells DNA \cite{tamangHorizontalGeneTransfer2023, kasmanBacteriophages2025}. 
-
-All methods provide a way for the cell to mutate and change the fitness value of the cell.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.7\linewidth]{Figures/horizontal_gene_transfer.png}
-    \caption{The three main ways that a (dead) bacterium can horizontally transfer DNA and genes over to another bacterium \cite{tamangHorizontalGeneTransfer2023}.}
-    \label{fig:horizontal_gene_transfer}
-\end{figure}
+A phage can accidentally collect a piece of the host's DNA instead of its own DNA during assembly. 
+The phage with the now dead hosts DNA can infect the next bacteria, injecting the new bacterium with the dead cell's DNA, horizontally transferring the DNA \cite{tamangHorizontalGeneTransfer2023, kasmanBacteriophages2025}. 
 
 \subsection{Phage Inactivation and Decoys}
-Bacteria can further protect themselves by producing decoys that the phage will attach to instead of themselves, inactivating the phage. 
-Freshly lysed bacteria can still contain biomarkers that phages use to detect the bacteria, but upon injection, nothing happens as the cell doesn't function anymore. 
-Bacteria can also produce proteolytic enzymes that will damage the proteins found in a phage \cite{tanQuorumSensingDetermines2015}. \newline
-Some bacteria can produce outer membrane vesicles that phages can absorb to, and later detach the vesicle with the phage \cite{rabinovitchBacterialDebrisEcological2003}. 
-The vesicle will proceed to float away with the attached phage, posing no risk to itself or to other bacteria. 
-It is suspected that the impact of these vesicles acting as a sink is minor \cite{bullPhageBacterialDynamicsSpatial2018}, but helpful nonetheless. 
+Bacteria can further protect themselves by producing decoys that the phage will attach to instead of themselves. 
+Freshly lysed bacteria may still have biomarkers that attract phages, leading phages to attach to non-viable cells where successful infection cannot occur.
+Bacteria can also produce proteolytic enzymes that will damage the proteins found in a phage \cite{tanQuorumSensingDetermines2015}. 
+Some bacteria can produce outer membrane vesicles that phages can absorb to, and later detach and float away with the phage \cite{rabinovitchBacterialDebrisEcological2003}. 
+It is suspected that the impact of these vesicles acting as a sink is minor \cite{bullPhageBacterialDynamicsSpatial2018}. 
 
 
 \subsection{CRISPR-Cas Methods}
 CRISPR is a gene editing tool that cells can use to cut out specified/unwanted parts of a DNA strand. 
 Researchers are commonly using CRISPR to genetically engineer plants and animals to have specific features. 
 Strands of DNA can be selectively added or removed from a DNA strand to achieve a better, more desired DNA strand. 
-Specialized defenses in the bacteria can detect unwanted strands and remove the strand, acting as a line of defense against phages. 
+CRISPR defenses in the bacteria can detect the unwanted phage DNA and remove the DNA. 
 
 \subsection{Phenotype Resistance}
 Although mutations can occur in bacterial DNA, not every mutation results in a distinct phenotypic change.
@@ -306,42 +291,35 @@ Usually bacteria and phages coexist in well mixed environments such as the ocean
 These structures can range from physical structure, like sediment in water to biochemical structures like biofilms, where the phages can't diffuse through the biofilm. 
 In large enough quantities, bacteria and other microbial communities create biofilms, a layer of mucus containing various microbes. 
 The thick mucus, microbes, and other spatial effects help protect the bacteria in the biofilm from external phages by making it hard for the phages to penetrate and diffuse through the mucus \cite{abedonPhageDelayEnhancing2017}. 
-In the case of a lab experiment on an agar plate, bacteria protect one another by making it harder for the phages to diffuse through the system \cite{eriksenGrowingMicrocolonyCan2018}. \newline
-Phages can not swim and do not contain any parts that allow it to move under its own power. 
-Movement is instead passive, relying on the environment to move through the environment, such as diffusion, changes in pressure or heat gradients \cite{lohrmannInfluenceBacterialSwimming2024}. 
-The motion that phages exhibit is called Brownian motion, the seemingly random movement of small particles throughout a medium due to other microscopic particles interacting and bouncing off of one another \cite{moineauBacteriophage2013}. 
-Unlike phages, bacteria have the ability to actively move through the environment, and they can use this to their advantage by crawling or swimming away if they detect a phage. 
+In the case of a lab experiment on an agar plate, bacteria protect one another by making it harder for the phages to diffuse through the system \cite{eriksenGrowingMicrocolonyCan2018}. 
 
-\subsection{Other Methods of Defense}
-Other methods of defense include phage restriction by prokaryotic argonaute proteins, production of small molecules that block phage propagation, depletion of molecules essential for phage replication, systems that use small molecule signaling to activate immune effectors, retrons that involve reverse-transcription of non-coding RNAs, and more \cite{stokar-avihailDiscoveryPhageDeterminants2023}.
+Phage movement is passive, relying on diffusion through the environment or via pressure and temperature gradients \cite{lohrmannInfluenceBacterialSwimming2024}. 
+Phages exhibit Brownian motion, the seemingly random movement of small particles throughout a medium due to other microscopic particles interacting and bouncing off of one another \cite{moineauBacteriophage2013}. 
+Unlike phages, bacteria possess motility, allowing them to actively move through their environment and escape nearby phages, increasing their chance of survival. 
+
+% \subsection{Other Methods of Defense}
+% Other methods of defense include phage restriction by prokaryotic argonaute proteins, production of small molecules that block phage propagation, depletion of molecules essential for phage replication, systems that use small molecule signaling to activate immune effectors, retrons that involve reverse-transcription of non-coding RNAs, and more \cite{stokar-avihailDiscoveryPhageDeterminants2023}.
 
 
 \section{Phage Counter Defense Against Bacteria}
 With some of the defenses that bacteria have developed, phages are always mutating to counter their defenses. 
 If phages don't adapt to the ever-changing bacterial defenses, the phages will die out due to their inability to infect and multiply. 
 It essentially becomes a race to the bottom, seeing who can out-adapt the other. 
-However, if the phages out-adapt the bacteria too much, the bacteria die out, then eventually the phages die out due to not having any bacteria left to infect. \newline
-This can be avoided if the phages can adapt to target a second strain of bacteria, but this is unlikely. 
-On the other hand, if bacteria out-adapt the phages, that is no problem for the bacteria because they don't need the phages to survive, and can keep on growing, limited only by the available space and resources. 
 
-This is a problem intrinsic to predator-prey systems, namely that the predators are dependent on the prey. 
-Once the prey disappear, the predators also disappear. 
-If the prey population goes down, and as a result the predator population goes down and becomes extinct, the prey can come back without the threat of predators. 
-
-Phages face this exact same problem: the complete removal of either the bacteria or phages will lead to the removal of the phages from the system unless reintroduced. 
+If the phages out-adapt the bacteria too much, the bacteria die out, then eventually the phages degrade and die due to not having any bacteria left to infect. 
+If bacteria out-adapt the phages, that is initially no problem for the bacteria because they don't need the phages to survive, and can keep on growing, limited only by the available space and resources. 
+However, phages help transfer and turn over nutrients for the bacteria, as well as help transfer DNA between hosts, ensuring that the bacteria are genetically diverse. 
+A delicate balance needs to be achieved so that both the bacteria and the phages can coexist. 
 
 \subsection{Genetic Mutations}
 Mutations in viral DNA will affect how the phage body parts are designed and built. 
-These mutations will affect external phage behavior such as how it detects a bacteria, as well as internal behavior such as evading detection and integrating with the cell's DNA. 
+These mutations will affect external phage behavior such as how it detects a bacterium, as well as internal behavior such as evading detection and integrating with the cell's DNA. 
 The changes will lead to changes in overall phage fitness, ie the ability for the phage to infect, replicate, and lyse bacteria. 
 
 \subsection{Viral Recombination}
-https://www.sciencedirect.com/science/article/pii/S1931312821004170
-https://pmc.ncbi.nlm.nih.gov/articles/PMC3185693/
 Multiple phages can infect a cell and replicate itself using the cells internal replication process. 
 Each phage has its own building blocks. 
-Phage 1 could have long legs, a long neck, and a small head, while phage 2 can have long legs, a long neck, and a medium-sized head. 
-When the phages are building copies of themselves, they could accidentally use the body parts of other phages. 
+When the phages are building copies of themselves, they could accidentally use the body parts of other phages \cite{aksyukBacteriophageAssembly2011}. 
 The primary method for proteins to bond with other proteins and molecules is via hydrogen bonds. 
 These attractive forces hold proteins and other molecules in defined positions, and a change in molecule shape will change the bonds, which will force the other molecule to undergo changes in shape. 
 If the proteins that build the subparts of each phage have similar chemical properties, they can be swapped between phages. 
@@ -353,25 +331,23 @@ Coexistence between phages and bacteria via genetic co-evolution seems unlikely 
 
 \section{Phage Defense Against Phages}
 Some phages can employ defenses against other phages from infecting the bacterial cell ensuring the hots resources are all for itself. 
-\subsection{Superinfection Exclusion}
-The act of preventing a secondary infection form a similar or closely related phage is called superinfection exclusion (SIE). \cite{patelAntiphageDefenceInhibition2024}. 
-There are various methods of preventing further infections. 
+The act of preventing a secondary infection from a similar or closely related phage is called superinfection exclusion (SIE) \cite{patelAntiphageDefenceInhibition2024}. 
+There are various methods of preventing further infections that are listed below. 
+
 \subsection{Altering Cell Structure}
-The prophage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. The prophage can hijack the internal metabolic pathway and cellular functions, affecting the genes that are expressed and transcribed to proteins. 
+The prophage can alter the surface receptors of the bacteria, making it harder for other phages to detect the bacteria, reducing the chance of attachment and injection by other phages \cite{bucherPhageMachineSIEence2024}. 
+The prophage can hijack the internal metabolic pathway and cellular functions, affecting the genes that are expressed and transcribed to proteins. 
 
 \subsection{Protein Creation}
-Other phages like the T4 phage can use proteins like the Spackle protein. 
+Other phages like the T4 phage can create proteins like the Spackle protein. 
 The Spackle protein inhibits the lysozyme activity used in the process of DNA injection by other phages \cite{bucherPhageMachineSIEence2024, kanamaruStructureFunctionT42020}. 
 Some prophages can encode proteins that will interfere with the replication process of other phages. 
-For example, the SieA protein encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. \newline
-TAB (Tail Assembly Blocker) is an anti-phage defense mechanism encoded by a \textit{Pseudomonas aeruginosa} prophage. 
+For example, the SieA protein encoded by phage P22 blocks infection from other phages \cite{leavittBacteriophageP22SieAmediated2024}. 
+
+Tail Assembly Blocker (TAB) is an anti-phage defense mechanism encoded by a \textit{Pseudomonas aeruginosa} prophage. 
 While TAB permits the invading phage to replicate its genome, it inhibits the assembly of the phage tail, thereby preventing the production of infectious virions. 
 The prophage that encodes TAB is not affected by this inhibition, as it also expresses a protein that neutralizes TAB's blocking activity. 
 Although the host cell still undergoes lysis, no infectious phages are released.
-
-\subsection{Implications of Phage Against Phage Defense}
-SIE can affect the speed and development of phage and bacterial populations. A phage restricting other phages from infecting the bacteria creates a competitive environment and can out-compete and dominate the other population. 
-This is commonly seen in wildlife populations, where invading species can out compete other species by consuming resources faster than local species, breeding at a faster rate than other species, and having no natural predators. 
 
 \section{Bacteria and Phages in the Lab}
 Researchers around the world are running lab experiments to gain further knowledge of the interactions between phages and bacteria. 
@@ -380,84 +356,79 @@ The aim is to better understand how phages work and interact with bacteria at a 
 A researcher might run the experiment in a liquid medium containing water, carbon and nitrogen sources, and other chemicals such as anti-foaming or pH control chemicals. 
 This liquid medium, often referred to as broth, allows for the cultivation of bacteria in a well-mixed environment, enabling researchers to monitor bacterial growth and phage infection dynamics over time. 
 By adjusting parameters such as resource concentration, temperature, agitation speed, and pH, researchers can simulate different environmental conditions and observe their effects on phage-bacteria interactions. 
-Samples can be taken at various time points to measure bacterial density, phage titer, and resource depletion, providing quantitative data for model validation and hypothesis testing. 
-If measured frequently enough, the researcher can get an ODE-like curve out, where each line shows the population levels at that time. 
-Researchers can create a mathematical interpretation of the curves and run algorithms such as curve fitting and simulated annealing to find and tune the ODE model parameters. 
+Samples can be taken at various time points to measure bacterial density, phage titer, and resource concentration, providing quantitative data for model validation and hypothesis testing. 
+If measured frequently enough, the researcher can get an ODE-like curve out, where each datapoint represents the population level at that time. 
+Researchers create a mathematical ODE interpretation of the curve and run curve fitting algorithms to find the ODE model parameters. 
 The tuned ODE parameter values tell the researcher the reaction rate speeds, the burst size of the cell, and cell latent period \cite{gengUsingBacterialPopulation2024, mullaExtremeDiversityPhage2024}. 
-Chemostats and batch cultures are commonly used setups, with chemostats allowing for continuous input of fresh medium and removal of waste, maintaining steady-state conditions ideal for studying long-term dynamics.
+Commonly used setups include chemostats and batch cultures. 
+Chemostats allow for continuous addition of resources and removal of waste, maintaining steady-state conditions ideal for studying long-term dynamics.
 
 Petri dishes are another commonly used way to grow bacterial colonies. 
 Agar, a jelly-like substance derived from seaweed, is commonly used as a solid growth medium in petri dishes. 
-It provides a stable surface for bacteria to grow and form visible colonies. 
-By adding resources and other supplements to the agar, researchers can tailor the medium to support the growth of specific bacterial strains or to test the effects of different environmental conditions. 
-When phages are introduced to a bacterial lawn on agar, clear zones called plaques appear where phages have infected and lysed the bacteria, allowing for quantification and observation of phage activity. 
+Agar provides a stable surface for bacteria to grow on and form visible colonies. 
+Researchers can tailor the nutrients and resources in the medium to support the growth of specific bacterial strains or to test the effects of different environmental conditions. 
+When phages are introduced, clear zones called plaques appear where phages have infected and lysed the bacteria, allowing for quantification and observation of phage activity. 
 As a cell lyses, it releases phages into the surrounding. 
 The phages can diffuse through the system, infecting neighboring cells. 
-A small plaque of size 2-3mm can be created, where there are no bacteria. 
+Phage infection creates clear plaques (2-3 mm) where bacteria are absent. 
+See \Cref{fig:phage_petri_dish} for an example.
 
-Bacteria density can be measured optically using light. 
-In the case of liquid cultures, as the bacteria grow and die, the solution will get more cloudy. 
-By shining a light through a control vial with no bacteria growth and through a vial with bacteria growth, the change in light refraction and intensity can be measured. 
+Bacteria density in clear liquid mediums can be measured optically using light. 
+As the bacteria grow and die, the solution will get more cloudy. 
+By shining a light through a vial with bacteria growth, the change in light refraction and intensity can be measured. 
 A researcher might also be interested in using a mass spectrometer to measure the density of phages and resources at specific time points. 
 
 With petri dishes, it is harder to measure the bacterial growth. 
-Bacteria are usually mixed with phages in a heated liquid agar solution, and poured onto a petri dish. 
-It might be possible to scrape the bacteria off of the dish into a liquid to measure the optical density (OD), but the results are not always consistent. 
-A computer vision algorithm might be able to quantify the change in color on the petri dish, by comparing the photo of the bacterial lawn with a reference photo with no bacteria growth. 
-Or it can compare the area of growth with area of no growth, where phages are present. 
-However the results are sensitive to camera settings, such as exposure and sharpness. 
-Lighting can have a big factor in the analysis such as if there are shadows from an object over the plate, or if there is residual sunlight entering the room, making the room brighter or darker. 
-It would be easier to measure the change in plaque size, assuming the camera and petri dish stay in the same position for every picture. 
-\Cref{fig:phage_petri_dish} shows a sample bacterial lawn with phage plaques. 
-If one were to zoom in, \Cref{fig:figures:phage_real} shows stained phages infecting a bacterium. 
-
+Bacteria are mixed with phages in a heated liquid agar solution, and poured onto a petri dish. 
+It might be possible to wash the bacteria off into a container to measure the optical density (OD), but the results are not always consistent. 
 Measuring OD is inaccurate and can only accurately measure up to an OD of 0.1. Even though using a special spectrophotometer allows consistent results, the results are dependent on the medium, the length of travel through the medium, bacteria size and density. 
-THe device and measurements need to be calibrated to ensure proper results. 
-Changing methods to using \textit{cells/ml} over OD can be used to directly compare results across experiments, labs, and bacteria colonies \cite{miraEstimatingMicrobialPopulation2022}. 
+The device and measurements need to be calibrated to ensure proper results. 
+Changing methods to using $\frac{\textit{cells}}{\textit{ml}}$ instead of OD can be used to directly compare results across experiments, labs, and bacteria colonies \cite{miraEstimatingMicrobialPopulation2022}. 
 
-
+A computer vision algorithm might be able to quantify the change in color on the petri dish, by comparing the photo of the bacterial lawn with a reference photo with no bacteria growth. 
+The algorithm could alternatively calculate plaque sizes and determine phage concentration. 
+The results are however sensitive to camera settings and external lighting changing the room brightness.  
 
 \begin{figure}[h!]
-    \includegraphics[width=0.7\textwidth]{Figures/phage_petri_dish.jpeg}
+    \includegraphics[width=0.5\textwidth]{Figures/phage_petri_dish.jpeg}
     \centering
-    \caption{Bacteria lawn, the dots on the petri dish show no bacteria growth due to the presence of phages. Photo courtesy of S. Flickinger. }
+    \caption{
+        Bacteria lawn, the dots on the petri dish show no bacteria growth due to the presence of phages. 
+        Photo courtesy of S. Flickinger. 
+    }
     \label{fig:phage_petri_dish}
 \end{figure}
 
-
 \section{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software programs modelling phage-bacteria-resource interactions already exists. 
-
 \subsection{Cocktail}
-Cocktail was developed by \citet{nilssonCocktailComputerProgram2022} to model phage-bacteria-resource kinetics in a chemostat. 
+\citet{nilssonCocktailComputerProgram2022} developed Cocktail to model phage-bacteria-resource kinetics in a chemostat. 
 The model assumes there is one bacteria strain that can be infected by phage A and phage B, and by both phages at the same time, phage AB. 
-The bacteria models resistance to phage A, B, and AB. 
-The user controls the parameter values such as resistance rate to A, B, and AB, resource concentration and outflow, and phage adsorption rate. 
-There is an also an option to periodically add more phages. 
-Model settings, such as if the model is deterministic or stochastic, and the step size is also controllable \cite{nilssonCocktailComputerProgram2022}. 
-After choosing the parameter values, an output is created, with four sample plots shown in \Cref{fig:sourced:cocktail_plot}
+The model models bacterial resistance to phage A, B, and AB. 
+The user can control the parameter values such as resistance rate to A, B, and AB, resource concentration and outflow, and phage adsorption rate. 
+The user can also control model settings, such as if the model is deterministic or stochastic, and the step size \cite{nilssonCocktailComputerProgram2022}. 
+Four sample output plots are shown in \Cref{fig:sourced:cocktail_plot}. 
 
 \subsection{PhageDyn}
-PhageDyn is a Java applet that interacts with existing files in GPS-X \cite{AdvancedWastewaterModelling} to incorporate phage dynamics into models of industrial wastewater treatment plants \cite{krysiak-baltynSimulationPhageDynamics2017}. 
-The aim of PhageDyn is to model phage dynamics in multi-reactor models. 
-Existing models are not applicable to a complex multi-reactor wastewater treatment plant model, which is why \citet{krysiak-baltynSimulationPhageDynamics2017} decided to create PhageDyn to determine how phages can be used to reduce foaming caused by bacteria in wastewater treatment plants \cite{heardEffectFilamentousBacteria2008}. 
-It should be noted that PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics into models of wastewater treatment plants. 
-And in order for PhageDyn to work, an activated copy of GPS-X is required \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+PhageDyn is a Java applet that models phage dynamics in multi-reactor industrial wastewater treatment plant models. 
+PhageDyn interacts with existing GPS-X \cite{AdvancedWastewaterModelling} files to incorporate phage dynamics into models of industrial wastewater treatment plants \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+\citet{krysiak-baltynSimulationPhageDynamics2017} developed PhageDyn to determine how phages can reduce foaming caused by bacteria in wastewater treatment plants, another real life application of phages \cite{heardEffectFilamentousBacteria2008}. 
+PhageDyn does not simulate phage dynamics on its own but rather manipulates existing files in GPS-X in order to incorporate phage dynamics in wastewater treatment plant models. 
 \Cref{fig:sourced:phagedyn_plot} shows the output that PhageDyn provides. 
 
 \subsection{Cocktail and PhageDyn Limitations}
-However there are limitations to Cocktail and PhageDyn. 
+There are limitations to Cocktail and PhageDyn. 
 Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model a chemostat. 
-Constant resources are being added into a chemostat, with the constant removal of medium from the chemostat. 
-Phages A and B can infect the bacteria, and the bacteria can gain resistance to phage A, B, and AB. 
-The limitation of Cocktail is that the model can not easily be adapted. 
+Constant resources are being added into a chemostat, with the constant addition and removal of medium from the chemostat. 
+Cocktail's model can not be easily adapted to other models. 
 The ODE model accepts inputs from a hardcoded GUI frontend. 
 So any changes to the frontend or to the ODE model will require changes to the ODE model and the frontend to accept the new inputs and outputs. 
 The code for Cocktail is open source, so adding new buttons and changing the model should not pose a significant challenge, but still an undertaking. 
 
 PhageDyn works with GPS-X, a very niche wastewater treatment modelling software. 
 PhageDyn is programmed for a very specific task with no flexibility in changing the model or inputs. 
-To the best of my ability, I could not find a copy of PhageDyn or an acknowledgement that the code is open or closed source. 
+PhageDyn assumes biomass, instead of individual bacteria populations. 
+To the best of my ability, I could not find a copy of PhageDyn. 
 When clicking on the link in the supplementary material of \citet{krysiak-baltynSimulationPhageDynamics2017} to download a copy of the Java applet, the link returned a "URL Not Found" error. 
 
 \begin{figure}
@@ -503,8 +474,9 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
 
 When choosing parameter values it is important to choose parameter values that could realistically be found in real life systems and be replicated in the lab. 
 Bacteria populations can double every 20-30 minutes, so if the growth rate is set to that it takes 1 day to double, the parameter choice is not good. 
-There are various features that a researcher will be looking for in a lab. 
-A combination of these features results in a graph being called "good". 
+There are various features that a researcher will be looking for in growth curve produced in a lab.
+A combination of these features results in a plot/graph/curve being called "good", while when those features are missing they are a “bad” graph. 
+
 There is a clear exponential rise in bacteria growth, and can expect to grow 40-100x in the span of a few hours. 
 At a certain point in time, the bacteria population stop growing and start dying, almost as fast as they were growing. 
 The shape should have a clear and pronounced growth, peak, and death. 
@@ -513,23 +485,20 @@ Phage populations also exhibit exponential growth, but with a delay in growth.
 The phage population will peak a few hours after the bacteria population reached its peak. 
 If there is no phage death or removal, the phage population will eventually reach a plateau when every bacteria has died. 
 
+\Cref{fig:created:a_good_curve_linear} shows an example of a curve for a $1\times1\times1$ system that would typically be seen in a lab, and thus can be called "a good curve". 
+\Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic y-axis. 
+Those specific plots can be classed as a “good curve” due to the plots exhibiting a clear growth, peak, and death cycle. 
 
+Once the resources reach 0, bacteria stop being created.
 
-\Cref{fig:created:a_good_curve_linear} shows an example of a curve for a $1\times1\times1$ system that would typically be seen in a lab. 
-\Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic curve instead. 
-Those specific plots can be classed as a "good curve" due to the plots exhibiting a clear growth, peak, and death cycle as explained in 
-
-The resources have been consumed by $t=8$, coinciding with the time at which the phages population starts to peak and which the total bacteria population is quickly approaching 0. 
-Once the resources reach 0, no more bacteria are being created. 
-
-The uninfected and infected bacteria exhibit exponential growth, peaking at 1617 uninfected bacteria at $t=3.99$ and 3463 infected bacteria at $t=5.27$ respectively. 
-At around $t=4$ is when the the resource really start to deplete as that is the peak of the uninfected bacteria. 
-At $t=5$ is when the resource consumption rate starts to slow down as from then on more bacteria are being killed than being created. 
-This effect creates a decreasing sigmoid shape in the resource concentration. 
-The bacteria sum do not have as stark of a peak in comparison to the uninfected and infected bacteria, due to the graph measuring all bacteria populations, but the peak of 3805 at $t=4.89$ is still clear and pronounced.
+The uninfected and infected bacteria exhibit exponential growth, peaking at $t=3.99$ with 1617 uninfected bacteria and at $t=5.27$ with 3463 infected bacteria respectively. 
+Resources start to deplete at $t=4$, coinciding with the peak of the uninfected bacteria. 
+The resource consumption rate starts to slow down at $t=5$ as more bacteria are being killed than being created. 
+This effect creates a decreasing sigmoid shape in the resource concentration curve, as the consumption of resources are proportional to the current bacterial population. 
+The total bacteria population curve does not have as strong of a peak as the uninfected and infected curve, but the peak of 3805 bacteria at $t=4.89$ is still clear. 
 
 The phages saw a significant increase in population count at around $t=4$, coinciding with the peak in uninfected bacteria. 
-There is a delay between the peak of bacteria at $t=5$ and when the phag epopulation reahces its effective max population at $t=10$. 
+There is a delay between the peak of bacteria at $t=5$ and when the phage population reaches its effective max population at $t=10$. 
 The total bacteria population reached a peak of 3805 at $t=4.89$, a 76.1x increase in population count from the initial 50 starting uninfected bacteria. 
 The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase in population count from its initial 10 phages. 
 \begin{figure}[h!]
@@ -539,7 +508,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
         \caption{
-            Linear y-axis for a "good" plot. 
+            An example linear y-axis for a curve that researchers aim to get, can be called "a good curve". 
         }
         \label{fig:created:a_good_curve_linear}
     \end{subfigure}
@@ -549,7 +518,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
         \caption{
-            Logarithmic y-axis for a "good" plot. 
+            The equivalent logarithmic y-axis plot for a curve that researchers aim to get, can be called "a good curve". 
         }
         \label{fig:created:a_good_curve_logarithmic}
     \end{subfigure}

@@ -1,47 +1,81 @@
 \chapter{Appendix F: Extra Plots and Figures}
 \label{AppendixF}
 
-\section{Extra SOBOL Analyses}
-\label{sec:AppendixF:extra_SOBOL_analyses}
+\section{SOBOL Analysis With Washin and Washout}
+\label{sec:AppendixF:sobol_analysis_with_washin_and_washout}
+\subsection{Final Value Analysis}
+\subsubsection{Resources}
+Despite the resource consumption rate directly depending on $e, v$ and $K$, the parameters had very little influence on the final value as evidence by the ST and S1 bar being near 0. 
+The resource population was mainly driven by the washin and washout value. 
+The peak resources are driven completely by the washin rate. 
+Not many interactions between two or more parameters were occurring. 
 
-\subsection{SOBOL Analysis Without Washin and Washout}
+\subsubsection{Phages}
+The most important factor for the final phage value is $r$, followed by $\beta$ and $\omega^o$. 
+The other parameters had little to no effect on the final phage value. 
+
+\subsubsection{Total Bacteria}
+The sum of uninfected and infected bacteria depended heavily on higher order interactions as $ST_i \gg S1_i$. 
+Although not shown, the bar plots for the total bacteria resembled that of the bar-plots for the uninfected bacteria, and less that of the infected bacteria. 
+
+\subsection{Peak Value and Time of peak}
+To create the custom SOBOL analyses, the peak value and the time at the peak of the population is measured and analyzed. 
+The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
+The time at peak is measured at the point in time that the population reaches 95\% of the maximum value. 
+This removes unintended side effects of the simulation. 
+For populations that are only increasing in value, this prevents the measured peak from bunching up at the end of the simulation, skewing the data. 
+As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
+For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
+The 95\% rule can fail under certain situations, such as when there is cyclic behavior. 
+See \nameref{sec:appendixF:why_95} for a more detailed explanation on why the 95\% rule is used. 
+
+
+The results of the SOBOL peak and time at peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+Although some of the bars between the final, peak, and time at peak values are the same, some are different. 
+But overall, similar values can be seen across the the final, peak, and time at peak analyses. 
+The peak infected values are more certain compared to the final infected values, which could be due to the 95\% rule removing some of the noise of the simulation. 
+The time at peak values have less error compared to the final and peak value. 
+This is due to the restricted range of values. The time at peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
+The final and peak values can fall anywhere between 0 and any value, depending on the IC and how high the population can rise, and how fast the population can fall, \textit{if} the population count falls. 
+
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Final_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Final.png}
         \caption{
-            Final value, no washin and washout. 
+            Final population value. 
         }
-        \label{fig:created:SOBOL_final_no_wi_wo_extra}
+        \label{fig:created:SOBOL_final}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak.png}
         \caption{
-            Peak population value, no washin and washout. 
+            Peak population value. 
         }
-        \label{fig:created:SOBOL_peak_no_wi_wo_extra}
+        \label{fig:created:SOBOL_peak}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak_Time_(no_wi_and_wo).png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak_Time.png}
         \caption{
-            Time of peak value, no washin and washout. 
+            Time at peak population. 
         }
-        \label{fig:created:SOBOL_peak_time_no_wi_wo_extra}
+        \label{fig:created:SOBOL_peak_time}
     \end{subfigure}
     \caption{
-        SOBOL analyses for the final, peak, and time of peak value, without a washin and washout rate.
+        SOBOL analyses for the final, peak, and time of peak value with a washin and washout rate. 
         The data was saved from the dashboard and plotted using Matplotlib. 
-        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}, except washin and washout have been set to 0. 
+        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
+        The data used in \Cref{fig:created:SOBOL_final} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
     }
-    \label{fig:created:SOBOL_no_wi_wo_extra}
+    \label{fig:created:SOBOL_analyses}
 \end{figure}
 
 \section{Why 95\%? }

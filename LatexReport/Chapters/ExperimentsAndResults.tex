@@ -1,10 +1,6 @@
 \chapter{Experiments and Results}
 \label{AER}
-This section presents the experimental results obtained from investigating the interactions between bacteria and phages under varying resource levels. 
-We first describe bacterial growth in the absence of phages across resource conditions to establish a baseline. 
-Next, we report the effects of phage exposure on bacterial survival. 
-Finally, we examine phage population changes over time. 
-Data are presented as means ± standard deviations and supported by appropriate statistical analyses.
+This section presents the various experimental results obtained. 
 
 \section{Graph Behavior}
 \Cref{tab:results:graph_behavior} elaborates how a change in parameter value changes the shape and population level of the agents. 
@@ -73,105 +69,86 @@ Each parameter was individually changed to a higher and lower value from the ref
 \section{SOBOL Sensitivity Analysis Results}
 \label{sec:SOBOL_sensitivity_analysis_results}
 
-\Cref{fig:created:SOBOL_final} shows the impact that the parameter had on the final value of the population at $t=15$. 
-The average value and variance of population value were intentionally left out of the analysis, despite being a part of the dashboard because the SOBOL sensitivity values are almost identical to the final sensitivity values. 
-It also doesn't make sense to measure the average and variance of the population given the dynamics of the system. 
-Given the similarity among the plots, the analysis will focus on the final value as shown in \Cref{fig:created:SOBOL_final}.
+\Cref{fig:created:SOBOL_final_no_wi_wo} shows the impact that the parameter had on the final value of the population at $t=15$ for a $1\times 1\times 1$ system. 
+\Cref{fig:created:SOBOL_peak_no_wi_wo} shows the impact that the parameter had on the peak population count, using the 95\% rule. 
+\Cref{fig:created:SOBOL_peak_time_no_wi_wo} shows the impact that the parameter had on the time of the peak, using the 95\% rule. 
 
-The parameters that were tested include all the parameters listed in the extended golden model, except for Uninfected Bacteria and $M$. 
-Uninfected Bacteria was left out as it doesn't make sense to already add infected bacteria to the system
-$M$, the number of stages that the infection goes through, can not be tested as $M$ hardcodes the number of infection stages that the bacteria has to go through. 
-The hardcoding is done before the simulation framework starts. 
+The parameters that were tested include all the parameters listed in the basic Golding model, except for Uninfected Bacteria, $M$, washin, and washout. 
+Uninfected Bacteria was left out as it doesn't make sense to start with infected bacteria to the system, and infected bacteria go from state to state in a constant uniform manner. 
+$M$, the number of stages that the infection goes through, can not be tested as $M$ hard-codes the array size of the uninfected bacteria before the simulation framework starts. 
 As such, it is not possible to change $M$ without rerunning the program from the very start. 
-
-\subsection{Final Value Analysis}
-\subsubsection{Resources}
 The washin rate and washout rate consistently had the largest influence on the final, peak value, and time of peak value, using the 95\% rule. 
-Despite the resource consumption rate directly depends on $e, v$ and $K$, the parameters had very little influence on the final value as evidence by the ST and S1 bar being near 0. 
-The resource population was mainly driven by the washin and washout value. 
-The peak resources are driven completely by the washin rate. 
-Not many interactions between two or more parameters were occurring. 
+Washin and washout significantly skewed the results and analysis and warrants an analysis without washin and washout. 
+The results for a SOBOL analysis with washin and washout can be found in \nameref{sec:AppendixF:sobol_analysis_with_washin_and_washout}. 
 
+
+\subsection{Final Value Results}
+\subsubsection{Resources}
+The final value for the resources depended heavily on the initial Resource concentration. 
+There weren't many interactions with other parameters because $ST \equiv S1$. 
+$e$ had little influence on the system despite $e$ acting as the link between the resources and bacteria and directly controlling the rate of resource consumption. 
+$\tau$ had a larger influence in the final resource value than $e$. 
 \subsubsection{Phages}
-The most important factor for the final phage value is $r$, followed by $\beta$ and $\omega^o$. 
-The other parameters had little to no effect on the final phage value. 
-
+The final phage population depended on $r$ the most, with $\beta$ as the second most important parameter influencing the final population value. 
+The other parameters had little to no influence on the final phage population levels. 
 \subsubsection{Total Bacteria}
-The sum of uninfected and infected bacteria depended heavily on higher order interactions as $ST_i \gg S1_i$. 
-Although not shown, the bar plots for the total bacteria resembled that of the bar-plots for the uninfected bacteria, and less that of the infected bacteria. 
+The final total bacteria population depended mostly on $\beta$, but via many second or higher interactions as noted by $ST >> S1$. 
+The final population depended heavily on many higher order interactions with Resources, $\tau$, and $e$. 
+Resources, $\tau$ and $e$ was responsible for about 25\% of the sensitivity to the output each. 
+
+\subsection{Peak Value Results}
+\subsubsection{Phages}
+The SOBOL peak value plot is basically the same as the final value. 
+Similar to the Final Value Analysis, the phage max value is highly dependent on the value of $r$ and $\beta$. 
+\subsubsection{Total Bacteria}
+The total bacteria peak value analysis has similar plot shape. 
+$\beta$ still has the largest bar graph, but instead of $ST$ and $S1$ being equal to 1 and 0.28 like in the final value, the sensitivity value is only 0.54 and 0.16 respectively. 
+Every parameter plays some influence on the output, but with higher order interactions as for all parameter inputs, $ST > S1$. 
+
+\subsection{Time of Peak Value Results}
+\subsubsection{Phages}
+With the time of peak value, $\tau$ becomes the most important parameter for determining the final phage value and $r$ and $\beta$ less so. 
+\subsubsection{Total Bacteria}
+$\beta$ and $\tau$ are the two most important factors in determining the time of peak for the total bacteria. 
+The only parameter that does not influence the time of peak is $e$, otherwise every parameter influences the time at which the bacteria population peaks. 
 
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Final.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Final_(no_washin_and_washout).png}
         \caption{
-            Final population value. 
+            Final value, no washin and washout. 
         }
-        \label{fig:created:SOBOL_final}
+        \label{fig:created:SOBOL_final_no_wi_wo}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Peak_(no_washin_and_washout).png}
         \caption{
-            Peak population value. 
+            Peak population value, no washin and washout. 
         }
-        \label{fig:created:SOBOL_peak}
+        \label{fig:created:SOBOL_peak_no_wi_wo}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak_Time.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Peak_Time_(no_washin_and_washout).png}
         \caption{
-            Time at peak population. 
+            Time of peak value, no washin and washout. 
         }
-        \label{fig:created:SOBOL_peak_time}
+        \label{fig:created:SOBOL_peak_time_no_wi_wo}
     \end{subfigure}
     \caption{
-        SOBOL analyses for the final, peak, and time of peak value. 
-        The data was saved from the dashboard and plotted using Matplotlib. 
-        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
-        The data used in \Cref{fig:created:SOBOL_final} was used for \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
+        SOBOL analyses for the final, peak, and time of peak value, without a washin and washout rate.
+        The input value ranges to test each parameter used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}, except washin and washout was set to 0. 
     }
-    \label{fig:created:SOBOL_analyses}
+    \label{fig:created:SOBOL_no_wi_wo}
 \end{figure}
-
-\subsection{Custom SOBOL Analysis - Peak Value and Time of peak}
-Due to the similarity of the final, average, and variance value as seen in \Cref{fig:created:SOBOL_final}, \Cref{fig:created:SOBOL_average_extra}, and \Cref{fig:created:SOBOL_variance_extra} a custom SOBOL analysis that isn't included in the dashboard might result in a different SOBOL analysis result. 
-To create the custom SOBOL analyses, the peak value and the time at the peak of the population is measured and analyzed. 
-The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
-The time at peak is measured at the point in time that the population reaches 95\% of the maximum value. 
-This removes unintended side effects of the simulation. 
-For populations that are only increasing in value, this prevents the measured peak from bunching up at the end of the simulation, skewing the data. 
-As the peak is defined at 95\% of the absolute maximum value, populations that have a faster increase on population count at the end will have a time value closer towards the end of the simulation. 
-For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation, while still "respecting" the absolute final value since $95\% \approx 100\%$. 
-The 95\% rule can fail under certain situations, such as when there is cyclic behavior. 
-See \nameref{sec:appendixF:why_95} for a more detailed explanation on why the 95\% rule is used. 
-
-The results of the SOBOL peak and time at peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
-Although some of the bars between the final, peak, and time at peak values are the same, some are different. 
-But overall, similar values can be seen across the the final, peak, and time at peak analyses. 
-The peak infected values are more certain compared to the final infected values, which could be due to the 95\% rule removing some of the noise of the simulation. 
-The time at peak values have less error compared to the final and peak value. 
-This is due to the restricted range of values. The time at peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
-The final and peak values can fall anywhere between 0 and any value, depending on the IC and how high the population can rise, and how fast the population can fall, \textit{if} the population count falls. 
-
-\subsection{SOBOL Analysis - Without Washin and Washout}
-In many of the plots, the washin and washout rate had a large influence on the final, peak, and time of peak value. 
-\Cref{fig:created:SOBOL_no_wi_wo_extra} ran the same input as \Cref{fig:created:SOBOL_analyses}, but left the washin and washout rate out. 
-The sensitivity plots for the final, peak, and time of peak plots look different from one another. 
-The final resource value depended heavily on the washin and washout rate, but without the washin and washout, the final resource depended heavily on the initial resource population. 
-Since $S1 \approx ST$, the resource parameter does not depend on other higher order interactions. 
-
-The peak value for the resources without washin and washout only depended on the initial resource consumption. 
-Since there was no washin, no resources could be added, so the peak for the resources was always at $t=0$, and was dependent on the initial resource value. 
-The time at peak value is always 0 as the resources are only being depleted, so no matter the change in parameter values, the parameter had no effect on the peak time, so SOBOL gives a value of 0 to every parameter for the resources. 
-$\beta$ consistently had a large effect on the final, peak, and time of peak value. 
-
 
 \section{Initial Value Analysis Results}
 \label{sec:results:initial_value_analysis}
@@ -217,7 +194,6 @@ Despite the large bacteria sum $R^2$ value, the fitted curve does not fit the da
         The default values for Figure a) and b) can be found at \Cref{tab:appendixE:a_good_curve} and \Cref{tab:appendixE:a_good_curve_2}. 
     }
 \end{figure}
-
 
 \section{Phase Portrait}
 \label{sec:results:phase_portrait}
@@ -283,7 +259,8 @@ For initial resource values of 7 or above, more phages (although very miniscule 
     \includegraphics[width=1\textwidth]{Plots/Created/PP/3d_plot_resource_bacteria_phage.png}
     \centering
     \caption{
-        3D plot of 
+        3D plot of phage proliferation, dependent on initial resource, uninfected bacteria, and phage population. 
+        Color scaling from white to red, color is dependent on the max phage population reached. 
     \label{fig:created:3D_phase_portrait}
     }
 \end{figure}

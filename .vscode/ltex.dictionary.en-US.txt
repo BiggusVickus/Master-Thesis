@@ -13,3 +13,12 @@ Rik
 Anthonissen
 solveivp
 dataframe
+SieA
+chemostats
+Chemostats
+petri
+PhageDyn
+chemostat
+CBASS
+washin
+Washin

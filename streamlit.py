@@ -6,7 +6,7 @@ from Classes.Visualizer import Visualizer
 # use base class Analysis to create a new class System
 class System(Analysis):
     def __init__(self, graph_location):
-        """The ODE representation of the Golden Model from 'Using population dynamics to count bacteriophages and their lysogens' from Yuncong Geng, Thu Vu Phuc Nguyen, Ehsan Homaee, and Ido Golding. 
+        """The ODE representation of the Golding Model from 'Using population dynamics to count bacteriophages and their lysogens' from Yuncong Geng, Thu Vu Phuc Nguyen, Ehsan Homaee, and Ido Golding. 
         Uses Classes.Analysis as a base class. 
         Args:
             graph_location (str): location of the graph file
@@ -14,7 +14,7 @@ class System(Analysis):
         super().__init__(graph_location)
 
     def odesystem(self, t, Y, *params):
-        """The system of ODEs that represent the Golden Model.
+        """The system of ODEs that represent the Golding Model.
         Args:
             t (float): The time value that the solver is currently at.
             Y (np.array): The initial (for t=0)/current (for t>0) population values of the system. A 1D array of length equal to the number of variables in the system.
@@ -136,9 +136,9 @@ class System(Analysis):
 
 
 # graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
-system = System('simple_graph.gexf') # load the graph from the file.
+# system = System('simple_graph.gexf') # load the graph from the file.
 # system = System('a_good_curve.gexf') # load the graph from the file.
-# system = System('a_good_curve_2.gexf') # load the graph from the file.
+system = System('a_good_curve_2.gexf') # load the graph from the file.
 # system = System('complex_graph.gexf') # load the graph from the file.
 # system = System('large_graph.gexf')
 
