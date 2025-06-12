@@ -43,27 +43,64 @@ The longer it takes, the longer it takes for the phage population to grow, allow
 The $r$ value allows the phages to infect the uninfected bacteria. 
 $r$, the adsorption rate of phages to bacteria, can be interpreted as the efficiency of infection. 
 The smaller the value, the more efficient the infection process is, and fewer phages it requires to infect a bacterium. 
-With a larger $r$ value, more phages are being used to infect a bacterium. 
-$\beta$ still has an influence on the final phage population. 
+With a larger $r$ value, more phages are used to infect a bacterium. 
+$\beta$ has an influence on the final phage population, as the infected bacterium will release $\beta$ phages into the system. 
 The more phages that are created for every lysed bacterium, the more phages are available in the system. 
-But large $r$ values will require more phages to infect 
+But larger $r$ values will effectively require more phages to infect the bacterium. 
 
 \subsubsection{Total Bacteria}
-Total bacteria is the sum of both uninfected and infected bacteria, so it makes sense for total bacteria to have similar values to uninfected and infected bacteria. 
-Apparently the uninfected bacteria have a stronger influence on the output variance than the infected bacteria. 
-The total bacteria sensitivities resemble the sensitivities of the uninfected bacteria more than the infected bacteria. 
-It would have been expected for the total bacteria to resemble more of an average between the uninfected and infected. 
+Resources, $\tau$, $e$, and $\beta$ all play a critical role in the final population value of bacteria. 
+More resources allow bacteria to grow for a longer time, allowing more bacteria to be created. 
+$\tau$ determines the infection process. 
+The larger $\tau$ is, the longer it takes for the bacteria to lyse and create new phages to infect other bacteria. 
+$\beta$ has a very important role in determining the final bacteria population, but surprisingly $r$ has no role in determining the final bacteria population. 
+$e$ determines how fast the resources are consumed. 
+The larger $e$ is, the faster the resources are being consumed and depleted. 
+So by lowering $e$, more bacteria will be created, and the time at which the bacteria peak at occurs later in time. 
+Of course as $\beta$ changes value, it will have a large influence on the final bacteria population. 
+More phages will cause more infections, slowing the spread of bacteria. 
+However, $r$ surprisingly does not have an influence on the final bacteria population level. 
+
 
 \subsection{Peak Value Analysis}
 \subsubsection{Resources}
+The peak value for resources in always starts at $t=0$ and is either decreasing or constant, never increasing in concentration. 
+As SOBOL measures the change in initial resource concentration and the resulting max value reached, it associates the initial condition with the peak value. 
 
 \subsubsection{Phages}
+The barplot values for the peak value for phages using the 95\% rule has the same values as in the final value plot for the phages. 
+This makes sense as there is no removal of phages from the system, so any phages created by $r$ or $\beta$ will stay in the system. 
+As the population is ever-increasing, the final and peak value will be occurring near one another and are tightly associated with one another. 
+
 \subsubsection{Total Bacteria}
+The total bacteria peak population is much more sensitive to the different parameter values. 
+The bacteria act as a link between the phages and resources. Any changes in the resource consumption rate or initial condition will affect the bacteria population. 
+Likewise, any change in phage adsorption rate will affect the bacteria growth, which in turn will affect the resource consumption rate. 
+The bacteria have the ability to dampen the effect of certain parameters. 
+For example, the initial resource value affects the final resource value. 
+The initial resource value partially affects the final bacteria value, but it doesn't affect the phages. 
+The parameters lose strength as it propagates through the system. 
+
+Since the bacteria exist in the middle between the phages and resources, the bacteria are exposed to many different parameters that will ultimately influence the peak value. 
+Many of these parameters are interacting with one another hence why $ST > S1$ is true for many of the inputs. 
 
 \subsection{Time of Peak Analysis}
 \subsubsection{Resources}
+The time of peak value for resources will always be at $t=0$, and no parameter change can affect that, so SOBOL does not give an output for the peak time of resources
 \subsubsection{Phages}
+The $\tau$ parameter influences how fast an infected bacterium goes through the infection process. 
+Decreasing tau increases the speed of lysis, allowing more phages to be produced faster. 
+This in turn will increase the phage population faster than other parameters, meaning that the phages reached the peak population faster.
+$r$ and $\beta$ have similar effects, but rather have a larger effect on the final and peak phage population than the time it takes to reach the peak value. 
+$r$ and $\beta$ add to the phage population, rather than specifically speed up a process which $\tau$ does. 
+Decreasing $r$ and increasing $\beta$ lead to more phages being created, which can then infect more bacteria. 
+This won't have nearly as large of an impact as shortening the infection period, literally decreasing the time until new phages are created, thus causing the phage population to reach its peak faster. 
+
 \subsubsection{Total Bacteria}
+Similar to the peak value, the bacteria interact with many parameters, who interact with other parameters. 
+The time of the peak can only occur between $t=0$ and the end of the simulation, limiting the values that can be measured, reducing the potential variance seen in the output. 
+The peak value on the other hand has no limit on the peak value, with a peak value occurring anywhere between 0 and $\infty$. 
+$e$ and $K$ depend almost exclusively on higher order terms due to the nature of the bacteria growing at the Monod rate. 
 
 \section{Initial Value Analysis}
 The behavior between \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} should be similar, however the change in parameter values altered the simulation to introduce a region in behavior change. 
@@ -71,17 +108,19 @@ It would be expected that for 100 initial uninfected bacteria and less the bacte
 Obviously something in the model altering the phage and bacterial growth. 
 The lack of resources is actually restricting the bacteria growth. 
 Between 100 and 500 uninfected bacteria, the system is adsorption limited. 
-There is a surplus of phages who in turn 
-Between 50 and 100 uninfected bacteria, the system is burst limited. 
-For uninfected bacteria less than 50, the system becomes resource limited. 
-As the uninfected bacteria decreases from 50 towards 1, passing $K=10$, the bacteria growth rate start to slow down. 
+There are not enough phages to quickly infect the bacteria. 
+The bacteria can grow without immediate pressure from the phages. 
+The system is burst limited between 30 and 100 uninfected bacteria, meaning that 
+For uninfected bacteria less than 30, the system becomes resource limited. 
+There are not enough
+As the uninfected bacteria decreases from 30 towards 1, passing $K=10$, the bacteria growth rate start to slow down as the initial bacteria concentration is on the "left side" of the Monod curve. 
 This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
 
 As the phage population is driven by the bacteria population, with an increase in bacteria time of peak, there is also an increase in time of peak for the phages. 
 
 
 \section{Phase Portrait}
-There is non-linear tradeoff between initial resources and initial phages when there is washout included. 
+There is non-linear trade-off between initial resources and initial phages when there is washout included. 
 The washout non-linearly affects if the phages proliferate or not. 
 The higher the washout, the harder it would be for the phages to proliferate. 
 Phage populations are coupled to bacteria populations which are coupled to resource populations. 
