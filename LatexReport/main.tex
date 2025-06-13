@@ -21,14 +21,6 @@
 
 
 
-
-
-
-
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Masters/Doctoral Thesis 
 % LaTeX Template
@@ -238,15 +230,38 @@ Date: \today\\
 %----------------------------------------------------------------------------------------
 %	ABSTRACT PAGE
 %----------------------------------------------------------------------------------------
-
 \addtotoc{Abstract} 
 \abstract{\addtocontents{toc}{\vspace{1em}} 
-Include your abstract here 
-Abstracts must include sufficient information for reviewers to judge the nature and significance
-of the topic, the adequacy of the investigative strategy, the nature of the results, and the
-conclusions. The abstract should summarize the substantive results of the work and not merely
-list topics to be discussed. 
-Length 200-400 words.
+    The interactions between phages, bacteria, resources, and the environment are complex. 
+    Not much is known about how phages interact with bacteria and their surroundings. 
+    There is a need to mathematically model phage and bacteria populations, but current models can only model 1 or 2 phages, bacteria strains, and resources. 
+    In the marine ecosystem, there can be hundreds of different phages and bacteria interacting with one another. 
+    These individual interactions have a greater implication on the ecosystem. 
+    Phages have been shown to influence bacteria's population fitness levels by introducing mutations and forcing bacteria to adapt to external stressors. 
+    Phages have also been shown to influence the resource recycling process. 
+    Upon lysing, bacteria release resources into the environment that other bacteria, plants, and animals can use. 
+
+    I created a program to create a tool that will create a network representation of the model's interactions. 
+    The graph network stores interactions and model parameters such as initial population and reaction rates, as well as environmental conditions like temperature and pH. 
+    I also created a simulation framework that can mathematically model the phage, bacteria, and resource population with the provided network, with a user-provided ODE model. 
+    The user can interact with the framework with a custom-built dashboard. 
+    Using the tools, a user can upload a self-implemented ODE model and network model to a dashboard and a self-implemented ODE model and interactively run simulations on the model. 
+    The user can, for example, change the initial resource concentration or how fast a phage infects a bacterium from the dashboard and immediately see how the change affects the simulation. 
+    The user can interact with five prebuilt plots. 
+    The user can run the simulations and save the results to their disk to create their own custom analyses and plots. 
+
+    Finally, I analyze a model using the Golding model from \citet{mullaExtremeDiversityPhage2024}. 
+    I qualitatively analyze the model's behavior and use a SOBOL analyses to help assign a quantitative value to the model's behavior. 
+    By varying the initial uninfected bacteria population, the model can become adsorption or latency limited. 
+    Knowing if a phage population will proliferate in a laboratory context while facing constant washout is important to ensure that the phage population is not wiped out. 
+    Given the context of large communities, knowing if phages and bacteria can coexist under various conditions is important, so a co-existence analysis is done and analyzed. 
+
+% Include your abstract here 
+% Abstracts must include sufficient information for reviewers to judge the nature and significance
+% of the topic, the adequacy of the investigative strategy, the nature of the results, and the
+% conclusions. The abstract should summarize the substantive results of the work and not merely
+% list topics to be discussed. 
+% Length 200-400 words.
 }
 \clearpage 
 

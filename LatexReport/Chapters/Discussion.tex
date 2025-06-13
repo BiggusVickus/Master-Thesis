@@ -105,18 +105,31 @@ $e$ and $K$ depend almost exclusively on higher order terms due to the nature of
 \section{Initial Value Analysis}
 The behavior between \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} should be similar, however the change in parameter values altered the simulation to introduce a region in behavior change. 
 It would be expected that for 100 initial uninfected bacteria and less the bacteria sum peak time would follow the linear regression line, but at around 100 uninfected bacteria and less, the peak curve deviated from the linear expression. 
-Obviously something in the model altering the phage and bacterial growth. 
-The lack of resources is actually restricting the bacteria growth. 
-Between 100 and 500 uninfected bacteria, the system is adsorption limited. 
-There are not enough phages to quickly infect the bacteria. 
-The bacteria can grow without immediate pressure from the phages. 
-The system is burst limited between 30 and 100 uninfected bacteria, meaning that 
-For uninfected bacteria less than 30, the system becomes resource limited. 
-There are not enough
-As the uninfected bacteria decreases from 30 towards 1, passing $K=10$, the bacteria growth rate start to slow down as the initial bacteria concentration is on the "left side" of the Monod curve. 
-This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
 
-As the phage population is driven by the bacteria population, with an increase in bacteria time of peak, there is also an increase in time of peak for the phages. 
+Between 100 and 500 uninfected bacteria, the system is adsorption limited. 
+The adsorption of phages to bacteria depends on the bacterial concentration \cite{mullaExtremeDiversityPhage2024}. 
+There are not enough phages relative to the population to infect the bacteria, so the phages slowly adsorb to the bacteria. 
+The bacteria can grow without immediate pressure from the phages. 
+There is also a lack of resources which is restricting the bacterial growth. 
+For large initial bacteria concentrations, the resources run out. 
+This severely limits the ability for the bacteria to grow and artificially limits the population cap of the bacteria. 
+
+The system is latency limited between 25 and 100 uninfected bacteria. 
+The collapse time in a latency limited regime is independent of the initial bacteria population \cite{mullaExtremeDiversityPhage2024}. 
+As the initial bacteria decreases, the phage to bacteria ratio increases, and they can infect the bacteria faster. 
+So the time to phage peak also decreases as the initial uninfected bacteria decreases. 
+
+As the uninfected bacteria decreases from 25 towards 1, it takes longer for the bacteria to grow and reach their peak population count. 
+At these initial bacteria concentration levels, there is enough resources to fully sustain the bacteria through the whole simulation. 
+For uninfected bacteria less than 25, the system enters a new sort of restriction, where the system experiences a delayed in infection due to low encounter rates. 
+The transition rate from $U$ to $I_1$ is proportional to $U\cdot P$. 
+With low $U$, less bacteria are initially infected. 
+If the phages can't infect the bacteria, the later infection stages are delayed due to the slow infection process. 
+There could be a threshold for phage to uninfected bacteria where a certain dilution rate will significantly affect the peak time. 
+This value could be around $\frac{\text{initial phage}}{\text{initial bacteria}} = \frac{10}{25} = 0.4$ as at around 25 uninfected bacteria is when the system switches from latency limited to the new limited regime. 
+The bacteria have a longer amount of time to grow as there is a low infection rate and plenty of resources to consume. 
+This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
+As the bacteria population drives the phage population, an increase in bacteria time of peak causes an increase in phage time of peak. 
 
 
 \section{Phase Portrait}
