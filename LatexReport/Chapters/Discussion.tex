@@ -1,11 +1,12 @@
 \chapter{Discussion}
 \label{Discussion}
+This section presents an analysis and discussion of the results. 
 
 \section{Graph Behavior}
 \Cref{tab:results:graph_behavior} presents illustrative examples rather than a comprehensive analysis. 
 The behaviors shown represent typical trends observed when varying each parameter in the specified direction, but they may not apply to all possible values or reflect the magnitude of changes. 
-Additionally, these results do not necessarily generalize to scenarios where two parameters are varied simultaneously. 
-\Cref{tab:results:graph_behavior} should be interpreted alongside the local S1 sensitivities from \nameref{sec:SOBOL_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
+Additionally, these results do not necessarily generalize to scenarios where two parameters are simultaneously varied. 
+\Cref{tab:results:graph_behavior} should be interpreted alongside the local $S1$ sensitivities from \nameref{sec:SOBOL_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
 
 \section{A Good Curve}
 As the bacterial population grows, resource consumption accelerates until only trace amounts remain at $t=8$. 
@@ -26,8 +27,24 @@ With a $p\times b\times r$ system, there are $\mathcal{O}(p\cdot b + b\cdot r)$ 
 So for a $3\times2\times3$ system, there are at most 12 interactions occurring. 
 12 events can occur at the same time, making it hard to identify the cause of the event. 
 
-
 \section{SOBOL Sensitivity}
+SOBOL, when mixed with a qualitative analysis can provide insight into why when a parameter changes, the output changes as it does. 
+A mathematician or biologist might look at an ODE model and reason through the changes. 
+They might explore the model by having an internal monologue as follows. 
+“If I increase $\tau$, which means that the bacteria infection process takes longer, then when a phage infects a bacterium, it will take longer for the bacteria to die. 
+Dying later means that the phages are released later. 
+By releasing later, it will take longer for the phages to grow and peak. 
+It also allows more time for the uninfected bacteria population to grow and use up the resources. 
+There will be a natural delay in uninfected bacteria peak as it takes longer for the bacteria to become infected and go through the infection process.”
+\Cref{tab:results:graph_behavior} aims to do this, but summarized to just the end result. 
+However, these changes can't always be (accurately) quantified, without access to a graph of the simulation. 
+Trying to accurately quantify these changes for multiple parameters takes time, and trying to reason through changing two or more parameters at a time is hard. 
+
+A data scientist or modeler might use SOBOL to quantify these changes, and use the analysis from the biologist to gain a better oversight. 
+The data scientist would be able to understand if the change in output value occurred because of that specific parameter of if it is a combination of parameters. 
+The data scientist might not know if changing $\tau$ would result in more or less bacteria, but they would know that $\tau$ has an important role for the total bacteria population, but less so for resources. 
+Then using the biologist's interpretation, they can piece together that changing $\tau$ to a larger number wont affect the resource cosnumption much, but that the bacteria population will show a significant increase in bacteria population. 
+
 \subsection{Final Value Analysis}
 \subsubsection{Resources}
 For most simulations, all resources no matter the initial value, will have been used up before the end of the simulation. 
@@ -123,14 +140,13 @@ As the uninfected bacteria decreases from 25 towards 1, it takes longer for the 
 At these initial bacteria concentration levels, there is enough resources to fully sustain the bacteria through the whole simulation. 
 For uninfected bacteria less than 25, the system enters a new sort of restriction, where the system experiences a delayed in infection due to low encounter rates. 
 The transition rate from $U$ to $I_1$ is proportional to $U\cdot P$. 
-With low $U$, less bacteria are initially infected. 
+With low initial starting bacteria, fewer bacteria are initially infected. 
 If the phages can't infect the bacteria, the later infection stages are delayed due to the slow infection process. 
 There could be a threshold for phage to uninfected bacteria where a certain dilution rate will significantly affect the peak time. 
 This value could be around $\frac{\text{initial phage}}{\text{initial bacteria}} = \frac{10}{25} = 0.4$ as at around 25 uninfected bacteria is when the system switches from latency limited to the new limited regime. 
 The bacteria have a longer amount of time to grow as there is a low infection rate and plenty of resources to consume. 
 This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
 As the bacteria population drives the phage population, an increase in bacteria time of peak causes an increase in phage time of peak. 
-
 
 \section{Phase Portrait}
 There is non-linear trade-off between initial resources and initial phages when there is washout included. 
@@ -161,5 +177,6 @@ If the phage growth rate is not fast enough to initially beat the washout remova
 It is not possible to see inside the matrix, but using the color on the outside can give some insights into the behavior happening inside the matrix. 
 Even with the added bacteria, the phage proliferation boundary is still heavily dependent on the initial phages and initial resources, and less so on bacteria. 
 
-
 \section{Plotting Parameter Change}
+
+\section{Large $20\times20\times10$ System}

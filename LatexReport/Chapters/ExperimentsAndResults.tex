@@ -3,64 +3,66 @@
 This section presents the various experimental results obtained. 
 
 \section{Graph Behavior}
-\Cref{tab:results:graph_behavior} elaborates how a change in parameter value changes the shape and population level of the agents. 
-\Cref{fig:created:a_good_curve_linear} is used as the reference graph to compare the graphs. 
-The default values for \Cref{fig:created:a_good_curve_linear} can be found in \Cref{tab:appendixE:a_good_curve}.  
-Each parameter was individually changed to a higher and lower value from the reference value, and the changes are noted in \Cref{tab:results:graph_behavior}. 
+\Cref{tab:results:graph_behavior} qualitatively elaborates how a change in parameter value changes the shape and population level of the populations. 
+\Cref{fig:created:a_good_curve_linear} is used as a “ground truth”.  
+The default values for \Cref{fig:created:a_good_curve_linear} can be found in \Cref{tab:appendixE:a_good_curve}. 
+The default value can also be found in the “Parameter” column, while the tested value is found in the “Tested Value” column. 
+Each parameter was individually changed to a higher and lower value from the reference value, and the visual changes are noted in \Cref{tab:results:graph_behavior}. 
+This table is not meant to be exhaustive, cover edge cases, or extreme cases, or cover every exact detail and change in the population graph. 
+The table is rather to give an idea of how a change in parameter influences the graph shape, such as the rate of resource depletion, maximum number of bacteria and phages, and change in peak time. 
 
 \begin{table}
-    \small 
+    \footnotesize
     \centering
     \begin{tabularx}{\textwidth}{l l X}
         \toprule
-        \textbf{Parameter} & \textbf{Tested Value} & \textbf{Description of Behavior} \\
+        \textbf{Parameter} & \textbf{Tested Value} & \textbf{Behavior Description} \\
         \midrule
-        $R$ (400) & 500 & More uninfected and infected, slightly more phages.\\
-         & 300 & Slightly less uninfected and infected, earlier resource depletion.\\
+        $R$ (400) & 500 & More uninfected and infected bacteria, slightly more phages. Resources last longer before being depleted. \\
+         & 300 & Slightly less uninfected and infected bacteria, slightly less phages, and earlier resource depletion. \\
 
         \midrule
-        $U$ (50) & 70 & Slightly more phages and uninfected and infected bacteria.\\
-         & 30 & Less uninfected and infected bacteria, slower resource depletion, not all resources used, slightly less phages. \\
+        $U$ (50) & 70 & Slightly more phages and uninfected and infected bacteria. Resources are depleted faster. \\
+         & 30 & Less uninfected and infected bacteria, slower resource depletion, not all resources used, slightly less phages are created. \\
 
         \midrule
-        $P$ (10) & 20 & Less resources consumed, less uninfected, bacteria peaks earlier, slightly less phages.\\
-         & 5 & Resources consumed faster, more uninfected, infected, and phages.\\
+        $P$ (10) & 20 & Less resources consumed, less bacteria created, bacteria population peaks earlier, slightly less phages.\\
+         & 5 & Resources are consumed faster, more uninfected, infected, and phages. Bacteria population peaks at a later time. \\
 
         \midrule
-        $\tau$ (2.14) & 10 & Faster resource depletion, faster bacteria peak, plateau, then fall in population. more uninfected and infected, less phages.\\
-         & 0.5& Barely any resource consumption, little bacteria growth and uninfected, more phages.\\
+        $\tau$ (2.14) & 3 & Bacteria population peaks later, with a plateau in population after peaking before infections take place. Phages population is still growing. Infected bacteria peak significantly later. Significant increase in bacteria population. \\
+         & 0.5& Barely any resource consumption, little bacteria growth and uninfected, more phages created, phages reach final value very fast. Bacteria population peaks very early. \\
 
         \midrule
-        $\omega^i$ (0) & 15 & Slightly more bacteria, resource replenish after bacteria die out.\\
+        $\omega^i$ (0) & 15 & Slightly more bacteria are created, resource replenish after bacteria die out. Resources are not depleted and regrow after bacteria die out. Slightly more bacteria are created. \\
 
         \midrule
-        $e$ (0.03) & 0.1 & Faster resource depletion, sharper decline in uninfected, less infected and phages. \\
-         & 0.01 & Less resource consumption, slightly more bacteria.\\
+        $e$ (0.03) & 0.1 & Faster resource depletion, sharper decline in uninfected, slightly less infected bacteria and phages. Drop in uninfected bacteria happens faster. Bacteria sum peak is sharper and happens earlier. \\
+         & 0.01 & Not all resources are consumed, slightly more bacteria are created. \\
 
         \midrule
-        $v$ (1.2) & 1.8 & More phages, significantly more bacteria, earlier and sharp peak in uninfected. \\
-         & 1 & Less phages and bacteria, less resource consumption, earlier bacteria peak.\\
+        $v$ (1.2) & 1.8 & Resources are finished faster, significantly more uninfected and infected bacteria. Bacteria population peaks earlier, and there are more phages. Peak of the bacteria curve is more sharp and less rounded. \\
+         & 1 & Less phages and bacteria are created, not all resources are consumed, bacteria population peaks a tiny bit earlier.\\
 
         \midrule
-        $K$ (10) & 100 & Less resource consumption, less bacteria and phages, earlier bacteria peak.\\
-         & 1 & Faster resource depletion and sudden stop instead of gradual slowdown, earlier bacteria peak.\\
+        $K$ (10) & 500 & Not all resources are consumed, less bacteria and phages are created, earlier bacteria peak.\\
+         & 1 & Faster resource depletion and sudden stop instead of gradual slowdown, more uninfected, infected, and phages create. \\
 
         \midrule
-        $r$ (0.01) & 0.1 & Less consumption, less infected and phages, earlier peak in bacteria..\\
-         & 0.001 & Faster resource consumption rate, more infected and phages, delay in bacteria peak, sharp bacteria peak, small plateau in bacteria count before drop.\\
+        $r$ (0.01) & 0.1 0.1& Less resource consumption, significantly less bacteria and phages, earlier peak in bacteria.\\
+         & 0.001 & Faster resource consumption rate, significantly more bacteria and phages, delay in uninfected and infected peak, sharp uninfected bacteria peak, sharp bacteria sum peak with a mini plateau before dropping. \\
 
         \midrule
-        $\beta$ (20) & 50 & More phages, earlier bacteria peak, less resources consumed, less bacteria.\\
-         & 10 & Faster resource consumption, more uninfected, less phages, sharper bacteria peak.\\
+        $\beta$ (20) & 50 & Significantly more phages and significantly less bacteria, earlier bacteria peak, less resources consumed. Steeper fall in uninfected bacteria, steeper rise in infected bacteria. \\
+         & 10 & Faster resource consumption, significantly more uninfected, less phages, sharper uninfected and total bacteria peak, total bacteria population has a plateau before falling. \\
 
         \midrule
-        $\omega^o$ (0) & 0.02 & Faster resource depletion, more bacteria and sharper peak, later peak, and less phages. \\
+        $\omega^o$ (0) & 0.02 & Faster resource depletion, more bacteria created, later peak in bacteria population. Faster decrease in uninfected bacteria, slightly less phages created, with a gradual decrease in phages post peak. \\
 
         \bottomrule
     \end{tabularx}
     \caption{
         A table that compares how moving one individual parameter value up or down relative to \Cref{fig:created:a_good_curve_linear} changes the general shape of the curve. 
-        This table is not meant to be exhaustive, cover edge cases, or extreme cases, or cover every exact detail and change in the population graph, but just to give an idea of how a change in parameter influences the graph shape, such as the rate of resource depletion, maximum number of bacteria and phages, and change in peak time. 
         Reference parameter values used to compare the produced curves are included in the parentheses, taken from \Cref{tab:appendixE:a_good_curve}. 
     }
     \label{tab:results:graph_behavior}
@@ -85,14 +87,14 @@ The results for a SOBOL analysis with washin and washout can be found in \namere
 \subsection{Final Value Results}
 \subsubsection{Resources}
 The final value for the resources depended heavily on the initial Resource concentration. 
-There weren't many interactions with other parameters because $ST \equiv S1$. 
+There weren't many interactions with other parameters because $ST \gg S1$. 
 $e$ had little influence on the system despite $e$ acting as the link between the resources and bacteria and directly controlling the rate of resource consumption. 
 $\tau$ had a larger influence in the final resource value than $e$. 
 \subsubsection{Phages}
 The final phage population depended on $r$ the most, with $\beta$ as the second most important parameter influencing the final population value. 
 The other parameters had little to no influence on the final phage population levels. 
 \subsubsection{Total Bacteria}
-The final total bacteria population depended mostly on $\beta$, but via many second or higher interactions as noted by $ST >> S1$. 
+The final total bacteria population depended mostly on $\beta$, but via many second or higher interactions as noted by $ST \gg S1$. 
 The final population depended heavily on many higher order interactions with Resources, $\tau$, and $e$. 
 Resources, $\tau$ and $e$ was responsible for about 25\% of the sensitivity to the output each. 
 
@@ -155,15 +157,15 @@ The only parameter that does not influence the time of peak is $e$, otherwise ev
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} illustrate how varying the initial uninfected bacteria population from 1 to 500 (using 100 different starting values) affects the dynamics and time of peak population of phage and total bacteria populations using the 95\% rule. 
 
-\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates  Figure 1 of \citet{mullaExtremeDiversityPhage2024} perfectly. 
+\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates Figure 1 of \citet{mullaExtremeDiversityPhage2024} perfectly. 
 As the initial bacteria population increases, the time to reach the phage and bacteria sum peak decreases, following $y = -0.8648\cdot ln(x) + 9.7911$ and $y = -1.0056\cdot ln(x)+7.7626$, with $R^2=0.9800, 0.9988$ respectively. 
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} on the other hand shows different behavior. 
 As the initial bacteria population decreases from 500 to 100, the same behavior in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} is noticed.
-However at 100 and less initial uninfected bacteria, there is a change in behavior. 
+There is a change in behavior at 100 and less initial uninfected bacteria. 
 Instead of following the predicted line like in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}, the curve for the phages suddenly decreases, following a quadratic like curve. 
 The bacteria on the other hand plateau before starting to increase again. 
-Both curves resemble a spoon-like shape. A straight handle with a "bowl" to hold the liquid. 
+Both curves resemble a spoon-like shape. A straight handle with a “bowl” to hold the liquid. 
 The fitted curves follow $y = -0.1292\cdot ln(x) + 10.1462$ and $y = -0.6234\cdot ln(x)+6.9602$, with $R^2=0.5406, 0.9206$ respectively. 
 Despite the large bacteria sum $R^2$ value, the fitted curve does not fit the data. 
 
@@ -209,8 +211,8 @@ The initial resource values span from 1 to 500, and the initial phage values ran
 Each cell is a unique set of initial conditions. 
 If the phages proliferated for that condition, the box is colored red. 
 In this case, proliferated means that the phage population reached at least 2 times the initial condition. 
-If the box is white, it means  the phages died out before being able to reach 2 times its initial concentration. 
-A boundary between the dead and proliferating phages can be curve-fit following $y=\frac{86.756x}{15.811+x} - 10.241$ with an $R^2$ value of 0.994. 
+If the box is white, it means the phages died out before being able to reach 2 times its initial concentration. 
+A boundary between the nonproliferating and proliferating phages can be curve-fit following $y=\frac{86.756x}{15.811+x} - 10.241$ with an $R^2$ value of 0.994. 
 \Cref{fig:created:phase_portrait_resource_phage_proliferate} zooms into the range $(1-40, 24.2-25)$ for a high detailed view of the behavior happening around initial resources of 10. 
 At about resources of 6 or 7, there is a minimum in phage proliferation. 
 For initial resource values of 6 or below, as initial resources increase, less phages (although very miniscule changes) are required to proliferate. 
