@@ -192,8 +192,8 @@ Despite the large bacteria sum $R^2$ value, the fitted curve does not fit the da
         \label{fig:created:initial_value_analysis_UB_50_500_a_good_plot}
     \end{subfigure}
     \caption{
-        Varying initial Uninfected Bacteria concentration, from 50 to 500, with 30 unique values tested over two different instances of "good" curves. 
-        Even with two "good" curves, even varying the default parameter values a tiny bit can have a large influence on how changing the initial bacteria concentration can have an influence on the dynamics of the system, changing the behavior of the peak time. 
+        Varying initial Uninfected Bacteria concentration, from 50 to 500, with 30 unique values tested over two different instances of “good” curves. 
+        Even with two “good” curves, even varying the default parameter values a tiny bit can have a large influence on how changing the initial bacteria concentration can have an influence on the dynamics of the system, changing the behavior of the peak time. 
         The default values for Figure a) and b) can be found at \Cref{tab:appendixE:a_good_curve} and \Cref{tab:appendixE:a_good_curve_2}. 
     }
 \end{figure}
@@ -205,6 +205,9 @@ For phages that start above 25.98, the phage population can proliferate (until t
 For phage populations that start below 25.98, the washout removes the phages before the phages had time to infect and kill the bacteria. 
 Both regions of phages exhibit consistent behavior, of either going to 0 or proliferating. 
 If the phage population started at exactly 25.98, if the initial resources was 260 or above, the phages died out. 
+These interesting dynamics warrant a phage proliferation analysis. 
+
+\subsection{2D Phage Proliferation}
 If the initial resources was 255 or below, the phages would proliferate. 
 Expanding on these results by simulating more initial values creates \Cref{fig:created:phase_portrait_resources_phage}. 
 The initial resource values span from 1 to 500, and the initial phage values range from 25.5 to 26.5, each with 100 unique values sampled.
@@ -213,9 +216,11 @@ If the phages proliferated for that condition, the box is colored red.
 In this case, proliferated means that the phage population reached at least 2 times the initial condition. 
 If the box is white, it means the phages died out before being able to reach 2 times its initial concentration. 
 A boundary between the nonproliferating and proliferating phages can be curve-fit following $y=\frac{86.756x}{15.811+x} - 10.241$ with an $R^2$ value of 0.994. 
+
 \Cref{fig:created:phase_portrait_resource_phage_proliferate} zooms into the range $(1-40, 24.2-25)$ for a high detailed view of the behavior happening around initial resources of 10. 
-At about resources of 6 or 7, there is a minimum in phage proliferation. 
-For initial resource values of 6 or below, as initial resources increase, less phages (although very miniscule changes) are required to proliferate. 
+From 1 to 6 initial resources, less phages are needed to proliferate. 
+At 6 initial resources, there is a minimum in the phage proliferation boundary. 
+From 6 initial resources and upwards, more phages are needed to ensure proliferation. 
 For initial resource values of 7 or above, more phages (although very miniscule changes) are required to proliferate. 
 
 \begin{figure}[]
@@ -300,13 +305,15 @@ The highlighted example demonstrated the dynamics and influence that multiple ag
 The top row of \Cref{fig:created:r_beta_washout_0.02} shows how the phages and resources died out relative to the top row of \Cref{fig:created:r_beta_washout_0}. 
 Even with a high burst value, the phages could not defeat the pressure from the washout. 
 But by changing the $r$ value from $r=0.001$ to $r=0.041$, the phages were able to save themselves and proliferate. 
-Using this knowledge, and the information gained from \nameref{sec:results:phase_portrait}, a 3D matrix of phage proliferation can be created. 
-\Cref{fig:created:3D_phase_portrait} shows the matrix of proliferation for varying resource, uninfected bacteria, and phage initial conditions. 
-The color consistently changes form white to red across the resources axis, and less so across the bacteria or phages axis. 
+
+\subsection{3D Phage Proliferation}
+A 3D phage proliferation is a natural extension of the 2D figure. 
+\Cref{fig:created:3D_phase_portrait} has three axes, the initial phage, resource, and bacteria population value. 
+If the phages were able to proliferate then the cell is colored from white to red depending on the max phage value reached. 
+The color consistently changes from white to red across the resource axis, and less so across the bacteria or phages axis. 
 If spliced along the bacteria axis, there is little difference in the shape of the curve. 
 On the underside of the curve, there is some slight variation in color and if the phages proliferated. 
 When spliced on the Resource values near 1, there is the decreasing edge of Phage-Bacteria phage proliferation as the initial resource concentration approaches 6. 
-
 
 \begin{figure}[]
     \centering
