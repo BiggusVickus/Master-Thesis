@@ -72,6 +72,11 @@ The model can also be adapted by introducing new environmental factors like pH o
 Cocktail supports adding more phages at set times, but only at most three times. 
 The model can be extended by allowing more times when phages can be added. 
 
+\subsubsection{Debris}
+Looking further into the debris and its effects would be a good next step in the project. 
+It was casually shown how adding a debris term increased the survivability of the bacteria populations, with showing on average a higher uninfected bacteria population, and lower uninfected and phage population count. 
+
+
 \subsubsection{Spatial simulations}
 https://www.sciencedirect.com/science/article/abs/pii/S0022519318305368
 The ODE models work very nicely when there is no consideration for space and 2D/3D-space dimensionality. 
@@ -85,6 +90,7 @@ The general formula, as given by
     \frac{\partial u}{\partial t} = D\nabla^2u + f(u, x, y, \dots, t)
 \] where $u(x, y, \dots, t)$ is the population density of interest, $D$ is the diffusion constant, $\nabla^2$ is the derivative of each spatial direction, and $f(x, y, \dots, t)$ is the function encapsulating growth, death, and interactions dynamics. 
 Modelling the localization of phages on a petri dish would be of interest. 
+
 \subparagraph{Discretization}
 The dimensions can be discretized into boxes of dimensions $\delta x, \delta y, \dots$. 
 This transforms the PDE into a system of difference equations, which can be solved numerically. 

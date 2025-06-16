@@ -2,6 +2,7 @@ import numpy as np
 from Classes.Analysis import Analysis
 from Classes.GraphMakerGUI import GraphMakerGUI
 from Classes.Visualizer import Visualizer
+np.random.seed(0) 
 
 # use base class Analysis to create a new class System
 class System(Analysis):
@@ -30,8 +31,10 @@ class System(Analysis):
             """
             return (R * v) / (R + K)
         # Unpack the parameters. Need to get the graph network, the list of phage/bacteria/resource node names, value of M, the vectors (tau and washin), and the matrices (e, v, K, r, B), and the environment settings
-        graph_object, phage_nodes, bacteria_nodes, resource_nodes, M, tau_vector, washin_vector, e_matrix, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
+        # graph_object, phage_nodes, bacteria_nodes, resource_nodes, M, tau_vector, washin_vector, e_matrix, v_matrix, K_matrix, r_matrix, B_matrix, environment = params
+        graph_object, phage_nodes, bacteria_nodes, resource_nodes, M, tau_vector, washin_vector, e_matrix, v_matrix, K_matrix, r_matrix, B_matrix, debris, environment = params
         graph = graph_object.graph
+
         Y = self.check_cutoff(Y) # check to see if any values are really small. If yes, set to 0
         R, U, I, P = self.unflatten_initial_matrix(Y, [len(resource_nodes), len(bacteria_nodes), (len(bacteria_nodes), M), len(phage_nodes)]) # Turn Y into the shape of the system. 
         new_R = np.zeros_like(R) # create fresh copies of the arrays to be updated. 
@@ -114,6 +117,7 @@ class System(Analysis):
             p_index = phage_nodes.index(phage) # get index of the phage
             left_sum = 0 # initialize sums
             right_sum = 0
+            debris_sum = 0
             for infected_bacteria in bacteria_nodes: # loop over the bacteria names
                 i_index = bacteria_nodes.index(infected_bacteria) # get index of the bacteria
                 if graph.has_edge(phage, infected_bacteria): # check if the edge between phage_p and bacteria_b exists.
@@ -123,8 +127,9 @@ class System(Analysis):
                         M_tau = M / tau_vector[i_index] # get the value of M_tau
                     left_sum += B_matrix[p_index, i_index] * M_tau * I[i_index, -1]
                     right_sum += r_matrix[p_index, i_index] * (U[i_index] + np.sum(I[i_index]))
+                    debris_sum += debris[p_index, i_index] * P[p_index] # get the debris value for this phage and bacteria interaction
             # update the phage value
-            new_sum = left_sum - right_sum * P[p_index] - environment['washout'] * P[p_index]
+            new_sum = left_sum - right_sum * P[p_index] - environment['washout'] * P[p_index] - debris_sum
             if new_sum <= 0 and P[p_index] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
                 new_P[p_index] = 0
             else:
@@ -140,7 +145,7 @@ class System(Analysis):
 # system = System('a_good_curve.gexf') # load the graph from the file.
 # system = System('a_good_curve_2.gexf') # load the graph from the file.
 # system = System('complex_graph.gexf') # load the graph from the file.
-system = System('large_graph.gexf')
+system = System('large_graph.gexf') # load the graph from the file.
 
 phage_nodes = system.get_nodes_of_type('P') # get the phage nodes
 bacteria_nodes = system.get_nodes_of_type('B') # get the bacteria nodes
@@ -183,6 +188,8 @@ visualizer.add_non_graph_data_matrix("v_matrix", v_matrix, bacteria_nodes, resou
 visualizer.add_non_graph_data_matrix("K_matrix", K_matrix, bacteria_nodes, resource_nodes)
 visualizer.add_non_graph_data_matrix("r_matrix", r_matrix, phage_nodes, bacteria_nodes)
 visualizer.add_non_graph_data_matrix("B_matrix", B_matrix, phage_nodes, bacteria_nodes)
+matrix1 = np.random.uniform(low=0.01, high=0.2, size=(len(phage_nodes), len(bacteria_nodes)))
+visualizer.add_non_graph_data_matrix("debris_matrix", matrix1, phage_nodes, bacteria_nodes)
 
 # optionally add other parameters to the visualizer, that will be passed to the ODE system.
 visualizer.add_other_parameters(phage_nodes, bacteria_nodes, resource_nodes, int(system.M))

@@ -110,7 +110,7 @@ class GraphMakerGUI(GraphMaker):
                     continue
                 edge = line.split(" ")
                 if len(edge) < 2:
-                    error_text += "There arent at least 2 lines in line: " + line + ", skipping\n"
+                    error_text += "There arent at least 2 nodes in line: " + line + ", skipping\n"
                     continue
                 for i in range(1, len(edge)):
                     if edge[i].strip() == "" :

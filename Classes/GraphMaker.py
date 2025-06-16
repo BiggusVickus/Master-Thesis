@@ -213,7 +213,10 @@ class GraphMaker:
             node_data = self.default_r_r_data()
         else:
             node_data = self.default_edge_data()
-        self.graph.edges[node1, node2, 0]['data'] = node_data
+        if edge_data is not None:
+            node_data = edge_data
+        edge_keys = list(self.graph[node1][node2].keys())
+        self.graph.edges[node1, node2, edge_keys[0]]['data'] = node_data
 
     def remove_edge(self, node1 = None, node2 = None):
         if node1 == None or node2 == None:
@@ -259,20 +262,27 @@ class GraphMaker:
             node1 = target[0].strip()
             node2 = target[1].strip()
             if (edge_data is not None):
-                if len(edge_data) == 1 or isinstance(edge_data, str):
+            current_edge_data = None
+            if edge_data is not None:
                     if isinstance(edge_data, str):
-                        edge_data = edge_data
-                    else: 
-                        edge_data = edge_data[0]
-                elif len(tuple_of_edges) != len(edge_data):
-                    return self.error_message("Number of target nodes must match number of edge data")
+                    current_edge_data = edge_data
+                elif isinstance(edge_data, list) or isinstance(edge_data, tuple):
+                    if len(edge_data) == 1:
+                        current_edge_data = edge_data[0]
+                    elif len(tuple_of_edges) == len(edge_data):
+                        current_edge_data = edge_data[i]
+                    else:
+                        return self.error_message("Number of target nodes must match number of edge data")
                 else:
-                    edge_data = edge_data[i]
+                    current_edge_data = edge_data
             if node1 == None or node2 == None:
                 error_text += f"Node name {node1} and/or {node2} cannot be empty"
                 continue
             if (self.verify_edge_connections(node1, node2, "E", "E")):
-                error_text += "Cannot connect any node to an E node\n"
+                error_text += "Cannot connect any node to the environment node\n"
+                continue
+            if (self.verify_edge_connections(node1, node2, "S", "S")):
+                error_text += "Cannot connect any node to the settings node\n"
                 continue
             if node1 not in self.graph or node2 not in self.graph:
                 error_text += f"{node1} or {node2} not found in graph\n"
@@ -280,7 +290,7 @@ class GraphMaker:
             if self.graph.has_edge(node1, node2):
                 error_text += f"Edge between {node1} and {node2} already exists, skipping\n"
                 continue
-            self.add_edge(node1, node2, edge_data)
+            self.add_edge(node1, node2, current_edge_data)
         return error_text
     
     def randomize_edge_connections(self, pb:int = 0, br:int = 0):
@@ -308,10 +318,6 @@ class GraphMaker:
         np.random.shuffle(br_pairs)
         pb_pairs = pb_pairs[:pb]
         br_pairs = br_pairs[:br]
-        print(pb_pairs)
-        print(br_pairs)
-
-        print(f"Creating {pb} P-B edges and {br} B-R edges")
         for node1, node2 in pb_pairs:
             self.add_edge(node1, node2)
         for node1, node2 in br_pairs:

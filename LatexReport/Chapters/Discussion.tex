@@ -180,3 +180,63 @@ Even with the added bacteria, the phage proliferation boundary is still heavily 
 \section{Plotting Parameter Change}
 
 \section{Large $20\times20\times10$ System}
+There are so many interactions and parameters in large and complex systems that it becomes hard to analyze. 
+There is no clear overview of the model, and a figure of the network interactions and a copy of the parameter inputs is needed in order to have some sort of chance to analyze why an entity is behaving as it does. 
+It is hard to simplify the model as each entity is influenced by the sum of other entities that it interacts with. 
+The lines for each population curve cover the other lines, and some lines have the same color due to limited color ranges. 
+
+A recently published paper \citet{deyEmergentHigherorderInteractions2025} uses the Golding model but adds a new term, debris. While running their simulations and experiments, the model's results would diverge from their experimental work. 
+Their thinking is that freshly lysed bacteria still have biomarkers that phages can detect and attach to. 
+Incorporating the debris term, which acts as an additional sink for phages, improved the model's alignment with the experimental data.
+The phages think they are infecting a bacterium, but in reality they aren't. 
+The debris term can also encompass bacterial phage defenses (\Cref{sec:literaturereview:bacterial_defense_against_phages}). 
+The phage equation from the Golding model can be rewritten as 
+\[
+    \frac{dP_p}{dt} = \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p - d_{p, b} \cdot P_p
+\]
+\Cref{fig:created:debris_model} shows how the effect of the debris term $d$ has on the growth curves of the phages and bacteria in comparison to no debris term, \Cref{fig:created:no_debris_model}. 
+Without the debris term, only one uninfected bacteria survived, and every phage survived except for one phage who died due to the washout. 
+Three uninfected bacteria species reached more than 1000 uninfected bacteria at any point in the simulation time, and only two infected bacteria species reached more than 1000 infected. 
+The maximum total bacteria population that was reached was a total of 6620 bacteria. 
+
+With the debris term included, the behavior is slightly altered. 
+Three uninfected bacteria survived, four different uninfected bacteria strains ever reached a population value of greater than 1000 at any point in time during the simulation. 
+Only one bacteria strain ever reached more than 1000 infected bacteria, 
+The ending bacteria value is 12000, almost double the maximum bacteria population reached without debris. 
+On average, there were significantly fewer phages at the end of the simulation than without debris. 
+No phage population ended above 2000 with debris, while without debris two phage populations ended up with more than 2000 phages. 
+
+It is clear to see that debris has a significant impact on the dynamics of the system. 
+There are in general fewer phages to infect the bacteria with the additional removal of the phages. 
+Fewer infections means more uninfected bacteria and fewer phages being produced. 
+This feedback loop keeps on going until the end of the simulation where it is possible to see the differences in behavior. 
+
+
+
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/debris.png}
+        \caption{
+            The $20\times20\times10$ model with a debris factor included. 
+        }
+        \label{fig:created:debris_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/no_debris.png}
+        \caption{
+            The $20\times20\times10$ model without the debris factor included. 
+        }
+        \label{fig:created:no_debris_model}
+    \end{subfigure}
+    \caption{
+        A large $20\times20\times10$ model with a debris model added. 
+        The debris parameter values were randomly and uniformly selected between 0.01 and 0.2.
+    }
+    \label{fig:created:debris}
+\end{figure}

@@ -219,9 +219,6 @@ class Visualizer():
             # column_names = dictionary['row_names'] if dictionary['row_names'] is not None else dictionary['column_names']
             column_names = group_data["column_names"]
             column_data = group_data["column_data"]
-            print('-------')
-            print(group_names, column_names, column_data)
-            print('-----')
             
             for i, (group_name, col_names, col_vals) in enumerate(zip(group_names, column_names, column_data)):
                 xpos = x_pos + i * intra_group_gap
