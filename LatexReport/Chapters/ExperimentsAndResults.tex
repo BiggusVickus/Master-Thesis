@@ -281,10 +281,10 @@ This was specifically chosen to highlight how even though the phage values all s
 If $r$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
 As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix} NaN & 0.200 \\ 0.200 & NaN \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
 When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix} NaN & 0.11695 \\ 0.144459 & NaN \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 
-For the cells that don't have an edge between $p$ and $b$ or between $b$ and $r$, the data is represented as $NaN$, short for "Not a Number", \textit{np.NaN}, 
+For the cells that don't have an edge between $p$ and $b$ or between $b$ and $r$, the data is represented as $NaN$, short for “Not a Number”, \textit{np.NaN}, 
 
 The columns and rows of each figure makes it easy to compare how a change in parameter value affects the curve, while keeping the other parameter the same. 
-In $r, \beta, \omega^o=inf, inf, 0$, although not a "good curve" due to limited resource consumption and limited bacterial and phage growth, really shows how the different parameter values for each interaction uniquely affect the growth rate of each agent, especially the phage population (P0=blue, P1=green, and P2=purple). 
+In $r, \beta, \omega^o=inf, inf, 0$, although not a “good curve” due to limited resource consumption and limited bacterial and phage growth, really shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population (P0=blue, P1=green, and P2=purple). 
 Despite all phages starting at the same population level, within the first two or so time units, P1 has less phages than P0 and P2. 
 P2 has the fastest initial growth rate, as P2 has the most phages until $t=4$, at which point P1 has a larger phage population. 
 P2 reaches its peak population count before P0 or P1, but despite the slower initial growth, P0 and P1 eventually overtake P2 in total phage population. 
@@ -350,4 +350,23 @@ When spliced on the Resource values near 1, there is the decreasing edge of Phag
 \end{figure}
 
 \section{Phage, Bacteria, and Resource Survivability For a $20\times20\times10$ System}
-Finally a large $20\times20\times10$ system can be created
+Leveraging the simulation framework, $20\times20\times10$ system can be created and analyzed. 
+Two parameters, $r$ and $e$ have been chosen to run a survivability analysis. 
+There are 20 phages and bacteria, and 10 resources. 
+Each phage is guaranteed to interact with at least one bacterium, each bacteria is guaranteed to interact with at least phage and resource, and each resource is guaranteed to interact with at least one bacterium. 
+The parameter values were randomly selected from a uniform distribution, with the values chosen in the ranges used for the SOBOL analysis, \Cref{tab:appendixE:SOBOL_analysis_values}. 
+A phage, bacteria or resource survived if at the end of the simulation the ending population value was greater than 1. 
+As washout is included, there is a chance that if the simulation kept on running everything would be removed. 
+In the default selected parameter values, there is exactly one bacteria that manages to survive, while the others all die out. 
+This can be seen in \Cref{fig:created:large_graph_output}. 
+Of the 20 starting phages, 19 phages survived until the end of the simulation. 
+
+\begin{figure}[]
+    \includegraphics[width=1\textwidth]{Plots/Created/large_graph_output.png}
+    \centering
+    \caption{
+        The output graph for the default parameter values for a large $20\times 20 \times 10$ network. 
+        Parameter values were randomly chosen in the interval given by \Cref{tab:appendixE:SOBOL_analysis_values}. 
+    \label{fig:created:large_graph_output}
+    }
+\end{figure}

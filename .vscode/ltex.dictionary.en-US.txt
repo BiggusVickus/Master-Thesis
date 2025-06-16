@@ -22,3 +22,5 @@ chemostat
 CBASS
 washin
 Washin
+Monod
+agoodcurve

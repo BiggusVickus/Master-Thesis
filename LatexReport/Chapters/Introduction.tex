@@ -38,10 +38,10 @@ This process can be visualized in \Cref{fig:phage_life_cycle}.
 In an ecosystem like the ocean, the gut, or in soil, there are thousands of different microbes all interacting with one another or the surrounding environment.
 The interactions are complex, with many factors affecting the growth of bacteria, phages, plants, animals, and more. 
 
-The interactions between agents in the environment are often synergistic. 
+The interactions between entities in the environment are often synergistic. 
 When an animal dies, bacteria start to digest and decompose the animal into simpler chemicals like carbon and nitrogen that plants can use to grow, which is then eaten by other animals. 
-External factors, such as flooding, droughts, chemical spills, or introduction of new agents have a massive impact on the ecosystem. 
-These events can add or remove resources from the system, change environmental parameters such as the surrounding temperature, introduce competition, or create an imbalance in the population by killing agents. 
+External factors, such as flooding, droughts, chemical spills, or introduction of new entities have a massive impact on the ecosystem. 
+These events can add or remove resources from the system, change environmental parameters such as the surrounding temperature, introduce competition, or create an imbalance in the population by killing entities. 
 These effects have a larger effect on the ecosystem and food chain as a whole as bacteria are one of the fundamental foundations for resource recycling. 
 
 \subsection{Phage's Role in the Environment}
@@ -92,18 +92,18 @@ Collecting interaction parameter values is an expensive and laborious task, as t
 There are two main ways to model phage-bacteria dynamics: spatially and non-spatially.
 In a spatial model phages and bacteria can move through space and interact with their neighbors. 
 Partial differential equations (PDE) and cellular agent-based models (ABM) have been used to model spatial interactions.
-Spatial models require special considerations, such as proximity to other agents.
-This creates areas of interaction and interest where agents are located, and areas of no interactions where there are no interactions.
+Spatial models require special considerations, such as proximity to other entities.
+This creates areas of interaction and interest where entities are located, and areas of no interactions where there are no interactions.
 Spatial models lead to more computationally complex models, but can result in more interesting and biologically realistic results. 
 
-Whereas in non-spatial models such as ODEs and DDEs, the bacteria and phages are assumed to be in a well-mixed solution and no distinctions are made in regard to neighbors or distances to other agents. 
-Interactions are simplified to a probabilistic approach, where a percentage $p$ of agents interact with one another at time step $t$.
+Whereas in non-spatial models such as ODEs and DDEs, the bacteria and phages are assumed to be in a well-mixed solution and no distinctions are made in regard to neighbors or distances to other entities. 
+Interactions are simplified to a probabilistic approach, where a percentage $p$ of entities interact with one another at time step $t$.
 Non non-spatial models are easier to develop, understand, and are more effective in modeling large populations, at the cost of losing spatial information. 
 
 For this thesis, the focus will be modelling resource, phage, and bacteria interactions using an ODE model. 
 A phage-bacteria-resource system is described as an $p\times b \times r$ system, meaning $p$ phages, $b$ bacteria, 
 Current modelling methods have mainly stayed with $1\times 1 \times 1$ models, meaning 1 phage, 1 bacteria, and 1 resource. 
-This thesis aims to develop a simulation framework that can model any $p\times b \times r$ ODE system, where each agent can contain states (called hidden agents) that they can move to and from. 
+This thesis aims to develop a simulation framework that can model any $p\times b \times r$ ODE system, where each entity can contain states (called hidden entities) that they can move to and from. 
 \newline 
 
 \section{Software Overview}

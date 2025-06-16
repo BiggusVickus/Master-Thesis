@@ -3,7 +3,7 @@
 \section{Project Overview}
 To help complete this Master thesis, I created various tools that would help create the final model outputs.
 The project is divided into four parts. 
-The first part is the tool that a user can use to design and create the network of agent interactions. 
+The first part is the tool that a user can use to design and create the entity interaction network. 
 The second part is the simulation framework that handles the data and runs the ODE solving method. 
 The third part is a dashboard that runs in the browser. The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
 The final part allows the user to download the simulation data to create their own custom graphs and analyses. 
@@ -12,15 +12,15 @@ A flowchart showing the user-system interactions can be seen in \nameref{Appendi
 
 \subsection{Network Creation Tool}
 \label{sec:network_creation_tool}
-The network creation tool is the first step that a user needs to use, and it revolves around using a GUI tool built to create and edit the graph representation of the agent interaction.
-Numerous interactions occur between agents in a microbial environment.
-However, not every agent can and will interact with one another.
-Based on which agents interact with one another, a network topography representing the agent interactions and dynamics can be created. 
+The network creation tool is the first step that a user needs to use, and it revolves around using a GUI tool built to create and edit the graph representation of the entity interaction.
+Numerous interactions occur between entities in a microbial environment.
+However, not every entity can and will interact with one another.
+Based on which entities interact with one another, a network topography representing the entity interactions and dynamics can be created. 
 
-Every node represents a unique agent, and each agent has their own intrinsic properties. 
-The user can intuitively define agents, their interactions, environmental and model settings using the GUI tool. 
-This tool allows users to quickly and intuitively define agents and their attributes, agent interactions and their attributes, environmental data, and model settings.
-An edge links two agents together if there is an arbitrary interaction occurring between the agents, with the properties exhibited in the interaction dependent on the interacting agents. 
+Every node represents a unique entity, and each entity has their own intrinsic properties. 
+The user can intuitively define entities, their interactions, environmental and model settings using the GUI tool. 
+This tool allows users to quickly and intuitively define entities and their attributes, entity interactions and their attributes, environmental data, and model settings.
+An edge links two entities together if there is an arbitrary interaction occurring between the entities, with the properties exhibited in the interaction dependent on the interacting entities. 
 Self interactions are allowed in the network. 
 There is an environment node that is used to store global environmental data, such as the temperature and pH of the system.
 The settings node holds information such as simulation length, max time step, and the type of ODE solver to use.
@@ -75,7 +75,7 @@ The user can self-decide which parameter values to give, and if and how the para
         This network topography along with a $1 \times 1 \times 1$ network will be used in the \nameref{Methods} and \nameref{AER} sections. 
             The parameter values for the networks can be found at \Cref{tab:appendixE:a_good_curve}, \Cref{tab:appendixE:complex_model} and \Cref{tab:appendixE:SOBOL_analysis_values}
         Each node represents a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
-        Although not shown and used here, edges between the same agent types and self loops are allowed. 
+        Although not shown and used here, edges between the same entity types and self loops are allowed. 
     }
  \end{figure}
 
@@ -86,21 +86,21 @@ The simulation framework deals with handling the input, output, collecting and s
 The framework uses SciPy's \cite{virtanenSciPy10Fundamental2020} \textit{solve\_ivp()} numerical solver \cite{ dormandFamilyEmbeddedRungeKutta1980} to simulate the provided ODE equations and calculate the population levels through time.
 The user receives two outputs from the framework. 
 The first output is an array of time values that the solver used to calculate the population count.
-The second output is an array containing the population count at each time step for every agent.
+The second output is an array containing the population count at each time step for every entity.
 
-In order to facilitate more complex model behavior, "hidden" agents can be added to the simulation, where the hidden agents represent states that a "visible" agent can be in. 
+In order to facilitate more complex model behavior, “hidden” entities can be added to the simulation, where the hidden entities represent states that a “visible” entity can be in. 
 Such an example would be the distinction between uninfected and infected bacteria. 
-Each bacteria agent $B_b$ would contain two hidden sub-agents, called sub-agent states, an uninfected state sub-agent $U_b$, and infected state sub-agent $I_b$. 
-It is possible to further create sub-agents, by having a bacteria go through $M$ stages of infection. 
-So each infected agent would have sub-agent $I_{b_k}$ where $1 \leq k \leq M$. 
+Each bacteria entity $B_b$ would contain two hidden sub-entities, called sub-entity states, an uninfected state sub-entity $U_b$, and infected state sub-entity $I_b$. 
+It is possible to further create sub-entities, by having a bacterium go through $M$ stages of infection. 
+So each infected entity would have sub-entity $I_{b_k}$ where $1 \leq k \leq M$. 
 
-In the network model you would explicitly create a $3\times 2 \times 3$ network, but when passing the network to the simulation framework, you would tell the framework to model the subagents. 
-The user's ODE model has to correctly model each (hidden) agent and correctly handle the changes in states. 
+In the network model you would explicitly create a $3\times 2 \times 3$ network, but when passing the network to the simulation framework, you would tell the framework to model the sub-entities. 
+The user's ODE model has to correctly model each (hidden) entity and correctly handle the changes in states. 
 
 Even though the user might submit a $3 \times 2 \times 3$ model, if the user follows the uninfected and infected classification, where each bacterium goes through $4$ stages, the ODE model and framework will explicitly be modelling 3 phages, 10 bacteria (2 uninfected + $2\cdot 4=10$ infected bacteria), and 3 resources. 
 
 The user might also be interested in modelling a resource reservoir in a chemostat, where resources go from an external reservoir not accessible by the bacteria to the virtual chemostat ready to be consumed by the bacteria. 
-3 hidden resource agents would be added to the system, where the resources would model the transfer of resources from the reservoir to the simulation environment. 
+3 hidden resource entities would be added to the system, where the resources would model the transfer of resources from the reservoir to the simulation environment. 
 The provided ODE model will have to correctly model and transfer the resources from $R_{r_{\text{reservoir}}}$ to $R_{r_{\text{chemostat}}}$, where $R_{r_{\text{reservoir}}}$ is unaccessible by the bacteria and $R_{r_{\text{chemostat}}}$ is accessible by the bacteria. 
 It is then up to the user to determine how the resources are transferred, if the resources are added at constant intervals or continuously. 
 
@@ -122,14 +122,14 @@ The final section allows for the user to run more advanced analyses on the netwo
 \label{sec:editing_network_and_parameter_values}
 The editing network and parameter value contain five separate sections.
 \paragraph{Initial Condition}
-The IC settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the agents. 
-Each agent type has a table containing the initial population count. 
-Extra hidden agents can be included. 
-When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria agent starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}.  
+The IC settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the entities. 
+Each entity type has a table containing the initial population count. 
+Extra hidden entities can be included. 
+When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria entity starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}.  
 \paragraph{Vector Data} 
-Data that can be represented as a vector, for example the data attributed to an agent type have their own section, \Cref{fig:ss:ds:vector}.
+Data that can be represented as a vector, for example the data attributed to an entity type have their own section, \Cref{fig:ss:ds:vector}.
 \paragraph{Matrix Data}
-Data that is stored as a matrix, the data stored on edges between agents, is stored in the matrix tab (\Cref{fig:ss:ds:matrix}).
+Data that is stored as a matrix, the data stored on edges between entities, is stored in the matrix tab (\Cref{fig:ss:ds:matrix}).
 \paragraph{Environment and settings}
 The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively.
 
@@ -140,7 +140,7 @@ The environment data and settings data also have their own tab, \Cref{fig:ss:ds:
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/DashboardSettings/initial_condition_settings.png}
         \caption{
-            The tab where the user can edit the ICs of the agents.
+            The tab where the user can edit the ICs of the entities.
         }
         \label{fig:ss:ds:initial_condition}
     \end{subfigure}
@@ -199,7 +199,7 @@ Once queried, the user can create their own graphs and plots as they have access
 \paragraph{Serial Transfer}
 \label{sec:serial_transfer}
 Serial transfer (ST) is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and resources, possibly with phages, and transfers the old media into a solution containing new media.
-At this stage, the bacteriologist can introduce new agents, or re-introduce agents if the agent population or concentration has died out.
+At this stage, the bacteriologist can introduce new entities, or re-introduce entities if the entity population or concentration has died out.
 However, usually only resources are added during the transfer process.
 An example would be an experiment starts with 50ml of solution.
 The experiment runs for 24 hours before 5ml is removed.
@@ -211,7 +211,7 @@ However eventually the resources run out, and the bacteria die out due to a lack
 By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
 
 The implementation of ST is slightly different.
-A user can select a number which will divide the population count of the agents by that number (\Cref{fig:ss:av:serial_transfer_settings}).
+A user can select a number which will divide the population count of the entities by that number (\Cref{fig:ss:av:serial_transfer_settings}).
 Then the program takes the IC values defined for the resources the IC in \Cref{sec:editing_network_and_parameter_values} and adds those values to the resources respectively.
 By selecting a checkbox, the values as defined in the IC box for phages and bacteria in \Cref{sec:editing_network_and_parameter_values} can optionally be added as well.
 As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen ST value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively.
@@ -252,7 +252,7 @@ As input, the user can select 2 parameters of choice.
 After the parameter name selection, the user can manually choose which parameter values they want to test or test a range of values equally spaced by selecting the number of values to test.
 Finally, the user can optionally run a ST, where the ST uses the settings found on the ST tab. 
 
-\Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each agent type.
+\Cref{fig:ss:av:parameter_analysis_run} shows the heatmap that the user can expect, one heatmap for each entity type.
 Each heatmap cell represents the input of 2 unique parameter values, and shows the population count for that parameter run at the time shown in the slider. 
 As the user slides the slider, the value inside the cell updates to correspond with the selected time. 
 Note that the heatmap color range resets for each heatmap, so similar colors across heatmaps and across time will not correspond to the same values.
@@ -284,10 +284,10 @@ Note that the heatmap color range resets for each heatmap, so similar colors acr
 
 \paragraph{Initial Value Analysis}
 \label{sec:initial_value_analysis}
-The initial value analysis (IVA) settings tab as shown in \Cref{fig:ss:av:initial_value_analysis_settings} allows the user to choose a single parameter and vary the value of that parameter, visualizing how a change in parameter value affects the population count of the agents.
+The initial value analysis (IVA) settings tab as shown in \Cref{fig:ss:av:initial_value_analysis_settings} allows the user to choose a single parameter and vary the value of that parameter, visualizing how a change in parameter value affects the population count of the entities.
 
 \Cref{fig:ss:av:initial_value_analysis_run} shows the plots that the user receives.
-For each agent type, there are three plots made.
+For each entity type, there are three plots made.
 The left plot shows the population count through time, one line for each parameter value submitted.
 The middle plot takes each run and calculates the “percentage from the max value“ (default value of $0.95 \rightarrow 95\%$) reached of the peak.
 This value is considered the time of peak, and is used to fix some issues that can arise where the population plateaus or only keeps on rising.
@@ -335,7 +335,7 @@ The analysis can then be boiled down to the $R^2$, slope, and intercept line to 
 
 \paragraph{Phase Portrait}
 \label{sec:phase_portrait}
-The phase portrait plot allows the user to analyze how an agent population evolves with respect to the other agent population through time.
+The phase portrait plot allows the user to analyze how an entity population evolves with respect to the other entity population through time.
 Phase portraits indicate how one population increases while the other decreases, and vice versa.
 Steady states can be identified and classified as either stable, unstable, or as saddle points. 
 It is also possible to visually identify attractor and repeller points by seeing where the population values trend towards. 
@@ -349,7 +349,7 @@ The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_s
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/AdvancedVisualization/phase_portrait_settings.png}
         \caption{
-            The user can select two starting values for the IC, but they can't choose vector, matrix, or environment settings due to the plot showing the development of agent populations against other agent populations.
+            The user can select two starting values for the IC, but they can't choose vector, matrix, or environment settings due to the plot showing the development of entity populations against other entity populations.
             As typical, the user can select their own values or auto-generate values between two values, as well as use a ST option.
             There is also an option to take the logarithm of the x and/or y-axis. 
         }
@@ -410,8 +410,8 @@ Due to the randomness of the sampling method, the user can, but does not need to
 
 Three SOBOL analyses are included by default in the dashboard, as shown in \Cref{fig:ss:av:SOBOL_analysis_run}.
 An analysis of the final value of the simulation, the average population count, and the variance in population count.
-The global and first sensitivity are shown next to one another, and each sub-row within a plot represents each agent type. 
-The proportion of the global and local sensitivity can be seen for each agent type and each parameter.
+The global and first sensitivity are shown next to one another, and each sub-row within a plot represents each entity type. 
+The proportion of the global and local sensitivity can be seen for each entity type and each parameter.
 
 It can be argued that the final, average, and variance value of the run is not a useful statistic to measure and run a SOBOL analysis on. 
 One might give the reasoning that the population value at time $t$ depends on the previous time step $t-1$. 
@@ -470,7 +470,7 @@ The data can be further processed and visualized as the user wishes.
 
 Depending on the provided model, different behavior might appear. 
 As the dashboard can not create a graph for every situation, or be easily adapted to analyze every situation, \nameref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
-For example the agents in a model can exhibit cyclic behavior. 
+For example the entities in a model can exhibit cyclic behavior. 
 A custom visualization that the could be created for this cyclic model would be to perform a Fourier transformation on the curve to obtain the predominant frequencies. 
 A change in parameter values would change the frequencies of the curve, so it would be easy to quantify how a change in parameter value affects the frequency output. 
 If dampening occurs, then a change in amplitude can also be measured, and compared to the change in frequency, allowing the user to identify if the frequency-dampening relationship is correlated or not. 
@@ -493,7 +493,7 @@ All plots and simulations will use this model.
     \end{align}
     \caption{
         The Golding model sourced from \citet{gengUsingBacterialPopulation2024}. 
-        The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of agents ($\omega^o$). 
+        The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of entities ($\omega^o$). 
         The washin is not dependent on the current resource population, as it is a constant rate being added. 
         By default these values are 0.
         A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golding_model}. 
@@ -512,12 +512,12 @@ After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst
 
 However this model is specifically designed for a $1\times 1 \times 1$ model. 
 In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be slightly adapted. 
-There are other changes that can be made to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all agents are washed out at a constant rate. 
+There are other changes that can be made to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all entities are washed out at a constant rate. 
 These changes are highlighted in \Cref{eq:golding_model} in \textcolor{red}{red}. 
 
 \subsection{The Adapted Golding Model}
 \label{sec:adapted_golding_model}
-\Cref{eq:adapted_golding_model} accounts for the interactions of multiple agents, and assumes the interactions occur independent of one another. 
+\Cref{eq:adapted_golding_model} accounts for the interactions of multiple entities, and assumes the interactions occur independent of one another. 
 Each updated population count is a sum of all interactions occurring independently of one another. 
 
 \begin{eqfloat}
@@ -548,7 +548,7 @@ NumPy is used to set the parameters up at program startup.
 
 The visualization part makes heavy usage of Dash and Plotly. 
 Dash acts as the server and is used for displaying the HTML aspect of the frontend and dealing with any input and output. 
-Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like "log x-axis" form the frontend to the backend server. 
+Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like “log x-axis” form the frontend to the backend server. 
 In the backend, the various inputs are handled, like changing the input string \textit{“0.05, 0.1, 0.15, 0.2”} into an iterable list \textit{[0.05, 0.1, 0.15, 0.2]} that the simulation framework can iterate over to vary the parameter value. 
 
 If there are many simulations to run through, in the case of \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called. 

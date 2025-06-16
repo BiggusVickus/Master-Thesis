@@ -27,7 +27,9 @@ Any population can be modelled as such:
     \frac{d{B}_i}{dt} = {B}_i \left(\left(r_i + \sum_{j}^{N} \alpha_{ij}{B}_j \right) - m_i\right)
 \]
 where $r_i$ is reproduction rate, $\alpha_{ij}$ is the devour rate of $B_i$ on $B_j$. If $\alpha_{ij}$ is negative, then $B_i$ has a negative effect on $B_j$, otherwise $B_i$ has a positive effect on $B_j$. $m_i$ is the removal rate of $B_i$. 
-The interactions can be seen in \Cref{fig:lotka_volterra_model}
+The interactions can be seen in \Cref{fig:lotka_volterra_model}. 
+
+It is possible to add phages into the system by 
  
 \subsection{Generalized Consumer-Resource Model}
 The generalized Consumer-Resource Model models the growth of a population and resource dynamics between a population of bacteria ${B}_i$ and a resource ${R}_i$. 
@@ -52,7 +54,7 @@ The Trait-Based Model is a model that takes into account external factors such a
 where $r_i$ is influenced by the environment impact factor. $S_i$ is the sensitivity to $B_i$ to factor $T$, and with trade off if $r_i^{max} > \text{ mean } r^{max} \text{ then } S_i > \text{ mean } S$. 
 The larger $S1_i$ is, and the larger the difference $T$ is from $T_{ref_i}$, the stronger the effect will have on the growth rate of $r_i$. 
 $r_i$ follows the Monod equation, with $r_{i\alpha}^{max}$ being the maximum growth rate of bacteria $B_i$, $R_\alpha$ is the resource concentration, and $K_{i\alpha}$ is the affinity constant. 
-\Cref{fig:trait_based_model} shows the agent interactions in detail. 
+\Cref{fig:trait_based_model} shows the entity interactions in detail. 
 
 \subsection{Agent-Based Models}
 ABMs model the system through space and time.
@@ -92,7 +94,7 @@ Agent $i$ consumes resources and converts them into new resource with \Cref{eq:a
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Figures/lotka_volterra_model.png}
         \caption{
-            Lotka Volterra model.
+            Lotka-Volterra model.
         }
         \label{fig:lotka_volterra_model}
     \end{subfigure}
@@ -126,7 +128,7 @@ Agent $i$ consumes resources and converts them into new resource with \Cref{eq:a
         }
         \label{fig:agent_based_model}
     \end{subfigure}
-    \caption{Different models and how the bacterial agents interact with itself, one another, resources and the environment. All figures sourced from \citet{vandenbergEcologicalModellingApproaches2022}}
+    \caption{Different models and how the bacterial entities interact with itself, one another, resources and the environment. All figures sourced from \citet{vandenbergEcologicalModellingApproaches2022}}. 
 \end{figure}
 
 
@@ -229,7 +231,7 @@ However prophages are still at risk of being discovered and excised by restricti
 \paragraph{Phage Induction}
 Prophages induct (leave) from the bacteria DNA under specific conditions. 
 The induction process starts with proteolytic cleavage and displacement of the phage repressor, which most of the time occurs upon activation of the SOS response following DNA damage \cite{waldorPhageRegulatoryCircuits2005}. 
-Cell stressors such as DNA-damaging agents like UV light and antibiotics can jump-start the process to switch to the lytic cycle \cite{stoneUnderstandingExploitingPhage2019, fortierImportanceProphagesEvolution2013}. 
+Cell stressors such as DNA-damaging entities like UV light and antibiotics can jump-start the process to switch to the lytic cycle \cite{stoneUnderstandingExploitingPhage2019, fortierImportanceProphagesEvolution2013}. 
 
 \subsubsection{Lytic Cycle}
 The lytic cycle describes the process in which the viral DNA hijacks the DNA replication process, assembles within the cell, and lyses the cell releasing the phages into the environment. 
@@ -417,9 +419,10 @@ PhageDyn does not simulate phage dynamics on its own but rather manipulates exis
 \Cref{fig:sourced:phagedyn_plot} shows the output that PhageDyn provides. 
 
 \subsection{Cocktail and PhageDyn Limitations}
+\label{sec:literature:cocktail_and_phagedyn_limitations}
 There are limitations to Cocktail and PhageDyn. 
 Cocktail can model up to a $2\times 1 \times 1$ system, and is designed to model a chemostat. 
-Constant resources are being added into a chemostat, with the constant addition and removal of medium from the chemostat. 
+Chemostats receive a constant influx of new resources and a constant removal of medium from the chemostat. 
 Cocktail's model can not be easily adapted to other models. 
 The ODE model accepts inputs from a hardcoded GUI frontend. 
 So any changes to the frontend or to the ODE model will require changes to the ODE model and the frontend to accept the new inputs and outputs. 
@@ -429,7 +432,7 @@ PhageDyn works with GPS-X, a very niche wastewater treatment modelling software.
 PhageDyn is programmed for a very specific task with no flexibility in changing the model or inputs. 
 PhageDyn assumes biomass, instead of individual bacteria populations. 
 To the best of my ability, I could not find a copy of PhageDyn. 
-When clicking on the link in the supplementary material of \citet{krysiak-baltynSimulationPhageDynamics2017} to download a copy of the Java applet, the link returned a "URL Not Found" error. 
+When clicking on the link in the supplementary material of \citet{krysiak-baltynSimulationPhageDynamics2017} to download a copy of the Java applet, the link returned a “URL Not Found” error. 
 
 \begin{figure}
     \centering
@@ -475,7 +478,7 @@ When clicking on the link in the supplementary material of \citet{krysiak-baltyn
 When choosing parameter values it is important to choose parameter values that could realistically be found in real life systems and be replicated in the lab. 
 Bacteria populations can double every 20-30 minutes, so if the growth rate is set to that it takes 1 day to double, the parameter choice is not good. 
 There are various features that a researcher will be looking for in growth curve produced in a lab.
-A combination of these features results in a plot/graph/curve being called "good", while when those features are missing they are a “bad” graph. 
+A combination of these features results in a plot/graph/curve being called “good”, while when those features are missing they are a “bad” graph. 
 
 There is a clear exponential rise in bacteria growth, and can expect to grow 40-100x in the span of a few hours. 
 At a certain point in time, the bacteria population stop growing and start dying, almost as fast as they were growing. 
@@ -485,7 +488,7 @@ Phage populations also exhibit exponential growth, but with a delay in growth.
 The phage population will peak a few hours after the bacteria population reached its peak. 
 If there is no phage death or removal, the phage population will eventually reach a plateau when every bacteria has died. 
 
-\Cref{fig:created:a_good_curve_linear} shows an example of a curve for a $1\times1\times1$ system that would typically be seen in a lab, and thus can be called "a good curve". 
+\Cref{fig:created:a_good_curve_linear} shows an example of a curve for a $1\times1\times1$ system that would typically be seen in a lab, and thus can be called “a good curve”. 
 \Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic y-axis. 
 Those specific plots can be classed as a “good curve” due to the plots exhibiting a clear growth, peak, and death cycle. 
 
@@ -501,6 +504,7 @@ The phages saw a significant increase in population count at around $t=4$, coinc
 There is a delay between the peak of bacteria at $t=5$ and when the phage population reaches its effective max population at $t=10$. 
 The total bacteria population reached a peak of 3805 at $t=4.89$, a 76.1x increase in population count from the initial 50 starting uninfected bacteria. 
 The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase in population count from its initial 10 phages. 
+
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{1\linewidth}
@@ -508,7 +512,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
         \caption{
-            An example linear y-axis for a curve that researchers aim to get, can be called "a good curve". 
+            An example linear y-axis for a curve that researchers aim to get, can be called “a good curve”. 
         }
         \label{fig:created:a_good_curve_linear}
     \end{subfigure}
@@ -518,7 +522,7 @@ The phage population reached a peak of 2584 phages at $t=15$, a 258.4x increase 
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
         \caption{
-            The equivalent logarithmic y-axis plot for a curve that researchers aim to get, can be called "a good curve". 
+            The equivalent logarithmic y-axis plot for a curve that researchers aim to get, can be called “a good curve”. 
         }
         \label{fig:created:a_good_curve_logarithmic}
     \end{subfigure}
