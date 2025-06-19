@@ -5,10 +5,11 @@ To help complete this Master thesis, I created various tools that would help cre
 The project is divided into four parts. 
 The first part is the tool that a user can use to design and create the entity interaction network. 
 The second part is the simulation framework that handles the data and runs the ODE solving method. 
-The third part is a dashboard that runs in the browser. The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
+The third part is a dashboard that runs in the browser. 
+The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
 The final part allows the user to download the simulation data to create their own custom graphs and analyses. 
 
-A flowchart showing the user-system interactions can be seen in \nameref{AppendixC}. 
+A flowchart showing the user-system interactions can be seen in \Cref{AppendixC}. 
 
 \subsection{Network Creation Tool}
 \label{sec:network_creation_tool}
@@ -26,10 +27,10 @@ There is an environment node that is used to store global environmental data, su
 The settings node holds information such as simulation length, max time step, and the type of ODE solver to use.
 The tool provides functionalities for adding, editing, and visualizing nodes and edges, as well as importing and exporting the network structure.  
 
-Once the user is happy with the graph shape, they can export the network representation for use in \nameref{sec:simulation_framework}, \nameref{sec:visualization_framework}, and \nameref{sec:custom_visualizations_and_framework}. 
+Once the user is happy with the graph shape, they can export the network representation for use in \Cref{sec:simulation_framework}, \Cref{sec:visualization_framework}, and \Cref{sec:custom_visualizations_and_framework}. 
 The most important part is that the user defines the shape and the attributes of the network, as that can't be edited in part 2 onwards. 
 It is possible go back to the network creation tool and upload the graph to the tool to be able to edit the network representation. \newline
-The user can edit the values of the attributes in \nameref{sec:visualization_framework}, so the parameter values do not have to be perfect. 
+The user can edit the values of the attributes in \Cref{sec:visualization_framework}, so the parameter values do not have to be perfect. 
 As such, the user does not need to keep on using the GUI tool to edit parameter values. 
 
 \Cref{fig:ss:initial_startup_GUI_tool} shows the layout of the GUI tool. \Cref{fig:ss:example_network} shows an example network that can be created.
@@ -57,7 +58,7 @@ The user can self-decide which parameter values to give, and if and how the para
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Screenshots/example_network.png}
         \caption{
-            A $3\times2\times3$ and $1\times 1 \times 1$ network. 
+            A $1\times1\times1$ and $2\times 2 \times 3$ network. 
         }
         \label{fig:ss:example_network}
     \end{subfigure} 
@@ -68,18 +69,18 @@ The user can self-decide which parameter values to give, and if and how the para
         \caption{
             A $20\times20\times10$ network. 
         }
-        \label{fig:ss:example_network}
+        \label{fig:ss:example_large_network}
     \end{subfigure} 
 
     \caption{
-        This network topography along with a $1 \times 1 \times 1$ network will be used in the \nameref{Methods} and \nameref{AER} sections. 
+        This network topography along with a $1 \times 1 \times 1$ network will be used in the \Cref{Methods} and \Cref{AER} sections. 
             The parameter values for the networks can be found at \Cref{tab:appendixE:a_good_curve}, \Cref{tab:appendixE:complex_model} and \Cref{tab:appendixE:SOBOL_analysis_values}
         Each node represents a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
         Although not shown and used here, edges between the same entity types and self loops are allowed. 
     }
  \end{figure}
 
-\subsection{Simulation Framework}
+\subsection{Simulation Framework} % TODO: Rewrite this section
 \label{sec:simulation_framework}
 The user provides an ODE model and the network topography as input to the framework. 
 The simulation framework deals with handling the input, output, collecting and storing of the simulation input and output.
@@ -88,29 +89,24 @@ The user receives two outputs from the framework.
 The first output is an array of time values that the solver used to calculate the population count.
 The second output is an array containing the population count at each time step for every entity.
 
-In order to facilitate more complex model behavior, “hidden” entities can be added to the simulation, where the hidden entities represent states that a “visible” entity can be in. 
+In order to facilitate more complex model behavior, extra entities can be added to the simulation.  
 Such an example would be the distinction between uninfected and infected bacteria. 
-Each bacteria entity $B_b$ would contain two hidden sub-entities, called sub-entity states, an uninfected state sub-entity $U_b$, and infected state sub-entity $I_b$. 
-It is possible to further create sub-entities, by having a bacterium go through $M$ stages of infection. 
-So each infected entity would have sub-entity $I_{b_k}$ where $1 \leq k \leq M$. 
+In the network model you explicitly create a $3\times 2 \times 3$ network, with 3 phages, 2 bacteria, and 3 resources. 
+You explicitly tell the solver to add $2\cdot M$ additional states that represent the infected states. 
+So the ODE solver would solve for 3 phages, 2 uninfected bacteria states, $2\cdot M = 2\cdot 4=8$ infected bacteria states, and 3 resources. 
 
-In the network model you would explicitly create a $3\times 2 \times 3$ network, but when passing the network to the simulation framework, you would tell the framework to model the sub-entities. 
-The user's ODE model has to correctly model each (hidden) entity and correctly handle the changes in states. 
+Adding a resource reservoir to the model would be simple as well. 
+3 extra resource entities would be added to the system, where the resources would model the transfer of resources from the reservoir to the simulation environment. 
+The provided ODE model will have to correctly model and transfer the resources from $R_{r_{\text{reservoir}}}$ to $R_{r_{\text{chemostat}}}$. 
+The bacteria would only consume from $R_{r_{\text{chemostat}}}$. 
 
-Even though the user might submit a $3 \times 2 \times 3$ model, if the user follows the uninfected and infected classification, where each bacterium goes through $4$ stages, the ODE model and framework will explicitly be modelling 3 phages, 10 bacteria (2 uninfected + $2\cdot 4=10$ infected bacteria), and 3 resources. 
-
-The user might also be interested in modelling a resource reservoir in a chemostat, where resources go from an external reservoir not accessible by the bacteria to the virtual chemostat ready to be consumed by the bacteria. 
-3 hidden resource entities would be added to the system, where the resources would model the transfer of resources from the reservoir to the simulation environment. 
-The provided ODE model will have to correctly model and transfer the resources from $R_{r_{\text{reservoir}}}$ to $R_{r_{\text{chemostat}}}$, where $R_{r_{\text{reservoir}}}$ is unaccessible by the bacteria and $R_{r_{\text{chemostat}}}$ is accessible by the bacteria. 
-It is then up to the user to determine how the resources are transferred, if the resources are added at constant intervals or continuously. 
+The user's ODE model has to correctly model each (extra) entity and correctly handle the changes in states. 
 
 \subsection{Visualization Dashboard}
 \label{sec:visualization_framework}
 The third part involves analyzing and visualizing the simulation results on an interactive Dash Plotly \cite{DashDocumentationUser} dashboard. 
 The user can use a dashboard built using Plotly Dash to interact with the solver and network.
-The user can interact with the solver and network by changing parameter, environment, and setting values on the fly.
-This allows the user to quickly change parameter values and test different situations.
-The dashboard includes various starter plots that allow the user to test the model.
+The user can quickly change parameter, environment, and setting values with the dashboard. 
 As output, the dashboard will show interactive plots so that the user can analyze the system. 
 
 The dashboard allows the user to interact with the network, the model, and some prebuilt visualizations, and is built into three logical sections.
@@ -124,12 +120,10 @@ The editing network and parameter value contain five separate sections.
 \paragraph{Initial Condition}
 The IC settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the entities. 
 Each entity type has a table containing the initial population count. 
-Extra hidden entities can be included. 
-When a bacteria has been infected, the bacteria goes through multiple stages before lysing. Each bacteria entity starts out as uninfected, and once infected, the bacteria goes through 4 stages of infection before lysing as seen in \Cref{fig:ss:ds:initial_condition}.  
 \paragraph{Vector Data} 
 Data that can be represented as a vector, for example the data attributed to an entity type have their own section, \Cref{fig:ss:ds:vector}.
 \paragraph{Matrix Data}
-Data that is stored as a matrix, the data stored on edges between entities, is stored in the matrix tab (\Cref{fig:ss:ds:matrix}).
+Data that is stored as a matrix, the data stored on edges between entities, is stored in the matrix tab, \Cref{fig:ss:ds:matrix}.
 \paragraph{Environment and settings}
 The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively.
 
@@ -189,12 +183,16 @@ The environment data and settings data also have their own tab, \Cref{fig:ss:ds:
 
 \subsubsection{Visualization and Analysis}
 In the analysis section, the user can run different analysis methods to gain a greater understanding of the model.
-For simplicity, the visualizations only support a $1 \times 1\times 1$ model, in order to make the analysis easier for the user, and to make it easier to analyze the visualization as the aim of the tool is to gain a deeper understanding of the interactions in a reduced complexity environment. 
-These advanced visualizations were created with the mind of understanding a simple network.
-There are five different analysis and visualization methods, and one system where the user can run a large simulation on the whole network and receive an output file containing the raw simulation file data.
-The raw data is stored as a \textit{parquet} file, a tabular-like data format, which when combined with Dask \cite{DaskDaskDocumentation}, allows for querying of the data similarly to Pandas.
-Parquet with Dask offers superior performance and data storage solutions that Pandas can't offer.
-Once queried, the user can create their own graphs and plots as they have access to the parameter values used and the raw simulation data.
+For simplicity, the visualizations on the dashboard only support a $1 \times 1\times 1$ model. 
+This makes it easier for the user to analyze the system. 
+The goal of the dashboard is to investigate a simple system in order to gain a deeper understanding of the system. 
+There are five prebuilt visualizations which are described below. 
+The aim of the visualizations is to investigate how the system changes with respect to varying inputs. 
+
+After the user has a deeper understanding of the system, they can run and download custom simulations to create their own custom visualizations. 
+The saved simulation data is stored as a \textit{.parquet} file, a tabular-like data format. 
+The simulation data can be queried with Dask, allowing a user to find a specific simulation result. 
+Parquet with Dask offers superior performance and data storage solutions that Pandas doesn't offer.
 
 \paragraph{Serial Transfer}
 \label{sec:serial_transfer}
@@ -205,19 +203,15 @@ An example would be an experiment starts with 50ml of solution.
 The experiment runs for 24 hours before 5ml is removed.
 Researchers can run various tests, such as using optical density measurements to assess bacterial density in the solution or employing a mass spectrometer to determine the concentration of the resources.
 The 5ml is then re-added to a new solution of 45ml containing fresh resources.
-The effect that this has is it creates a sort of artificial stable point.
 As the bacteria grow, they consume the resources found in the solution.
 However eventually the resources run out, and the bacteria die out due to a lack of resources.
 By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
 
 The implementation of ST is slightly different.
-A user can select a number which will divide the population count of the entities by that number (\Cref{fig:ss:av:serial_transfer_settings}).
-Then the program takes the IC values defined for the resources the IC in \Cref{sec:editing_network_and_parameter_values} and adds those values to the resources respectively.
-By selecting a checkbox, the values as defined in the IC box for phages and bacteria in \Cref{sec:editing_network_and_parameter_values} can optionally be added as well.
-As an example, if at the end of a simulation, there are 120 resources, 5000 bacteria, and 1000 phages remaining and the chosen ST value is 15, then the resource, bacteria, and phage values would be decreased to 8, 333.33, and 66.66 respectively.
-Then, if the IC for the resources, bacteria, and phages in \Cref{sec:editing_network_and_parameter_values} are 500, 80, and 10 respectively, and the checkbox is unchecked, the new population count will be 508, 333.33 and 66.66 respectively.
-If the checkbox is checked, the new population count will be 508, 413.33, and 76.66 respectively.
-These new values would be used as the new starting IC for a new simulation, and the run results will be appended to the previous run.
+A user can select the dilution factor which will divide the population count of the entities by that number (\Cref{fig:ss:av:serial_transfer_settings}).
+Then the program takes the IC values defined in \Cref{sec:editing_network_and_parameter_values} and adds those values to the respective entity. 
+
+As an example, if the simulation ended with 3500 phages, 100 (uninfected) bacteria and 50 resources, the dilution factor is 10, and the user wants to add 350 new bacteria and 130 new resources for the next simulation, the new starting condition for the next simulation would be $\frac{3500}{10} = 350$ phages, $\frac{100}{10} + 350 = 660$ bacteria, and $\frac{50}{10} + 130 = 135$ resources.
 As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}.
 
 \begin{figure}[h!]
@@ -298,9 +292,6 @@ The initial concentration and corresponding collapse time are plotted on logarit
 The observed logarithmic decrease suggests that the phage kinetics is adsorption-limited. 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates this graph. 
 
-The $R^2$ value, or coefficient of determination, is calculated as $R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2}$
-where $y_i$ is the observed values, $\hat{y}_i$ is the predicted values, and $\bar{y}$ is the mean of the observed values.
-
 Using the IVA tool can be useful for understanding how a change in parameter value affects the time at which the population count reaches a maximum.
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name. 
 For every re-run of the IVA, the slope, intercept and $R^2$ value is stored in the bar chart. 
@@ -373,18 +364,18 @@ The setup for the phase portrait can be seen in \Cref{fig:ss:av:phase_portrait_s
 It is important to understand how a change in parameter value affects the change in output of a model. 
 Models will have parameters that are more important and have a larger effect on the model output than other parameters. 
 
-SOBOL analysis, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output by changing the input parameter values of the model and measuring the change in model output.
+SOBOL analysis \cite{sobolGlobalSensitivityIndices2001}, a variance-based sensitivity analysis, is a method that allows a user to quantify how important an input parameter has on a measured aspect of the output by changing the input parameter values of the model and measuring the change in model output.
 SOBOL can only measure a single univariate model output, for example the final population value, smallest or largest value reached, the time at which the largest value was reached, or any other univariate output. 
 SOBOL quantifies how much variance in the output can be attributed to a specific parameter and can measure the effect of global/total ($ST$), first ($S1$), and second order sensitivity ($S2$). 
 
-Global, also called total sensitivity, is the summation of all higher order interactions. 
 First order $Si$, or local sensitivity, is the measurement of the effect that parameter $i$ has on the variance of the output. 
 Second order is the measurement of parameter $i$ interacting with parameter $j$, and how the interaction attributes to the output variance. 
 Etc for third order and higher. 
+Global, also called total sensitivity, is the summation of all interactions. 
 If $ST_i \gg S1_i$, then parameter $i$ depends on higher order interactions with other parameters, while when $ST_i \approx S1_i$, then $i$ doesn't interact much with and depend on other parameters.
-It should be stated that $ST_i \geq S1_i$ and that $ST_i$ can be greater than 1, while $S1_i <= 1$. 
+It should be stated that $ST_i \geq S1_i$ and that $ST_i$ can be greater than 1, while $S1_i \leq 1$. 
 
-When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ is an input vector of $d$ elements, and $Y$ is a univariate model output.
+When a model is viewed as a black-box model, the model can be seen as a function $Y=f(X)$, where $X$ are the parameter values of $d$ elements, and $Y$ is a univariate model output.
 $X$ is assumed to be independently and uniformly distributed within a hypercube $X_i \in [0, 1]$ for $i=1, \dots d$.
 The first order sensitivity measures the output variance of the main affect of parameter $X_i$.
 Measuring the effect of varying $X_i$ averaged over other input parameters, and standardized to provide a fractional contribution to the overall output variance.
@@ -408,18 +399,9 @@ If 2nd order is not chosen, the model is run $N(D+2)$ times.
 If the user wants to analyze the second order interactions, then the model will run the system $N(2D+2)$ times with the randomly sampled input values, where $N$ is a multiple of 2, and $D$ is the number of parameters being tested.
 Due to the randomness of the sampling method, the user can, but does not need to, submit a seed value. 
 
-Three SOBOL analyses are included by default in the dashboard, as shown in \Cref{fig:ss:av:SOBOL_analysis_run}.
-An analysis of the final value of the simulation, the average population count, and the variance in population count.
 The global and first sensitivity are shown next to one another, and each sub-row within a plot represents each entity type. 
 The proportion of the global and local sensitivity can be seen for each entity type and each parameter.
 
-It can be argued that the final, average, and variance value of the run is not a useful statistic to measure and run a SOBOL analysis on. 
-One might give the reasoning that the population value at time $t$ depends on the previous time step $t-1$. 
-Thus the average and variance of the value is not completely random and is semi-dependent on the previous value. 
-Another argument is that the simple Golding model doesn't exhibit complex behavior unlike the oscillating behavior exhibited in \Cref{fig:sourced:cocktail_and_phagedyn}. 
-
-Making a dashboard that can be used for different inputs is hard to make. Predicting the type of plots that a user might be interested in, and the type of behavior the user wants to analyze is impossible to predict. 
-Therefore, three simple and easy to understand default SOBOL analysis methods are provided that aims to capture the simple dynamics of the system. 
 Upon completion of a SOBOL analysis, the original simulation data is saved to the disk as a \textit{.pickle} file so that the user can reuse the data and run their own SOBOL analyses. 
 
 \begin{figure}[h!]
@@ -448,6 +430,7 @@ Upon completion of a SOBOL analysis, the original simulation data is saved to th
 
 \paragraph{Ultimate Analysis}
 \label{sec:ultimate_analysis}
+Making a dashboard that can be used for different inputs is hard to make. Predicting the type of plots that a user might be interested in, and the type of behavior the user wants to analyze is impossible to predict. 
 The Ultimate Analysis section does not produce any visualizations or analysis, but instead allows for the user to define which ICs and parameter values they want to run a simulation on.
 The solver will iterate over every single parameter input possibility and save the results in a \textit{.parquet} file.
 Similarly settings in the other sections, the user can specify a start and end value, along with the number of values to generate evenly spaced within that range, including both the start and end values (\Cref{fig:ss:av:ultimate_analysis_settings}).
@@ -468,20 +451,15 @@ The final part, an optional step, allows the user to define a number of paramete
 The user can use this data to create their own custom visualizations without having to rerun the simulations, especially if there are many simulations. 
 The data can be further processed and visualized as the user wishes. 
 
-Depending on the provided model, different behavior might appear. 
-As the dashboard can not create a graph for every situation, or be easily adapted to analyze every situation, \nameref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
-For example the entities in a model can exhibit cyclic behavior. 
-A custom visualization that the could be created for this cyclic model would be to perform a Fourier transformation on the curve to obtain the predominant frequencies. 
-A change in parameter values would change the frequencies of the curve, so it would be easy to quantify how a change in parameter value affects the frequency output. 
-If dampening occurs, then a change in amplitude can also be measured, and compared to the change in frequency, allowing the user to identify if the frequency-dampening relationship is correlated or not. 
+As the dashboard can not create a graph for every situation, or be easily adapted to analyze every situation, \Cref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
 
 \section{The Golding Model}
 \label{sec:golding_model}
-The default model, the “Golding model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between Resources, Uninfected bacteria, Infected bacteria, and Phages. 
+The default model, the “Golding model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between resources, uninfected bacteria, infected bacteria, and phages. 
 All plots and simulations will use this model. 
 
 \subsection{The Golding Model}
-\begin{eqfloat}
+\begin{eqfloat}[ht!]
     \begin{align}
         \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{k=1}^{M} I_k) \mathcolor{red}{+ w^i -w^o \cdot R}\\
         \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P \mathcolor{red}{-w^o \cdot U}\\
@@ -499,8 +477,6 @@ All plots and simulations will use this model.
         A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golding_model}. 
     }
 \end{eqfloat}
-
-where $R$ is resources, $U$ is uninfected bacteria, $I_{1, \dots, M}$ is the infected stage of the bacteria, and $P$ is the phage population. 
 
 The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
 The cell growth process is described by $g(R, v, K)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
@@ -551,7 +527,7 @@ Dash acts as the server and is used for displaying the HTML aspect of the fronte
 Upon choosing parameter values and clicking on “submit“, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options like “log x-axis” form the frontend to the backend server. 
 In the backend, the various inputs are handled, like changing the input string \textit{“0.05, 0.1, 0.15, 0.2”} into an iterable list \textit{[0.05, 0.1, 0.15, 0.2]} that the simulation framework can iterate over to vary the parameter value. 
 
-If there are many simulations to run through, in the case of \nameref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called. 
+If there are many simulations to run through, in the case of \Cref{sec:ultimate_analysis}, an intermediate call to a parallel computing library Joblib is called. 
 Joblib parallelizes the computations on multiple CPUs to speed up computing time. 
 
 Ultimate analysis uses Pandas to write the data to a \textit{.parquet} file. 
@@ -560,7 +536,7 @@ Pandas parquet offers efficient data compression, efficient memory usage and whe
 SOBOL uses the SALib library to sample and analyze the parameter input. 
 Both ultimate analysis and SOBOL save a \textit{.pickle} file containing a dictionary with the parameter values tested, setting values, and other important information regarding the simulation. 
 
-\nameref{sec:initial_value_analysis} uses SciPy's \textit{curve\_fit()} function to curve fit the points in the middle plot (\Cref{fig:ss:av:initial_value_analysis_run}). 
+\Cref{sec:initial_value_analysis} uses SciPy's \textit{curve\_fit()} function to curve fit the points in the middle plot (\Cref{fig:ss:av:initial_value_analysis_run}). 
 
 Other packages that are used include collections, copy, warnings, itertools, os, datetime, json, gc, and time. 
 

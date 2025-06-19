@@ -4,15 +4,22 @@
 \section{Conclusion}
 \label{Conclusion}
 Understanding the relationship that phages have with bacteria and the environment is complex. 
-Even for a $1\times1\times1$ system, analyzing the system is already complex. 
-Not including $M$ and the initial infected bacteria population, The parameter space is 12 dimensions large. 
-Although far from large models, analyzing 12 unique parameters and their influence already takes effort. 
-Finding regions of interesting behavior that is worth analyzing takes time. 
-Using interactive graphs like what I created helps the user to look through the parameter spece to find interesting behavior and gain a deeper understanding of the model. 
-However even a simple change in the parameter input like in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} vs \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} shows vastly contrasting behavior, despite both graphs falling under the “good graph” category. 
+Even for a $1\times1\times1$ system, the system is already complex. 
+Not including $M$ and the initial infected bacteria population, the parameter input space is 12 dimensions large. 
+Although quite small in comparison to other larger models, analyzing 12 unique parameters and their interactions takes effort. 
+Finding parameter values that result in quality graphs is not the easiest task, although knowing the expected values and the biological relevance makes the task easier. 
+Finding a set of parameters that results in behavior that is worth analyzing takes time. 
+Using interactive graphs like what I created helps the user to look through the parameter space to find interesting behavior and gain a deeper understanding of the model. 
+However even a simple change in the parameter input like in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} vs \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} shows vastly contrasting behavior, despite both graphs being realistic. 
 
 Trying to expand an analysis into a $p\times b\times r$ system becomes even more complicated due to the interconnected nature of the entities. 
 With larger and larger systems small changes in a single parameter will not have big of an influence on the final output. 
+But if the parameter value does have an influence, it has a cascading effect on the whole network. 
+Increasing the infection rate of phage 1 will slow the growth of the bacteria 1. 
+With slower bacteria 1 growth, phage 2 is affected as there are less bacteria 1 to infect (assuming that phage 2 can infect bacteria 1). With lower phage 2 count, bacteria 2 can grow, using more resources. 
+The 
+
+
 And how do you change the parameter value of the vector or matrix representation? 
 If you want to chnage $\tau$ to $1.5$, how do you do that? 
 Do you only change one value in the vector or matrix, so for example $\tau = \begin{bmatrix} 1.43 & 0.98 & 1.13\end{bmatrix}$ becomes $\tau = \begin{bmatrix} 1.5 & 0.98 & 1.13\end{bmatrix}$? 
@@ -30,7 +37,7 @@ With the lab results, the model can be adapted to better fit the lab results.
 This can be done by changing parameter values, or by changing the model equation. 
 The user can decide to add the Monod microbial growth model to the growth of the bacteria, or adapt the Monod equation to being dependent on multiple sources. 
 Using the model, the technicians can improve and validate their methods. 
-If the empirical results significantly deviate from the model results, the technician can review to see if their method is good. 
+If the empirical results significantly deviate from the model results, the technician can review to see if their method is appropriate and follows protocol. 
 They might have accidentally not added enough resources, or accidentally miscalculated the initial concentration of bacteria. 
 
 \subsection{Other Models}
@@ -56,6 +63,13 @@ where $K$ is the carrying capacity. This adapted model, the logistic growth mode
 \Cref{fig:created:exponential_vs_logistic_growth} shows how the carrying capacity has a large influence on the speed and growth trajectory of a population. 
 The logistic curve initially follows the exponential curve before the maximum growth rate is reached and starts to slow down and taper off as the population asymptotically approaches the carrying capacity $K=200$. 
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{Plots/Created/exponential_vs_logistic_growth.png}
+    \caption{Exponential growth curve vs logistic growth}
+    \label{fig:created:exponential_vs_logistic_growth}
+\end{figure}
+
 A further step would be to introduce competition between other bacteria. 
 For example, a $p_{0, 1}\cdot P_0 \cdot P_1$ term can be subtracted from the logistic growth curve. 
 This term accounts for competition between Populace 0 and Populace 1, with $p_{0, 1}$ being the interaction factor between $P_0$ and $P_1$. 
@@ -73,7 +87,7 @@ Cocktail supports adding more phages at set times, but only at most three times.
 The model can be extended by allowing more times when phages can be added. 
 
 \subsubsection{Debris}
-Looking further into the debris and its effects would be a good next step in the project. 
+Looking further into the debris and its effects would be a next step in the project. 
 It was casually shown how adding a debris term increased the survivability of the bacteria populations, with showing on average a higher uninfected bacteria population, and lower uninfected and phage population count. 
 
 
@@ -104,13 +118,20 @@ Each box can be represented by a matrix, and the population value can be display
 
 \subsection{Lab Work}
 A next logical step would be to complete lab work to obtain curves that could be used to compare the simulation results with the lab results. 
-If the curves are significantly different than that of the ODE model, a new ODE model can be created. 
+If the curves are significantly different from that of the ODE model, a new ODE model can be created. 
 Curve fitting algorithms can be used to numerically find the interaction parameters for the new ODE model. 
-Using the simulation software would save time, money, and resources as less experiments would have to be run. 
-Being able to predict how the system will evolve for a specific input will help aid the researchers in understand the system. 
+Using the simulation software would save time, money, and resources as fewer experiments would have to be run. 
+
+The lab work would act as an important model validation step. 
+\citet{deyEmergentHigherorderInteractions2025} showed how their ODE model would eventually diverge from the lab-produced ODE curve. 
+They were able to achieve a better curve fit by adapting the model to include the debris term. 
 
 Future lab work can also include finding out which bacteria, phages, and resources are found in marine water via samples taken from the environment. 
-Building an interaction network would be the next step, along with experimentally finding out the interaction parameter values using experimental lab work or with curve fitting algorithms. 
+The next step would be to build an interaction network, along with experimentally finding out the interaction parameter values using experimental lab work. 
+Researchers can predict how the system would behave under new untested conditions, saving money and time. 
+It might also tell researchers if they made a mistake during testing. 
+If the model says the system should behave in one way, but the system acts differently, the researcher can review their methods and maybe make changes to how they run the experiments. 
+All in all, having a model that takes seconds to run will help aid researchers better understand the system. 
 
 \subsubsection{Environmental Modelling}
 Many results in research papers come from controlled lab settings. 
@@ -119,11 +140,3 @@ Collecting samples for over a year would create an ODE-like population curve of 
 This approach would provide deeper insights into the dynamics of bacteria and phage populations in natural environments, at the loss of control over conditions. 
 By continuously monitoring environmental factors such as hourly temperature, rainfall, and the concentrations of each entity, researchers can gain a deeper understanding of the causal relationships within the ecosystem.
 By conducting the experiment over the course of a year, short-term fluctuations in daily measurements are averaged out, resulting in a smoother overall curve.
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\linewidth]{Plots/Created/exponential_vs_logistic_growth.png}
-    \caption{Exponential growth curve vs logistic growth}
-    \label{fig:created:exponential_vs_logistic_growth}
-\end{figure}

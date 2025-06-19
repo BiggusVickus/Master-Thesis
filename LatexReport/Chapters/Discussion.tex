@@ -6,26 +6,40 @@ This section presents an analysis and discussion of the results.
 \Cref{tab:results:graph_behavior} presents illustrative examples rather than a comprehensive analysis. 
 The behaviors shown represent typical trends observed when varying each parameter in the specified direction, but they may not apply to all possible values or reflect the magnitude of changes. 
 Additionally, these results do not necessarily generalize to scenarios where two parameters are simultaneously varied. 
-\Cref{tab:results:graph_behavior} should be interpreted alongside the local $S1$ sensitivities from \nameref{sec:SOBOL_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
+\Cref{tab:results:graph_behavior} should be interpreted alongside the local $S1$ sensitivities from \Cref{sec:SOBOL_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
 
-\section{A Good Curve}
+Many parameter changes offered little substantial changes in graph behavior. 
+The changes were mostly minor with not a significant change noticed. 
+A change in parameter input would sometimes result in 50-100 fewer phages compared to the original reference graph. 
+The magnitude of change is roughly in line with the SOBOL results. 
+
+As an example take $\tau$ from \Cref{tab:results:graph_behavior} and \Cref{fig:created:SOBOL_no_wi_wo}. 
+I noted that for $\tau=3$ the phage and total bacteria peak was significantly later than for the default $\tau$ value of 2.14. 
+Likewise for $\tau=0.5$, the phage and total bacteria peak occurred significantly earlier than the reference graph. 
+Looking at $\tau$ in the Phage and Total Bacteria Peak Time figure, \Cref{fig:created:SOBOL_peak_time_no_wi_wo}, $\tau$ has a significant impact on the peak time. 
+
+A biologist would look at the growth curve and create their conclusions by visually looking at the curves and reasoning through the ODE model to explain the behavior. 
+A biologist can supplement this analysis with a SOBOL analysis to quantify how significant the change was, and compare a parameter's significance with other parameters. 
+
+\section{A Realistic Growth Curve}
 As the bacterial population grows, resource consumption accelerates until only trace amounts remain at $t=8$. 
 The delay between the peaks of uninfected and infected bacteria is due to the infection stages and the latent period of phage infection. 
-Each bacterium progresses from infection stage $k$ to $k+1$ at a rate of $\frac{M}{\tau}$. 
+Each bacterium transitions from infection stage $k$ to $k+1$ at a rate of $\frac{M}{\tau}$. 
 Therefore, decreasing the number of infection steps $M$ or increasing the latent period $\tau$ amplifies this delay. 
 A longer latent period means it takes more time for bacteria to progress through the infection stages.
 
 At $t=4$, the infection rate surpasses the bacterial replication rate, causing the bacterial population to decline even though resources are still available. 
 This moment coincides with the rise of the phage population. 
-Observing the timing of these events and changes in graph behavior, as well as their relationships across different graphs, helps clarify the complex population dynamics and the interdependence of the populations that might not be obvious from reading the ODE model. 
+Observing the timing of these events and changes in the graph's behavior, as well as their relationships across different graphs, helps clarify the complex population dynamics and the interdependence of the populations that might not be obvious from reading the ODE model. 
+The nature of the models being nonlinear makes the analysis harder to understand and conceptualize. 
 
-This becomes more difficult when the model goes from a $1\times1\times1$ system to a $p\times b \times r$ system. 
-Now up to any number of phages can interact with any number of bacteria, and any number of bacteria can interact with any number of resources at varying rates. 
+Understanding the system becomes more complicated as the model increases from a $1\times1\times1$ system to a $p\times b\times r$ system. 
+Now up to any number of phages can interact with any number of bacteria, and any number of bacteria can interact with any number of resources, each with their own unique parameter values. 
 These varying rates will significantly influence the dynamics of the system, and make it hard to determine what event caused what due to the rise in number of interactions.
-For a $1\times1\times1$ system, there are 2 interactions that can occur (assuming no self interactions, and that phages don\t interact with the resources). 
+There are only 2 interactions that occur in a $1\times1\times1$ system. 
 With a $p\times b\times r$ system, there are $\mathcal{O}(p\cdot b + b\cdot r)$ interactions that can occur. 
-So for a $3\times2\times3$ system, there are at most 12 interactions occurring. 
-12 events can occur at the same time, making it hard to identify the cause of the event. 
+So for a $3\times2\times3$ system, there are at most 12 interactions that can occur, assuming there are no self interactions and interactions between the same entity group. 
+Twelve individual events occurring at the same time makes it hard to identify the cause of the event, and how the event's action will propagate through the network. 
 
 \section{SOBOL Sensitivity}
 SOBOL, when mixed with a qualitative analysis can provide insight into why when a parameter changes, the output changes as it does. 
@@ -43,11 +57,11 @@ Trying to accurately quantify these changes for multiple parameters takes time, 
 A data scientist or modeler might use SOBOL to quantify these changes, and use the analysis from the biologist to gain a better oversight. 
 The data scientist would be able to understand if the change in output value occurred because of that specific parameter of if it is a combination of parameters. 
 The data scientist might not know if changing $\tau$ would result in more or less bacteria, but they would know that $\tau$ has an important role for the total bacteria population, but less so for resources. 
-Then using the biologist's interpretation, they can piece together that changing $\tau$ to a larger number wont affect the resource cosnumption much, but that the bacteria population will show a significant increase in bacteria population. 
+Then using the biologist's interpretation, they can piece together that changing $\tau$ to a larger number won't affect the resource consumption much, but that the bacteria population will show a significant increase in bacteria population. 
 
 \subsection{Final Value Analysis}
 \subsubsection{Resources}
-For most simulations, all resources no matter the initial value, will have been used up before the end of the simulation. 
+In most simulations, the system consumes all resources, regardless of the initial value, before the end of the simulation.
 So on average, the final value for resources will be 0. 
 This explains why the resource sensitivity is so high. 
 There are some combinations of parameters that when chosen, will result in not all the resources being used up. 
@@ -71,8 +85,8 @@ More resources allow bacteria to grow for a longer time, allowing more bacteria 
 $\tau$ determines the infection process. 
 The larger $\tau$ is, the longer it takes for the bacteria to lyse and create new phages to infect other bacteria. 
 $\beta$ has a very important role in determining the final bacteria population, but surprisingly $r$ has no role in determining the final bacteria population. 
-$e$ determines how fast the resources are consumed. 
-The larger $e$ is, the faster the resources are being consumed and depleted. 
+$e$ determines the resource consumption rate. 
+The larger $e$ is, the faster the depletion rate of the resource. 
 So by lowering $e$, more bacteria will be created, and the time at which the bacteria peak at occurs later in time. 
 Of course as $\beta$ changes value, it will have a large influence on the final bacteria population. 
 More phages will cause more infections, slowing the spread of bacteria. 
@@ -139,8 +153,9 @@ So the time to phage peak also decreases as the initial uninfected bacteria decr
 As the uninfected bacteria decreases from 25 towards 1, it takes longer for the bacteria to grow and reach their peak population count. 
 At these initial bacteria concentration levels, there is enough resources to fully sustain the bacteria through the whole simulation. 
 For uninfected bacteria less than 25, the system enters a new sort of restriction, where the system experiences a delayed in infection due to low encounter rates. 
+
 The transition rate from $U$ to $I_1$ is proportional to $U\cdot P$. 
-With low initial starting bacteria, fewer bacteria are initially infected. 
+Fewer bacteria are initially infected with a low initial starting bacteria. 
 If the phages can't infect the bacteria, the later infection stages are delayed due to the slow infection process. 
 There could be a threshold for phage to uninfected bacteria where a certain dilution rate will significantly affect the peak time. 
 This value could be around $\frac{\text{initial phage}}{\text{initial bacteria}} = \frac{10}{25} = 0.4$ as at around 25 uninfected bacteria is when the system switches from latency limited to the new limited regime. 
@@ -148,30 +163,34 @@ The bacteria have a longer amount of time to grow as there is a low infection ra
 This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
 As the bacteria population drives the phage population, an increase in bacteria time of peak causes an increase in phage time of peak. 
 
-\section{Phase Portrait}
+\section{Phage Proliferation}
+\subsection{Phase Portrait}
 There is non-linear trade-off between initial resources and initial phages when there is washout included. 
 The washout non-linearly affects if the phages proliferate or not. 
-The higher the washout, the harder it would be for the phages to proliferate. 
-Phage populations are coupled to bacteria populations which are coupled to resource populations. 
-By varying the initial resource concentration, the bacteria growth rate is affected. 
+The bigger the washout value, the harder it is for the phages and bacteria to proliferate. 
+The bacteria couple the phage populations to resources, so changes in initial resource concentration will have an effect on the final phage value. 
+Increasing the initial resource concentration creates more bacteria, while decreasing it results in fewer bacteria.
+More bacteria ultimately produce more phages, while fewer bacteria ultimately result in fewer phages.
+While SOBOL with washin and washout, \Cref{fig:created:SOBOL_peak}, showed that the final value for phages due to changes in initial resource input values is limited (sensitivity $\approx 0.1$), it still has an impact. 
 
-For low initial resource concentration values, values below $10$ the resource, the monod curve is below the half-velocity constant (the velocity $v$ is 1 and $K$ is 10). 
-The bacteria are restricted by the resources and can't grow quickly. 
-So more phages are needed to grow. 
-As N increases towards $K=10$, the bacteria can grow faster. 
-Since $K$ is small, a small change in $R$ causes a relatively large change in the monod rate. 
-This is noticed by the very steep downward line to the left of the minimum. 
+For low initial resource concentration values, values below $10$ the resource, the Monod curve is below the half-velocity constant (the velocity $v$ is 1 and $K$ is 10). 
+The lack of resources restricts the bacteria growth, and the bacteria can't grow quickly. 
+As the resource concentration increases towards $K=10$, the bacteria can grow faster. 
+Since $K$ is small, a small change in $R$ causes a relatively large change in the Monod rate. 
 
-At around the minimum, the behavior changes. 
-At $R\equiv 6$, the monod rate reaches half of its max velocity. 
-It should be 10, but the washout must have an effect on the monod rate, artificially shifting the point where the half velocity occurs from $K=10$ to $K=6$. 
+At around the minimum in the phage proliferation boundary, the behavior changes. 
+At $R\approx 7$, the Monod rate reaches half of its max velocity. 
+This behavior should be seen at around 10, but the washout has an effect on the Monod rate by artificially shifting the point where the half velocity occurs from $K=10$ to $K\approx 7$. 
+$10\cdot 0.98^{15} = 7.386$
+
+
 
 As $R$ increases from $K$, the bacteria are not limited by the nutrients anymore and can grow faster. 
 However, as $R$ increases beyond $K$, each additional unit of $R$ results in a diminishing increase in the Monod rate, which asymptotically approaches its maximum velocity. 
 As bacteria grow according to the Monod equation $g(N, v, K)$, the phage population dynamics remain tightly coupled to bacterial growth. 
 
-Phage proliferation becomes a race against time. 
-If the phage growth rate is not fast enough to initially beat the washout removal rate, or the infected bacteria are washed out before lysing, the phages can not proliferate. 
+Phage proliferation becomes a race against time under external pressure. 
+The phages will not proliferate if the phage growth rate is not fast enough to initially beat the washout removal rate, or the infected bacteria are washed out before lysing. 
 
 \subsection{3D Plot}
 It is not possible to see inside the matrix, but using the color on the outside can give some insights into the behavior happening inside the matrix. 

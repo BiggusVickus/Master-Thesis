@@ -1,7 +1,7 @@
 \chapter{Appendix E: Parameter Values Used}
 \label{AppendixE}
 
-\section{A Good Curve}
+\section{Realistic Growth Curves}
 \label{sec:appendixE:a_good_curve}
 \begin{table}[ht!]
     \small % or \footnotesize to make it more compact
@@ -48,7 +48,7 @@
     \label{tab:appendixE:a_good_curve}
 \end{table}
 
-\section{A Good Curve 2}
+\section{A Second Realistic Growth Curve}
 \label{sec:appendixE:a_good_curve_2}
 
 \begin{figure}[ht!]
@@ -58,7 +58,7 @@
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
         \caption{
-            A second curve for “a good curve”, linear y-axis. 
+            A second realistic growth curve, linear y-axis
         }
         \label{fig:created:a_good_curve_linear_2}
     \end{subfigure}
@@ -68,7 +68,7 @@
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
         \caption{
-            A second curve for “a good curve”, logarithmic y-axis. 
+            A second realsitic growth curve, logarithmic y-axis. 
         }
         \label{fig:created:a_good_curve_logarithmic_2}
     \end{subfigure}
@@ -118,7 +118,7 @@
         \bottomrule
     \end{tabularx}\newline
     \caption{
-        Another set of “good” curves. 
+        Another set of realistic growth curves. 
         The linear and logarithmic plot of this data can be seen in \Cref{fig:created:a_good_curve_2}
     }
     \label{tab:appendixE:a_good_curve_2}
@@ -163,13 +163,14 @@
     \begin{tabularx}{\textwidth}{l l l l l}
         \toprule
         Other Data\\
-        \textbf{Seed Value} & \textbf{2nd Order} & \textbf{Number Samples} & \textbf{Simulations Run} & \textbf{Simulation Lenght}\\
+        \textbf{Seed Value} & \textbf{2nd Order} & \textbf{Number Samples} & \textbf{Simulations Run} & \textbf{Simulation Length}\\
         \midrule
-        0 & False & 15 & $2^{15}(11+2) = 425984$ & 15\\
+        0 & False & 15 & $2^{15}(9+2) = 360448$ & 15\\
         \bottomrule
     \end{tabularx}\newline
     \caption{
-        The parameter values used for the SOBOL sensitivity analysis in \Cref{fig:created:SOBOL_no_wi_wo} and \Cref{fig:created:SOBOL_analyses}. 
+        The parameter values used for the SOBOL sensitivity analysis in \Cref{fig:created:SOBOL_no_wi_wo} (SOBOL analysis without washin and washout) and \Cref{fig:created:SOBOL_analyses} (SOBOL analysis with washin and washout). 
+        For SOBOL analysis with washin and washout, there are $2^{15}(9+2) = 425984$ unique simulations run. 
     }
     \label{tab:appendixE:SOBOL_analysis_values}
 \end{table}

@@ -476,12 +476,6 @@
           <attvalue for="4" value="0" />
         </attvalues>
       </edge>
-      <edge source="P11" target="B5" id="16">
-        <attvalues>
-          <attvalue for="3" value="Burst_Size: 21&#10;r: 0.07797860355989918&#10;" />
-          <attvalue for="4" value="0" />
-        </attvalues>
-      </edge>
       <edge source="P12" target="B10" id="17">
         <attvalues>
           <attvalue for="3" value="Burst_Size: 92&#10;r: 0.05147486232710773&#10;" />
@@ -635,12 +629,6 @@
       <edge source="B12" target="R7" id="42">
         <attvalues>
           <attvalue for="3" value="v: 1.3221347868331241&#10;e: 0.0868725191651045&#10;K: 114.34255462538424&#10;" />
-          <attvalue for="4" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="B12" target="R6" id="43">
-        <attvalues>
-          <attvalue for="3" value="v: 1.152621860785473&#10;e: 0.05061990821687737&#10;K: 153.35270548578907&#10;" />
           <attvalue for="4" value="0" />
         </attvalues>
       </edge>

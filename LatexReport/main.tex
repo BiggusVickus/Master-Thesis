@@ -49,8 +49,8 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-% \documentclass[11pt, oneside, draft]{Thesis}
-\documentclass[11pt, oneside, final]{Thesis}
+\documentclass[11pt, oneside, draft]{Thesis}
+% \documentclass[11pt, oneside, final]{Thesis}
 
 \graphicspath{{Images/}} 
 \usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers' 
@@ -232,30 +232,36 @@ Date: \today\\
 %----------------------------------------------------------------------------------------
 \addtotoc{Abstract} 
 \abstract{\addtocontents{toc}{\vspace{1em}} 
-    The interactions between phages, bacteria, resources, and the environment are complex. 
-    Not much is known about how phages interact with bacteria and their surroundings. 
-    There is a need to mathematically model phage and bacteria populations, but current models can only model 1 or 2 phages, bacteria strains, and resources. 
-    In the marine ecosystem, there can be hundreds of different phages and bacteria interacting with one another. 
-    These individual interactions have a greater implication on the ecosystem. 
-    Phages have been shown to influence bacteria's population fitness levels by introducing mutations and forcing bacteria to adapt to external stressors. 
-    Phages have also been shown to influence the resource recycling process. 
-    Upon lysing, bacteria release resources into the environment that other bacteria, plants, and animals can use. 
+    In any given microbial ecosystem, there can be hundreds of different phages and bacteria interacting with one another in a complex system. 
+    These individual interactions have a significant impact on the bacterial community and the overall ecosystem, with important ecological consequences. 
+They force bacteria to mutate and evolve, changing the community fitness level. 
+    Phages can control bacterial populations, ensuring that dangerous bacteria do not over-reproduce and harm the ecosystem. 
+    Phages control bacterial population dynamics using the “kill-the-winner” dynamic, preventing any one species from dominating.
+    Upon lysis, bacteria release resources into the environment that other bacteria and plants can use. 
 
-    I created a program to create a tool that will create a network representation of the model's interactions. 
-    The graph network stores interactions and model parameters such as initial population and reaction rates, as well as environmental conditions like temperature and pH. 
-    I also created a simulation framework that can mathematically model the phage, bacteria, and resource population with the provided network, with a user-provided ODE model. 
-    The user can interact with the framework with a custom-built dashboard. 
-    Using the tools, a user can upload a self-implemented ODE model and network model to a dashboard and a self-implemented ODE model and interactively run simulations on the model. 
-    The user can, for example, change the initial resource concentration or how fast a phage infects a bacterium from the dashboard and immediately see how the change affects the simulation. 
-    The user can interact with five prebuilt plots. 
-    The user can run the simulations and save the results to their disk to create their own custom analyses and plots. 
+    There is a need to mathematically model complex systems, but current models typically only model 1 or 2 phages and bacteria. 
+    It is, however, straightforward to extend the model to multiple species. 
+    Mathematically modeling large bacterial communities is important because running lab experiments takes time and is costly. 
+    These simulations can guide future lab work, for example, in combating antibiotic-resistant bacteria. 
 
-    Finally, I analyze the Golding model from \citet{gengUsingBacterialPopulation2024}. 
-    I qualitatively analyze the model's behavior and use a SOBOL analyses to quantitavely assign a value to the model's variance in output form the models input. 
-    When using both methods, a greater understanding of the model is acheived. 
-    By varying the initial uninfected bacteria population, the model can become adsorption or latency limited. 
-    Knowing if a phage population will proliferate in a laboratory context while facing constant washout is important to ensure that the phage population is not wiped out. 
-    Given the context of large communities, knowing if phages and bacteria can coexist under various conditions is important, so a co-existence analysis is done and analyzed. 
+    I created a program consisting of three parts that can model complex communities of $p$ phages, $b$ bacteria, and $r$ resources. 
+    The first part uses a GUI tool to create and edit the interactions between the phages, bacteria, and resources using a graph network. 
+    The nodes and edges hold the interaction and environmental parameter values. 
+    The second part, the simulation framework itself, models and calculates the phage, bacteria, and resource population levels with the user-provided network and ODE model. 
+    The third part allows the user to interact with the simulation framework with a custom-built dashboard. 
+    The user can, for example, change the parameter values from the dashboard and immediately see how the change affects the simulation. 
+    There are five pre-built plots that the user can interact with. 
+    It is possible to download the simulation results so that the user can create custom analyses and plots. 
+
+    I apply this process to the Golding model from \citet{gengUsingBacterialPopulation2024}. 
+    I qualitatively analyze the model's behavior and use a SOBOL analysis to quantitatively assign a value to the model's variance in output from the model's input. 
+    In addition, understanding the different regimes of restriction in phages, as well as the factors that drive reaction rates and determine the rate-limiting steps, is crucial.
+    By varying the initial uninfected bacteria population, the model can interpolate between two limiting scenarios, adsorption and latency limited. 
+    It is important to determine whether a phage population will proliferate in a laboratory context under constant washout to prevent the phage population from accidentally being wiped out. 
+    I run an analysis to see if phages will proliferate or die out depending on the initial condition. 
+    Finally, I perform and analyze a co-existence analysis on a large 20-phage, 20-bacteria, and 10-resource community to determine whether phages and bacteria can coexist under various conditions. 
+    I find that in large communities, phages and bacteria can coexist. 
+    If a debris term is introduced, the bacteria's survivability rate increases.
 
 % Include your abstract here 
 % Abstracts must include sufficient information for reviewers to judge the nature and significance
@@ -373,7 +379,7 @@ Date: \today\\
 
 % \lhead{\emph{Symbols}} 
 
-% A table of Symbols and Parameter Values can be viewed in \nameref{AppendixA} and \nameref{AppendixE}. 
+% A table of Symbols and Parameter Values can be viewed in \Cref{AppendixA} and \Cref{AppendixE}. 
 % \listofnomenclature{lll} % Include a list of Symbols (a three column table)
 % {
 % $a$ & distance & m \\

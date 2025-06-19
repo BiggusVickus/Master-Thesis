@@ -11,3 +11,8 @@
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThank you to Sarah Flickinger for showing me the research that she has been doing in the lab.\\E$"}
 {"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThe Spackle protein inhibits the lysozyme activity used in the process of DNA injection by other phages \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
 {"rule":"EN_UNPAIRED_BRACKETS","sentence":"^\\QFigure A) E. coli infected with phage T4 in a chemostat exhibiting an oscillating growth behavior, following the model of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"WORD_CONTAINS_UNDERSCORE","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q should be interpreted alongside the local \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q sensitivities from sec:SOBOL_sensitivity_analysis_results to better understand how sensitive the output is to specific parameters and the potential impact of their variation.\\E$"}
+{"rule":"EN_UNPAIRED_BRACKETS","sentence":"^\\QThe default values for Figure a) and b) can be found at \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"CD_NN","sentence":"^\\QFinally, in the context of large communities, analyzing whether phages and bacteria can coexist under various conditions is crucial, so I perform and analyze a co-existence analysis on a large 20 phage, 20 bacteria, and 10 resource community.\\E$"}
+{"rule":"THREE_NN","sentence":"^\\QThe second option is that the phage immediately directly hijack the DNA replication process and will create copies of the phage DNA This process defines the Lysogenic cycle.\\E$"}
+{"rule":"THREE_NN","sentence":"^\\QThe second option is that the phage immediately enters the Lytic cycle by immediately hijacking the DNA replication process in order to create copies of the phage DNA.\\E$"}

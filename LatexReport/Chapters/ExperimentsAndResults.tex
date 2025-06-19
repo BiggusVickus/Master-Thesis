@@ -81,7 +81,7 @@ $M$, the number of stages that the infection goes through, can not be tested as 
 As such, it is not possible to change $M$ without rerunning the program from the very start. 
 The washin rate and washout rate consistently had the largest influence on the final, peak value, and time of peak value, using the 95\% rule. 
 Washin and washout significantly skewed the results and analysis and warrants an analysis without washin and washout. 
-The results for a SOBOL analysis with washin and washout can be found in \nameref{sec:AppendixF:sobol_analysis_with_washin_and_washout}. 
+The results for a SOBOL analysis with washin and washout can be found in \Cref{sec:AppendixF:sobol_analysis_with_washin_and_washout}. 
 
 
 \subsection{Final Value Results}
@@ -147,7 +147,7 @@ The only parameter that does not influence the time of peak is $e$, otherwise ev
     \end{subfigure}
     \caption{
         SOBOL analyses for the final, peak, and time of peak value, without a washin and washout rate.
-        The input value ranges to test each parameter used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}, except washin and washout was set to 0. 
+        The input value ranges to test each parameter used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}, except washin and washout is 0. 
     }
     \label{fig:created:SOBOL_no_wi_wo}
 \end{figure}
@@ -157,7 +157,7 @@ The only parameter that does not influence the time of peak is $e$, otherwise ev
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} illustrate how varying the initial uninfected bacteria population from 1 to 500 (using 100 different starting values) affects the dynamics and time of peak population of phage and total bacteria populations using the 95\% rule. 
 
-\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates Figure 1 of \citet{mullaExtremeDiversityPhage2024} perfectly. 
+\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} perfectly replicates Figure 1 of \citet{mullaExtremeDiversityPhage2024}. 
 As the initial bacteria population increases, the time to reach the phage and bacteria sum peak decreases, following $y = -0.8648\cdot ln(x) + 9.7911$ and $y = -1.0056\cdot ln(x)+7.7626$, with $R^2=0.9800, 0.9988$ respectively. 
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} on the other hand shows different behavior. 
@@ -165,7 +165,6 @@ As the initial bacteria population decreases from 500 to 100, the same behavior 
 There is a change in behavior at 100 and less initial uninfected bacteria. 
 Instead of following the predicted line like in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}, the curve for the phages suddenly decreases, following a quadratic like curve. 
 The bacteria on the other hand plateau before starting to increase again. 
-Both curves resemble a spoon-like shape. A straight handle with a “bowl” to hold the liquid. 
 The fitted curves follow $y = -0.1292\cdot ln(x) + 10.1462$ and $y = -0.6234\cdot ln(x)+6.9602$, with $R^2=0.5406, 0.9206$ respectively. 
 Despite the large bacteria sum $R^2$ value, the fitted curve does not fit the data. 
 
@@ -192,28 +191,28 @@ Despite the large bacteria sum $R^2$ value, the fitted curve does not fit the da
         \label{fig:created:initial_value_analysis_UB_50_500_a_good_plot}
     \end{subfigure}
     \caption{
-        Varying initial Uninfected Bacteria concentration, from 50 to 500, with 30 unique values tested over two different instances of “good” curves. 
-        Even with two “good” curves, even varying the default parameter values a tiny bit can have a large influence on how changing the initial bacteria concentration can have an influence on the dynamics of the system, changing the behavior of the peak time. 
+        Varying the initial uninfected bacteria concentration, from 50 to 500, with 30 unique values tested. 
+        Varying the default parameter values a can have a large influence on how changing the initial bacteria concentration influences the dynamics of the system. 
         The default values for Figure a) and b) can be found at \Cref{tab:appendixE:a_good_curve} and \Cref{tab:appendixE:a_good_curve_2}. 
     }
 \end{figure}
 
-\section{Phase Portrait}
+\section{Phage Proliferation}
 \label{sec:results:phase_portrait}
+\subsection{Phase Portrait}
 \Cref{fig:created:phase_portrait_resources_245-265_phages_25-26} shows a phase portrait varying the initial resource and phage concentration. 
-For phages that start above 25.98, the phage population can proliferate (until the washout would eventually remove the phages). 
+The same initial phage values have the same color for the line. 
+For phages that start above 25.98, the phage population can proliferate until the washout would eventually remove the phages. 
 For phage populations that start below 25.98, the washout removes the phages before the phages had time to infect and kill the bacteria. 
 Both regions of phages exhibit consistent behavior, of either going to 0 or proliferating. 
 If the phage population started at exactly 25.98, if the initial resources was 260 or above, the phages died out. 
-These interesting dynamics warrant a phage proliferation analysis. 
+If the initial resource value was 255 or below, the phages proliferated. 
 
 \subsection{2D Phage Proliferation}
-If the initial resources was 255 or below, the phages would proliferate. 
-Expanding on these results by simulating more initial values creates \Cref{fig:created:phase_portrait_resources_phage}. 
+\Cref{fig:created:phase_portrait_resources_phage} expands on the phase portrait by simulating more values and coloring the square depending on if the phages proliferated or not. 
 The initial resource values span from 1 to 500, and the initial phage values range from 25.5 to 26.5, each with 100 unique values sampled.
-Each cell is a unique set of initial conditions. 
-If the phages proliferated for that condition, the box is colored red. 
-In this case, proliferated means that the phage population reached at least 2 times the initial condition. 
+The box is colored red if the phages proliferated for that condition. 
+Proliferated is defined as the phage population reached at least 2 times the initial condition. 
 If the box is white, it means the phages died out before being able to reach 2 times its initial concentration. 
 A boundary between the nonproliferating and proliferating phages can be curve-fit following $y=\frac{86.756x}{15.811+x} - 10.241$ with an $R^2$ value of 0.994. 
 
@@ -284,7 +283,7 @@ When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix} NaN & 0
 For the cells that don't have an edge between $p$ and $b$ or between $b$ and $r$, the data is represented as $NaN$, short for “Not a Number”, \textit{np.NaN}, 
 
 The columns and rows of each figure makes it easy to compare how a change in parameter value affects the curve, while keeping the other parameter the same. 
-In $r, \beta, \omega^o=inf, inf, 0$, although not a “good curve” due to limited resource consumption and limited bacterial and phage growth, really shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population (P0=blue, P1=green, and P2=purple). 
+In $r, \beta, \omega^o=inf, inf, 0$, although not realistic, really shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population (P0=blue, P1=green, and P2=purple). 
 Despite all phages starting at the same population level, within the first two or so time units, P1 has less phages than P0 and P2. 
 P2 has the fastest initial growth rate, as P2 has the most phages until $t=4$, at which point P1 has a larger phage population. 
 P2 reaches its peak population count before P0 or P1, but despite the slower initial growth, P0 and P1 eventually overtake P2 in total phage population. 
@@ -350,15 +349,17 @@ When spliced on the Resource values near 1, there is the decreasing edge of Phag
 \end{figure}
 
 \section{Phage, Bacteria, and Resource Survivability For a $20\times20\times10$ System}
-Leveraging the simulation framework, $20\times20\times10$ system can be created and analyzed. 
-Two parameters, $r$ and $e$ have been chosen to run a survivability analysis. 
-There are 20 phages and bacteria, and 10 resources. 
-Each phage is guaranteed to interact with at least one bacterium, each bacteria is guaranteed to interact with at least phage and resource, and each resource is guaranteed to interact with at least one bacterium. 
-The parameter values were randomly selected from a uniform distribution, with the values chosen in the ranges used for the SOBOL analysis, \Cref{tab:appendixE:SOBOL_analysis_values}. 
-A phage, bacteria or resource survived if at the end of the simulation the ending population value was greater than 1. 
-As washout is included, there is a chance that if the simulation kept on running everything would be removed. 
-In the default selected parameter values, there is exactly one bacteria that manages to survive, while the others all die out. 
-This can be seen in \Cref{fig:created:large_graph_output}. 
+
+
+Using the simulation framework, we created and analyzed a $20\times20\times10$ system. 
+We selected two parameters, $r$ and $e$, to run a survivability analysis. 
+Each phage is guaranteed to interact with at least one bacterium but no more than tow bacterium, each bacterium interacts with at least one phage and one resource, but not more than two phages and resources, and each resource interacts with at least one bacterium, but can interact with more than two bacteria. 
+We randomly selected parameter values from a uniform distribution within the ranges used for the SOBOL analysis (\Cref{tab:appendixE:SOBOL_analysis_values}). 
+We considered a phage, bacterium, or resource to have survived if its final population exceeded 1 at the end of the simulation. 
+Continued simulation could eventually remove all entities from the system due to the washout. 
+
+In the default selected parameter values, there is exactly one bacteria population that manages to survive, while the others all die out. 
+This can be seen in \Cref{fig:created:no_debris_model}. 
 Of the 20 starting phages, 19 phages survived until the end of the simulation. 
 
 \begin{figure}[]
