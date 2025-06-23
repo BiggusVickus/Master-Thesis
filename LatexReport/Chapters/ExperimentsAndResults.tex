@@ -1,15 +1,111 @@
 \chapter{Experiments and Results}
 \label{AER}
-This section presents the various experimental results obtained. 
 
-\section{Graph Behavior}
-\Cref{tab:results:graph_behavior} qualitatively elaborates how a change in parameter value changes the shape and population level of the populations. 
-\Cref{fig:created:a_good_curve_linear} is used as a “ground truth”.  
-The default values for \Cref{fig:created:a_good_curve_linear} can be found in \Cref{tab:appendixE:a_good_curve}. 
-The default value can also be found in the “Parameter” column, while the tested value is found in the “Tested Value” column. 
-Each parameter was individually changed to a higher and lower value from the reference value, and the visual changes are noted in \Cref{tab:results:graph_behavior}. 
-This table is not meant to be exhaustive, cover edge cases, or extreme cases, or cover every exact detail and change in the population graph. 
-The table is rather to give an idea of how a change in parameter influences the graph shape, such as the rate of resource depletion, maximum number of bacteria and phages, and change in peak time. 
+In the following section I will apply the software to demonstrate the predicted dynamics of the phages and bacteria under different conditions. 
+I first begin with analyzing the model using a SOBOL analysis on the simple Golding model, \Cref{eq:golding_model}. 
+Using the most important parameters identified from the SOBOL analysis, I run multiple IVAs to describe the change in graph behavior for different inputs. 
+I use the information gained from this to describe how the graphs change for a wide range of inputs. 
+Next, I analyze if phages will proliferate or not depending on the initial phage, uninfected bacteria, and resource concentration. 
+I finally extend the analyses to a large community and analyze how changing parameter values will change the phage and bacteria growth, and if the phages and bacteria can coexist or not. 
+
+\section{SOBOL Sensitivity Analysis Results}
+\label{sec:SOBOL_sensitivity_analysis_results}
+The SOBOL method is a global sensitivity analysis technique that quantifies the contribution of each input parameter, as well as their interactions, to the variance of a model's univariate output. 
+It decomposes the output variance into fractions attributed to individual parameters and their combinations, providing first-order and total-order sensitivity indices.
+A SOBOL analysis identifies the most influential parameters affecting model output. 
+The insights from this analysis inform the selection of key parameters for subsequent simulations, ensuring that further investigations focus on those with the greatest impact.
+
+\Cref{fig:created:SOBOL_final_no_wi_wo} shows the impact that the parameter had on the final value of the population at $t=15$ for a $1\times 1\times 1$ system, on the original Golding model, \Cref{eq:golding_model}. 
+\Cref{fig:created:SOBOL_peak_no_wi_wo} shows the impact that the parameter had on the peak population count, using the 95\% rule. 
+\Cref{fig:created:SOBOL_peak_time_no_wi_wo} shows the impact that the parameter had on the time of the peak, using the 95\% rule. 
+
+The parameters that were tested include all the parameters listed in the basic Golding model, except for the uninfected bacteria $(I_1, \dots, I_4), M, \omega^i,$ and $\omega^o$. 
+Infected bacteria was not included as it doesn't make sense to start with infected bacteria to the system. 
+$M$, the number of stages that the infection goes through, can not be tested as SOBOL as $M$ is an integer, while SOBOL randomly chooses float values. 
+While testing, the washin rate $\omega^i$ and washout rate $\omega^o$ consistently had the largest influence on the final, peak value, and time of peak value, using the 95\% rule. 
+Washin and washout are not part of the original model from Golding, and the addition of a washin and washout term significantly skews the results and analysis, so it was left out of the analysis. 
+The results for a SOBOL analysis with washin and washout can be found in \Cref{sec:AppendixF:sobol_analysis_with_washin_and_washout}. 
+
+\subsection{Resources}
+The final value for the resources depended heavily on the initial resource concentration. 
+There weren't many interactions with other parameters because $ST \gg S1$. 
+$e$ had little influence on the system despite $e$ acting as the link between the resources and bacteria and directly controlling the rate of resource consumption. 
+$\tau$ had a larger influence in the final resource value than $e$. 
+
+The peak value and time of peak value graphs are empty for the SOBOL indices for Resources as the resource concentration is always decreasing from different initial conditions, the initial resource always had a peak at $t=0$. 
+
+\subsection{Phages}
+The final phage population value depended on $r$ the most, with $\beta$ as the second most important parameter influencing the final population value. 
+The other parameters had little to no influence on the final phage population levels. 
+
+The SOBOL peak value plot is basically the same as the final population value. 
+Similar to the final value, the phage max value is highly dependent on the value of $r$ and $\beta$, and the other parameters had little to no influence on the peak value for the phages. 
+
+For the time of peak value, $\tau$ becomes the most important parameter for determining the time of peak value, while $r$ isn't as important anymore. 
+The initial phage population has a small influence on the final population value, about as equally important as $r$. 
+$\beta$ roughly maintains the same sensitivity value across the final, peak, and time of peak analyses. 
+
+\subsection{Total Bacteria}
+The final total bacteria population depended mostly on $\beta$, the burst size of the phage, but via many second or there are many higher order interactions occurring as $ST \gg S1$. 
+The final population depended heavily on many higher order interactions with the initial resource concentration, $\tau$, and $e$. 
+
+$\beta$ is still the most important parameter to the model, but instead of $ST$ and $S1$ being equal to 1 and 0.28 like in the final value, the sensitivity value is only 0.54 and 0.16 respectively. 
+Every parameter plays some influence on the output, but with higher order interactions as for all parameter inputs, $ST > S1$. 
+
+$\beta$ and $\tau$ are the two most important factors in determining the time of peak for the total bacteria. 
+The only parameter that does not influence the time of peak in some manner is $e$, otherwise every parameter has some sort of influence on the time at which the bacteria population peaks. 
+
+\subsection{Results}
+Some results are surprising. 
+$e$, $v$, and $K$ are consistently the least important factor in determining the final value, peak value, and time of peak. 
+It would be expected that changing the parameter values that directly affect the bacterial growth would have a large impact on the resources and phages. 
+More bacteria mean more resources are consumed, and more phages are created. 
+Knowing that $e$, $v$, and $K$ are relatively unimportant compared to a parameter like $r$ or $\tau$, future analyses do not have to focus on $e$, $v$, and $K$. 
+As $\beta$, $r$, and $\tau$ are relatively important, future analyses could focus on how those parameters influence the growth of phages and bacteria. 
+
+
+\begin{figure}[ht!]
+    \centering
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Final_(no_washin_and_washout).png}
+        \caption{
+            Final value, no washin and washout. 
+        }
+        \label{fig:created:SOBOL_final_no_wi_wo}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Peak_(no_washin_and_washout).png}
+        \caption{
+            Peak population value, no washin and washout. 
+        }
+        \label{fig:created:SOBOL_peak_no_wi_wo}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Peak_Time_(no_washin_and_washout).png}
+        \caption{
+            Time of peak value, no washin and washout. 
+        }
+        \label{fig:created:SOBOL_peak_time_no_wi_wo}
+    \end{subfigure}
+    \caption{
+        SOBOL analyses for the final, peak, and time of peak value, without a washin and washout rate.
+        The input value ranges to test each parameter used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}, except washin and washout is 0. 
+    }
+    \label{fig:created:SOBOL_no_wi_wo}
+\end{figure}
+
+\section{Graph Behavior with IVA}
+\Cref{fig:created:a_good_curve_linear} is used as a “ground truth” for what a researcher would aim to replicate in a lab.  
+\Cref{tab:results:graph_behavior} quantitatively elaborates how a change in parameter value across multiple values changes the shape of the population curves. 
+Only the most important parameters identified in the SOBOL section, will be analyzed, so initial resource concentration, $\tau$, $r$, and $\beta$. 
 
 \begin{table}
     \footnotesize
@@ -68,90 +164,6 @@ The table is rather to give an idea of how a change in parameter influences the 
     \label{tab:results:graph_behavior}
 \end{table}
 
-\section{SOBOL Sensitivity Analysis Results}
-\label{sec:SOBOL_sensitivity_analysis_results}
-
-\Cref{fig:created:SOBOL_final_no_wi_wo} shows the impact that the parameter had on the final value of the population at $t=15$ for a $1\times 1\times 1$ system. 
-\Cref{fig:created:SOBOL_peak_no_wi_wo} shows the impact that the parameter had on the peak population count, using the 95\% rule. 
-\Cref{fig:created:SOBOL_peak_time_no_wi_wo} shows the impact that the parameter had on the time of the peak, using the 95\% rule. 
-
-The parameters that were tested include all the parameters listed in the basic Golding model, except for Uninfected Bacteria, $M$, washin, and washout. 
-Uninfected Bacteria was left out as it doesn't make sense to start with infected bacteria to the system, and infected bacteria go from state to state in a constant uniform manner. 
-$M$, the number of stages that the infection goes through, can not be tested as $M$ hard-codes the array size of the uninfected bacteria before the simulation framework starts. 
-As such, it is not possible to change $M$ without rerunning the program from the very start. 
-The washin rate and washout rate consistently had the largest influence on the final, peak value, and time of peak value, using the 95\% rule. 
-Washin and washout significantly skewed the results and analysis and warrants an analysis without washin and washout. 
-The results for a SOBOL analysis with washin and washout can be found in \Cref{sec:AppendixF:sobol_analysis_with_washin_and_washout}. 
-
-
-\subsection{Final Value Results}
-\subsubsection{Resources}
-The final value for the resources depended heavily on the initial Resource concentration. 
-There weren't many interactions with other parameters because $ST \gg S1$. 
-$e$ had little influence on the system despite $e$ acting as the link between the resources and bacteria and directly controlling the rate of resource consumption. 
-$\tau$ had a larger influence in the final resource value than $e$. 
-\subsubsection{Phages}
-The final phage population depended on $r$ the most, with $\beta$ as the second most important parameter influencing the final population value. 
-The other parameters had little to no influence on the final phage population levels. 
-\subsubsection{Total Bacteria}
-The final total bacteria population depended mostly on $\beta$, but via many second or higher interactions as noted by $ST \gg S1$. 
-The final population depended heavily on many higher order interactions with Resources, $\tau$, and $e$. 
-Resources, $\tau$ and $e$ was responsible for about 25\% of the sensitivity to the output each. 
-
-\subsection{Peak Value Results}
-\subsubsection{Phages}
-The SOBOL peak value plot is basically the same as the final value. 
-Similar to the Final Value Analysis, the phage max value is highly dependent on the value of $r$ and $\beta$. 
-\subsubsection{Total Bacteria}
-The total bacteria peak value analysis has similar plot shape. 
-$\beta$ still has the largest bar graph, but instead of $ST$ and $S1$ being equal to 1 and 0.28 like in the final value, the sensitivity value is only 0.54 and 0.16 respectively. 
-Every parameter plays some influence on the output, but with higher order interactions as for all parameter inputs, $ST > S1$. 
-
-\subsection{Time of Peak Value Results}
-\subsubsection{Phages}
-With the time of peak value, $\tau$ becomes the most important parameter for determining the final phage value and $r$ and $\beta$ less so. 
-\subsubsection{Total Bacteria}
-$\beta$ and $\tau$ are the two most important factors in determining the time of peak for the total bacteria. 
-The only parameter that does not influence the time of peak is $e$, otherwise every parameter influences the time at which the bacteria population peaks. 
-
-\begin{figure}[ht!]
-    \centering
-    \begin{subfigure}{0.32\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Final_(no_washin_and_washout).png}
-        \caption{
-            Final value, no washin and washout. 
-        }
-        \label{fig:created:SOBOL_final_no_wi_wo}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.32\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Peak_(no_washin_and_washout).png}
-        \caption{
-            Peak population value, no washin and washout. 
-        }
-        \label{fig:created:SOBOL_peak_no_wi_wo}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.32\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749708738_Peak_Time_(no_washin_and_washout).png}
-        \caption{
-            Time of peak value, no washin and washout. 
-        }
-        \label{fig:created:SOBOL_peak_time_no_wi_wo}
-    \end{subfigure}
-    \caption{
-        SOBOL analyses for the final, peak, and time of peak value, without a washin and washout rate.
-        The input value ranges to test each parameter used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}, except washin and washout is 0. 
-    }
-    \label{fig:created:SOBOL_no_wi_wo}
-\end{figure}
-
 \section{Initial Value Analysis Results}
 \label{sec:results:initial_value_analysis}
 
@@ -161,12 +173,15 @@ The only parameter that does not influence the time of peak is $e$, otherwise ev
 As the initial bacteria population increases, the time to reach the phage and bacteria sum peak decreases, following $y = -0.8648\cdot ln(x) + 9.7911$ and $y = -1.0056\cdot ln(x)+7.7626$, with $R^2=0.9800, 0.9988$ respectively. 
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} on the other hand shows different behavior. 
-As the initial bacteria population decreases from 500 to 100, the same behavior in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} is noticed.
+As the initial bacteria population decreases from 500 to 100, \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} exhibits the same behavior. 
 There is a change in behavior at 100 and less initial uninfected bacteria. 
-Instead of following the predicted line like in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}, the curve for the phages suddenly decreases, following a quadratic like curve. 
+Instead of following the predicted line like in \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}, the curve for the phages suddenly decreases, following a non-monotonic curve. 
 The bacteria on the other hand plateau before starting to increase again. 
 The fitted curves follow $y = -0.1292\cdot ln(x) + 10.1462$ and $y = -0.6234\cdot ln(x)+6.9602$, with $R^2=0.5406, 0.9206$ respectively. 
-Despite the large bacteria sum $R^2$ value, the fitted curve does not fit the data. 
+The slope tells us how well the uninfected bacteria has an influence on the time of peak value. 
+The larger (positive or negative) the slope is, the more impact the uninfected bacteria had on the time of peak value. 
+The closer the $R^2$ value is to 1, the more proportion of the variance for the time to peak value is explained by the uninfected bacteria. 
+There is a deviation because the model changes limiting regions. 
 
 \begin{figure}
     \centering
@@ -208,19 +223,25 @@ Both regions of phages exhibit consistent behavior, of either going to 0 or prol
 If the phage population started at exactly 25.98, if the initial resources was 260 or above, the phages died out. 
 If the initial resource value was 255 or below, the phages proliferated. 
 
-\subsection{2D Phage Proliferation}
+\subsection{An Initial Phage and Resource Analysis for Phage Proliferation}
 \Cref{fig:created:phase_portrait_resources_phage} expands on the phase portrait by simulating more values and coloring the square depending on if the phages proliferated or not. 
 The initial resource values span from 1 to 500, and the initial phage values range from 25.5 to 26.5, each with 100 unique values sampled.
-The box is colored red if the phages proliferated for that condition. 
-Proliferated is defined as the phage population reached at least 2 times the initial condition. 
-If the box is white, it means the phages died out before being able to reach 2 times its initial concentration. 
-A boundary between the nonproliferating and proliferating phages can be curve-fit following $y=\frac{86.756x}{15.811+x} - 10.241$ with an $R^2$ value of 0.994. 
+A boundary between the non-proliferating and proliferating phages can be curve-fit following $y=\frac{86.756x}{15.811+x} - 10.241$ with an $R^2$ value of 0.994. 
 
 \Cref{fig:created:phase_portrait_resource_phage_proliferate} zooms into the range $(1-40, 24.2-25)$ for a high detailed view of the behavior happening around initial resources of 10. 
-From 1 to 6 initial resources, less phages are needed to proliferate. 
-At 6 initial resources, there is a minimum in the phage proliferation boundary. 
-From 6 initial resources and upwards, more phages are needed to ensure proliferation. 
-For initial resource values of 7 or above, more phages (although very miniscule changes) are required to proliferate. 
+From 1 to around 7 initial resources, fewer phages are needed to proliferate. 
+At 7 initial resources, there is a minimum in the phage proliferation boundary. 
+From 7 initial resources and upwards, as more resources are added to the system, more phages are needed to ensure proliferation. 
+Despite this, the change is tiny, a difference of about 2 phages. 
+Considering the range of possible initial phage populations, the phage proliferation boundary is essentially flat. 
+Under these parameter values, choosing an initial phage population of 27 or higher will ensure phage proliferation. 
+This behavior is counter-intuitive. 
+It would be expected that as there are more resources, the bacteria would have more resources to consume, allowing more phages to grow. 
+A reason for this behavior might be because as there are more resources, bacteria can grow faster. 
+The bacteria growth population outpaces the growth rate of the phages, causing the phages to die out due to the washout. 
+
+If there is a higher washout, similar behavior is observed where the phage proliferation boundary exhibits a similar shape to that of \Cref{fig:created:phase_portrait_resources_phage}, except more phages are needed to proliferate. 
+If $K$ is increased to a larger value, the minimum in the proliferation boundary is shifted to the right. 
 
 \begin{figure}[]
     \centering
@@ -256,13 +277,31 @@ For initial resource values of 7 or above, more phages (although very miniscule 
     \end{subfigure}
     \caption{
         Varying initial resources and initial phages and the resulting proliferation and fitted proliferation curve. 
-        Proliferation is defined as when the phage population reached at least 2 times the initial starting population. 
-        This simulation values used can be found in \Cref{tab:appendixE:a_good_curve_2}, but with washout set to 0.02 instead of 0. 
+        The box is colored red if the phages proliferated for that condition, and white if the phages died out. 
+        Phages proliferated if they reached 2 times their initial population at any point in time in the simulation. 
+        This simulation used the values from \Cref{tab:appendixE:a_good_curve_2}, but with washout set to 0.02 instead of 0. 
     }
     \label{fig:created:phase_portrait_resource_phage_proliferate}
 \end{figure}
 
-\begin{figure}[]
+\subsection{An Initial Phage, Bacteria, and Resource Analysis for Phage Proliferation}
+The initial resource concentration had some, but very limited impact on if the initial phage concentration would affect if the phages proliferate. 
+Within the context of the basic Golding model, the initial uninfected bacteria population is one of three parameters that a researcher can easily control, with the other two being the initial resource and initial phage. 
+For low initial uninfected bacteria populations, it will be harder for the phages to proliferate. 
+There is not enough bacteria to infect before the washout will remove the phages from the system. 
+While for large initial uninfected bacteria populations it will be easier for the phages to proliferate such that the washout won't immediately wash the phages out. 
+So I extend the initial resource and phage population analysis by adding a third dimension to the analysis, the initial uninfected bacteria population. 
+The aim of adding the uninfected bacteria is to see how the initial uninfected bacteria will 1) affect if the phage can proliferate, and 2) affect the max population that the phages can reach. 
+
+\Cref{fig:created:3D_phase_portrait} has three axes, the initial phage, resource, and bacteria population value. 
+The initial uninfected bacteria did not have a significant impact on the 1) if the phages would proliferate, and 2) by how much the phages would proliferate. 
+If spliced along the bacteria axis, there is little difference in the shape of the curve. 
+It was expected that as the uninfected bacteria count would increase there would be significantly fewer phages that would be needed to ensure phage proliferation. 
+However, there is not a significant change in if the phages proliferated and by how much. 
+
+This suggests that under a washout situation, ensuring that there are enough phages is the most important factor to ensure that the phages are not washed out. 
+
+\begin{figure}[ht!]
     \includegraphics[width=1\textwidth]{Plots/Created/PP/3d_plot_resource_bacteria_phage.png}
     \centering
     \caption{
@@ -272,73 +311,71 @@ For initial resource values of 7 or above, more phages (although very miniscule 
     }
 \end{figure}
 
-\section{Plotting Parameter Change - $3\times 2\times 3$ Model}
-\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}, show a 7x7 matrix of different $r$ and $\beta$ initial conditions for a $3\times2\times3$ model, and each figure changes the washout rate from 0 to 0.02 to 0.05. 
-For each simulation, if $r$ or $\beta$ is equal to a value not equal to $inf$, as identified by the title above each sub-figure, then each value of $r$ or $\beta$ has that value.
-All phage initial values started at 10. 
-This was specifically chosen to highlight how even though the phage values all start the same, and how two parameter values are controlled, the other parameter values and unequal network topogrpahy has an impact on the population values of the phages. 
-If $r$ or $\beta$ is equal to $inf$, then the simulation uses the original data as defined in the IC, vector, and matrix section of the dashboard. 
-As a small example for the $3\times 2\times 3$ model, when $r=0.200$, the simulation framework uses $r = \left(\begin{smallmatrix} NaN & 0.200 \\ 0.200 & NaN \\ 0.200 & 0.200 \\ \end{smallmatrix}\right)$ as the input matrix to the ODE model. 
-When $r=inf$, the simulation framework uses $r=\left(\begin{smallmatrix} NaN & 0.11695 \\ 0.144459 & NaN \\ 0.11895 & 0.13065 \\ \end{smallmatrix}\right)$ as the data to simulate the interactions with. 
-For the cells that don't have an edge between $p$ and $b$ or between $b$ and $r$, the data is represented as $NaN$, short for “Not a Number”, \textit{np.NaN}, 
+\section{Plotting Parameter Change — $3\times 2\times 3$ Model}
+Now that we have identified the most important parameters in the Golding model, we can analyze how the curve shapes change across a range of parameters for a larger model. 
+The larger model will exhibit different behavior than a $1\times 1\times 1$ model due to the many interactions. 
+The differing parameter values across each interaction will influence how fast each population can grow and die. 
+A $3\times 2\times 3$ model was chosen as it is on the boundary between adding more phages, bacteria, or resources would clutter the plot with lines, while still offering behavior that can be compared against one another. 
+The graph network that was used can be found at \Cref{fig:ss:example_network}, with the default parameter values found at \Cref{tab:appendixE:complex_model}. 
+$B_0$ is infected by $P_1$ and $P_2$, and consumes $R_0$ and $R_1$. 
+$B_1$ is infected by $P_0$ and $P_2$, while consuming $R_2$. 
 
-The columns and rows of each figure makes it easy to compare how a change in parameter value affects the curve, while keeping the other parameter the same. 
-In $r, \beta, \omega^o=inf, inf, 0$, although not realistic, really shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population (P0=blue, P1=green, and P2=purple). 
+
+\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}, show a $7\times7$ matrix of subfigures across washout rates of 0, 0.02, and 0.05
+Each subfigure uses a different combination of $r$ and $\beta$ parameter values. 
+However, we will specifically focus on \Cref{fig:created:r_beta_washout_original_original_0}, \Cref{fig:created:r_beta_washout_original_100_0}, and \Cref{fig:created:r_beta_washout_original_original_0.02}. 
+All initial phage values started at 10. 
+This was specifically chosen to show how even though the phage values all start the same, the different parameter values and interactions ultimately influence the population growth. 
+
+If $r$ or $\beta$ is equal to $Original$, then the simulation uses the original parameter values as defined in \Cref{tab:appendixE:complex_model}, otherwise each $r$ and each $\beta$ parameter interaction has the value listed in the subfigure title. 
+
+The columns and rows of each figure show how a change in parameter value affects the curve, while keeping the other parameter the same. 
+In $r, \beta, \omega^o=Original, Original, 0$, although not a realistic growth curve, shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population (P0=blue, P1=green, and P2=purple). 
 Despite all phages starting at the same population level, within the first two or so time units, P1 has less phages than P0 and P2. 
 P2 has the fastest initial growth rate, as P2 has the most phages until $t=4$, at which point P1 has a larger phage population. 
 P2 reaches its peak population count before P0 or P1, but despite the slower initial growth, P0 and P1 eventually overtake P2 in total phage population. 
 P2 also actually reaches its peak before decreasing in population. 
-There are trace amounts of infected bacteria at the end of the simulation. 
 Since the phage population is reduced by $r_{pb}\cdot(U_b + \sum_{k=1}^M I_{b_k})$, and by specifically choosing the parameter values as used in \Cref{tab:appendixE:complex_model}, behavior that hasn't been seen in a $1\times 1\times 1$ system has been found. 
 The complete extinction of the bacteria has been delayed long enough such that at trace amounts, there is phage reduction despite bacteria still existing. 
 The peak times for P0, P1, and P2 are $t=6.33, 7.99, 4.52$, a difference of $3.47$ time units. 
 
-Contrast that with the phage population dynamics of that with $r, \beta, \omega^o = inf, 100, 0$, the phage populations do not show interesting dynamics. 
+Contrast that with the phage population dynamics of that with $r, \beta, \omega^o = Original, 100, 0$, the phage populations do not show interesting dynamics. 
 The peak times are more similar and consistent to one another ($t=5.50, 7.01, 6.78$, a difference of $1.51$ time units). 
 The phage population curve all appear the same, with slightly slower growth rates. 
-There is no crossing of phage populations unlike with $r, \beta, \omega^o=inf, inf, 0$. 
+There is no crossing of phage populations unlike with $r, \beta, \omega^o=Original, Original, 0$. 
 
-Losing the change in $\beta$ values really affected the dynamics fo the phage population. 
 The highlighted example demonstrated the dynamics and influence that multiple agents can have on the final output. 
 
 The top row of \Cref{fig:created:r_beta_washout_0.02} shows how the phages and resources died out relative to the top row of \Cref{fig:created:r_beta_washout_0}. 
 Even with a high burst value, the phages could not defeat the pressure from the washout. 
 But by changing the $r$ value from $r=0.001$ to $r=0.041$, the phages were able to save themselves and proliferate. 
 
-\subsection{3D Phage Proliferation}
-A 3D phage proliferation is a natural extension of the 2D figure. 
-\Cref{fig:created:3D_phase_portrait} has three axes, the initial phage, resource, and bacteria population value. 
-If the phages were able to proliferate then the cell is colored from white to red depending on the max phage value reached. 
-The color consistently changes from white to red across the resource axis, and less so across the bacteria or phages axis. 
-If spliced along the bacteria axis, there is little difference in the shape of the curve. 
-On the underside of the curve, there is some slight variation in color and if the phages proliferated. 
-When spliced on the Resource values near 1, there is the decreasing edge of Phage-Bacteria phage proliferation as the initial resource concentration approaches 6. 
 
 \begin{figure}[]
     \centering
     \begin{subfigure}{0.32\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_inf_inf_0.png}
+        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_Original_Original_0.png}
         \caption{
-            $r, \beta, \omega^o = inf, inf, 0$, all initial phage condition=10. 
+            $r, \beta, \omega^o = Original, Original, 0$, all initial phage condition=10. 
         }
-        \label{fig:created:r_beta_washout_inf_inf_0}
+        \label{fig:created:r_beta_washout_original_original_0}
     \end{subfigure}
     \begin{subfigure}{0.32\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_inf_100_0.png}
+        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_Original_100.0_0.png}
         \caption{
-            $r, \beta, \omega^o = inf, 100, 0$, all initial phage condition=10. 
+            $r, \beta, \omega^o = Original, 100, 0$, all initial phage condition=10. 
         }
-        \label{fig:created:r_beta_washout_inf_100_0}
+        \label{fig:created:r_beta_washout_original_100_0}
     \end{subfigure}
     \begin{subfigure}{0.32\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_inf_inf_0.02.png}
+        \includegraphics[width=\linewidth]{Images/Plots/Created/UA/r_beta_washout_Original_Original_0.02.png}
         \caption{
-            $r, \beta, \omega^o = inf, inf, 0.02$, all initial phage condition=10. 
+            $r, \beta, \omega^o = Original, Original, 0.02$, all initial phage condition=10. 
         }
-        \label{fig:created:r_beta_washout_inf_inf_0.02}
+        \label{fig:created:r_beta_washout_original_original_0.02}
     \end{subfigure}
     \caption{
         Varying $r$, $\beta$, and $\omega^o$. 
@@ -346,21 +383,17 @@ When spliced on the Resource values near 1, there is the decreasing edge of Phag
         Selectively chosen sub-figures from \Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}. 
         Chosen parameter values can be found in \Cref{tab:appendixE:complex_model}. 
     }
+    \label{fig:created:r_beta_washout}
 \end{figure}
 
-\section{Phage, Bacteria, and Resource Survivability For a $20\times20\times10$ System}
-
-
-Using the simulation framework, we created and analyzed a $20\times20\times10$ system. 
-We selected two parameters, $r$ and $e$, to run a survivability analysis. 
-Each phage is guaranteed to interact with at least one bacterium but no more than tow bacterium, each bacterium interacts with at least one phage and one resource, but not more than two phages and resources, and each resource interacts with at least one bacterium, but can interact with more than two bacteria. 
-We randomly selected parameter values from a uniform distribution within the ranges used for the SOBOL analysis (\Cref{tab:appendixE:SOBOL_analysis_values}). 
-We considered a phage, bacterium, or resource to have survived if its final population exceeded 1 at the end of the simulation. 
-Continued simulation could eventually remove all entities from the system due to the washout. 
-
-In the default selected parameter values, there is exactly one bacteria population that manages to survive, while the others all die out. 
-This can be seen in \Cref{fig:created:no_debris_model}. 
-Of the 20 starting phages, 19 phages survived until the end of the simulation. 
+\section{Phage and Bacteria,Survivability Analysis For A $20\times20\times10$ System}
+Using the simulation framework, I created and analyzed a $20\times20\times10$ system. 
+I selected two parameters, $\tau$ and $\beta$, to run a survivability analysis using the extended Golding model. 
+Each phage is guaranteed to interact with at least one bacterium but no more than two bacteria. 
+Each bacterium interacts with at least one phage and one resource, but not more than two phages and two resources. 
+Every resource interacts with at least one bacterium, and at most three bacteria. 
+The parameter values were randomly selected from a uniform distribution in the SOBOL analysis value ranges (\Cref{tab:appendixE:SOBOL_analysis_values}). 
+A phage survived if its final population is greater than 1 at the end of the simulation. 
 
 \begin{figure}[]
     \includegraphics[width=1\textwidth]{Plots/Created/large_graph_output.png}

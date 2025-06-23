@@ -3,20 +3,26 @@
 \section{Project Overview}
 To help complete this Master thesis, I created various tools that would help create the final model outputs.
 The project is divided into four parts. 
-The first part is the tool that a user can use to design and create the entity interaction network. 
-The second part is the simulation framework that handles the data and runs the ODE solving method. 
-The third part is a dashboard that runs in the browser. 
-The dashboard allows for a user to interact with the model, for example by changing parameter and environment values, and run some basic simulations and receive different plots as output. 
-The final part allows the user to download the simulation data to create their own custom graphs and analyses. 
+\begin{itemize}
+    \item Using a GUI network creation too to define the number of phages, bacteria and resources in the network, and their interactions. 
+    \item The simulation framework handles the data, runs the ODE simulations, and sends the data back to the dashboard. 
+    \item A dashboard that the user can interact with to run simulations, edit parameter values, and plot and interact with the visualizations. 
+    \item Download the data to create your own custom visualizations and analyses. 
+\end{itemize}
 
 A flowchart showing the user-system interactions can be seen in \Cref{AppendixC}. 
 
 \subsection{Network Creation Tool}
 \label{sec:network_creation_tool}
-The network creation tool is the first step that a user needs to use, and it revolves around using a GUI tool built to create and edit the graph representation of the entity interaction.
-Numerous interactions occur between entities in a microbial environment.
-However, not every entity can and will interact with one another.
-Based on which entities interact with one another, a network topography representing the entity interactions and dynamics can be created. 
+The user uses the GUI network creation tool to create and edit the network interactions. 
+There are three types of variables in the simulations: phages, bacteria, and resources. 
+Every node in the network represents either a phage, bacteria, or resource. 
+The bacteria can be further divided into uninfected and infected bacteria. 
+An edge links two nodes together if there is an arbitrary interaction occurring between them. 
+Bacteria are infected by phages and take up resource. 
+Which phage can infect which bacteria and which resources each species of bacteria can take up describes a network of interactions. 
+Finally, the user can export (and later import to edit) the network representation for use in \Cref{sec:simulation_framework}, \Cref{sec:visualization_framework}, and \Cref{sec:custom_visualizations_and_framework}. 
+\Cref{fig:ss:GUI_tool_and_network} shows the layout of the GUI tool and example networks that can be created. 
 
 Every node represents a unique entity, and each entity has their own intrinsic properties. 
 The user can intuitively define entities, their interactions, environmental and model settings using the GUI tool. 
@@ -71,13 +77,13 @@ The user can self-decide which parameter values to give, and if and how the para
         }
         \label{fig:ss:example_large_network}
     \end{subfigure} 
-
     \caption{
         This network topography along with a $1 \times 1 \times 1$ network will be used in the \Cref{Methods} and \Cref{AER} sections. 
             The parameter values for the networks can be found at \Cref{tab:appendixE:a_good_curve}, \Cref{tab:appendixE:complex_model} and \Cref{tab:appendixE:SOBOL_analysis_values}
         Each node represents a phage, bacteria, or resource, with arbitrary interactions occurring between them. 
         Although not shown and used here, edges between the same entity types and self loops are allowed. 
     }
+    \label{fig:ss:GUI_tool_and_network}
  \end{figure}
 
 \subsection{Simulation Framework} % TODO: Rewrite this section
@@ -118,14 +124,19 @@ The final section allows for the user to run more advanced analyses on the netwo
 \label{sec:editing_network_and_parameter_values}
 The editing network and parameter value contain five separate sections.
 \paragraph{Initial Condition}
-The IC settings panel (\Cref{fig:ss:ds:initial_condition}) allows for the user to edit the initial starting values of the entities. 
+The IC settings panel (\Cref{fig:ss:ds:initial_condition}) allows the user to edit the initial starting values of the entities. 
 Each entity type has a table containing the initial population count. 
 \paragraph{Vector Data} 
-Data that can be represented as a vector, for example the data attributed to an entity type have their own section, \Cref{fig:ss:ds:vector}.
+Data that can be represented as a vector have their own section. 
+This data would typically be seen with node data. 
+So the washin rate of resources, or how fast a bacteria goes through the infection stage would be represented as a vector \Cref{fig:ss:ds:vector}.
 \paragraph{Matrix Data}
 Data that is stored as a matrix, the data stored on edges between entities, is stored in the matrix tab, \Cref{fig:ss:ds:matrix}.
+This would typically be data that is stored on the edges, for example the phage infection speed or how fast a bacteria can consume a resource. 
 \paragraph{Environment and settings}
-The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively.
+The environment data and settings data also have their own tab, \Cref{fig:ss:ds:environment} and \Cref{fig:ss:ds:settings} respectively. 
+The data stored in the environment act as global variables, like the pH of the system, or the constant washout rate. 
+THe settings node holds the solver and simulation settings like the length of the simulation or minimum time-step. 
 
 \begin{figure}[h!]
     \centering
@@ -187,32 +198,23 @@ For simplicity, the visualizations on the dashboard only support a $1 \times 1\t
 This makes it easier for the user to analyze the system. 
 The goal of the dashboard is to investigate a simple system in order to gain a deeper understanding of the system. 
 There are five prebuilt visualizations which are described below. 
+These five visualizations are called serial transfer, parameter analysis, initial value analysis, serial trasnfer, and SOBOL analysis. 
 The aim of the visualizations is to investigate how the system changes with respect to varying inputs. 
 
-After the user has a deeper understanding of the system, they can run and download custom simulations to create their own custom visualizations. 
+After the user has a deeper understanding of the system, they can run and download custom simulations to create their own custom visualizations in the Ultimate Analysis section. 
 The saved simulation data is stored as a \textit{.parquet} file, a tabular-like data format. 
 The simulation data can be queried with Dask, allowing a user to find a specific simulation result. 
 Parquet with Dask offers superior performance and data storage solutions that Pandas doesn't offer.
 
 \paragraph{Serial Transfer}
 \label{sec:serial_transfer}
-Serial transfer (ST) is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes a specified amount of media (for example 10ml of liquid) containing bacteria and resources, possibly with phages, and transfers the old media into a solution containing new media.
-At this stage, the bacteriologist can introduce new entities, or re-introduce entities if the entity population or concentration has died out.
-However, usually only resources are added during the transfer process.
-An example would be an experiment starts with 50ml of solution.
-The experiment runs for 24 hours before 5ml is removed.
-Researchers can run various tests, such as using optical density measurements to assess bacterial density in the solution or employing a mass spectrometer to determine the concentration of the resources.
-The 5ml is then re-added to a new solution of 45ml containing fresh resources.
-As the bacteria grow, they consume the resources found in the solution.
-However eventually the resources run out, and the bacteria die out due to a lack of resources.
-By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
-
-The implementation of ST is slightly different.
-A user can select the dilution factor which will divide the population count of the entities by that number (\Cref{fig:ss:av:serial_transfer_settings}).
+On the dashboard, a user can select the dilution factor which will divide the population count of the phages, bacteria, and resources by that number (\Cref{fig:ss:av:serial_transfer_settings}).
 Then the program takes the IC values defined in \Cref{sec:editing_network_and_parameter_values} and adds those values to the respective entity. 
 
 As an example, if the simulation ended with 3500 phages, 100 (uninfected) bacteria and 50 resources, the dilution factor is 10, and the user wants to add 350 new bacteria and 130 new resources for the next simulation, the new starting condition for the next simulation would be $\frac{3500}{10} = 350$ phages, $\frac{100}{10} + 350 = 660$ bacteria, and $\frac{50}{10} + 130 = 135$ resources.
-As output, new graphs are created showing the runs appended to one another, with an example output shown in \Cref{fig:ss:av:serial_transfer_run}.
+
+As output, ST will show how the population evolved through time as well as the final population value at the end of each serial transfer run. 
+An example output is shown in \Cref{fig:ss:av:serial_transfer_run}.
 
 \begin{figure}[h!]
     \centering
@@ -283,7 +285,7 @@ The initial value analysis (IVA) settings tab as shown in \Cref{fig:ss:av:initia
 \Cref{fig:ss:av:initial_value_analysis_run} shows the plots that the user receives.
 For each entity type, there are three plots made.
 The left plot shows the population count through time, one line for each parameter value submitted.
-The middle plot takes each run and calculates the “percentage from the max value“ (default value of $0.95 \rightarrow 95\%$) reached of the peak.
+The middle plot takes each run and calculates the “percentage from the max value” (default value of $0.95 \rightarrow 95\%$) reached of the peak.
 This value is considered the time of peak, and is used to fix some issues that can arise where the population plateaus or only keeps on rising.
 The initial value is plotted on the x-axis, with the time at which the max value is reached on the y-axis.
 Using the plotted data, a linear or log fit can be created.
@@ -296,7 +298,6 @@ Using the IVA tool can be useful for understanding how a change in parameter val
 The slope, intercept and $R^2$ value is stored and saved in the third plot, a bar chart, with an editable name. 
 For every re-run of the IVA, the slope, intercept and $R^2$ value is stored in the bar chart. 
 When executed with multiple parameters, this enables comparison of high-level results across various parameters and experimental conditions.
-The analysis can then be boiled down to the $R^2$, slope, and intercept line to describe how the parameter value affects the peak value and time. 
 
 \begin{figure}[h!]
     \centering
@@ -452,65 +453,6 @@ The user can use this data to create their own custom visualizations without hav
 The data can be further processed and visualized as the user wishes. 
 
 As the dashboard can not create a graph for every situation, or be easily adapted to analyze every situation, \Cref{sec:ultimate_analysis} can be used to run and download the simulation data to the disk to later create your own custom visualizations. 
-
-\section{The Golding Model}
-\label{sec:golding_model}
-The default model, the “Golding model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between resources, uninfected bacteria, infected bacteria, and phages. 
-All plots and simulations will use this model. 
-
-\subsection{The Golding Model}
-\begin{eqfloat}[ht!]
-    \begin{align}
-        \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{k=1}^{M} I_k) \mathcolor{red}{+ w^i -w^o \cdot R}\\
-        \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P \mathcolor{red}{-w^o \cdot U}\\
-        \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1 \mathcolor{red}{-w^o \cdot I_1}\\
-        \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \mathcolor{red}{-w^o \cdot I_k}\text{ for } k=2, \dots, M \\
-        \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{k=1}^{M} I_k)\cdot P \mathcolor{red}{-w^o \cdot P} \\
-        g(R, v, K) &= \frac{v\cdot R}{R + K}
-        \label{eq:golding_model}
-    \end{align}
-    \caption{
-        The Golding model sourced from \citet{gengUsingBacterialPopulation2024}. 
-        The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of entities ($\omega^o$). 
-        The washin is not dependent on the current resource population, as it is a constant rate being added. 
-        By default these values are 0.
-        A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golding_model}. 
-    }
-\end{eqfloat}
-
-The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
-The cell growth process is described by $g(R, v, K)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate and $K$ is the Monod constant. 
-The consumption rate of a resource by a bacteria is $e$. 
-
-Once infected by a phage, the bacteria goes from $U$ to $I_1$. 
-The bacteria goes through $M$ stages of infection $I_1, \dots, I_M$ before lysing, where the bacteria goes from state $I_k$ to state $I_{k+1}$ with equal transition rate $\frac{M}{\tau}$. The probability of a successful infection of a cell is $r$. 
-After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst size of the phage. 
-
-However this model is specifically designed for a $1\times 1 \times 1$ model. 
-In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be slightly adapted. 
-There are other changes that can be made to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all entities are washed out at a constant rate. 
-These changes are highlighted in \Cref{eq:golding_model} in \textcolor{red}{red}. 
-
-\subsection{The Adapted Golding Model}
-\label{sec:adapted_golding_model}
-\Cref{eq:adapted_golding_model} accounts for the interactions of multiple entities, and assumes the interactions occur independent of one another. 
-Each updated population count is a sum of all interactions occurring independently of one another. 
-
-\begin{eqfloat}
-    \begin{align}
-        \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b r} \cdot g(R_r, v_{b r}, K_{b r})\cdot (U_b + \sum_{k=1}^{M} I_{b_k}) + w^i_r - w^o \cdot R_r\\
-        \frac{dU_b}{dt} &= U_b \cdot \sum_{r \in R} g(R_r, v_{b r}, K_{b r}) - U_b \cdot \sum_{p \in P} r_{p b} \cdot P_p - w^o \cdot U_b\\
-        \frac{dI_{b_1}}{dt} &= U_b \cdot \sum_{p \in P}r_{p b} \cdot P_p - \frac{M}{\tau_b}\cdot I_{b_1} - w^o \cdot I_{b_1}\\
-        \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) - w^o \cdot I_{b_k}\text{ for } k=2, \dots, M \\
-        \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p\\
-        g(R_r, v_{b r}, K_{b r}) &= \frac{v_{b r} \cdot R_r}{R_r + K_{b r}}
-        \label{eq:adapted_golding_model}
-    \end{align} 
-    \caption{
-        Probability of phage infection $r_{p b}$ is not to be confused with $R_r$, short for Resource $r$. 
-        The interactions are a sum of all interactions due to all interactions taking place at the same time. 
-    }
-\end{eqfloat}
 
 \section{Software Used and Packages}
 The program was created exclusively in Python \cite{Python}, and makes extensive usages of various packages, ranging from the standard scientific packages such as NumPy \cite{NumPy} and SciPy to more niche packages such as pickle and SALib \cite{iwanagaSALib20Advancing2022, hermanSALibOpensourcePython2017}.

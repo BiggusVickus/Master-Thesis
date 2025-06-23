@@ -127,7 +127,7 @@ class System(Analysis):
                         M_tau = M / tau_vector[i_index] # get the value of M_tau
                     left_sum += B_matrix[p_index, i_index] * M_tau * I[i_index, -1]
                     right_sum += r_matrix[p_index, i_index] * (U[i_index] + np.sum(I[i_index]))
-                    debris_sum += debris[p_index, i_index] * P[p_index] # get the debris value for this phage and bacteria interaction
+                    # debris_sum += debris[p_index, i_index] * P[p_index] # get the debris value for this phage and bacteria interaction
             # update the phage value
             new_sum = left_sum - right_sum * P[p_index] - environment['washout'] * P[p_index] - debris_sum
             if new_sum <= 0 and P[p_index] <= 0: # if the new sum is negative and the phage population is greater than 0, set it to 0
@@ -141,7 +141,6 @@ class System(Analysis):
 
 
 # graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
-# system = System('simple_graph.gexf') # load the graph from the file.
 # system = System('a_good_curve.gexf') # load the graph from the file.
 # system = System('a_good_curve_2.gexf') # load the graph from the file.
 # system = System('complex_graph.gexf') # load the graph from the file.

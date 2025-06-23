@@ -6,13 +6,16 @@ Phages act as nature's anti-microbial defense, but also impact bacteria evolutio
 There are various medical and industrial applications for phages to control bacterial growth, but to realize these applications, it is important to know how phages and bacteria interact with one another in order to implement a robust method to control bacterial growth. 
 
 \section{Thesis Overview}
-This thesis covers multiple topics to ultimately answer how phages and bacteria interactions can be mathematically modelled. 
-First, there is a (biological) introduction to phages and bacteria. 
+This thesis covers multiple topics to ultimately answer how phage, bacteria, and resource interactions with one another and the environment can be mathematically modelled. 
+To answer this question, I wrote a simulation framework that can model and interact with any $p\times b\times r$ system, $p$ phages, $b$ bacteria, and $r$ resources. 
+Using the software, I answer how phages impact community dynamics in complex microbial communities. 
+
+First, there is a biological introduction to phages and bacteria. 
 This introduction covers how phages infect bacteria, how bacteria defend against phages, how phages defeat bacterial defenses, and how phages defend against other phages. 
-There is also an introduction to different modelling techniques such as spatial vs non-spatial models and ODEs vs DDEs. 
+There is an introduction to different methods of modelling phages and bacteria dynamics. 
 This thesis briefly covers software that models phages, resources, bacteria, and their limitations. 
 
-This thesis presents software I developed to support the research, demonstrating its capabilities using a representative model of phage-bacteria-resource interactions. 
+This thesis presents software I developed to support the research, demonstrating its capabilities using a representative model of phage, bacteria, and resource interactions. 
 The section also provides an overview of its usage, including example outputs from demonstration runs.
 I use the software to analyze various scenarios, such as phage proliferation under a washout scenario and analyze growth rate-limited regions. 
 
@@ -57,8 +60,8 @@ There are about $10^6$ bacteria cells/ml and $10^7$ phages/ml of marine water.
 About 5\% of any bacteria are currently infected and about 15\% of daily bacterial death can be attributed to phages \cite{chibani-chennoufiPhageHostInteractionEcological2004}. 
 
 
-Phage populations depend on growth by infection and death by degrading. 
-UV is a large factor of killing marine phages, causing up to a 5\% reduction in phage infectivity per hour \cite{chibani-chennoufiPhageHostInteractionEcological2004}. 
+Phage populations grow by infecting their hosts, but they can also degrade, e.g., by UV. 
+UV is a large factor of deactivating marine phages, causing up to a 5\% reduction in phage infectivity per hour \cite{chibani-chennoufiPhageHostInteractionEcological2004}. 
 
 \subsubsection{Phages and Controlling Bacterial Blooms}
 Phages could potentially be used to control \textit{Cyanobacteria} (blue-green algae) blooms in the environment \cite{colomaFrequencyVirusresistantHosts2019}. 
@@ -87,10 +90,12 @@ Phages can be used to control the growth of bacteria like \textit{Salmonella} wh
 \Cref{sec:AppendixB:controlling_foodborne_bacteria} in \Cref{AppendixB} goes into more detail about using phages to control foodborne bacteria. 
 
 \section{Modelling Phages in a Complex Community}
-Not much is known about phages in large and complex communities between other phages, bacteria, resources, and the environment. 
+What we know about phages mechanistically often comes from well researched bacteria in a lab like \textit{E. coli} and its phages, and what we know about phages in the environment comes from metagenomic surveys. 
+Making the connection between the mechanistically and metagenomic models, which would allow us to make and test different models, is the difficult part. 
+Because of this, we need mathematical models to help bridge the gap between the lab and the environment. 
+
 There have been previous attempts to model the complex dynamics of the populations between phages, bacteria, and resources, with the environment using Ordinary Differential Equations (ODE) and Delay Differential Equations (DDE).
-Not every interaction in the complex community can be identified, and if an interaction has been identified, the associated parameter values are unknown and need to be experimentally derived. 
-Collecting interaction parameter values is an expensive and laborious task, as the data has to experimentally collected. 
+Not every interaction in the complex community can be identified, and if an interaction has been identified, the associated parameter values need to be experimentally derived. 
 
 There are two main ways to model phage-bacteria dynamics: spatially and non-spatially.
 In a spatial model phages and bacteria can move through space and interact with their neighbors. 
@@ -106,7 +111,6 @@ For this thesis, the focus will be modelling resource, phage, and bacteria inter
 A phage-bacteria-resource system is described as an $p\times b \times r$ system, meaning $p$ phages, $b$ bacteria, and $r$ resources. 
 Current modelling methods have mainly stayed with $1\times 1 \times 1$ models, meaning 1 phage, 1 bacteria, and 1 resource. 
 This thesis aims to develop a simulation framework that can model any $p\times b \times r$ ODE system. 
-\newline 
 
 \section{Software Overview}
 The project is divided into three logical parts, with an optional fourth part.

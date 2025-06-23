@@ -2,21 +2,16 @@
 \label{LR}
 
 \section{Methods of Modelling Phages and Bacteria}
-There are numerous ways to model the interactions between phages and bacteria.
-Populations of phages, bacteria, and resources are typically modeled using Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDE). 
-DDEs are similar to ODEs, but DDEs incorporate time delays to account for processes that depend not only on the current state but also on past states, such as latency periods in phage infection or delayed bacterial responses to environmental changes.
+The most common way to model phages, bacteria, and resources populations and interactions is with Ordinary Differential Equations (ODEs) or Delay Differential Equations (DDE). 
+DDEs are similar to ODEs, but DDEs incorporate time delays to account for processes that depend not only on the current state but also on past states, to incorporate behavior that has a delay, like latent infection time. 
 
 One way to introduce a delay in an ODE model is to force populations to go through stages, causing a delay in other events. 
 For example, in the paper \citet{gengUsingBacterialPopulation2024}, infected bacteria go through $M$ stages of infection, before lysing. 
-By decreasing $\tau$ (the latent period) in the model proposed by \citet{gengUsingBacterialPopulation2024}, the throughput of bacteria going from stage $i$ to stage $i+1$ of infection increases, thus seeing a larger rise in phage population. 
-All simulations and analyses in this report will use the Golding model, see \Cref{sec:golding_model}. 
+By decreasing $\tau$ (the latent period) in the model proposed by \citet{gengUsingBacterialPopulation2024}, more infected bacteria go from infected state $i$ to infected state $i+1$ per timestep, causing the infected peak population count to peak earlier. 
 
-Each type of model has its pros and cons.
-With the molecular level model, the model is more complex and needs significantly more startup time, simulation time, and is much more complex.
-However, more information can be gained from the simulations and can guide research in creating phages for a certain type of bacteria.
-The ODE method is simpler to understand and easier to set up, but it can only capture large population dynamics.
-Certain assumptions about the community interactions also have to be made, such as the constant washout of the bacteria. 
-Each model can be further developed, for example by adding temperature and pH dependence, bacteria releasing nutrients, or if the bacteria concentration is above a certain threshold, the infection rate is lowered to model phages struggling to diffuse through a biofilm. 
+The ODE method is simple to understand and easy to set up, but it can only capture large population dynamics.
+Certain assumptions about the community interactions also have to be made, such as that everything is a probabilistic approach. 
+Each model can be further developed, for example by adding temperature and pH dependence, bacteria releasing nutrients, or phage resistance. 
 
 \subsection{Generalized Lotka-Volterra Model}
 The Lotka-Volterra model, a first-order non-linear differential model, captures the dynamics between predators and prey.
@@ -42,30 +37,6 @@ Bacteria $B_i$ reproduces at rate $r_i$ dependent on the concentration of resour
 Bacteria die out at rate $m_i$. 
 For a visual, see \Cref{fig:consumer_resource_model}
 
-\subsection{Agent-Based Models}
-In contrast to Lotka-Volterra and consumer-resource models, ABMs model individual agents and their interactions with other agents and the environment through space and time.
-Agents interact with other agents in the vicinity according to some preset rules. 
-Non-agent-based entities, such as resources, can diffuse through the environment and are typically modeled using partial differential equations (PDEs) to solve boundary value problems. 
-Agents themselves may move between locations with a probability $p$, which can depend on environmental factors or stochastic processes.  
-ABMs are used when there is a need to simulate individual entities. 
-
-\begin{align} 
-    \label{eq:resource_diffusion}
-    \frac{\delta R_\alpha(\left(x, y\right), t)}{\delta t} = \nabla \left[D \left( R_\alpha, \left(x, y\right) \right) \nabla R_\alpha \left(\left(x, y\right), t \right) \right]
-\end{align}
-\Cref{eq:resource_diffusion} describes the diffusion of resource $R_\alpha$ through space, dependent on the resource concentration $R_\alpha$ at location $(x, y)$. 
-The rules for cellular agents follow \Cref{eq:agent_rules}. 
-\begin{align} 
-    \label{eq:agent_rules}
-    \frac{di}{dt} = r_i \left( \sum_\alpha \Delta w_{i\alpha}C_{i\alpha}R_\alpha\right)
-\end{align}, 
-where $i$ is a bacterial agent. 
-\begin{align} 
-    \label{eq:agent_consumption_and_conversion}
-    \frac{dR_\beta}{dt} &= \sum_i C_{i\beta}R_\beta I + \sum_{\alpha, i}D_{\beta \alpha}^{i} C_{i \alpha} R_\alpha i
-\end{align}
-\Cref{fig:agent_based_model} shows how the agents interact with other agents in their cell. 
-
 \begin{figure}[h!]
     \centering
     \begin{subfigure}{0.49\linewidth}
@@ -86,26 +57,6 @@ where $i$ is a bacterial agent.
             Consumer Resource model.
         }
         \label{fig:consumer_resource_model}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Figures/trait_based_model.png}
-        \caption{
-            Trait Based model. 
-        }
-        \label{fig:trait_based_model}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\linewidth}
-        \centering
-        \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Figures/agent_based_model.png}
-        \caption{
-            Agent Based model. 
-        }
-        \label{fig:agent_based_model}
     \end{subfigure}
     \caption{Different models and how the bacterial entities interact with itself, one another, resources and the environment. All figures sourced from \citet{vandenbergEcologicalModellingApproaches2022}}. 
 \end{figure}
@@ -158,72 +109,27 @@ Eventually, the cell lyses, releasing the newly created phages into the environm
 
 \subsection{How Does the Phage Cycle Work?}
 There are 3 main parts to the phage-bacteria host cycle, the infection stage, the lysogenic cycle, and the lytic cycle. 
-In the infection stage, a phage attaches to the surface of a bacteria cell. 
-Once injected, the phage-cell pair can go into the lysogenic cycle or into the lytic cycle. 
 \Cref{fig:phage_life_cycle} shows a detailed overview of the phage cycle. 
-\newline 
 
-In the lysogenic cycle, the phage DNA injects integrates into the genome of the bacteria. 
-As the bacteria undergoes cellular replication, the DNA of the phage will be copied with the cell. 
-After a set amount of time, the phage DNA can cut itself from the genome and enters the lytic cycle.
-\newline 
+In the infection stage, a phage attaches to the surface of a bacteria cell. 
+The infection stage involves the phage searching for, detecting, and attaching to a bacterium, followed by DNA injection. 
+Detection and attachment occur via phage receptor-binding proteins located at the tip of the phage tail that recognize specific receptors on the bacterial cell wall, triggering conformational changes that enable DNA injection. 
+The success of this process depends on the specificity and density of both phage and bacterial receptors \cite{stoneUnderstandingExploitingPhage2019}. 
+Once attached, the phage injects its DNA into the host cytoplasm, where it can replicate independently.
+Once injected, the phage-cell pair can go into the lysogenic cycle or into the lytic cycle. 
 
-In the lytic cycle, the phage hijacks the cellular process of the bacteria. 
-The phage DNA hijacks the replication, transcription, and replication process of the cell, making more and more copies of phage. 
-The phage parts build together to make a full part. 
-Eventually the cell wall bursts releasing the phages into the environment ready to infect more bacteria. 
+The lysogenic cycle involves phage DNA integrating into the bacterial genome as a prophage, where it is replicated along with the host cell without causing immediate lysis.
+The phage evades host defenses such as CBASS and CRISPR-Cas systems, which can start programmed cell death preventing phage replication or detect and degrade foreign DNA \cite{banhBacterialCGASSenses2023, levyCRISPRAdaptationBiases2015}. 
+Programmed cell death helps recycle resources for other bacteria \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
+Once integrated, the prophage can alter host fitness and provide resistance to other phages. 
+During cell division, the prophage is copied into daughter cells but remains at risk of being excised by restriction enzymes \cite{sharpMolecularEvolutionBacteriophages1986}.
+Under certain stress conditions, such as DNA damage or activation of the SOS response, the prophage can be induced to exit the genome and enter the lytic cycle \cite{waldorPhageRegulatoryCircuits2005, stoneUnderstandingExploitingPhage2019, fortierImportanceProphagesEvolution2013}.
 
-\subsubsection{Infection Stage}
-The infection stage is characterized as the searching for a bacterium, detection, and subsequent attachment and injection of DNA into the bacteria. 
-\paragraph{Detection and Attachment}
-The phage detects the cell via phage receptor binding proteins located at the tip of the phage tail. 
-The receptors are tuned to specific receptors found on the surface of the bacteria cell wall. 
-Upon detection, conformational alterations in the phage's baseplate occur, causing changes in protein shapes, causing the sheath to contract and inject the viral DNA into the host. 
-The successful binding and adsorption depends on the phage binding protein sensitivity, localization,and density of receptors. \cite{stoneUnderstandingExploitingPhage2019}. 
-\paragraph{Phage DNA Injection}
-The injection is triggered by the recognition between the phage's receptor-binding protein located at the tip of the tail and a specific receptor located on the surface of the bacteria. 
-The specificity of recognition is directly related to the specificity of adsorption, which correlates to the structure of receptors located on the host's cell surface \cite{stoneUnderstandingExploitingPhage2019}. 
-Once a suitable injection site has been identified, the phage injects the DNA into the cytoplasm of the cell. 
-The injected DNA can replicate independently of chromosomes. 
-
-\subsubsection{Lysogenic Cycle}
-The lysogenic cycle describes the process in which the viral DNA evades detection, integrates into the cell's DNA, replicates with the cell, and cuts itself from the host's DNA to enter the lytic cycle. 
-Prophages are phages that have integrated into the host's DNA. 
-
-\paragraph{Repression of Phage DNA Detection}
-Phages need to evade various cellular viral detection methods. 
-CBASS triggers effector proteins that cause cell death, preventing phage replication and lysis \cite{banhBacterialCGASSenses2023}. 
-Two benefits for the bacteria is that the cell death slows the growth of phages and the dead cells release resources into the environment, allowing other bacteria to recycle the resources and grow \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
-
-% CRISPR-Cas is another method that bacteria can use to detect the presence of phage DNA. 
-% CRISPR-Cas is an adaptive immune system in bacteria that defends against phages by acquiring foreign DNA sequences (spacers) into its CRISPR array, transcribing them into CRISPR RNAs (crRNAs), and using these crRNAs with Cas proteins to identify and degrade foreign DNA \cite{levyCRISPRAdaptationBiases2015}. 
-
-
-\paragraph{Phage DNA Integration Into Bacteria DNA}
-Phage DNA integrates into the bacterial genome as a prophage. 
-This can alter host fitness by modifying metabolic pathways and cellular functions or increasing resistance to other phages, allowing the prophage to persist until conditions favor entry into the lytic cycle \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}.
-
-\paragraph{Cellular Replication}
-The cell undergoes division multiple times, copying the prophage DNA into the cell copies. 
-However prophages are still at risk of being discovered and excised by restriction enzymes \cite{sharpMolecularEvolutionBacteriophages1986}. 
-\paragraph{Phage Induction}
-Prophages induce (leave) from the bacteria DNA under specific conditions. 
-The induction process starts with proteolytic cleavage and displacement of the phage repressor. 
-
-This is typically seen in the lab upon activation of the SOS response following DNA damage \cite{waldorPhageRegulatoryCircuits2005}. 
-Cell stressors such as DNA-damaging entities like UV light and antibiotics can jump-start the process to switch to the lytic cycle \cite{stoneUnderstandingExploitingPhage2019, fortierImportanceProphagesEvolution2013}. 
-
-\subsubsection{Lytic Cycle}
-The lytic cycle describes the process in which the viral DNA hijacks the DNA replication process, assembles within the cell, and lyses the cell releasing the phages into the environment. 
-\paragraph{Hijacking DNA Replication Process}
-The phage hijacks the cellular replication process to create the different proteins that make up the phage, like the long tail fiber, tail tube and sheath, and capsid \Cref{fig:figures:phage_diagram}. 
-The phage redirects energy and resources from cellular functions towards viral replication \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
-\paragraph{Assembly of Phage Parts}
-Phage parts self-assemble by using various protein-protein and protein-nucleic acid interactions \cite{aksyukBacteriophageAssembly2011}. 
-\paragraph{Lysis of the Bacterial Cell}
-Many phages produce holin proteins that trigger and degrade the cell wall, releasing the phages and internally stored resources into the environment. 
-Holins accumulate in the membrane until a specific time preprogrammed in the protein tells it to destroy the cell wall. 
-The protein faces intense evolutionary pressure to control the length of the lytic cycle and ensure lysis at the optimal time \cite{wangHolinsProteinClocks2000}. 
+The lytic cycle is the process where a phage infects a bacterium, hijacks its replication machinery to produce new phage components, assembles these parts, and ultimately lyses the host cell to release new phages. 
+This involves hijacking the host's DNA replication to synthesize phage parts like the capsid, sheath, and tail \Cref{fig:figures:phage_diagram}. 
+The phage does this by redirecting resources from internal cellular functions towards viral replication \cite{warwick-dugdaleHosthijackingPlanktonicPiracy2019}. 
+The phage parts self-assemble via protein-protein and protein-nucleic acid interactions \cite{aksyukBacteriophageAssembly2011}. 
+Phages induce bacterial lysis by producing holin proteins that disrupt the cell membrane, releasing the phages and resources \cite{wangHolinsProteinClocks2000}.
 
 \section{Bacterial Defense Against Phages} 
 \label{sec:literaturereview:bacterial_defense_against_phages}
@@ -234,17 +140,16 @@ The bacteria don't want to be killed by the phages, so they adapt defenses such 
 As bacteria cells grow and divide, random point mutations can occur in the DNA. 
 These mutations can affect phage defenses, like thickening the cell wall or removing a receptor, making it harder for the phages to detect and infect the cell. 
 Mutations can be partially effective if full effectiveness requires multiple steps to achieve. 
-Mutations can fail or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984}. 
+Random mutations can also fail at making the bacteria more resistant to phages by increasing phage susceptibility or the mutation brings a cost to the bacteria cell by losing receptors on the cell wall \cite{lenskiTWOSTEPRESISTANCEESCHERICHIA1984}. 
 
 \subsection{Horizontally Transferring DNA}
 Bacteria can horizontally transfer DNA to other bacteria on contact. 
-A donor cell can donate DNA fragments using a mechanism called the F-factor or plasmid with a pilus. 
-The pilus acts as a tunnel between the donor cell and the recipient cell so that DNA can be transferred from the donor cell to the receiver cell. 
-This method of sharing DNA can also have the unintended side effect where one bacteria will directly infect another bacteria by transferring phage DNA. 
+A donor cell can donate DNA fragments using a mechanism called a pilus. 
+The pilus acts as a tunnel between the donor cell and the recipient cell so that DNA can be transferred from the donor cell to the receiver cell \cite{harbSsRNAPhagePenetration2020}. 
 
 A phage can accidentally collect a piece of the host's DNA instead of its own DNA during assembly. 
 The phage with the now dead hosts DNA can infect the next bacteria, injecting the new bacterium with the dead cell's DNA, horizontally transferring the DNA \cite{tamangHorizontalGeneTransfer2023, kasmanBacteriophages2025}. 
-The transferred DNA can include natural phage defenses or significantly alter the DNA of the bacterium that future phages can't detect it anymore. 
+The transferred DNA can include natural phage defenses or significantly alter the genes and phenotype of the bacterium that future phages can't detect it anymore. 
 
 \subsection{Phage Inactivation and Decoys}
 Bacteria can further protect themselves by producing decoys that the phage will attach to instead of themselves. 
@@ -313,19 +218,69 @@ While TAB permits the invading phage to replicate its genome, it inhibits the as
 The prophage that encodes TAB is not affected by this inhibition, as it also expresses a protein that neutralizes TAB's blocking activity. 
 Although the host cell still undergoes lysis, no infectious phages are released.
 
+\subsection{Growth Curves Typically Seen in a Lab}
+\label{sec:literaturereview:growth_curves_typically_seen_in_a_lab}
+
+When choosing parameter values it is important to choose parameter values that could realistically be found in real life systems and be replicated in the lab. 
+There are various features that a researcher will be looking for in growth curve produced in a lab.
+A combination of these features results in an ideal growth curve that replicates real life bacterial growth. 
+
+The idealized dynamics of bacterial populations undergoing phage infection have several phases. First, there is a clear exponential rise in bacteria growth, and can expect to grow 40-100x in the span of a few hours. 
+At a certain point in time, the bacteria population start decreasing, almost as fast as they were growing. 
+
+Phage populations also exhibit exponential growth, but with a delay in growth. 
+There is initially no growth in phage population. 
+After a set amount of time, the phage population will start to grow and peak a few hours after the bacteria population reached its peak. 
+If there is no phage death or removal, the phage population will eventually reach a plateau when every bacteria has died. 
+
+\Cref{fig:created:a_good_curve_linear} shows an example of a curve for a $1\times1\times1$ system that would typically be seen in a lab. 
+\Cref{fig:created:a_good_curve_logarithmic} is the same plot but with a logarithmic y-axis. 
+These specific plots exhibiting a clear growth, peak, delay, and death cycle. 
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_linear.png}
+        \caption{
+            An example linear y-axis for a curve that researchers aim to replicate. 
+        }
+        \label{fig:created:a_good_curve_linear}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Created/a_good_curve_logarithmic.png}
+        \caption{
+            The equivalent logarithmic y-axis plot for a curve that researchers aim to replicate. 
+        }
+        \label{fig:created:a_good_curve_logarithmic}
+    \end{subfigure}
+    \caption{
+        Growth population of a $1\times1\times1$ system. 
+        The log plot allows to see behavior happening at values approaching and to plot data on a logarithmic scale. 
+        The parameters used for this plot can be found in \Cref{tab:appendixE:a_good_curve}. 
+    }
+    \label{fig:created:a_good_curve}
+\end{figure}
+
 \section{Bacteria and Phages in the Lab}
 Researchers around the world are running lab experiments to gain further knowledge of the interactions between phages and bacteria. 
 The aim is to better understand how phages work and interact with bacteria at a molecular, host, and population level. 
 
+\subsection{Running Experiments}
 A researcher might run the experiment in a liquid medium containing water, carbon and nitrogen sources, and other chemicals such as anti-foaming or pH control chemicals. 
 This liquid medium, often referred to as broth, allows for the cultivation of bacteria in a well-mixed environment, enabling researchers to monitor bacterial growth and phage infection dynamics over time. 
 By adjusting parameters such as resource concentration, temperature, agitation speed, and pH, researchers can simulate different environmental conditions and observe their effects on phage-bacteria interactions. 
 
 Samples can be taken at various time points to measure bacterial density, phage titer, and resource concentration, providing quantitative data for model validation and hypothesis testing. 
-If measured frequently enough, the researcher can get an ODE-like curve out, where each datapoint represents the bacteria population level at that time. 
-Researchers create a mathematical interpretation of the bacteria growth curve and run curve fitting algorithms to find the model parameters. 
+The researcher received an ODE-like curve of the bacteria density. 
+Researchers can create a mathematical interpretation of the bacteria growth curve and run curve fitting algorithms to find the bacteria's growth rate. 
 The phage parameters such as latent time and burst size can be found by analyzing the phage one-step growth curve \cite{gengUsingBacterialPopulation2024, mullaExtremeDiversityPhage2024}. 
 
+\subsection{Chemostats}
 Commonly used setups include liquids containing phages, bacteria, and resources in a chemostat and batch culture. 
 Chemostats allow for continuous addition of resources and removal of waste, maintaining steady-state conditions ideal for studying long-term dynamics.
 Bacteria density in clear liquid mediums can be measured optically using light. 
@@ -333,26 +288,28 @@ As the bacteria grow and die, the solution will get more cloudy.
 By shining a light through a vial with bacteria growth, the change in light refraction and intensity can be measured. 
 A researcher might also be interested in using a mass spectrometer to measure the density of phages and resources at specific time points. 
 
+\subsection{Petri Dishes}
 Petri dishes are another commonly used way to grow bacterial colonies. 
 Agar, a jelly-like substance derived from seaweed, is commonly used as a solid growth medium in petri dishes. 
 Agar provides a stable surface for bacteria to grow on and form visible colonies. 
-Researchers can tailor the nutrients and resources in the medium to support the growth of specific bacterial strains or to test the effects of different environmental conditions. 
 When phages are introduced, clear zones called plaques appear where phages have infected and lysed the bacteria, allowing for quantification and observation of phage activity. 
-As a cell lyses, it releases phages into the surrounding. 
-The phages can diffuse through the system, infecting neighboring cells. 
+The phages can diffuse on the agar plate, infecting neighboring cells. 
 Phage infection creates clear plaques (2-3 mm) where bacteria are absent. 
-See \Cref{fig:phage_petri_dish} for an example.
+\Cref{fig:phage_petri_dish} shows an example of a bacteria lawn with phage plaques. 
+
+\subsection{Measuring Growth}
+Bacteria density in clear liquid mediums can be measured optically using light. 
+As the bacteria grow and die, the solution will get more cloudy. 
+By shining a light through a vial with bacteria growth, the change in light refraction and intensity can be measured. 
+A researcher might also be interested in using a mass spectrometer to measure the density of phages and resources at specific time points. 
 
 With petri dishes, it is harder to measure the bacterial growth. 
-Bacteria are mixed with phages in a heated liquid agar solution, and poured onto a petri dish. 
-It might be possible to wash the bacteria off into a container to measure the optical density (OD), but the results are not always consistent. 
-Measuring OD is inaccurate and can only accurately measure up to an OD of 0.1. Even though using a special spectrophotometer allows consistent results, the results are dependent on the medium, the length of travel through the medium, bacteria size and density. 
-The device and measurements need to be calibrated to ensure proper results. 
+It might be possible to wash the bacteria off into a test tube with water to measure the optical density (OD), but the results are inconsistent. 
+Even though using a special spectrophotometer allows consistent results, the results are dependent on the medium, the length of travel through the medium, bacteria size, and density. 
+The device also has to be calibrated to ensure proper results, and results cant be compared across devices without calibration \cite{bealRobustEstimationBacterial2020}. 
 Changing methods to using $\frac{\textit{cells}}{\textit{ml}}$ instead of OD can be used to directly compare results across experiments, labs, and bacteria colonies \cite{miraEstimatingMicrobialPopulation2022}. 
 
-A computer vision algorithm might be able to quantify the change in color on the petri dish, by comparing the photo of the bacterial lawn with a reference photo with no bacteria growth. 
-The algorithm could alternatively calculate plaque sizes and determine phage concentration. 
-The results are however sensitive to camera settings and external lighting changing the room brightness.  
+It might be possible to quantify the change in plaque size, either by hand or using an image analysis program, but the results might be inaccurate and sensitive to different lighting conditions. 
 
 \begin{figure}[h!]
     \includegraphics[width=0.5\textwidth]{Figures/phage_petri_dish.jpeg}
@@ -363,6 +320,14 @@ The results are however sensitive to camera settings and external lighting chang
     }
     \label{fig:phage_petri_dish}
 \end{figure}
+\subsection{Serial Transfer}
+Serial transfer (ST) is a method employed by bacteriologist where after a set amount of time, the bacteriologist pipettes medium containing phages, bacteria, and resources out of a test tube and adds the old media into a new test tube with new media.
+At this stage, the bacteriologist can add more bacteria or phages to the test tube. 
+However, usually only resources are added during the transfer process.
+Researchers can optically measure the bacteria density using an optical density machine or employ a mass spectrometer to determine the phage concentration at set time points during the experiment. 
+As the bacteria grow, they consume the resources found in the medium.
+The resources will eventually run out, and the bacteria die out due to a lack of resources.
+By introducing new resources at set time intervals, the bacteria can regrow and exhibit a semi-stationary behavior.
 
 \subsection{Growth Curves Typically Seen in a Lab}
 \label{sec:literaturereview:growth_curves_typically_seen_in_a_lab}
@@ -481,3 +446,63 @@ However, PhageDyn is no longer available for download.
     }
     \label{fig:sourced:cocktail_and_phagedyn}
 \end{figure}
+
+\section{The Golding Model}
+\label{sec:golding_model}
+The default model that will be used in this thesis, the “Golding model“, sourced from \citet{gengUsingBacterialPopulation2024}, describes the interactions between resources, uninfected bacteria, infected bacteria, and phages. 
+
+\subsection{The Original Golding Model}
+The model describes three biological processes, cell consumption of resources and growing, phage/cell encounters and infection, and cell lysis. 
+The cell growth process is described by $g(R, v, K)$, the instantaneous growth rate dependent on the Monod equation, where $v$ is the maximal growth rate of the bacteria population and $K$ is the Monod constant. 
+Bacteria consume a resource with rate $e$. 
+
+Once infected by a phage, the bacteria goes from $U$ to $I_1$. 
+The bacteria goes through $M$ stages of infection $I_1, \dots, I_M$ before lysing, 
+The bacteria goes from state $I_k$ to state $I_{k+1}$ with equal transition rate $\frac{M}{\tau}$. 
+The infection rate of a cell is $r$. 
+After a bacteria lyses after stage $I_M$, $\beta$ phages are released, the burst size of the phage. 
+
+\begin{eqfloat}[ht!]
+    \begin{align}
+        \frac{dR}{dt} &= -e \cdot g(R, v, K)\cdot (U + \sum_{k=1}^{M} I_k)\\
+        \frac{dU}{dt} &= g(R, v, K)\cdot U - r\cdot U \cdot P\\
+        \frac{dI_1}{dt} &= r\cdot U \cdot P - \frac{M}{\tau}\cdot I_1\\
+        \frac{dI_k}{dt} &= \frac{M}{\tau}(I_{k-1}-I_k) \text{ for } k=2, \dots, M \\
+        \frac{dP}{dt} &= \beta \cdot\frac{M}{\tau} \cdot I_M - r\cdot(U + \sum_{k=1}^{M} I_k)\cdot P \\
+        g(R, v, K) &= \frac{v\cdot R}{R + K}
+        \label{eq:golding_model}
+    \end{align}
+    \caption{
+        The Golding model sourced from \citet{gengUsingBacterialPopulation2024}. 
+        The text in \textcolor{red}{red} has been added to the model, adding (the wash-in) fresh resources ($\omega^i$) and the removal (wash-out) of entities ($\omega^o$). 
+        The washin is not dependent on the current resource population, as it is a constant rate being added. 
+        By default these values are 0.
+        A summary of the parameters can be found at \Cref{tab:appendixA:parameter_table_simple_golding_model}. 
+    }
+\end{eqfloat}
+
+\subsection{The Adapted Golding Model}
+\label{sec:adapted_golding_model}
+The original Golding model is specifically designed for a $1\times 1 \times 1$ system. 
+In order to adapt this model to fit an $p \times b \times r$ model, the model needs to be slightly adapted. 
+There are other changes that can be made to the model, for example by adding a washin rate $\omega^{i}$, where resources are constantly being introduced, and a washout rate $\omega^{o}$ where all entities are washed out at a constant rate. 
+These changes are highlighted in \Cref{eq:adapted_golding_model} in \textcolor{red}{red}. 
+
+The adapted model accounts for the interactions of multiple phages, bacteria, and resources, and assumes the interactions occur independently of one another. 
+
+\begin{eqfloat}
+    \begin{align}
+        \frac{dR_r}{dt} &= -\sum_{b \in B} e_{b r} \cdot g(R_r, v_{b r}, K_{b r})\cdot (U_b + \sum_{k=1}^{M} I_{b_k}) \mathcolor{red}{+ w^i -w^o \cdot R_r}\\
+        \frac{dU_b}{dt} &= U_b \cdot \sum_{r \in R} g(R_r, v_{b r}, K_{b r}) - U_b \cdot \sum_{p \in P} r_{p b} \cdot P_p -\mathcolor{red}{-w^o \cdot U_b}\\
+        \frac{dI_{b_1}}{dt} &= U_b \cdot \sum_{p \in P}r_{p b} \cdot P_p - \frac{M}{\tau_b}\cdot I_{b_1} \mathcolor{red}{-w^o \cdot I_{b_1}}\\
+        \frac{dI_{b_k}}{dt} &= \frac{M}{\tau_b}(I_{b_{k-1}}-I_{b_k}) \mathcolor{red}{-w^o \cdot I_{b_k}}\text{ for } k=2, \dots, M \\
+        \frac{dP_p}{dt} &= \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p \mathcolor{red}{-w^o \cdot P_p}\\
+        g(R_r, v_{b r}, K_{b r}) &= \frac{v_{b r} \cdot R_r}{R_r + K_{b r}}
+        \label{eq:adapted_golding_model}
+    \end{align} 
+    \caption{
+        The adapted Golding model. 
+        The probability of phage $p$ infecting bacteria $b$ is $r_{p b}$ is not to be confused with the resource concentration $R_r$. 
+        The interactions are a sum of all interactions due to all interactions taking place at the same time. 
+    }
+\end{eqfloat}

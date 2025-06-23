@@ -17,18 +17,16 @@ With larger and larger systems small changes in a single parameter will not have
 But if the parameter value does have an influence, it has a cascading effect on the whole network. 
 Increasing the infection rate of phage 1 will slow the growth of the bacteria 1. 
 With slower bacteria 1 growth, phage 2 is affected as there are less bacteria 1 to infect (assuming that phage 2 can infect bacteria 1). With lower phage 2 count, bacteria 2 can grow, using more resources. 
-The 
 
 
 And how do you change the parameter value of the vector or matrix representation? 
-If you want to chnage $\tau$ to $1.5$, how do you do that? 
+If you want to change $\tau$ to $1.5$, how do you do that? 
 Do you only change one value in the vector or matrix, so for example $\tau = \begin{bmatrix} 1.43 & 0.98 & 1.13\end{bmatrix}$ becomes $\tau = \begin{bmatrix} 1.5 & 0.98 & 1.13\end{bmatrix}$? 
 Do you set each value in the vector or matrix the same, so $\tau = \begin{bmatrix} 1.43 & 0.98 & 1.13\end{bmatrix}$ becomes $\tau = \begin{bmatrix} 1.5 & 1.5 & 1.5\end{bmatrix}$? 
 Do you respect the different values in the vector or matrix by shifting the values from the average value? 
 So $\tau = \begin{bmatrix} 1.43 & 0.98 & 1.13\end{bmatrix}$ becomes $\tau = 1.5 - \frac{1.43 + 0.98 + 1.13}{3} = 1.5-1.18 = 0.32 = \begin{bmatrix} 1.43+0.32 & 0.98+0.32 & 1.13+0.32\end{bmatrix} = \begin{bmatrix} 1.75 & 1.3 & 1.45\end{bmatrix}$. 
-How does that change if there is $NaN$? 
-Do you treat it as 0? 
-Do you skip it and dont let that value count towards the average value to shift the vector and matrix values by. 
+How does that change if the value is 0?
+Do you skip it and don't let that value count towards the average value to shift the vector and matrix values by. 
 
 \section{Future Work}
 \label{Future Work}

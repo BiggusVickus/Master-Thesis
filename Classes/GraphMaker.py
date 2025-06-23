@@ -261,10 +261,8 @@ class GraphMaker:
                 continue
             node1 = target[0].strip()
             node2 = target[1].strip()
-            if (edge_data is not None):
-            current_edge_data = None
             if edge_data is not None:
-                    if isinstance(edge_data, str):
+                if isinstance(edge_data, str):
                     current_edge_data = edge_data
                 elif isinstance(edge_data, list) or isinstance(edge_data, tuple):
                     if len(edge_data) == 1:
