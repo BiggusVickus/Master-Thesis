@@ -394,6 +394,12 @@ Each bacterium interacts with at least one phage and one resource, but not more 
 Every resource interacts with at least one bacterium, and at most three bacteria. 
 The parameter values were randomly selected from a uniform distribution in the SOBOL analysis value ranges (\Cref{tab:appendixE:SOBOL_analysis_values}). 
 A phage survived if its final population is greater than 1 at the end of the simulation. 
+A bacterium survived if the final population for the uninfected bacteria was greater than 1. 
+
+\Cref{fig:created:survivability} shows the phage and bacteria survivability matrix. 
+It appears as if there is an inverse relationship between phage and bacteria survivability. 
+If the phages survived, the bacteria died out. 
+If the bacteria survived, the phages did not survive. 
 
 \begin{figure}[]
     \includegraphics[width=1\textwidth]{Plots/Created/large_graph_output.png}
@@ -401,6 +407,6 @@ A phage survived if its final population is greater than 1 at the end of the sim
     \caption{
         The output graph for the default parameter values for a large $20\times 20 \times 10$ network. 
         Parameter values were randomly chosen in the interval given by \Cref{tab:appendixE:SOBOL_analysis_values}. 
-    \label{fig:created:large_graph_output}
+    \label{fig:created:survivability}
     }
 \end{figure}
