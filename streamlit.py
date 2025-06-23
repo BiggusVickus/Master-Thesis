@@ -142,9 +142,9 @@ class System(Analysis):
 
 # graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
 # system = System('a_good_curve.gexf') # load the graph from the file.
-# system = System('a_good_curve_2.gexf') # load the graph from the file.
+system = System('a_good_curve_2.gexf') # load the graph from the file.
 # system = System('complex_graph.gexf') # load the graph from the file.
-system = System('large_graph.gexf') # load the graph from the file.
+# system = System('large_graph.gexf') # load the graph from the file.
 
 phage_nodes = system.get_nodes_of_type('P') # get the phage nodes
 bacteria_nodes = system.get_nodes_of_type('B') # get the bacteria nodes
