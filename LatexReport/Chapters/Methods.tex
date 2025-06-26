@@ -294,7 +294,7 @@ In that case, the program can calculate that the "peak" of the phage population 
 
 The plotter places the initial value on the x-axis, while the time at which the max value is reached appears on the y-axis. 
 Using the plotted data, one can create a linear or log fit.
-In Figure 1 of \citet{mullaExtremeDiversityPhage2024}, the authors vary the initial bacterial concentration and measure the time until bacterial collapse. 
+In Figure 1 of \citet{mullaExtremeDiversityPhage2024} (see \Cref{fig:sourced:Mulla}), the authors vary the initial bacterial concentration and measure the time until bacterial collapse. 
 The initial concentration and corresponding collapse time are plotted on a logarithmic x-axis, with a linear regression fitted to the log-transformed data.
 The observed logarithmic decrease suggests that the phage kinetics is adsorption-limited. 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} replicates this graph. 
@@ -328,6 +328,19 @@ When executed with multiple parameters, this enables comparison of high-level re
         \vspace*{\fill}
     \end{subfigure}
     \caption{The IVA settings and output. }
+\end{figure}
+
+\begin{figure}[]
+    \includegraphics[width=1\textwidth]{Plots/Sourced/Mulla.png}
+    \centering
+    \caption{
+        Phage-induced bacterial population collapse is limited by phage-bacteria adsorption. 
+        a) Exemplary growth curve of \text{E. coli} in the absence and presence of a phage (Bas04), measured by bioluminescence. 
+        b) Growth curves measured at different initial bacterial concentrations $b_0$ ($3\times10^3 - 3\times 10^6 ml^{-1}$ from red to black; colors as in c) at a fixed multiplicity of infection (MOI, i.e. phage-to-bacteria ratio) of 0.4. 
+        c) Collapse times from b); the observed logarithmic decrease (Pearson's $\rho=0.995, p=10^{-10})$ suggests that the phage-amplification kinetics is adsorption-limited. 
+        Error bars show standard errors from bootstrapping the growth curves.
+    }
+    \label{fig:sourced:Mulla}
 \end{figure}
 
 \paragraph{Phase Portrait}

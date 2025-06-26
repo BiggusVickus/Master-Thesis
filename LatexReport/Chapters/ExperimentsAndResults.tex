@@ -42,7 +42,7 @@ The insights from this analysis inform the selection of key parameters for subse
 \Cref{fig:created:Sobol_peak_time_no_wi_wo} shows the impact that the parameter had on the time of the peak, using the 95\% rule. 
 
 The parameters that were tested include all the parameters listed in the basic Golding model, except for the uninfected bacteria $(I_1, \dots, I_4), M, \omega^i,$ and $\omega^o$. 
-Infected bacteria was not included as it doesn't make sense to start with infected bacteria to the system. 
+Infected bacteria $I_k$ was not included as it doesn't make sense to start with infected bacteria to the system. 
 $M$, the number of stages that the infection goes through, can not be tested with Sobol as $M$ is an integer, while Sobol randomly chooses float values. 
 While testing, the washin rate $\omega^i$ and washout rate $\omega^o$ consistently had the largest influence on the final, peak value, and time of peak value, using the 95\% rule. 
 Washin and washout are not part of the original model from Golding, and the addition of a washin and washout term significantly skews the results and analysis, so it was left out of the analysis. 
@@ -51,13 +51,13 @@ The results for a Sobol analysis with washin and washout can be found in \Cref{s
 \subsection{Resources}
 The final value for the resources depended heavily on the initial resource concentration. 
 There weren't many interactions with other parameters because $ST \gg S1$. 
-$e$ had little influence on the system despite $e$ acting as the link between the resources and bacteria and directly controlling the rate of resource consumption. 
-$\tau$ had a larger influence in the final resource value than $e$. 
+$e$, the ability for the bacteria to consume resources, had little influence on the system despite $e$ acting as the link between the resources and bacteria and directly controlling the rate of resource consumption. 
+$\tau$, the latent period, had a larger influence in the final resource value than $e$. 
 
 The peak value and time of peak value graphs are empty for the Sobol indices for Resources as the resource concentration is always decreasing from different initial conditions, the initial resource always had a peak at $t=0$. 
 
 \subsection{Phages}
-The final phage population value depended on $r$ the most, with $\beta$ as the second most important parameter influencing the final population value. 
+The final phage population value depended on $r$ (the probability of a successful phage-bacteria infection) the most, with $\beta$ (the burst size) as the second most important parameter influencing the final population value. 
 The other parameters had little to no influence on the final phage population levels. 
 
 The Sobol peak value plot is basically the same as the final population value. 
@@ -79,12 +79,11 @@ The only parameter that does not influence the time of peak in some manner is $e
 
 \subsection{Results}
 Some results are surprising. 
-$e$, $v$, and $K$ are consistently the least important factor in determining the final value, peak value, and time of peak. 
+$e$, $v$ (max growth velocity of a bacteria), and $K$ (half saturation Monod constant) are consistently the least important factor in determining the final value, peak value, and time of peak. 
 It would be expected that changing the parameter values that directly affect the bacterial growth would have a large impact on the resources and phages. 
 More bacteria mean more resources are consumed, and more phages are created. 
 Knowing that $e$, $v$, and $K$ are relatively unimportant compared to a parameter like $r$ or $\tau$, future analyses do not have to focus on $e$, $v$, and $K$. 
 As $\beta$, $r$, and $\tau$ are relatively important, future analyses could focus on how those parameters influence the growth of phages and bacteria. 
-
 
 \begin{figure}[ht!]
     \centering
@@ -133,7 +132,6 @@ The default parameter values can be found in \Cref{tab:appendixE:a_good_curve}, 
 The sections below use an IVA run to analyze the change in behavior across a wide range of values. 
 Each figure from which the conclusions are made can be found in \Cref{sec:apendixF:graph_behavior_with_IVA}. 
 $\omega^i$ and $\omega^o$ are not included despite having a large impact as seen in \Cref{sec:AppendixF:sobol_analysis_with_washin_and_washout} because $\omega^i$ and $\omega^o$ are not a part of the original Golding model. 
-
 
 \subsection{$R$}
 The initial resource concentration values were tested across a range from 1 resource to 500 resources, with a default value of 200 resources. 
@@ -198,7 +196,7 @@ With fewer bacteria, fewer resources are being consumed.
 \label{sec:results:initial_value_analysis}
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} illustrate how varying the initial uninfected bacteria population from 1 to 500 (using 100 different starting values) affects the dynamics and time of peak population of phage and total bacteria populations using the 95\% rule. 
 
-\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} perfectly replicates Figure 1 of \citet{mullaExtremeDiversityPhage2024}. 
+\Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} perfectly replicates Figure 1 (\Cref{fig:sourced:Mulla}) of \citet{mullaExtremeDiversityPhage2024}. 
 As the initial bacteria population increases, the time to reach the phage and bacteria sum peak decreases, following $y = -0.8648\cdot ln(x) + 9.7911$ and $y = -1.0056\cdot ln(x)+7.7626$, with $R^2=0.9800, 0.9988$ respectively. 
 
 \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} on the other hand shows different behavior. 
@@ -244,6 +242,9 @@ So for the first curve, the uninfected bacteria had a small influence on the tim
 \end{figure}
 
 \section{Phage Proliferation}
+Understanding how phage behavior varies under different conditions, is important. 
+Phages have to survive throughout the whole experiment. 
+Phages can experience random deactivations or if the replication process is not fast enough, be removed from the system from the washout. 
 \label{sec:results:phase_portrait}
 \subsection{Phase Portrait}
 \Cref{fig:created:phase_portrait_resources_245-265_phages_25-26} shows a phase portrait varying the initial resource and phage concentration. 
