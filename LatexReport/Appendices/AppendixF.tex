@@ -1,7 +1,7 @@
 \chapter{Appendix F: Extra Plots and Figures}
 \label{AppendixF}
 
-\section{SOBOL Analysis With Washin and Washout}
+\section{Sobol Analysis With Washin and Washout}
 \label{sec:AppendixF:sobol_analysis_with_washin_and_washout}
 \subsection{Final Value Analysis}
 \subsubsection{Resources}
@@ -19,7 +19,7 @@ The sum of uninfected and infected bacteria depended heavily on higher order int
 Although not shown, the bar plots for the total bacteria resembled that of the bar-plots for the uninfected bacteria, and less that of the infected bacteria. 
 
 \subsection{Peak Value and Time of peak}
-To create the custom SOBOL analyses, the peak value and the time at the peak of the population is measured and analyzed. 
+To create the custom Sobol analyses, the peak value and the time at the peak of the population is measured and analyzed. 
 The peak is defined as the point where the population reaches 95\% of its absolute maximum value. 
 The time at peak is measured at the point in time that the population reaches 95\% of the maximum value. 
 This removes unintended side effects of the simulation. 
@@ -30,9 +30,9 @@ The 95\% rule can fail under certain situations, such as when there is cyclic be
 See \Cref{sec:appendixF:why_95} for a more detailed explanation on why the 95\% rule is used. 
 
 
-The results of the SOBOL peak and time at peak analyses can be seen in \Cref{fig:created:SOBOL_peak} and \Cref{fig:created:SOBOL_peak_time}. 
-Although some of the bars between the final, peak, and time at peak values are the same, some are different. 
-But overall, similar values can be seen across the the final, peak, and time at peak analyses. 
+The results of the Sobol peak and time at peak analyses can be seen in \Cref{fig:created:Sobol_peak} and \Cref{fig:created:Sobol_peak_time}. 
+Although some bars between the final, peak, and time at peak values are the same, some are different. 
+But overall, similar values can be seen across the final, peak, and time at peak analyses. 
 The peak infected values are more certain compared to the final infected values, which could be due to the 95\% rule removing some of the noise of the simulation. 
 The time at peak values have less error compared to the final and peak value. 
 This is due to the restricted range of values. The time at peak value can only fall somewhere between 0 and 15, the start and end values of the simulation respectively. 
@@ -47,7 +47,7 @@ The final and peak values can fall anywhere between 0 and any value, depending o
         \caption{
             Final population value. 
         }
-        \label{fig:created:SOBOL_final}
+        \label{fig:created:Sobol_final}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
@@ -57,7 +57,7 @@ The final and peak values can fall anywhere between 0 and any value, depending o
         \caption{
             Peak population value. 
         }
-        \label{fig:created:SOBOL_peak}
+        \label{fig:created:Sobol_peak}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\linewidth}
@@ -67,17 +67,17 @@ The final and peak values can fall anywhere between 0 and any value, depending o
         \caption{
             Time at peak population. 
         }
-        \label{fig:created:SOBOL_peak_time}
+        \label{fig:created:Sobol_peak_time}
     \end{subfigure}
     \caption{
-        SOBOL analyses for the final, peak, and time of peak value with a washin and washout rate. 
+        Sobol analyses for the final, peak, and time of peak value with a washin and washout rate. 
         The data was saved from the dashboard and plotted using Matplotlib. 
-        The values used for this SOBOL test can be found in \Cref{tab:appendixE:SOBOL_analysis_values}. 
+        The values used for this Sobol test can be found in \Cref{tab:appendixE:Sobol_analysis_values}. 
     }
-    \label{fig:created:SOBOL_analyses}
+    \label{fig:created:Sobol_analyses}
 \end{figure}
 
-\section{Why 95\%? }
+\section{Why 95\%?}
 \label{sec:appendixF:why_95}
 The 95\% rule helps in the IVA analysis. 
 Due to the solver, when taking the absolute peak value, the same time value can occur. 
@@ -86,7 +86,7 @@ However, as the parameter value is changing, each graph for every input change w
 
 \Cref{fig:appendixF:IVA_95_vs_100} shows how using the 95\% rule vs the 100\% rule for finding the max value reached helps smooth out computational errors from the ODE solver and smooths out the shape. 
 For the phages, using the 100\% rule (\Cref{fig:appendixF:IVA_phages_100}) shows that the population peaked at the end of the simulation, $t=15$, for all $e$ values. 
-However at $t=15$, the population plateaued, as evident by the line graph. 
+However, at $t=15$, the population plateaued, as evident by the line graph. 
 Plotting the same plot, but calculating the peak at 95\% of the actual peak (\Cref{fig:appendixF:IVA_phage_95}) shows that the green line ($e=0.25$) “reached” its peak at $t=8.4$ before the red line ($e=0.05$) at $t=9.4$, a full unit of time after $e=0.25$. 
 The user can thus conclude that for this instance, larger $e$ values will cause the phage population to reach its “peak” faster than smaller $e$ values. 
 
@@ -99,8 +99,6 @@ It takes about 0.02321 seconds to run a simulation for 15 time units, where 200 
 Comparatively, a simulation with 1000 time units and 1000000 (a 5000x increase in samples) equidistant time samples takes about 1.71651 seconds to run, a 73.95562258x increase in time spent computing the simulation. 
 The total time taken to run the whole method call, a call to the simple graph maker at the top of the dashboard took 1.76130 seconds vs 17.70634 seconds. 
 
-
-
 Alternatively instead of controlling the solver, the user can use the 95\% rule.
 Although some accuracy is lost. 
 Going from the 100\% rule to the 95\% rule, the solver still captures the peak values and the dynamics, but the accuracy is lost. 
@@ -108,11 +106,11 @@ The 100\% rule shows that for $e=0.25$, the time the uninfected population reach
 But for the 95\% rule, the time at which the peak occurred at is at $t=3.05$. 
 The slope (the $a$ value) and the intercept (the $c$ value) are somewhat similar, with very high and similar $R^2$ values (0.97), suggesting a good linear fit of the data. 
 
-\Cref{fig:appendixF:IVA_uninfected_bacteria_100_own_time} shows how the by increasing the time sampling to more fine grained results in a more accurate graph. 
+\Cref{fig:appendixF:IVA_uninfected_bacteria_100_own_time} shows how the by increasing the time sampling to more fine-grained results in a more accurate graph. 
 Instead of having the solver choose the time values to test, 1000 equidistant time values were selected between 0 and 15. 
 The solver can more accurately calculate the population values and calculate the proper peak time. 
 Comparing the 100\% rule without the custom time values with the 100\% rule with the custom time values shows the same time values were calculated. 
-in both, the $e=0.25$ resulted in a time of peak at 3.2 and for $e=0.05$, the time of peak occurred at $t=3.95$. 
+In both, the $e=0.25$ resulted in a time of peak at 3.2 and for $e=0.05$, the time of peak occurred at $t=3.95$. 
 This is in stark comparison to the 95\% rule vs 100\% rule without the custom time, showing a difference of $0.15$ time units. 
 The custom time values also preserved the shape of the curve $e$-value vs time curve, being almost identical to that of the 95\% rule as seen in \Cref{fig:appendixF:IVA_uninfected_bacteria_95} and \Cref{fig:appendixF:IVA_uninfected_bacteria_100_own_time}. 
 
@@ -176,37 +174,64 @@ The user can use their own custom time values, to ensure that they get high qual
     \label{fig:appendixF:IVA_95_vs_100}
 \end{figure}
 
-\section{Varying $r$ and $\beta$ In A $3\times 2\times 3$ System}
-\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05} show a 7x7 matrix of figures, each with a unique parameter set. 
-In each sub-figure, the values of $r$ and $\beta$ are varied as follows: $r = 0.5, 1.1, 1.7, 2.3, 2.9, 3.5,$ inf; $\beta = 0, 20, 40, 60, 80, 100,$ inf. 
-“inf” in the figures, represented as \textit{np.inf} in the code, the representation of $\infty$,  represents the original parameter values used in the IC, vector data, or matrix data. 
-Each figure shows the effect of varying the washout rate, with values set to 0, 0.02, and 0.05, respectively.
-All initial phage values were set to 10. 
-This was done to really show how the different interactions with the bacteria, and the value of the parameters affected the phage growth. 
-The default values for the parameters can be found in \Cref{tab:appendixE:complex_model}. 
-\begin{figure}[]
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/r_beta_washout_0.png}
+\section{Graph Behavior with IVA}
+\label{sec:apendixF:graph_behavior_with_IVA}
+\subsection{$R$}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{Plots/Created/IVA/IVA_Table/resource_.png}
     \centering
     \caption{
-        Washout $\omega^o=0$. 
+        Changing initial resource values. 
     }
-    \label{fig:created:r_beta_washout_0}
+    \label{fig:created:IVA_IVAtable_resource}
 \end{figure}
 
-\begin{figure}[]
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/r_beta_washout_0.02.png}
+\subsection{$U$}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{Plots/Created/IVA/IVA_Table/uninfected_bacteria.png}
     \centering
     \caption{
-        Washout $\omega^o=0.02$. 
+        Changing initial uninfected bacteria values. 
     }
-    \label{fig:created:r_beta_washout_0.02}
+    \label{fig:created:IVA_IVAtable_uninfected_bacteria}
 \end{figure}
 
-\begin{figure}[]
-    \includegraphics[width=1\textwidth]{Plots/Created/UA/r_beta_washout_0.05.png}
+\subsection{$P$}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{Plots/Created/IVA/IVA_Table/phages.png}
     \centering
     \caption{
-        Washout $\omega^o=0.05$. 
+        Changing initial phage values. 
     }
-    \label{fig:created:r_beta_washout_0.05}
+    \label{fig:created:IVA_IVAtable_phages}
+\end{figure}
+
+\subsection{$\tau$}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{Plots/Created/IVA/IVA_Table/tau.png}
+    \centering
+    \caption{
+        Changing $\tau$ values. 
+    }
+    \label{fig:created:IVA_IVAtable_tau}
+\end{figure}
+
+\subsection{$r$}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{Plots/Created/IVA/IVA_Table/r.png}
+    \centering
+    \caption{
+        Changing initial $r$ values. 
+    }
+    \label{fig:created:IVA_IVAtable_r}
+\end{figure}
+
+\subsection{$\beta$}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{Plots/Created/IVA/IVA_Table/beta.png}
+    \centering
+    \caption{
+        Changing $\beta$ values. 
+    }
+    \label{fig:created:IVA_IVAtable_beta}
 \end{figure}

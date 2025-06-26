@@ -3,40 +3,41 @@
 Parameters used in the various equations. 
 
 \section{Simple/Advanced Golding Model Parameters}
-\begin{table}[h!]
+\begin{table}[H]
     \small % or \footnotesize to make it more compact
     \centering
     \begin{tabularx}{\textwidth}{l l X}
         \toprule
         \textbf{Variable} & \textbf{Name} & \textbf{Description} \\
         \midrule
-        $P / P_p$ & Phages entity & Phage population for phage $p$ \\
-        $U / U_b$ & Uninfected Bacteria entity & Uninfected population for bacteria $b$ \\
-        $I_i / I_{b_i}$ & Infected Bacteria entity & Infected population for bacteria $b$ at stage $1, \dots, i, \dots, M$ \\
-        $B / B_b$ & Bacteria entity & Total bacteria population for bacteria $b$, assuming $B_b = U_b + \sum_{i=1}^M I_{b_i}$ \\
         $R / R_r$ & Resource entity & Resource $r$ concentration\\
-        $e / e_{b r}$ & Consumption rate& Rate at which resource r is consumed by bacteria b\\
+        $U / U_b$ & Uninfected Bacteria population & Uninfected population for bacteria $b$ \\
+        $I_i / I_{b_i}$ & Infected Bacteria population & Infected population for bacteria $b$ at stage $1, \dots, i, \dots, M$ \\
+        $B / B_b$ & Bacteria population & Total bacteria population for bacteria $b$, assuming $B_b = U_b + \sum_{i=1}^M I_{b_i}$ \\
+        $P / P_p$ & Phages population & Phage population for phage $p$ \\
+        $e / e_{b r}$ & Consumption rate & Rate at which resource $r$ is consumed by bacteria $b$\\
         $\beta / \beta_{p b}$ & Burst size (B matrix)& Lytic burst size for phage $p$ and bacteria $b$\\
         $r / r_{p b}$ & Successful phage/cell encounter & Probability of a phage $p$ successfully infecting bacteria $b$\\
-        $\tau / \tau_{b}$ & Latent period (tau vector)& Time it takes bacteria $b$ to go through one infection stage\\
+        $\tau / \tau_{b}$ & Latent period (tau vector)& Time it takes bacteria $b$ to go through the infection stage\\
         $v / v_{b r}$ & Maximal growth rate & Growth rate of bacteria $b$ from resource $r$ \\
-        $K / K_{b r}$ & Monod Constant & Monod constant representing the resource $r$ concentration at which bacteria $b$ grows at half its maximal rate\\
-        $\omega^i / \omega^i_r$ & wash-in rate & Rate of resources $r$ being added\\
-        $\omega^o / \omega^o$ & wash-out rate & Rate of entities being removed, acts on all entities equally\\
+        $K / K_{b r}$ & Monod Constant & Monod constant representing at what resource $r$ concentration at which bacteria $b$ grows at half its maximal rate $v$\\
+        $\omega^i / \omega^i_r$ & wash-in rate & Rate of resource $r$ being added\\
+        $\omega^o$ & wash-out rate & Rate of phages, bacteria, and resources being removed, acts on everything proportionally\\
         $M$ & Number of infection stages & Number of infection stages that a bacteria goes through, all bacteria entities have the same value for $M$\\
-        $t$ & time & time value \\
+        $d$ & Debris & A debris term used to deactivate phages. See \Cref{sec:discussion:debris} for more information. \\
+        $t$ & time & time value through the simulation \\
         \bottomrule
-    \end{tabularx}\newline
+    \end{tabularx}
     \caption{
-        Golding model parameters with variables, names, and descriptions. 
+        Golding model parameters (\Cref{eq:golding_model} and \Cref{eq:adapted_golding_model}) with variables, names, and descriptions. 
         Subscripts on parameters indicate relationships; for example, $e_{b r}$ is nonzero if there is an edge connecting bacteria $b$ to resource $r$ in the network, zero otherwise.
     }
     \label{tab:appendixA:parameter_table_simple_golding_model}
 \end{table}
 
 
-\section{SOBOL Parameters}
-\begin{table}[h!]
+\section{Sobol Parameters}
+\begin{table}[H]
     \small % or \footnotesize to make it more compact
     \centering
     \begin{tabularx}{\textwidth}{l l X}
@@ -51,19 +52,20 @@ Parameters used in the various equations.
         $X_{\sim i}$ & Parameter input & All values of $X$ that are not $X_i$ \\
         $f$ & Function $f$ & Arbitrary black-box function describing model \\
         $N$ & Samples & Number of samples, power of 2, $2^x$ \\
-        $D$ & Parameter input size & Number of parameters inputted into SOBOL, $d=|X|$ \\
+        $D$ & Parameter input size & Number of parameters inputted into Sobol, $d=|X|$ \\
         $ST_i$ & Global sensitivity & Contribution of parameter $X_i$ to output variance of $Y$ due to interactions with other variables \\
         $S1_i$ & First order sensitivity & Contribution of $X_i$ to output variance of $Y$ \\
         \bottomrule
     \end{tabularx} \newline
     \caption{
-        SOBOL parameter symbols, name, and description.
+        Sobol parameter symbols, name, and description. 
+        See \Cref{sec:Sobol_sensitivity_analysis} for the equations. 
     }
-    \label{tab:appendixA:parameter_table_SOBOL}
+    \label{tab:appendixA:parameter_table_Sobol}
 \end{table}
 
 \section{Linear Regression Parameters}
-\begin{table}[h!]
+\begin{table}[H]
     \small % or \footnotesize to make it more compact
     \centering
     \begin{tabularx}{\textwidth}{l l X}

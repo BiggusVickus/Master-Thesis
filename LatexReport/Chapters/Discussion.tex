@@ -3,64 +3,97 @@
 This section presents an analysis and discussion of the results. 
 
 \section{Graph Behavior}
-\Cref{tab:results:graph_behavior} presents illustrative examples rather than a comprehensive analysis. 
 The behaviors shown represent typical trends observed when varying each parameter in the specified direction, but they may not apply to all possible values or reflect the magnitude of changes. 
 Additionally, these results do not necessarily generalize to scenarios where two parameters are simultaneously varied. 
-\Cref{tab:results:graph_behavior} should be interpreted alongside the local $S1$ sensitivities from \Cref{sec:SOBOL_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
+The graph behavior should be interpreted alongside the local $S1$ sensitivities from \Cref{sec:Sobol_sensitivity_analysis_results} to better understand how sensitive the output is to specific parameters and the potential impact of their variation.
 
-Many parameter changes offered little substantial changes in graph behavior. 
-The changes were mostly minor with not a significant change noticed. 
-A change in parameter input would sometimes result in 50-100 fewer phages compared to the original reference graph. 
-The magnitude of change is roughly in line with the SOBOL results. 
+A researcher would look at the growth curve and create their conclusions by visually looking at the curves and reasoning through the ODE model to explain the behavior. 
+They can further supplement this analysis with a Sobol analysis to quantify how significant the change was, and compare a parameter's significance with other parameters. 
 
-As an example take $\tau$ from \Cref{tab:results:graph_behavior} and \Cref{fig:created:SOBOL_no_wi_wo}. 
-I noted that for $\tau=3$ the phage and total bacteria peak was significantly later than for the default $\tau$ value of 2.14. 
-Likewise for $\tau=0.5$, the phage and total bacteria peak occurred significantly earlier than the reference graph. 
-Looking at $\tau$ in the Phage and Total Bacteria Peak Time figure, \Cref{fig:created:SOBOL_peak_time_no_wi_wo}, $\tau$ has a significant impact on the peak time. 
+\section{Realistic Growth Curves}
+As the complexity of the network grows, biologically accurate curves might disappear. 
+In a $1\times 1\times 1$ system, like that in \Cref{fig:created:a_good_curve}, there is a clear exponential growth, peak, and death cycle for the bacteria. 
+The phages experience a delay in growth, but also exhibit exponential growth. 
+These behaviors can disappear as the community size grows to a $p\times b\times r$ system. 
+\Cref{fig:created:large_graph_network_output} shows how these behaviors disappear. 
+Some, but not every phage or bacteria in \Cref{fig:created:large_graph_network_output} exhibits a clear growth and death cycle. 
+Bacteria face increased competition for resources, and phages face increased competition for bacteria. 
+This increased competition decreases the pool of available resources for the bacteria and phages to grow. 
+There is an external threat, the washout, so any bacterial and phage growth gets cancelled out by the washout, or even worse, if the growth is not fast enough, completely eliminated. 
 
-A biologist would look at the growth curve and create their conclusions by visually looking at the curves and reasoning through the ODE model to explain the behavior. 
-A biologist can supplement this analysis with a SOBOL analysis to quantify how significant the change was, and compare a parameter's significance with other parameters. 
-
-\section{A Realistic Growth Curve}
-As the bacterial population grows, resource consumption accelerates until only trace amounts remain. 
-The delay between the peaks of uninfected and infected bacteria is due to the infection stages and the latent period of phage infection. 
-Each bacterium transitions from infection stage $k$ to $k+1$ at a rate of $\frac{M}{\tau}$. 
-Therefore, decreasing the number of infection steps $M$ or increasing the latent period $\tau$ amplifies this delay. 
-A longer latent period means it takes more time for bacteria to progress through the infection stages.
-
-At $t=4$, the infection rate surpasses the bacterial replication rate, causing the bacterial population to decline even though resources are still available. 
-This moment coincides with the rise of the phage population. 
-Observing the timing of these events and changes in the graph's behavior, as well as their relationships across different graphs, helps clarify the complex population dynamics and the interdependence of the populations. 
-The nature of the models being nonlinear makes the analysis harder to understand and conceptualize. 
-
-Understanding the system becomes more complicated as the model increases from a $1\times1\times1$ system to a $p\times b\times r$ system. 
-Now up to any number of phages can interact with any number of bacteria, and any number of bacteria can interact with any number of resources, each with their own unique parameter values. 
-These varying rates will significantly influence the dynamics of the system, and make it hard to determine what event caused what due to the rise in number of interactions.
 There are only 2 interactions that occur in a $1\times1\times1$ system. 
 With a $p\times b\times r$ system, there are at most $p\cdot b + b\cdot r$ interactions that can occur. 
-So many individual events occurring at the same time makes it harder to identify the cause of the event, and how the event's action will propagate through the network. 
-A method to circumvent this issue is by knocking out certain nodes or edges and rerunning the simulation and compare the results. 
+Any number of phages can interact with any number of bacteria, and any number of bacteria can interact with any number of resources, each with their own unique parameter values. 
+These varying rates will influence the dynamics of the system, and make it hard to determine what event caused what due to the rise in number of interactions.
+With so many individual events occurring at the same time, it makes harder to identify the cause of the event, and how the event's action will propagate through the network. 
+
+There are ways to circumvent this issue. 
+Simulations offer the ability for researchers to experiment with the system that normally might not be feasible. 
+Knocking out certain nodes or edges and rerunning the simulation would allow the researcher to see how the knocked out node or edge influenced the simulation. 
 The knocked out node or edge won't contribute to the simulation anymore, so there will be an impact on the population count. 
+The larger the difference, the more important that that node or edge had on the simulation. 
 
-\section{SOBOL Sensitivity}
-SOBOL, when mixed with a qualitative analysis can provide insight into why when a parameter changes, the output changes as it does. 
-A researcher might look at an ODE model and reason through the changes. 
-They might explore the model by having an internal monologue as follows. 
-“If I increase $\tau$, which means that the bacteria infection process takes longer, then when a phage infects a bacterium, it will take longer for the bacteria to die. 
-Dying later means that the phages are released later. 
-By releasing later, it will take longer for the phages to grow and peak. 
-It also allows more time for the uninfected bacteria population to grow and use up the resources. 
-There will be a natural delay in uninfected bacteria peak as it takes longer for the bacteria to become infected and go through the infection process.” 
+\subsection{Knockout}
+\Cref{fig:created:large_graph_network_output_hidden_B14_P2} and \Cref{fig:created:large_graph_network_output_knockout_B14_P2}
+show the difference that a knockout has on the output of the graphs. 
+$P_2$ and $B_14$ were knocked out of the network, using \Cref{fig:ss:example_large_network} as the base network. 
+On average, there are more resources, as there is less competition for the resources. 
+In the knocked out graph, more bacteria were able to survive, and in total there were more bacteria in the system as evident by the bacteria sum. 
+There are also less infected bacteria. 
+With the phages, there is less of an obvious difference in behavior, but in \Cref{fig:created:large_graph_network_output_hidden_B14_P2}, $P_18$, pink, suddenly increases in population at $t=10$ until the end of the simulation, while this doesn't happen in \Cref{fig:created:large_graph_network_output_hidden_B14_P2}. 
+$P_18$ infects $B_14$ (as well as $B_13$), so by removing $B_14$ $P_18$ was negatively affected. 
 
-A researcher might use SOBOL to quantify these changes, and use the analysis to gain a better oversight of the model. 
-B identifying the important parameters, a researcher could engineer new phages to target those changes to alter the output in their favor. 
+By removing $P_2$ and $B_14$, it was casually shown how the resource, bacteria, and phage dynamics were permanently altered. 
+\Cref{fig:created:large_graph_network_output_knockout_B14_P2} showed how knockouts have a lasting impact on the dynamics of the system, changing which phages and bacteria survive. 
+\begin{figure}
+    \includegraphics[width=1\textwidth]{Plots/Created/large_graph_network_output.png}
+    \centering
+    \caption{
+        The output graph for the default parameter values for a large $20\times 20 \times 10$ network. 
+        Parameter values were randomly chosen in the interval given by \Cref{tab:appendixE:Sobol_analysis_values}. 
+    }
+    \label{fig:created:large_graph_network_output}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/large_graph_network_output_knockout_B14_P2.png}
+        \caption{
+            The same figure as \Cref{fig:created:large_graph_network_output}, but with phage $P_2$ and bacteria $B_14$ hidden from the graph. 
+        }
+        \label{fig:created:large_graph_network_output_hidden_B14_P2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/large_graph_network_output.png}
+        \caption{
+            The large $20\times 20\times 10$ network, with phage $P_2$ and bacteria $B_14$ knocked out from the system.
+        }
+        \label{fig:created:large_graph_network_output_knockout_B14_P2}
+    \end{subfigure}
+    \caption{
+        Comparing the effect of knocking $P_2$ and $B_14$ out from the system. 
+        Figure a) has $P_2$ and $B_14$ hidden from the system, while Figure b) has the phage and bacteria knocked out from the system. 
+        The most important phage and bacteria as noted by the bacteria growth were knocked out. 
+        \Cref{fig:ss:example_large_network} is used as the reference network model. 
+        The colors between a) and b) can not be directly compared as the color is not mapped to a specific phage or bacteria. 
+    }
+\end{figure}
+
+\section{Sobol Sensitivity}
+A researcher might have an intuitive understanding of how a model works, but might be unsure of how important the parameters of the model has on the model results.  
+A researcher can use Sobol to quantify how important a change in parameter value is in the context of the simulation results. 
+By testing and measuring hundreds of simulation inputs and outputs, Sobol understands how changing a parameter value would influence the output of the parameter. 
+By identifying the important parameters, a researcher could use that to their benefit in their research. 
+Researchers can prioritize adjusting the most influential parameters in their simulations or consider engineering phages and bacteria to achieve the desired parameter values.
 
 \subsection{Resources}
 Every parameter affects how the bacteria and phage population grows in some way, which influences the consumption rate of resources, which determines the final resource value. 
 Of the other parameters, $\tau$ has the biggest influence because $\tau$ determines how fast the bacteria will go through the infection process. 
 The longer it takes, the longer it takes for the phage population to grow, allowing more bacteria to grow and consume resources. 
-
-
 
 \subsection{Phages}
 The $r$ value quantifies how fast the phages infect the uninfected bacteria. 
@@ -94,7 +127,8 @@ More phages will cause more infections, slowing the spread of bacteria.
 However, $r$ surprisingly does not have an influence on the final bacteria population level.  
 
 The total bacteria peak population is much more sensitive to the different parameter values. 
-The bacteria act as a link between the phages and resources. Any changes in the resource consumption rate or initial condition will affect the bacteria population. 
+The bacteria act as a link between the phages and resources. 
+Any changes in the resource consumption rate or initial condition will affect the bacteria population. 
 Likewise, any change in phage adsorption rate will affect the bacteria growth, which in turn will affect the resource consumption rate. 
 The bacteria have the ability to dampen the effect of certain parameters. 
 For example, the initial resource value affects the final resource value. 
@@ -122,8 +156,8 @@ For large initial bacteria concentrations, the resources run out.
 This severely limits the ability for the bacteria to grow and artificially limits the population cap of the bacteria. 
 
 The system is latency limited between 25 and 100 uninfected bacteria. 
-The collapse time in a latency limited regime is independent of the initial bacteria population \cite{mullaExtremeDiversityPhage2024}. 
-As the initial bacteria decreases, the phage to bacteria ratio increases, and they can infect the bacteria faster. 
+The collapse time in a latency limited regime is independent of the initial bacteria population \cite{mullaExtremeDiversityPhage2024}.
+As the initial bacteria decreases, $r\cdot \beta$ eventually becomes smaller than $1/tau = \frac{1}{2.14} = 0.467$, that's around where the transition happens - see Yuval's paper supplement.the phage to bacteria ratio increases, and they can infect the bacteria faster. 
 So the time to phage peak also decreases as the initial uninfected bacteria decreases. 
 
 As the uninfected bacteria decreases from 25 towards 1, it takes longer for the bacteria to grow and reach their peak population count. 
@@ -147,7 +181,7 @@ The bigger the washout value, the harder it is for the phages and bacteria to pr
 The bacteria couple the phage populations to resources, so changes in initial resource concentration will have an effect on the final phage value. 
 Increasing the initial resource concentration creates more bacteria, while decreasing it results in fewer bacteria.
 More bacteria ultimately produce more phages, while fewer bacteria ultimately result in fewer phages.
-While SOBOL with washin and washout, \Cref{fig:created:SOBOL_peak}, showed that the final value for phages due to changes in initial resource input values is limited (sensitivity $\approx 0.1$), it still has an impact. 
+While Sobol with washin and washout, \Cref{fig:created:Sobol_peak}, showed that the final value for phages due to changes in initial resource input values is limited (sensitivity $\approx 0.1$), it still has an impact. 
 
 For low initial resource concentration values, values below $10$ the resource, the Monod curve is below the half-velocity constant (the velocity $v$ is 1 and $K$ is 10). 
 The lack of resources restricts the bacteria growth, and the bacteria can't grow quickly. 
@@ -155,11 +189,9 @@ As the resource concentration increases towards $K=10$, the bacteria can grow fa
 Since $K$ is small, a small change in $R$ causes a relatively large change in the Monod rate. 
 
 At around the minimum in the phage proliferation boundary, the behavior changes. 
-At $R\approx 7$, the Monod rate reaches half of its max velocity. 
+The minimum happens at $R\approx 7$, the Monod rate reaches half of its max velocity. 
 This behavior should be seen at around 10, but the washout has an effect on the Monod rate by artificially shifting the point where the half velocity occurs from $K=10$ to $K\approx 7$. 
 $10\cdot 0.98^{15} = 7.386$
-
-
 
 As $R$ increases from $K$, the bacteria are not limited by the nutrients anymore and can grow faster. 
 However, as $R$ increases beyond $K$, each additional unit of $R$ results in a diminishing increase in the Monod rate, which asymptotically approaches its maximum velocity. 
@@ -174,37 +206,47 @@ Even with the added bacteria, the phage proliferation boundary is still heavily 
 
 \section{Plotting Parameter Change}
 
-\section{Large $20\times20\times10$ System}
+\section{Phage and Bacteria Survivability}
 There are so many interactions and parameters in large and complex systems that it becomes hard to analyze. 
-There is no clear overview of the model, and a figure of the network interactions and a copy of the parameter inputs is needed in order to have some sort of chance to analyze why an entity is behaving as it does. 
-It is hard to simplify the model as each entity is influenced by the sum of other entities that it interacts with. 
-The lines for each population curve cover the other lines, and some lines have the same color due to limited color ranges. 
+The model network and parameter values are relatively random, and a figure of the network interactions and a copy of the parameter inputs is needed in order to have some sort of chance to analyze why a phage or bacteria is behaving in a certain way. 
+Further, it is hard to simplify the model, for example by knocking out unimportant bacteria from the system, due to the interconnected nature of the system. 
 
+
+Since their discovery, bacteriophages have been traditionally regarded as the natural enemies of bacteria. However, recent advances in molecular biology techniques, especially data from "omics" analyses, have revealed that the interplay between bacterial viruses and their hosts is far more intricate than initially thought. On the one hand, we have become more aware of the impact of viral predation on the composition and genetic makeup of microbial communities thanks to genomic and metagenomic approaches. Moreover, data obtained from transcriptomic, proteomic, and metabolomic studies have shown that responses to phage predation are complex and diverse, varying greatly depending on the bacterial host, phage, and multiplicity of infection. Interestingly, phage exposure may alter different phenotypes, including virulence and biofilm formation. The complexity of the interactions between microbes and their viral predators is also evidenced by the link between quorum-sensing signaling pathways and bacteriophage resistance. Overall, new data increasingly suggests that both temperate and virulent phages have a positive effect on the evolution and adaptation of microbial populations. From this perspective, further research is still necessary to fully understand the interactions between phage and host under conditions that allow co-existence of both populations, reflecting more accurately the dynamics in natural microbial communities.
+
+Phages have traditionally been seed as the enemy of bacteria, but with new trancriptomic, proteomic, genomic, and metabolomic methods, we have a better understanding of hoe phage predation infleunces 
+
+Overall, new data increasingly suggests that both temperate and virulent phages have a positive effect on the evolution and adaptation of microbial populations. From this perspective, further research is still necessary to fully understand the interactions between phage and host under conditions that allow co-existence of both populations, reflecting more accurately the dynamics in natural microbial communities. 
+
+\subsection{Ecology}
+With the competitive exclusion principle in ecology, there should be at most 10 surviving bacteria. 
+Two or more species competing for the same resources can not coexist indefinitely. 
+
+The $\text{R}^{*}$ resource-ratio hypothesis rule is a rule that states that a species needs to be the best at consuming resources to persist. 
+The growth rate of a species is proportional to the resources consumed with an energy factor, minus a maintenance and death rate. 
+The bigger the resource overlap between competing bacteria, the smaller the realm of co-existence \cite{vandenbergEcologicalModellingApproaches2022}. 
+
+\subsection{Debris Term}
+\label{sec:discussion:debris}
 A recently published paper \citet{deyEmergentHigherorderInteractions2025} uses the Golding model but adds a new term, debris. While running their simulations and experiments, the model's results would diverge from their experimental work. 
 Their thinking is that freshly lysed bacteria still have biomarkers that phages can detect and attach to. 
 Incorporating the debris term, which acts as an additional sink for phages, improved the model's alignment with the experimental data.
-The phages think they are infecting a bacterium, but in reality they aren't. 
 The debris term can also encompass bacterial phage defenses (\Cref{sec:literaturereview:bacterial_defense_against_phages}). 
 The phage equation from the Golding model can be rewritten as 
 \[
-    \frac{dP_p}{dt} = \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p - d_{p, b} \cdot P_p
+    \frac{dP_p}{dt} = \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p \mathcolor{red}{- d_{p, b} \cdot P_p}
 \]
-\Cref{fig:created:debris_model} shows how the effect of the debris term $d$ has on the growth curves of the phages and bacteria in comparison to no debris term, \Cref{fig:created:no_debris_model}. 
+\Cref{fig:created:debris_model} shows how debris $d$ had an effect on the growth curves of the phages and bacteria in comparison to no debris term, \Cref{fig:created:no_debris_model}. 
 Without the debris term, only one uninfected bacteria survived, and every phage survived except for one phage who died due to the washout. 
 Three uninfected bacteria species reached more than 1000 uninfected bacteria at any point in the simulation time, and only two infected bacteria species reached more than 1000 infected. 
 The maximum total bacteria population that was reached was a total of 6620 bacteria. 
 
-With the debris term included, the behavior is slightly altered. 
+With the debris term included, different results are obvious. 
 Three uninfected bacteria survived, four different uninfected bacteria strains ever reached a population value of greater than 1000 at any point in time during the simulation. 
 Only one bacteria strain ever reached more than 1000 infected bacteria, 
 The ending bacteria value is 12000, almost double the maximum bacteria population reached without debris. 
 On average, there were significantly fewer phages at the end of the simulation than without debris. 
 No phage population ended above 2000 with debris, while without debris two phage populations ended up with more than 2000 phages. 
-
-It is clear to see that debris has a significant impact on the dynamics of the system. 
-There are in general fewer phages to infect the bacteria with the additional removal of the phages. 
-Fewer infections mean more uninfected bacteria and fewer phages being produced. 
-This feedback loop keeps on going until the end of the simulation where it is possible to see the differences in behavior. 
 
 \begin{figure}
     \centering

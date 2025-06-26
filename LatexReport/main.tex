@@ -67,13 +67,15 @@
 \usepackage{float}
 \usepackage{subcaption}
 \usepackage{tabularx}
-% \usepackage[margin=1in]{geometry} % Adjust margins if needed
 \usepackage{booktabs}    
 \usepackage{listings}
 \usepackage{bm}
 \usepackage{aliascnt}
 \usepackage{algpseudocode}
+\usepackage{rotating}
 \usepackage{makecell}
+\usepackage{pdflscape}
+\usepackage[graphicx]{realboxes}
 \floatstyle{ruled}
 \newfloat{listing}{htbp}{lop}
 \floatname{listing}{Algorithm}
@@ -232,36 +234,36 @@ Date: \today\\
 %----------------------------------------------------------------------------------------
 \addtotoc{Abstract} 
 \abstract{\addtocontents{toc}{\vspace{1em}} 
-    In any given microbial ecosystem, there can be hundreds of different phages and bacteria interacting with one another in a complex system. 
+    In any given microbial ecosystem, hundreds of different phages and bacteria interact with one another in a complex system. 
     These individual interactions have a significant impact on the bacterial community and the overall ecosystem, with important ecological consequences. 
-They force bacteria to mutate and evolve, changing the community fitness level. 
+    They force bacteria to mutate and evolve, changing the community's fitness level. 
     Phages can control bacterial populations, ensuring that dangerous bacteria do not over-reproduce and harm the ecosystem. 
-    Phages control bacterial population dynamics using the “kill-the-winner” dynamic, preventing any one species from dominating.
+    Phages control bacterial population dynamics using the "kill-the-winner" dynamic, preventing any one species from dominating the population.
     Upon lysis, bacteria release resources into the environment that other bacteria and plants can use. 
 
-    There is a need to mathematically model complex systems, but current models typically only model 1 or 2 phages and bacteria. 
+    There is a need to model complex systems mathematically; however, current models typically only model one or two phages and bacteria. 
     It is, however, straightforward to extend the model to multiple species. 
-    Mathematically modeling large bacterial communities is important because running lab experiments takes time and is costly. 
+    Mathematically modeling large bacterial communities is important because running laboratory experiments is time-consuming and costly. 
     These simulations can guide future lab work, for example, in combating antibiotic-resistant bacteria. 
 
     I created a program consisting of three parts that can model complex communities of $p$ phages, $b$ bacteria, and $r$ resources. 
     The first part uses a GUI tool to create and edit the interactions between the phages, bacteria, and resources using a graph network. 
     The nodes and edges hold the interaction and environmental parameter values. 
-    The second part, the simulation framework itself, models and calculates the phage, bacteria, and resource population levels with the user-provided network and ODE model. 
+    The second part, the simulation framework itself, models and calculates the population levels of phage, bacteria, and resources using the user-provided network and ODE model. 
     The third part allows the user to interact with the simulation framework with a custom-built dashboard. 
-    The user can, for example, change the parameter values from the dashboard and immediately see how the change affects the simulation. 
+    The user can, for example, modify the parameter values from the dashboard and immediately observe the impact of the change on the simulation. 
     There are five pre-built plots that the user can interact with. 
-    It is possible to download the simulation results so that the user can create custom analyses and plots. 
+    It is possible to download the simulation results, allowing users to create custom analyses and plots. 
 
     I apply this process to the Golding model from \citet{gengUsingBacterialPopulation2024}. 
-    I qualitatively analyze the model's behavior and use a SOBOL analysis to quantitatively assign a value to the model's variance in output from the model's input. 
-    In addition, understanding the different regimes of restriction in phages, as well as the factors that drive reaction rates and determine the rate-limiting steps, is crucial.
-    By varying the initial uninfected bacteria population, the model can interpolate between two limiting scenarios, adsorption and latency limited. 
-    It is important to determine whether a phage population will proliferate in a laboratory context under constant washout to prevent the phage population from accidentally being wiped out. 
-    I run an analysis to see if phages will proliferate or die out depending on the initial condition. 
+    I qualitatively analyze the model's behavior and use a Sobol analysis to quantitatively assign a value to the model's variance in output based on its input. 
+    Additionally, understanding the various restriction regimes in phages, as well as the factors that drive reaction rates and determine the rate-limiting steps, is crucial.
+    By varying the initial population of uninfected bacteria, the model can interpolate between two limiting scenarios: adsorption and latency. 
+    It is essential to determine whether a phage population will proliferate in a laboratory setting under constant washout conditions to prevent the phage population from being inadvertently wiped out. 
+    I analyze whether phages will proliferate or die out, depending on the initial condition. 
     Finally, I perform and analyze a co-existence analysis on a large 20-phage, 20-bacteria, and 10-resource community to determine whether phages and bacteria can coexist under various conditions. 
-    I find that in large communities, phages and bacteria can coexist. 
-    If a debris term is introduced, the bacteria's survivability rate increases.
+    In large communities, phages and bacteria can coexist. 
+    If a debris term is introduced, bacterial defenses randomly deactivate phage, increasing the bacteria's survivability rate.
 
 % Include your abstract here 
 % Abstracts must include sufficient information for reviewers to judge the nature and significance
@@ -279,24 +281,24 @@ They force bacteria to mutate and evolve, changing the community fitness level.
 \setstretch{1.3} 
 \acknowledgements{
     \addtocontents{toc}{\vspace{1em}} 
-    I would like to thank my parents for loving me despite some of my faults, and for supporting me through my Bachelor and Master studies even if they don't exactly know what I am studying. Without them, I wouldn't know where my life would be right now, and I certainly would be a different person if it were not for them. 
+    I want to thank my parents for loving me despite some of my faults and for supporting me throughout my Bachelor's and Master's studies. Without them, I would not be where I am today, and I would certainly be a different person if it were not for them. 
 
-    Thank you to Dr. Matti Gralka for the weekly meetings and teaching me everything about phages and bacteria. 
-    Every meeting was always insightful, productive, and informative. 
-    I will forever be amazed at how he can remember which paper talks about which topic, and how he always had a paper for every topic. 
+    Thank you to Dr. Matti Gralka for the weekly meetings and for teaching me everything about phages and bacteria. 
+    Every meeting was always insightful, productive, engaging, and informative. 
+    I will forever be amazed at how he can recall which paper discusses which topic and how he always had a paper for every topic. 
 
     Thank you to Sofia Blaszczyk for finding the Master thesis opening and suggesting that I email Dr. Gralka for an introductory meeting. 
-    She acted as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy}, and watched my cringe screen recordings that I sent her at 2am showcasing various demos of my project. 
-    If she wouldn't have found this opening, I wouldn't know what I would be doing as my thesis. 
+    She acted as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy} and watched the cringe-worthy screen recordings that I sent her at 2 am, showcasing various demos of my project. 
+    If she had not found this opening, I would not know what I would be doing for my thesis. 
 
-    If I hadn't followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses “Introduction Computational Sciences“ and “Numerical Linear Algebra“ in my Bachelors, I would not have been interested in Computational Sciences. 
+    If I had not followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses "Introduction Computational Sciences "and "Numerical Linear Algebra "in my Bachelor's, I would not have been interested in Computational Sciences. 
     I would not have found the MSc Computational Sciences program, as Computational Sciences fits my interests and skill sets better than any other program I could have taken. 
-    For Rik and Martijn have forever altered my career trajectory. 
+    Rik and Martijn have forever altered my career trajectory. 
 
-    Thank you to Sarah Flickinger for showing me the research that she has been doing in the lab. 
-    She allowed me to really connect my research and models to real life, reminding me that what I am doing has real life use cases than just a purely theoretical or programming challenge. 
+    Thank you to Sarah Flickinger for showing me the research she has been working on in the lab. 
+    She allowed me to connect my research and models to real life, reminding me that what I am doing has real-life applications rather than just being a purely theoretical or programming challenge. 
 
-    And finally, thank you to all of my friends for keeping me sane and helping me through both of my programs. 
+    Moreover, I want to thank my friends for keeping me sane and supporting me throughout both of my programs. 
 }
 \clearpage 
 
