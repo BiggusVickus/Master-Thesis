@@ -255,6 +255,7 @@ class GraphMaker:
     
     def mass_create_edges(self, tuple_of_edges:tuple, edge_data = None):
         error_text = ""
+        current_edge_data = None
         for i, target in enumerate(tuple_of_edges):
             if len(target) != 2:
                 error_text += "Each tuple must have 2 elements, skipping edge\n"
