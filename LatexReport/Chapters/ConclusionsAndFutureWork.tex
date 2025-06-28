@@ -3,117 +3,118 @@
 
 \section{Conclusion}
 \label{Conclusion}
-Understanding the relationship that phages have with bacteria and the environment is complex. 
-Not including $M$ and the initial infected bacteria population, the parameter input space is 12 dimensions large. 
-Although quite small in comparison to other larger models, analyzing 12 unique parameters and their interactions takes times and an intricate understanding of the model. 
-Finding parameter values that result in quality and noteworthy graphs is not the easiest task, although knowing the expected values and the biological relevance makes the task easier. 
-Finding a set of parameters that results in behavior that is worth analyzing takes time. 
+Understanding the relationship between phages and bacteria, as well as their interaction with the environment, is complex. 
+For a single phage-bacteria pair growing on one resource there are seven biological parameters $(e, v, K, r, \beta, M, \tau)$ inputs for the Golding model, and six non-biological parameters ($R, U, I, P, \omega^o, \omega^o$). 
+Although relatively small in comparison to other models, analyzing 12 unique parameters and their interactions takes time and requires an intricate understanding of the model. 
+Finding parameter values that result in high-quality and noteworthy graphs is not an easy task, although knowing the expected values and the biological relevance makes the task easier. 
+Finding a set of parameters that yields behavior worth analyzing takes time. 
 
 To help aid myself with the task, I created a simulation framework that anyone can use to analyze their own custom model and interaction network. 
-A user can visually create and edit their interaction network. 
-Using the dashboard, they can edit the parameter values and run their own simulations. 
-The dashboard comes with some prebuilt visualization tools that allows the user to interact with the simulation results. 
-The tools allow the user to quickly iterate over and change parameter values to see how they influence the simulation results. 
-Although the visualizations on the dashboard are specifically built for $1\times 1\times 1$ models, the user can download the full simulation data and implement their own visualization methods to visualize the data over a $p\times b\times r$ system. 
-I use this tool to great effect, to introduce visualization methods like the IVA to identify growth bottlenecks. 
-I take the analysis further by introducing new visualizations such as a phage proliferation analysis and a survivability matrix. 
+Users can visually create and edit their interaction networks. 
+Using the dashboard, they can edit the parameter values and run their simulations. 
+The dashboard includes prebuilt visualization tools that enable users to interact with the simulation results. 
+The tool enables users to quickly iterate over and modify parameter values to observe their impact on simulation results. 
+Although the visualizations on the dashboard are designed explicitly for $1\times 1\times 1$ models, users can download the complete simulation data and implement their visualization methods to visualize the data over a $p\times b\times r$ system. 
+I use this tool to significant effect in introducing visualization methods, such as the IVA, to identify growth bottlenecks. 
+I take the analysis further by introducing new visualizations, such as a phage proliferation analysis and a survivability matrix. 
 
-Using the default interactive graphs on the dashboard and their own custom visualizations, users can explore the parameter space to identify notable model behaviors and gain a deeper understanding of the system's dynamics. 
+Using the default interactive graphs on the dashboard and their custom visualizations, users can explore the parameter space to identify notable model behaviors and gain a deeper understanding of the system's dynamics. 
 As evident by \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2}, different parameter values will lead to contrasting behavior, even if both parameter models replicate realistic growth curves. 
 
 Trying to expand an analysis into a $p\times b\times r$ system becomes even more complicated due to the interconnected nature of the entities. 
-With larger and larger systems small changes in a single parameter will not have big of an influence on the final output. 
+With increasingly larger systems, small changes in a single parameter will often have a minimal influence on the final output. 
 But if the parameter value does have an influence, it has a cascading effect on the whole network. 
 As an example, with a $2\times 2\times 1$ system, where $P_1$ infects $B_1$, and $P_2$ infects $B_1$ and $B_2$, and both bacteria consume $R_1$.  
-Increasing the infection rate of $P_1$ will slow the growth of the $B_1$ as $B_1$ is being infected faster. 
-With slower $B_1$ growth, and less uninfected $B_1$, $P_2$ is affected as there are fewer $B_1$ to infect. With lower $P_2$ count, $B_2$ can grow, using more resources. 
-As there are now less resources, it is harder for $B_1$ to grow, so $B_2$ can grow. 
-Eventually $P_2$ starts to infect $B_2$, so $B_2$ start to die, which gives $B_1$ a chance to consume resources and grow. 
+Increasing the infection rate of $P_1$ will slow the growth of $B_1$ as $B_1$ is being infected more rapidly. 
+With slower $B_1$ growth and less uninfected $B_1$, $P_2$ is affected as there are fewer $B_1$ to infect. With a lower $P_2$ count, $B_2$ can grow, using more resources. 
+As there are now fewer resources, it is harder for $B_1$ to grow, so $B_2$ can grow. 
+Eventually, $P_2$ starts to infect $B_2$, so $B_2$ starts to die, which gives $B_1$ a chance to consume resources and grow. 
 A self-reinforcing feedback loop starts, where a change in the infection rate has a cascading effect on the rest of the network. 
-The coupled interactions will have a feedback loop on itself, causing non-obvious behavior to occur. 
+The coupled interactions will form a feedback loop, causing non-obvious behavior to occur. 
 
-Parameterizing complex system is a hard task. 
-In the context of a $p\times b\times 4$ system, with $p, b, r > 1$, if you want to for example change $\beta$ to $35$, how would you do that? 
+Parameterizing complex systems is a challenging task. 
+In the context of a $p\times b\times r$ system, with $p, b, r > 1$, if you want to, for example, change $\beta$ to $35$, how would you do that? 
 There are various methods to solve this. 
 For a given matrix of size $p\times b$, you change each parameter value to 35. 
 You could alternatively randomize the parameter values in the matrix, with the random values averaging to 35. 
-A third option would be to shift every parameter values up or down so that the average of the values equal 35. 
+A third option would be to adjust every parameter value so that the average of the values equals 35. 
 
-Typically for bacterial communities there is a random parameter matrix, possible with a predetermined structure. 
+Typically, for bacterial communities, a common choice is random parameter matrix, possibly with a predetermined structure. 
 
 \section{Future Work}
 \label{Future Work}
-Next steps would be to collaborate with the researchers running the lab experiments so that they can verify the results as seen in the output by comparing the lab results with the model output. 
-With the lab results, the model can be adapted to better fit the lab results. 
-This can be done by changing parameter values, or by changing the model equation. 
-The user can decide to add the Monod microbial growth model to the growth of the bacteria, or adapt the Monod equation to being dependent on multiple sources. 
+The following steps involve collaborating with the researchers running the lab experiments to verify the results, as seen in the output, by comparing the lab results with the model output. 
+With the lab results, the model can be adjusted to better align with the lab findings. 
+This can be achieved by modifying parameter values or adjusting the model equation. 
+The user can decide to add the Monod microbial growth model to the growth of the bacteria or adapt the Monod equation to being dependent on multiple sources. 
 Using the model, the technicians can improve and validate their methods. 
 If the empirical results significantly deviate from the model results, the technician can theorize what might be happening and alter the model to account for the discrepancy. 
 \citet{deyEmergentHigherorderInteractions2025} was able to adapt their model to account for the discrepancy between the model results and the results seen in the lab. 
 They theorized that phages were somehow being deactivated. 
-By adding the debris term, they were better able to account for the phage deactivation, and achieved a better and more accurate curve fit. 
+By adding the debris term, they were better able to account for phage deactivation and achieved a better, more accurate curve fit. 
 
 \subsection{Model Replication}
 Being able to replicate other models like that of \citet{nilssonCocktailComputerProgram2022} would allow me to compare model outputs. 
 A benefit of implementing Cocktail's model is that it would be possible to model multiple bacteria and phages at the same time, as noted as a limitation in \Cref{sec:literature:cocktail_and_phagedyn_limitations}. 
-Cocktail limits itself to 2 phages, 1 bacteria, and 1 resource. 
+Cocktail limits itself to two phages, one bacteria, and one resource. 
 Cocktail supports adding more phages at set times, but only at most three times. 
 This arbitrary limitation can be removed with Cocktail's model implementation. 
 
 \subsection{Debris}
-Looking further into the debris and its effects could be a next step in the project. 
-It was casually shown how adding a debris term increased the survivability of the bacteria populations, on average showing a higher uninfected bacteria population, and lower uninfected and phage population count. 
-The debris term influenced the phage and bacteria dynamics. 
+Investigating the debris and its effects further could be the next step in the project. 
+It was casually shown that adding a debris term increased the survivability of the bacterial populations, on average, resulting in a higher uninfected bacterial population and lower uninfected and phage population counts. 
+The term 'debris' influenced the dynamics of phage and bacteria. 
 
 \subsection{Lab Work}
-A next logical step would be to complete lab work to obtain curves that could be used to compare the simulation results with the lab results. 
+The next logical step would be to complete lab work to obtain curves that could be used to compare the simulation results with the lab results. 
 If the curves are significantly different from that of the ODE model, a new ODE model can be created. 
-Curve fitting algorithms can be used to numerically find the interaction parameters for the new ODE model. 
+Curve fitting algorithms can be used to determine the interaction parameters for the new ODE model numerically. 
 Using the simulation software would save time, money, and resources as fewer experiments would have to be run. 
 
-The lab work would act as an important model validation step. 
+The lab work would act as an essential model validation step. 
 \citet{deyEmergentHigherorderInteractions2025} showed how their ODE model would eventually diverge from the lab-produced ODE curve. 
 They were able to achieve a better curve fit by adapting the model to include the debris term. 
 
-Future lab work can also include finding out which bacteria, phages, and resources are found in marine water via samples taken from the environment. 
-The next step would be to build an interaction network, along with experimentally finding out the interaction parameter values using experimental lab work. 
-Researchers can predict how the system would behave under new untested conditions, saving money and time. 
-It might also tell researchers if they made a mistake during testing. 
-If the model says the system should behave in one way, but the system acts differently, the researcher can review their methods and maybe make changes to how they run the experiments. 
-All in all, having a model that takes seconds to run will help aid researchers better understand the system. 
+Future lab work can also involve identifying the bacteria, phages, and resources present in marine water by analyzing samples collected from the environment. 
+The next step would be to build an interaction network, along with experimentally determining the interaction parameter values through laboratory work. 
+Researchers can predict how the system would behave under new, untested conditions, saving money and time. 
+It may also indicate to researchers if they made an error during testing. 
+Suppose the model indicates that the system should behave in one way, but the system acts differently. In that case, the researcher can review their methods and consider making adjustments to how they conduct the experiments. 
+All in all, having a model that runs in seconds will help researchers better understand the system. 
 
 \subsubsection{Environmental Modelling}
 Many results in research papers come from controlled lab settings. 
 As a next step, researchers can actively collect daily water samples and measure phage, bacteria, and resource concentrations. 
 Collecting samples for over a year would create an ODE-like population curve of the entities. 
-This approach would provide deeper insights into the dynamics of bacteria and phage populations in natural environments, at the loss of control over conditions. 
+This approach would provide deeper insights into the dynamics of bacterial and phage populations in natural environments, albeit at the expense of losing control over conditions. 
 By continuously monitoring environmental factors such as hourly temperature, rainfall, and the concentrations of each entity, researchers can gain a deeper understanding of the causal relationships within the ecosystem.
-By conducting the experiment over the course of a year, short-term fluctuations in daily measurements are averaged out, resulting in a smoother overall curve.
+By experimenting over a year, short-term fluctuations in daily measurements are averaged out, resulting in a smoother overall curve.
 
 The next step would be to use the model to fit and explain observed population dynamics. 
-We would want to model how environmental variables (for example temperature, nutrient availability, rainfall) influence the interactions between phages, bacteria, and resources. 
-Key phenomena could include year long seasonal cycles, such as a dry and wet season, rapid growth and decline in population count, resilience, and impact of random events such as storms or pollution spikes. 
-By fitting the model to real-world data, we could identify which parameters or interactions are most sensitive to environmental changes, and potentially predict how the ecosystem might respond to future events and scenarios. 
-Trying to isolate these communities and run different experiments could be a next step. 
-Analyzing which phages interact with which bacteria, or a knockout experiment to analyze how a loss in a bacteria or resource node has a cascading effect in the population growth. 
+We want to model how environmental variables (such as temperature, nutrient availability, and rainfall) influence the interactions between phages, bacteria, and resources. 
+Key phenomena could include year-long seasonal cycles, such as dry and wet seasons, rapid growth and decline in population counts, resilience, and the impact of random events, including storms or pollution spikes. 
+By fitting the model to real-world data, we could identify which parameters or interactions are most sensitive to environmental changes and predict how the ecosystem might respond to future events and scenarios. 
+Trying to isolate these communities and run different experiments could be the next step. 
+Analyzing which phages interact with which bacteria or conducting a knockout experiment to investigate how the loss of a bacterium or resource node has a cascading effect on population growth. 
 
-\citet{cleggCrossfeedingCreatesTipping2025} created a $b\times r$ bacteria-resource model, so without phages, and identified which bacteria consumed which resources. 
-By changing the number of resources needed to survive, the consumer requirements, the researchers were able to change the community diversity. 
-By adding and removing bacteria-resource interactions to the adapted Golding model, these results could be replicated. 
-Adding more bacteria-resource edges would introduce more competition, so more bacteria would die out, decreasing the community diversity. 
-Removing edges would remove competition for the resources, and the community diversity would increase. 
+\citet{cleggCrossfeedingCreatesTipping2025} created a $b\times r$ bacteria-resource model without phages and identified which bacteria consumed which resources. 
+By adjusting the number of resources required for survival, the researchers were able to alter the community's diversity. 
+By adding and removing bacteria-resource interactions to the generalized Golding model, these results could be replicated. 
+Adding more bacteria-resource edges would introduce more competition, resulting in more bacteria dying out and decreasing community diversity. 
+Removing edges would remove competition for resources, and community diversity would increase. 
 
 \section{Other Users}
-Even though I created the simulation framework to help me with running and analyzing the simulation results, the idea of this program is that anyone could download the framework source code and run their own simulations. 
-A professor might be interested in using this tool in an “Introduction to Bacteriology” or “Biological Modelling” course, where the professor would instruct the students to design and implement an ODE model. 
-They would instruct the students to interact with the model as an introduction to modelling phage and bacteria populations. 
-A researcher with weaker programming skills could use this low code tool to better understand how the system they are analyzing in their lab would change under different conditions. 
-The code has been designed such that a user with basic programming skills can create their own analysis, by copy-pasting boilerplate like code. 
-The biggest challenge would be to program the ODE model, and possibly their own custom visualizations. 
+Although I created the simulation framework to facilitate the running and analysis of simulation results, the idea behind this program is that anyone can download the framework's open-source code, edit it, and run their own simulations. 
+A professor might be interested in using this tool in an "Introduction to Bacteriology" or "Biological Modelling" course, where the professor would instruct the students to design and implement an ODE model. 
+They would instruct the students to interact with the model as an introduction to modeling phage and bacteria populations. 
+A researcher with weaker programming skills can utilize this low-code tool to gain a deeper understanding of how the system they are analyzing in their lab would behave under different conditions. 
+The code has been designed so that a user with basic programming skills can create their own analysis by copying and pasting boilerplate-like code. 
+A sample of the boiler-plate code with the implemented ODE model of the generalized Golding model can be found in \Cref{AppendixD}. 
+The biggest challenge for the user is programming the ODE model and custom visualizations. 
 
-Other users and researchers could program their own subset of tools to work with the tool. 
+Other users and researchers could program their subset of tools to work with the tool. 
 The graph network can be programmatically created with NetworkX. 
-As the network is graph based, they can run network analysis programs on the graph to identify the node with the most edges and remove that node. 
-The user can create a tool would programmatically knock out nodes and edges. 
-Since the simulation framework is object orientated, the user can interface with the framework from their code and skip the dashboard to automate every step along their simulation pipeline. 
-This would help users programmatically run a wider range and more unique simulations. 
+As the network is graph-based, they can run network analysis programs on the graph to identify the node with the most edges and remove that node. 
+The user can create a tool that programmatically removes nodes and edges. 
+Since the simulation framework is object-orientated, the user can interface with the framework from their code and skip the dashboard to automate every step along their simulation pipeline. 
+This would enable users to run a broader range of more unique simulations programmatically. 

@@ -49,8 +49,8 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[11pt, oneside, draft]{Thesis}
-% \documentclass[11pt, oneside, final]{Thesis}
+% \documentclass[11pt, oneside, draft]{Thesis}
+\documentclass[11pt, oneside, final]{Thesis}
 
 \graphicspath{{Images/}} 
 \usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers' 
@@ -238,11 +238,11 @@ Date: \today\\
     These individual interactions have a significant impact on the bacterial community and the overall ecosystem, with important ecological consequences. 
     They force bacteria to mutate and evolve, changing the community's fitness level. 
     Phages can control bacterial populations, ensuring that dangerous bacteria do not over-reproduce and harm the ecosystem. 
-    Phages control bacterial population dynamics using the "kill-the-winner" dynamic, preventing any one species from dominating the population.
+    Phages control bacterial population dynamics using the “kill-the-winner" dynamic, preventing any one species from dominating the population.
     Upon lysis, bacteria release resources into the environment that other bacteria and plants can use. 
 
     There is a need to model complex systems mathematically; however, current models typically only model one or two phages and bacteria. 
-    It is, however, straightforward to extend the model to multiple species. 
+    It is, however, straightforward to extend classical models for single phage-host pairs to multiple species. 
     Mathematically modeling large bacterial communities is important because running laboratory experiments is time-consuming and costly. 
     These simulations can guide future lab work, for example, in combating antibiotic-resistant bacteria. 
 
@@ -255,15 +255,18 @@ Date: \today\\
     There are five pre-built plots that the user can interact with. 
     It is possible to download the simulation results, allowing users to create custom analyses and plots. 
 
-    I apply this process to the Golding model from \citet{gengUsingBacterialPopulation2024}. 
+    I apply this process to the model from \citet{gengUsingBacterialPopulation2024}. 
     I qualitatively analyze the model's behavior and use a Sobol analysis to quantitatively assign a value to the model's variance in output based on its input. 
     Additionally, understanding the various restriction regimes in phages, as well as the factors that drive reaction rates and determine the rate-limiting steps, is crucial.
-    By varying the initial population of uninfected bacteria, the model can interpolate between two limiting scenarios: adsorption and latency. 
+    By varying the initial population of uninfected bacteria, the model can interpolate between two limiting processes: adsorption and latency. 
     It is essential to determine whether a phage population will proliferate in a laboratory setting under constant washout conditions to prevent the phage population from being inadvertently wiped out. 
     I analyze whether phages will proliferate or die out, depending on the initial condition. 
     Finally, I perform and analyze a co-existence analysis on a large 20-phage, 20-bacteria, and 10-resource community to determine whether phages and bacteria can coexist under various conditions. 
     In large communities, phages and bacteria can coexist. 
-    If a debris term is introduced, bacterial defenses randomly deactivate phage, increasing the bacteria's survivability rate.
+    Introducing a debris term  that can deactivate free phages increases the bacteria's survivability rate.
+
+    The flexible simulation framework developed here can be used to study the dynamics of complex communities, thus contributing to a better understanding of phage-host dynamics in the future. 
+    Since it requires little to no programming skills on the part of the user, it can also serve as a value tool in teaching. 
 
 % Include your abstract here 
 % Abstracts must include sufficient information for reviewers to judge the nature and significance

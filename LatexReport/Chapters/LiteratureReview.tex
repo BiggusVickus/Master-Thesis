@@ -152,7 +152,7 @@ Researchers worldwide are conducting laboratory experiments to gain a deeper und
 The aim is to gain a better understanding of how phages work and interact with bacteria at the molecular, host, and population levels. 
 
 \subsection{Running Experiments}
-A researcher might run the experiment in a liquid medium containing water, carbon, and nitrogen sources. 
+Laboratory experiments are often carried out in a liquid medium containing the necessary resources for the bacteria to grow. 
 This liquid medium, often referred to as broth, facilitates the cultivation of bacteria in a well-mixed environment, allowing researchers to monitor bacterial growth and phage infection dynamics over time. 
 By adjusting parameters such as resource concentration, temperature, and pH, researchers can simulate different environmental conditions and observe their effects on phage-bacteria interactions. 
 
@@ -165,7 +165,7 @@ Chemostats enable the continuous addition of resources and removal of waste, the
 
 \subsection{Petri Dishes}
 Petri dishes are another common method used to grow bacterial colonies. 
-Agar, a jelly-like substance derived from seaweed, is commonly used as a solid-growth medium in Petri dishes. 
+Agar, a jelly-like substance derived from seaweed, is commonly added to make a solid-growth medium in Petri dishes. 
 Agar provides a stable surface for bacteria to grow on and form visible colonies. 
 Clear zones, called plaques, appear where phages have infected and lysed the bacteria, allowing for the quantification and observation of phage activity. 
 The phages can diffuse on the agar plate, infecting neighboring cells. 
@@ -202,15 +202,14 @@ By introducing new resources at set time intervals, the bacteria can regrow and 
 
 \subsection{Growth Curves Typically Seen in a Lab}
 \label{sec:literaturereview:growth_curves_typically_seen_in_a_lab}
-When choosing parameter values, it is essential to select values that can realistically be found in real-life systems and be replicated in the lab. 
-There are various features that a researcher will look for in a growth curve produced in a lab.
-A combination of these features yields an ideal growth curve that replicates real-life bacterial growth. 
+When choosing model parameter values, it is essential to select values that can realistically be found in real-life systems and be replicated in the lab. 
+There are various features that characterize a growth curve produced in a lab that a model should aim to reproduce. 
 
 The idealized dynamics of bacterial populations undergoing phage infection have several phases. 
 First, there is an apparent exponential rise in bacteria growth, growing 40-100x in population in the span of a few hours. 
 At a certain point in time, the bacterial population starts decreasing almost as fast as it was growing. 
 
-Phage populations also exhibit exponential growth but with a delay in growth. 
+Phage populations also exhibit exponential growth but with a delay in growth relative to the bacterial population. 
 Initially, there is no growth in the phage population. 
 After a set amount of time, the phage population will start to grow and peak a few hours after the bacteria population reaches its peak. 
 If there is no phage death or removal, the phage population will eventually reach a plateau when every bacteria has died. 
@@ -250,7 +249,7 @@ These specific plots exhibit a clear growth, peak, delay, and death cycle.
 
 \section{Software Mathematically Modelling Phages, Bacteria, and Resources}
 Some software programs modeling phage-bacteria-resource interactions already exist. 
-Here I cover two software, Cocktail and PhageDyn, that have been created to model phages and bacteria, as well as their limitations. 
+Here I cover three software, Cocktail, PhageDyn, and PhiSite and that have been created to model phages and bacteria, as well as their limitations. 
 
 \subsection{Cocktail}
 \citet{nilssonCocktailComputerProgram2022} developed Cocktail to model phage-bacteria-resource kinetics in a chemostat. 
@@ -261,15 +260,23 @@ The user can also control model settings, such as if the model is deterministic 
 \Cref{fig:sourced:cocktail_plot} shows four sample output plots. 
 
 \subsection{PhageDyn}
-PhageDyn is a Java applet that models phage dynamics in multi-reactor industrial wastewater treatment plant models. 
-PhageDyn interacts with existing GPS-X \cite{AdvancedWastewaterModelling} files to incorporate phage dynamics into models of industrial wastewater treatment plants \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+PhageDyn developed by \cite{krysiak-baltynSimulationPhageDynamics2017}, is a Java applet that models phage dynamics in multi-reactor industrial wastewater treatment plant models. 
+PhageDyn interacts with existing GPS-X \cite{AdvancedWastewaterModelling} files to incorporate phage dynamics into models of industrial wastewater treatment plants. 
 \citet{krysiak-baltynSimulationPhageDynamics2017} developed PhageDyn to determine how phages can reduce foaming caused by bacteria in wastewater treatment plants, another real-life application of phages \cite{heardEffectFilamentousBacteria2008}. 
 PhageDyn does not simulate phage dynamics on its own; instead, it manipulates existing files in GPS-X to incorporate phage dynamics into wastewater treatment plant models. 
 \Cref{fig:sourced:phagedyn_plot} shows the output that PhageDyn provides. 
 
-\subsection{Cocktail and PhageDyn Limitations}
+\subsection{PhiSite}
+PhiSite is a website created by \citet{bekeModellingInteractionBacteriophages2016} to allow users to interact with the \citet{schragHostParasiteCoexistenceRole1996} model. 
+The website can be accessed \href{http://dublin.embnet.sk:3838/model/}{here}. 
+It is possible to change various input parameters, like the temperature and pH of the system, infected bacteria count, washout, and more. 
+The software allows you to download the graphs and simulation data. 
+See \Cref{sec:lit:schrag} for more details on the model. 
+\Cref{fig:sourced:phisite_plot} shows the output that PhiSite provides. 
+
+\subsection{Cocktail, PhageDyn, and PhiSite Limitations}
 \label{sec:literature:cocktail_and_phagedyn_limitations}
-There are limitations to Cocktail and PhageDyn. 
+There are limitations to all three software. 
 Cocktail can model up to a $2\times 1 \times 1$ system and in a chemostat environment. 
 Chemostats receive a constant influx of new resources and a constant removal of medium from the chemostat. 
 Cocktail's model can not be easily adapted to other models. 
@@ -282,9 +289,11 @@ PhageDyn is programmed for a specific task, with no flexibility in modifying the
 PhageDyn assumes biomass instead of individual bacteria populations. 
 However, PhageDyn is no longer available for download.
 
+PhiSite faces similar limitations to Cocktail where the model input is hardcoded to the frontend, so any changes to the ODE parameter are not possible, and it is not not easy to run multiple simulations at once to cover a wide range of parameter values. 
+
 \begin{figure}
     \centering
-    \begin{subfigure}{0.49\linewidth}
+    \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Sourced/cocktail_plot.png}
@@ -293,11 +302,12 @@ However, PhageDyn is no longer available for download.
             Figure B) Oscillations of bacteria and phages can exist at higher titers, dependent on low resource concentration, following the model of \citet{lenskiDynamicsInteractionsBacteria1988}. 
             Figure C) As the concentration of resources change, this results in increasing oscillations, but not going extinct. 
             Figure D) A system modeling the interactions with phage A and B. 
+            Figure and caption sourced from \citet{nilssonCocktailComputerProgram2022}. 
         }
         \label{fig:sourced:cocktail_plot}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.49\linewidth}
+    \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
         \includegraphics[width=\linewidth]{Plots/Sourced/phagedyn_plot.png}
@@ -311,11 +321,25 @@ However, PhageDyn is no longer available for download.
             Figure C) Biomass concentration when phages are extinct. 
             Figure D) Biomass concentration with a less virulent and low adsorption rate phage, indicating coexistence with biomass. 
             A change in phage concentration shows a decrease in heterotrophic and foaming biomass \cite{krysiak-baltynSimulationPhageDynamics2017}. 
+            Figure and caption sourced from \cite{krysiak-baltynSimulationPhageDynamics2017}
         }
         \label{fig:sourced:phagedyn_plot}
     \end{subfigure}
-    \caption{Example output from Cocktail and PhageDyn, respectively. For PhageDyn, the concentration of heterotrophic biomass in an aerobic plug flows across four situations.
-        See \citet{nilssonCocktailComputerProgram2022} and \citet{krysiak-baltynSimulationPhageDynamics2017} for more information on parameter values and supplementary resources. 
+    \hfill
+    \begin{subfigure}{0.32\linewidth}
+        \centering
+        \captionsetup{width=1\linewidth}
+        \includegraphics[width=\linewidth]{Plots/Sourced/phisite.png}
+        \caption{
+            Running the simulations under five different conditions.
+            The simulations have been run under different conditions to demonstrate the capabilities of designed model. To set up the simulation the values of maximal, minimal and the optimal pH and temperature have to be experimentally stipulated. 
+            Then the model can calculate specific growth rate under different pH and temperature. 
+            Figure and caption sourced from \citet{bekeModellingInteractionBacteriophages2016}
+        }
+        \label{fig:sourced:phisite_plot}
+    \end{subfigure}
+    \caption{Example output from Cocktail, PhageDyn and PhiSite, respectively. For PhageDyn, the concentration of heterotrophic biomass in an aerobic plug flows across four situations.
+        See \citet{nilssonCocktailComputerProgram2022}, \citet{krysiak-baltynSimulationPhageDynamics2017}, and \citet{bekeModellingInteractionBacteriophages2016} for more information on parameter values and supplementary resources. 
     }
     \label{fig:sourced:cocktail_and_phagedyn}
 \end{figure}
@@ -339,8 +363,8 @@ Each model can be further developed, for example, by adding temperature and pH d
 The \citet{campbellConditionsExistenceBacteriophage1961} model is a DDE model that describes the growth of bacteria and phages in a chemostat, a bioreactor used to cultivate microorganisms, where fresh liquid medium is constantly added, and liquid culture is constantly removed at a constant rate to maintain a constant culture volume. 
 The growth of bacteria $B$ and phage $P$ is described as follows. 
 \begin{align}
- \frac{d{B}_i}{dt} &= k_B B \left (1 - \frac{B}{L}\right ) -\alpha B - k_A PB \\
- \frac{dP}{dt} &= k_A N \left [B(t-\tau)P(t-\tau) \right ] - k_A BP - k_IP-\alpha P
+    \frac{d{B}_i}{dt} &= k_B B \left (1 - \frac{B}{L}\right ) -\alpha B - k_A PB \\
+    \frac{dP}{dt} &= k_A N \left [B(t-\tau)P(t-\tau) \right ] - k_A BP - k_IP-\alpha P
 \end{align}
 
 $\alpha$ is the inflow and outflow rate, $k_A$ is the adsorption rate, $k_I$ is the rate of spontaneous inactivation of phages, $k_B$ is the bacterial growth rate following a logistic growth rate, with max level $L$, $N$ is the burst size after $\tau$ time units, and $t$ is the time. 
@@ -356,9 +380,14 @@ Steady states occur when $\frac{dB}{dt} = \frac{d0}{dt} = 0$, and there are four
 Solutions 3 and 4 happen when the initial populations are not zero, and the flow rate or the spontaneous phage inactivation rate is greater than 0. 
 
 \subsection{Weitz ODE Model for Coevolutionary Arms Race}
-The \citet{weitzCoevolutionaryArmsRaces2005} model describes how to model selective pressure and trait adaptations in phage and bacterial populations, and how these adaptations affect the dynamics of phage and bacterial populations. 
+Bacteria adapting to avoid phage infection pay a cost in cellular functions such as resource uptake. 
+Phages adapting to infect new bacteria may lose efficiency on others.
 As phages and bacteria evolve, the phage's ability to adsorb to bacteria and the bacteria's ability to consume resources change. 
-The receptors on the bacteria's cell wall and phage's tail act as a key-lock model, so any changes to the 
+The key is this trade-off, which promotes diversification in phage and bacteria populations even in a single-resource, homogeneous environment \cite{weitzCoevolutionaryArmsRaces2005}. 
+The \citet{weitzCoevolutionaryArmsRaces2005} model describes how to model selective pressure and trait adaptations in phage and bacterial populations, and how these adaptations affect the dynamics of phage and bacterial populations. 
+The receptors on the bacteria's cell wall and phage's tail act as a key-lock model, so any changes to the receptors will prevent detection and docking. 
+The Weitz model simplifies the traits into one number, $x_i$ for bacteria $i$ and $y_j$ for phage $j$. 
+
 \begin{align}
     \frac{dR}{dt} &= -\omega(R-R_0) - \sum_i \epsilon\gamma(x_i)\frac{RB_i}{R+K} \\
     \frac{dB_i}{dt} &= -\omega B_i+ \gamma(x_i)\frac{RB_i}{R+K} - \sum_j \phi(x_i, y_j)B_i P_j \\ 
@@ -369,12 +398,31 @@ The receptors on the bacteria's cell wall and phage's tail act as a key-lock mod
 $\omega$ is the washin rate, $R_0$ is the initial resource concentration, $x_i$ is the trait value for bacteria $i$, and $y_j$ is the trait value for phage $j$, $\gamma(x_i)$ is the resource consumption rate dependent on trait $x_i$, $\phi(x_i, y_j)$ is the adsorption rate between trait $x_i$ and trait $y_j$. 
 $K$ is the half saturation Monod constant, $\beta$ is the burst size of a phage, $\xi_n$ is the stable uptake range of hosts, and $\xi_v$ is the host range of phages. 
 
-Specifically, $\xi_n$ is the range of possible host phenotypes. 
-whose maximal growth rate is within $e^{-\frac{1}{2}}$ of the maximum for all phenotypes. 
+Specifically, $\xi_n$ is the range of possible host phenotypes, whose maximal growth rate is within $e^{-\frac{1}{2}}$ of the maximum for all phenotypes. 
 $\xi_v$ is the range of possible host phenotypes for which any given phage has an adsorption rate within $e^{-\frac{1}{2}}$ of its maximal adsorption rate. 
 $K$ and $\beta$ can also be considered traits of the bacteria and phage, but the authors decided to hold them constant for mathematical tractability. 
 $\gamma(x_i)$ implies that there is an optimal configuration for maximal resource uptake when $ x_i = x_0$, and an opportunity for a trade-off between resource uptake and phage avoidance. 
-$\phi(x_i, y_j)$ suggests that for every bacteria trait $x_i$, there is a phage trait $y_j$ that maximizes the strain-specific adsorption rate. 
+$\phi(x_i, y_j)$ suggests that for every bacteria trait $x_i$, there is a phage trait $y_j$ that maximizes the adsorption rate. 
+
+\subsection{Schrag DDE Model for a Chemostat Including Temperature and pH}
+\label{sec:lit:schrag}
+The \citet{bekeModellingInteractionBacteriophages2016, schragHostParasiteCoexistenceRole1996} model describes a phage and bacteria population in a chemostat environment with dependence on temperature and pH. 
+Temperature and pH affects the ability for phages and bacteria to grow, impacting the dynamics of the system. 
+Changing the temperature or pH of the system away from the optimal values will result in less than optimal growth.
+It should be noted that, for example, the $T_{min}$ value is not the lowest known temperature where growth can occur, but an extrapolated value. 
+Likewise for $T_{max}, pH_{min}, pH_{max}$. 
+When $T$ or $pH$ is near those values, the maximal growth rate $\mu_{max}$ will be close to zero, thus the system will show barely any growth \cite{bekeModellingInteractionBacteriophages2016}. 
+
+\begin{align}
+    \frac{dR}{dt} &= \omega (R_0 - R) - \frac{\varepsilon \mu_{\text{max}} R(U + I)}{K + R} \\
+    \frac{dU}{dt} &= \frac{\mu_{\text{max}} RU}{K + R} - \delta UP - \omega U \\
+    \frac{dI}{dt} &= \delta UP - \delta U(t - \tau) P(t - \tau) e^{-\omega \tau} - \omega I \\
+    \frac{dP}{dt} &= \beta \delta U(t - \tau) P(t - \tau) e^{-\omega \tau} - \delta UP - \delta IP - \omega P\\
+    \mu_{\text{max}} &= \mu_{\text{opt}} \cdot \tau(T) \cdot \rho(pH) \\
+    \tau(T) &= \frac{(T - T_{\text{max}})(T - T_{\text{min}})^2}{(T_{\text{opt}} - T_{\text{min}})\left[(T_{\text{opt}} - T_{\text{min}})(T - T_{\text{opt}}) - (T_{\text{opt}} - T_{\text{max}})\right]} \\
+    \rho(pH) &= \frac{(pH - pH\cdot T_{\text{min}})(pH - pH\cdot T_{\text{max}})}{(pH - pH_{\text{min}})(pH - pH_{\text{max}}) - (pH - pH_{\text{opt}})^2}
+\end{align}
+$R$ is the resource concentration, $R_0$ is the resource concentration in the reservoir, $U$ is bacteria population density, $I$ is the population density of infected bacteria, $P$ is phage population, $t$ is the time of the simulation, $\omega$ is the flow rate, $\mu_{max}$ is the maximal growth rate, $\mu_{opt}$ is the optimal growth rate, $\epsilon$ is the growth efficiency, $K$ is the Monod constant for half growth rate of $\mu_{max}$, $\beta$ is burst size of the phages, $\delta$ is the adsorption rat eof phages to bacteria, $\tau$ is the latent time period, $T$ is the temperature of the system, $T_{opt}, T_{min}, T_{max}$ is the optimal, minimal, and maximal temperature of the bacteria, $pH$ is the pH of the system, $pH_{opt}, pH_{min}, pH_{max}$ is the optimal, minimal, and maximal pH of the bacteria, 
 
 \subsection{The Golding Model}
 \label{sec:golding_model}
@@ -403,22 +451,21 @@ Bacteria consume a resource at a rate of $e$.
         \label{eq:golding_model}
     \end{align}
     \caption{
-        The Golding model was sourced from \citet{gengUsingBacterialPopulation2024}. 
-        The text in \textcolor{red}{red} has been added to the model, incorporating (the washin) fresh resources ($\omega^i$) and the removal (washout) of entities ($\omega^o$). 
-        By default, $\omega^i$ and $\omega^o$ values are zero unless stated otherwise.
+        The Golding model was sourced from \citet{gengUsingBacterialPopulation2024}.
+        The probability of phage $p$ infecting bacteria $b$ is $r$ and is not to be confused with the resource concentration $R$. 
         The parameter values can be found in \Cref{tab:appendixA:parameter_table_simple_golding_model}. 
     }
 \end{eqfloat}
 
-\subsubsection{The Adapted Golding Model}
+\subsubsection{The Generalized Golding Model}
 \label{sec:adapted_golding_model}
 The original Golding model simulates a $1\times 1 \times 1$ system. 
-To adapt this model to fit a $p \times b \times r$ model, it needs to be slightly modified. 
+To generalize this model to fit a $p \times b \times r$ model, it needs to be slightly modified by adding summation and index terms. 
 Other changes can be made to the model, for example, by adding a washin rate $\omega^{i}$, where resources are constantly introduced, and a washout rate $\omega^{o}$, where all phages, bacteria, and resources are washed out at a proportional rate. 
 \Cref{eq:adapted_golding_model} highlights the $\omega^i$ and $\omega^o$ in \textcolor{red}{red}. 
 If $\omega^i$ and $\omega^o$ are zero, and there is only one phage, one bacteria, and one resource, then you get the original Golding model. 
 
-The adapted model accounts for the interactions among multiple phages, bacteria, and resources, assuming that these interactions occur independently of one another. 
+The generalized model accounts for the interactions among multiple phages, bacteria, and resources, assuming that these interactions occur independently of one another. 
 
 \begin{eqfloat}
     \begin{align}
@@ -431,9 +478,11 @@ The adapted model accounts for the interactions among multiple phages, bacteria,
         \label{eq:adapted_golding_model}
     \end{align} 
     \caption{
-        The adapted Golding model. 
-        The probability of phage $p$ infecting bacteria $b$ is $r_{p b}$ and is not to be confused with the resource concentration $R_r$. 
-        The interactions are the sum of all interactions as they occur simultaneously. 
+        The generalized Golding model. 
+        The text in \textcolor{red}{red} has been added to the model, incorporating (the washin) fresh resources ($\omega^i$) and the removal (washout) of entities ($\omega^o$). 
+        By default, $\omega^i$ and $\omega^o$ values are zero unless stated otherwise.
+        The probability of phage $p$ infecting bacteria $b$ is $r_{pb}$ and is not to be confused with the resource concentration $R_r$. 
+        The interactions act independent of one another, and are the sum of all interactions as they occur simultaneously. 
     }
 \end{eqfloat}
 
