@@ -9,13 +9,13 @@ Next, I analyze if phages will proliferate or not depending on the initial phage
 I finally extend the analyses to a large community and examine how changing parameter values affect the growth of phages and bacteria, as well as whether the phages and bacteria can coexist or not. 
 
 \section{A Realistic Growth Curve}
-As the bacterial population grows, resource consumption accelerates, leaving only trace amounts remaining. 
+As the bacterial population grows, resource consumption accelerates until eventually the resources start to deplete leaving no resources available. 
 The delay between the peaks of uninfected and infected bacteria is due to the infection stages and the latent period of phage infection. 
 Each bacterium transitions from infection stage $k$ to $k+1$ at a rate of $\frac{M}{\tau}$. 
 Therefore, decreasing the number of infection steps, $M$, or increasing the latent period, $\tau$, amplifies this delay. 
 A more extended latent period means it takes more time for bacteria to progress through the infection stages.
 
-At $t=4$, the infection rate surpasses the bacterial replication rate, causing the bacterial population to decline despite the availability of resources. 
+\Cref{fig:created:a_good_curve_linear} shows how the infection rate surpasses the bacterial replication rate at $t=4$, causing the bacterial population to decline despite the availability of resources. 
 This moment coincides with the rise of the phage population. 
 Observing the timing of these events and changes in the graph's behavior, as well as their relationships across different graphs, helps clarify the complex population dynamics and the interdependence of the populations. 
 The nonlinearity of the models makes the analysis harder to understand and conceptualize. 
@@ -40,6 +40,7 @@ The insights from this analysis inform the selection of key parameters for subse
 
 \Cref{fig:created:Sobol_final_no_wi_wo} shows the impact that the parameter had on the final value of the population at $t=15$ for a $1\times 1\times 1$ system, on the original Golding model, \Cref{eq:golding_model}. 
 \Cref{fig:created:Sobol_peak_no_wi_wo} shows the impact that the parameter had on the peak population count using the 95\% rule. 
+(see \Cref{sec:initial_value_analysis} and \Cref{sec:appendixF:why_95} for an explanation on what the 95\% rule is). 
 \Cref{fig:created:Sobol_peak_time_no_wi_wo} shows the impact that the parameter had on the time of the peak, using the 95\% rule. 
 
 The parameters tested include all those listed in the basic Golding model, except for the uninfected bacteria $(I_1, \dots, I_4), M, \omega^i$, and $\omega^o$. 
@@ -127,6 +128,7 @@ As $\beta$, $r$, and $\tau$ are relatively important, future analyses could focu
 \end{figure}
 
 \section{Graph Behavior with IVA}
+\label{sec:results:graph_behavior}
 Understanding how a change in parameter values across a wide range of values affects the curve is essential for comprehending how the model operates across a variety of values. 
 The sections below provide both quantitative and qualitative elaborations on how changes in parameter values across multiple values alter the shape of the population curves. 
 Only the most critical parameters identified in the Sobol section, along with the initial resource, uninfected bacteria, and phage value, will be analyzed. 
@@ -145,12 +147,12 @@ As the resource concentration increases, the time it takes for the uninfected ba
 The infected bacteria face the opposite, whereas the resource concentration increases, the time to peak decreases from 9.5 time units to 4.9 time units. 
 The same behavior is exhibited for the phages, except that the time duration changes from 14 time units to 6.3 time units. 
 The phage population showed a significant variation in maximum population, ranging from a maximum of 464 phages to 17,200 phages, a 37-fold difference. 
-The maximum bacterial population sum varied from 55 to 3106 total bacteria, representing a 56.5-fold difference. \Cref{fig:created:IVA_IVAtable_resource}. 
+The maximum bacterial population sum varied from 55 to 3106 total bacteria, representing a 56.5-fold difference. 
 
 \subsection{Initial Uninfected Bacteria $U$}
 The initial uninfected bacteria $U$ population values were tested across a range of 1 to 100 uninfected bacteria, with a default value of 20 uninfected bacteria. 
 The IVA run and results can be found at \Cref{fig:created:IVA_IVAtable_uninfected_bacteria}. 
-As the initial uninfected bacterial population increases, resources are consumed faster, and the bacterial populations grow faster and peak earlier. The phages were able to grow faster. The phages peaked at 5.7 time units for 100 initial uninfected bacteria, whereas for small initial uninfected populations, the phages peaked at 10.3 time units. Varying the number of uninfected bacteria had little influence on the maximum value reached. There is a difference of 600 phages between the phages that started with 1 uninfected and 100 uninfected bacteria. The difference in total bacteria peak values is 173. Changing the uninfected bacteria had little influence on the peak values, but had a significant impact on the time at which the peak value occurred. \\
+As the initial uninfected bacterial population increases, resources are consumed faster, and the bacterial populations grow faster and peak earlier. The phages were able to grow faster. The phages peaked at 5.7 time units for 100 initial uninfected bacteria, whereas for small initial uninfected populations, the phages peaked at 10.3 time units. Varying the number of uninfected bacteria had little influence on the maximum value reached. There is a difference of 600 phages between the phages that started with 1 uninfected and 100 uninfected bacteria. The difference in total bacteria peak values is 173. Changing the uninfected bacteria had little influence on the peak values, but had a significant impact on the time at which the peak value occurred. 
 
 \subsection{Initial Phage $P$}
 The initial phage $P$ population values were tested across a range from 1 phage to 50 phages, with a default value of 10 phages. 
@@ -234,7 +236,7 @@ For the first curve, the uninfected bacteria had a small influence on the time o
         \includegraphics[width=\linewidth]{Plots/Created/IVA/initial_value_analysis_UB_50_500_a_good_plot.png}
         \caption{
             IVA for \Cref{tab:appendixE:a_good_curve}. 
-            For uninfected bacteria less than 100, the phage-bacteria interaction is resource-limited. 
+            For initial uninfected bacteria less than 100, the phage-bacteria interaction is burst-limited, while for initial uninfected bacteria more than 100, the phage-bacteria interaction is adsorption-limited. 
         }
         \label{fig:created:initial_value_analysis_UB_50_500_a_good_plot}
     \end{subfigure}
@@ -247,10 +249,9 @@ For the first curve, the uninfected bacteria had a small influence on the time o
 
 \section{Phage Proliferation}
 Understanding how phage behavior varies under different conditions is essential. 
-Phages must survive throughout the entire experiment. 
 Phages can experience chemical or biological deactivations or, if the replication process is not fast enough, be removed from the system from the washout. 
 It is very easy for a researcher to vary the initial resource concentration, phage, or resource concentration. 
-It isn't very easy for a researcher to vary the other parameter values. x
+One of the first experiments that a researcher might run in a lab is how changing the initial population or concentration value of phages, bacteria, and resources might affect if the phages or bacteria survive, and by how much. 
 
 \subsection{Phase Portrait}
 \label{sec:results:phase_portrait}
@@ -333,7 +334,7 @@ The washout $\omega^o$ removes a percentage $\omega^o$ of phages, bacteria, and 
 
 For large initial uninfected bacterial populations, it will be easier for the phages to proliferate, such that the washout will not immediately eliminate the phages. 
 I extend the initial resource and phage population analysis by adding a third dimension: the initial uninfected bacteria population. 
-The aim of adding the uninfected bacteria is to see how the initial uninfected bacteria will 1) affect if the phage can proliferate and 2) affect the maximum population that the phages can reach. 
+The aim of adding the uninfected bacteria is to see how the initial uninfected bacteria will: 1) affect if the phage can proliferate and 2) affect the maximum population that the phages can reach. 
 
 \Cref{fig:created:3D_phase_portrait} has three axes: the initial phage, resource, and bacteria population value. 
 The initial uninfected bacteria did not have a significant impact on two aspects: 1) whether the phages would proliferate and 2) how much the phages would proliferate. 
@@ -362,10 +363,12 @@ Understanding how multiple parameters affect the output is crucial.
 As the complexity of the model input increases, interactions and their corresponding parameter values play a crucial role in determining which phage or bacteria can survive. 
 The interactions (or lack thereof) will influence the output of the graphs. 
 
-The larger model will exhibit similar but slightly different behavior than a $1\times 1\times 1$ model due to the interactions. 
-The differing parameter values across each interaction will influence how fast each population can grow and die. 
+The larger model will exhibit similar but slightly different behavior than a $1\times 1\times 1$ model due to the multiple interactions happening at the same time. 
+The population curves are now explained by a combination of interactions. 
+The differing parameter values across each interaction will influence how fast each population can grow and die which will have cascading affects on other population values. 
+
 A $3\times 2\times 3$ model was chosen because it is situated on the boundary between adding too many phages, bacteria, or resources that would otherwise clutter the plot with lines while still offering behavior that can be compared against one another. 
-The graph network used can be found in \Cref{fig:ss:example_network}, with the default parameter values listed in \Cref{tab:appendixE:complex_model}. 
+The $3\times 2\times 3$ graph network used can be found in \Cref{fig:ss:example_network}, with the default parameter values listed in \Cref{tab:appendixE:complex_model}. 
 $B_0$ is infected by $P_1$ and $P_2$, and consumes $R_0$ and $R_1$. 
 $B_1$ is infected by $P_0$ and $P_2$, while consuming $R_2$. 
 
@@ -379,10 +382,11 @@ It was selected to provide context to and show how the parameter values and inte
 If $r$ or $\beta$ is equal to $Original$, then the simulation uses the original parameter values as defined in \Cref{tab:appendixE:complex_model}, otherwise each $r$ and each $\beta$ parameter interaction has the value listed in the subfigure title. 
 
 The columns and rows of each figure illustrate how a change in parameter value affects the curve while keeping the other parameters constant. 
-A visualization of which phages can infect which bacteria and which bacteria can consume which resources can be seen in the $3 \times 2\times 3$ model in \Cref{fig:ss:example_network}. $P_0$ infects $B_1$, $P_1$ infects $B_0$, and $P_2$ infects $B_0$ and $B_1$. 
+A visualization of which phages can infect which bacteria and which bacteria can consume which resources can be seen in the $3 \times 2\times 3$ model in \Cref{fig:ss:example_network}. 
+$P_0$ infects $B_1$, $P_1$ infects $B_0$, and $P_2$ infects $B_0$ and $B_1$. 
 $B_0$ consumes $R_0$ and $R_1$, while $B_1$ consumes $R_2$. 
 
-In $r, \beta, \omega^o=Original, Original, 0$, although not a realistic growth curve, this graph shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population ($P_0$=blue, $P_1$=green, and $P_2$=purple). 
+In $r, \beta, \omega^o=Original, Original, 0$, the graph shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population ($P_0$=blue, $P_1$=green, and $P_2$=purple). 
 All phages start at the same population level. 
 $P_2$ has the fastest initial growth rate until $t=4$, at which $P_1$ overtakes $P_2$. 
 $P_2$ reaches its peak population count before $P_0$ or $P_1$, but despite the slower initial growth, $P_0$ and $P_1$ eventually overtake $P_2$ in total phage population. 
@@ -391,8 +395,8 @@ The complete extinction of the bacteria has been delayed long enough that, at tr
 The peak times for $P_0$, $P_1$, and $P_2$ are $t=6.33, 7.99, 4.52$, a difference of $3.47$ time units. 
 This illustrates how the other parameter values influence the growth and competition of phages for bacteria, as well as the impact these parameters have on the phage populations. 
 
-Contrast $r, \beta, \omega^o=Original, Original, 0$ (the previous paragraph) with the phage population dynamics of $r, \beta, \omega^o = Original, 100, 0$, the phage populations do not show notable dynamics. 
-The peak times are more similar and consistent to one another ($t=5.50, 7.01, 6.78$, a difference of $1.51$ time units). 
+Contrast $r, \beta, \omega^o=Original, Original, 0$ (the previous paragraph) with the phage population dynamics of $r, \beta, \omega^o = Original, 100, 0$, the phage populations show less notable dynamics. 
+The peak times are more similar and consistent to one another ($t=5.50, 7.01, 6.78$, a maximum difference of $1.51$ time units). 
 The phage population curve all appears the same, with slightly slower growth rates compared to $r, \beta, \omega^o=Original, Original, 0$. 
 There is no crossing of phage population count, unlike with $r, \beta, \omega^o=Original, Original, 0$. 
 The crossing of phage populations highlights how one phage population performs better than the other, especially when compared to different situations where the cross does not occur. 
@@ -449,7 +453,9 @@ Using the simulation framework, I created and analyzed a $20\times20\times10$ sy
 I selected two parameters, $\tau$ and $\beta$, to run a survivability analysis using the extended Golding model. 
 A phage is considered to have survived if its final population is greater than 1 at the end of the simulation. 
 A bacteria population survived if the final population for the uninfected bacteria was greater than 1. 
-The washout will otherwise remove the phages and bacteria from the system if left long enough. 
+Washin and washout are included in the simulation. 
+Washout will remove the phages and bacteria from the system if left long enough unless if a delicate coexistence balance can be found. 
+Washin is required to ensure constant new resources for the bacteria to grow, which the phages can infect, while washout ensures that the phage population can not grow too big to infect every bacterium. 
 
 Each phage is guaranteed to interact with at least one bacterium but no more than two bacteria. 
 Each bacterium interacts with at least one phage and one resource but not more than two phages and two resources. 
@@ -472,14 +478,68 @@ The bacterium takes longer for the infection process to complete, so there is a 
 
 For the most part, the competitive exclusion principle is respected. 
 The majority of the simulations resulted in less than 10 uninfected bacteria surviving. 
-For small burst sizes, there were more than 10 surviving bacteria. However, if the simulation length were to be extended, it would be expected that more bacteria populations would start to die out. 
+For small burst sizes, there were more than 10 surviving bacteria. 
+However, this is a consequence of the limited simulation length. 
+It would be expected that more bacteria populations would start to die out as the simulation length is increased. 
 
 \begin{figure}[]
     \includegraphics[width=1\textwidth]{Plots/Created/phage_bacteria_survivability.png}
     \centering
     \caption{
+        The survivability matrix for phages and bacteria by changing $\tau$ and $\beta$ in a $20\times 20\times 10$ network. 
         The output graph for the default parameter values for an extensive $20\times 20 \times 10$ network. 
         Parameter values were randomly chosen in the interval given by \Cref{tab:appendixE:Sobol_analysis_values}. 
-            \label{fig:created:survivability}
     }
+    \label{fig:created:survivability}
+\end{figure}
+
+\subsection{Debris Term}
+\label{sec:results:debris}
+A recently published paper \citet{deyEmergentHigherorderInteractions2025} utilizes the Golding model, incorporating a new term: debris. While running their simulations and experiments, the model's results would diverge from their experimental work. 
+THey hypothesized that freshly lysed bacteria still have biomarkers that phages can detect and attach to. 
+Incorporating the debris term, which acts as an additional death term for phages, improved the model's alignment with the experimental data.
+The debris term can also encompass bacterial phage defenses (\Cref{sec:literaturereview:bacterial_defense_against_phages}). 
+The ODE equation from the generalized Golding model that describes the phage behavior can be rewritten as: 
+\[
+ \frac{dP_p}{dt} = \sum_{b\in B}\beta_{p b}\cdot\frac{M}{\tau_b} \cdot I_{b_M} - r_{p b}\cdot(U_b + \sum_{k=1}^{M} I_{b_k})\cdot P_p - w^o \cdot P_p \mathcolor{red}{- d_{pb} \cdot P_p}
+\]
+\Cref{fig:created:debris_model} shows how debris $d$ had an effect on the growth curves of the phages and bacteria in comparison to no debris term, \Cref{fig:created:no_debris_model}. 
+Without the debris term, only one uninfected bacteria survived, and every phage survived except for one phage that died due to the washout. 
+Three uninfected bacteria species reached more than 1,000 uninfected bacteria at any point in the simulation time, and only two infected bacteria species reached more than 1,000 infected. 
+The maximum total bacterial population reached was 6,620 bacteria. 
+
+With the debris term included, different results are apparent. 
+Three uninfected bacteria survived, and four different uninfected bacteria strains ever reached a population value of greater than 1,000 at any point in time during the simulation. 
+Only one bacteria strain ever reached more than 1,000 infected bacteria, 
+The ending bacteria value is 12,000, almost double the maximum bacteria population reached without debris. 
+On average, there were significantly fewer phages at the end of the simulation than in the control without debris. 
+No phage population exceeded 2,000 with debris, whereas two phage populations reached more than 2,000 phages without debris. 
+
+The debris term more accurately models real communities as phages can randomly deactivate, for example, by UV radiation or phage defense mechanisms. 
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/debris.png}
+        \caption{
+            The $20\times20\times10$ model with a debris factor included. 
+        }
+        \label{fig:created:debris_model}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{1\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{Plots/Created/no_debris.png}
+        \caption{
+            The $20\times20\times10$ model without the debris factor included. 
+        }
+        \label{fig:created:no_debris_model}
+    \end{subfigure}
+    \caption{
+        A large $20\times20\times10$ model with a debris model added. 
+        The debris parameter values were randomly and uniformly selected between 0.01 and 0.2 for each phage-bacteria interaction. 
+        Washin of resources and washout is included. 
+    }
+    \label{fig:created:debris}
 \end{figure}

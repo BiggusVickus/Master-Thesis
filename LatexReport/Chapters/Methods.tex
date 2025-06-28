@@ -288,13 +288,16 @@ The initial value analysis (IVA) settings tab, as shown in \Cref{fig:ss:av:initi
 \Cref{fig:ss:av:initial_value_analysis_run} shows the plots that the user receives.
 For each entity type, three plots are created.
 The left plot shows the population count through time, one line for each parameter value submitted.
-The middle plot takes each run and calculates the "percentage from the max value" (default value of $0.95 \rightarrow 95\%$) reached from the peak.
+The middle plot takes each run and calculates the “percentage from the max value” (default value of $0.95 \rightarrow 95\%$) reached from the peak.
+In short, the 95\% rule identifies the maximum value reached during the simulation, then calculates 95\% of that maximum. 
+It determines the time point at which this 95\% threshold is first reached.
+See \Cref{sec:appendixF:why_95} for more information on what the 95\% rule is. 
 This value is considered the time of peak and is used to address some issues that can arise when the population plateaus or continues to rise.
 For example, suppose the phage population starts to plateau early in the simulation. 
-In that case, the program can calculate that the "peak" of the phage population happened at the beginning of the simulation. 
+In that case, the program can calculate that the “peak” of the phage population happened at the beginning of the simulation. 
 
-The plotter places the initial value on the x-axis, while the time at which the max value is reached appears on the y-axis. 
-Using the plotted data, one can create a linear or log fit.
+The initial value is placed on the x-axis, while the time of peak value appears on the y-axis. 
+Using the plotted data, a linear or log fit can be made.
 In Figure 1 of \citet{mullaExtremeDiversityPhage2024} (see \Cref{fig:sourced:Mulla}), the authors vary the initial bacterial concentration and measure the time until bacterial collapse. 
 The initial concentration and corresponding collapse time are plotted on a logarithmic x-axis, with a linear regression fitted to the log-transformed data.
 The observed logarithmic decrease suggests that the phage kinetics is adsorption-limited. 
@@ -490,7 +493,7 @@ It also uses NetworkX to load the graph and parameter values.
 The visualization component heavily utilizes Dash and Plotly. 
 Dash hosts the web server and displays the HTML and visualizations while handling input and output. 
 Upon choosing parameter values and clicking “Submit”, Dash registers the activity and calls the function registered to the button, sending data such as parameter values and options, like “log x-axis” to the backend server. 
-In the backend, various inputs are handled, such as converting the input string \textit{"0.05, 0.1, 0.15, 0.2"} into an iterable list \textit{[0.05, 0.1, 0.15, 0.2]} that the simulation framework can iterate over to vary the parameter value. 
+In the backend, various inputs are handled, such as converting the input string \textit{“0.05, 0.1, 0.15, 0.2”} into an iterable list \textit{[0.05, 0.1, 0.15, 0.2]} that the simulation framework can iterate over to vary the parameter value. 
 
 If there are many simulations to run, an intermediate call executes Joblib, a parallel computing program, as seen in \Cref{sec:ultimate_analysis} and \Cref{sec:Sobol_sensitivity_analysis}. 
 Joblib parallelizes computations across multiple CPUs to speed up computation time. 

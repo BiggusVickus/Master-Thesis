@@ -316,11 +316,11 @@ class Visualizer():
             if graph_axis_scale == "linear-linear (linear)": # linear
                 popt, _ = curve_fit(lin_func, param_values, list_max_x)
                 predictions = np.array([lin_func(x, *popt) for x in param_values])
-                parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
+                parameter_string = f"Equation: y=a*x+c<br> a: {popt[0]:.5f}<br> c: {popt[1]:.5f}<br>"
             elif graph_axis_scale == "log-linear (log)":  #log
                 popt, _ = curve_fit(lin_func, np.log(param_values), list_max_x)
                 predictions = np.array([lin_func(x, *popt) for x in np.log(param_values)])
-                parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.8f}<br> c: {popt[1]:.8f}<br>"
+                parameter_string = f"Equation: y=a*log(x)+c<br> a: {popt[0]:.5f}<br> c: {popt[1]:.5f}<br>"
                 fig.update_xaxes(type="log", row=1, col=2)
 
             popt.real[abs(popt.real) < 0.00000000001] = 0.0
@@ -339,7 +339,7 @@ class Visualizer():
 
             for j in range(len(self.initial_value_plot[name]['data'])):
                 for k, value in enumerate(self.initial_value_plot[name]['data'][j]):
-                    self.initial_value_plot[name]['data'][j][k] = round(value, 9)
+                    self.initial_value_plot[name]['data'][j][k] = round(value, 5)
                 fig.add_trace(
                     go.Bar(
                         x=["a", "c", "R^2"], 
@@ -376,14 +376,14 @@ class Visualizer():
                     y=predictions, 
                     mode="lines", 
                     name="Fitted Curve",
-                    hovertemplate=f"<br>SV of {param_name}: %{{x}}<br>Fitted time of collapse: %{{y:.8f}}<br>" + parameter_string + f"R²: {r_squared:.8f}", 
+                    hovertemplate=f"<br>SV of {param_name}: %{{x}}<br>Fitted time of collapse: %{{y:.4f}}<br>" + parameter_string + f"R²: {r_squared:.4f}", 
                     hoverlabel = dict(namelength = -1) 
                 ), 
                 row=1, col=2
             )
             for j in range(len(simulation_output)):
                 color = uniform_color_gradient_maker(j, len(simulation_output))
-                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {param_values[j]}", marker=dict(color=color), hoverlabel = dict(namelength = -1)), row=1, col=1)
+                fig.add_trace(go.Scatter(x=time_output[j], y=simulation_output[j][i][0], mode="lines", name=f"{param_name} {round(param_values[j], 4)}", marker=dict(color=color), hoverlabel = dict(namelength = -1)), row=1, col=1)
             fig.update_xaxes(title_text="Time", row=1, col=1)
             fig.update_yaxes(title_text="Value", row=1, col=1)
             fig.update_xaxes(title_text=f"Starting Value of {param_name}", row=1, col=2)

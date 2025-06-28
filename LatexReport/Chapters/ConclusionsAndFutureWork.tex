@@ -3,11 +3,18 @@
 
 \section{Conclusion}
 \label{Conclusion}
+Phages have traditionally been viewed as the enemy of bacteria. 
+But with the advent of new transcriptomic, proteomic, genomic, and metabolomic methods, we have gained a better understanding of how phages influence bacterial populations in ecosystems, as well as in laboratories. 
+Data from transcriptomics, proteomics, and metabolomics studies have shown how bacterial responses to phages vary and alter the phenotype of the bacterial host. 
+Data suggests that phages have a net positive effect on bacterial populations. 
+More research is needed to understand how phages and bacteria can coexist, as well as how the removal of a phage, bacteria, or their interactions can influence the dynamics of microbial communities \cite{fernandezPhageFoeInsight2018}. 
+
 Understanding the relationship between phages and bacteria, as well as their interaction with the environment, is complex. 
 For a single phage-bacteria pair growing on one resource there are seven biological parameters $(e, v, K, r, \beta, M, \tau)$ inputs for the Golding model, and six non-biological parameters ($R, U, I, P, \omega^o, \omega^o$). 
 Although relatively small in comparison to other models, analyzing 12 unique parameters and their interactions takes time and requires an intricate understanding of the model. 
 Finding parameter values that result in high-quality and noteworthy graphs is not an easy task, although knowing the expected values and the biological relevance makes the task easier. 
 Finding a set of parameters that yields behavior worth analyzing takes time. 
+
 
 To help aid myself with the task, I created a simulation framework that anyone can use to analyze their own custom model and interaction network. 
 Users can visually create and edit their interaction networks. 
@@ -33,13 +40,15 @@ A self-reinforcing feedback loop starts, where a change in the infection rate ha
 The coupled interactions will form a feedback loop, causing non-obvious behavior to occur. 
 
 Parameterizing complex systems is a challenging task. 
-In the context of a $p\times b\times r$ system, with $p, b, r > 1$, if you want to, for example, change $\beta$ to $35$, how would you do that? 
-There are various methods to solve this. 
-For a given matrix of size $p\times b$, you change each parameter value to 35. 
-You could alternatively randomize the parameter values in the matrix, with the random values averaging to 35. 
-A third option would be to adjust every parameter value so that the average of the values equals 35. 
+Parameterizing high-dimensional systems can be challenging. 
+In a $p \times b \times r$ model with $p, b, r > 1$, setting a parameter (e.g., $\beta$ to 35) can be approached in several ways: 1) assign 35 to every element in the $p \times b$ matrix, 2) randomize values such that their mean is 35, or 3) scale existing values to achieve a mean of 35.
 
 Typically, for bacterial communities, a common choice is random parameter matrix, possibly with a predetermined structure. 
+
+There are numerous interactions and parameters in large and complex systems, making it challenging to analyze them effectively. 
+The model network and parameter values are relatively random, and a figure of the network interactions and a copy of the parameter inputs are needed to analyze why a phage or bacterium is behaving in a certain way. 
+Furthermore, it is challenging to simplify or eliminate a phage or bacterium from the model due to the interconnected nature of the system. 
+
 
 \section{Future Work}
 \label{Future Work}
@@ -105,7 +114,7 @@ Removing edges would remove competition for resources, and community diversity w
 
 \section{Other Users}
 Although I created the simulation framework to facilitate the running and analysis of simulation results, the idea behind this program is that anyone can download the framework's open-source code, edit it, and run their own simulations. 
-A professor might be interested in using this tool in an "Introduction to Bacteriology" or "Biological Modelling" course, where the professor would instruct the students to design and implement an ODE model. 
+This tool could be used in an “Introduction to Bacteriology” or “Biological Modelling” course, where the professor would instruct the students to design and implement an ODE model. 
 They would instruct the students to interact with the model as an introduction to modeling phage and bacteria populations. 
 A researcher with weaker programming skills can utilize this low-code tool to gain a deeper understanding of how the system they are analyzing in their lab would behave under different conditions. 
 The code has been designed so that a user with basic programming skills can create their own analysis by copying and pasting boilerplate-like code. 
