@@ -1,26 +1,3 @@
-% add section on what phages do in the environemnt, in general. Dont constrain to applications of the phages, talk about what they do, in the larger environemnt ecosystem, carbon turnover, 30% (depends on ecosystem) of bacterial lysis per day. (done)
-
-
-% Read review from matti
-
-% add section on thesis overview, how I created the tools and run the visualizations/analysis (done)
-
-% In the different models (2.1), mention how phages and resources can be added to the model itself. 
-% flip it around to say how you build form modelling just bacteria, maybe resources, to adding resources and phages. 
-% add section 2.1.5 on a model that specifically models phages. 
-% tell how the Geng model cna be made form the other 2.1.1-4 models. 
-
-% Repression of DNA be more general, move outside and mention that you cna go to lytic or lysogenic part
-
-% holin to lyse bacteria (done)
-
-% do I really need fitness vlaue of the cell, and horizontal gene transfer? Maybe a bit too much, cut it down, or just rmeove it? (done, by cutting parts of it)
-
-% CHange “good plot” to something like “this is waht typically looks like in a lab”. (done)
-
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Masters/Doctoral Thesis 
 % LaTeX Template
@@ -49,13 +26,14 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[11pt, oneside, draft]{Thesis}
-% \documentclass[11pt, oneside, final]{Thesis}
+% \documentclass[11pt, oneside, draft]{Thesis}
+\documentclass[11pt, oneside, final]{Thesis}
 
 \graphicspath{{Images/}} 
 \usepackage[square, numbers, comma, sort&compress]{natbib} % Use the natbib reference package - read up on this to edit the reference style; if you want text (e.g. Smith et al., 2012) for the in-text references (instead of numbers), remove 'numbers' 
 \usepackage[ruled,vlined]{algorithm2e}
-\usepackage{amsmath}
+% \usepackage{amsmath, amssymb}
+\usepackage{amsmath, amssymb,siunitx}
 \usepackage{booktabs}
 \usepackage[nameinlink]{cleveref}
 \PassOptionsToPackage{hyphens}{url}
@@ -235,45 +213,38 @@ Date: \today\\
 \addtotoc{Abstract} 
 \abstract{\addtocontents{toc}{\vspace{1em}} 
     In any given microbial ecosystem, hundreds of different phages and bacteria interact with one another in a complex system. 
-    These individual interactions have a significant impact on the bacterial community and the overall ecosystem, with important ecological consequences. 
-    They force bacteria to mutate and evolve, changing the community's fitness level. 
-    Phages can control bacterial populations, ensuring that dangerous bacteria do not over-reproduce and harm the ecosystem. 
-    Phages control bacterial population dynamics using the “kill-the-winner” dynamic, preventing any one species from dominating the population.
+    These individual interactions have a significant impact on the bacterial community and the overall ecosystem, with lasting ecological consequences. 
+    They force bacteria to mutate and evolve, changing the community’s fitness level. 
+    Phages can control bacterial populations, ensuring that dangerous bacteria do not over-reproduce. 
+    Phages control bacterial population with the “kill-the-winner” dynamic, preventing any one species from dominating the population.
     Upon lysis, bacteria release resources into the environment that other bacteria and plants can use. 
 
-    There is a need to model complex systems mathematically; however, current models typically only model one or two phages and bacteria. 
-    It is, however, straightforward to extend classical models for single phage-host pairs to multiple species. 
-    Mathematically modeling large bacterial communities is important because running laboratory experiments is time-consuming and costly. 
-    These simulations can guide future lab work, for example, in combating antibiotic-resistant bacteria. 
+    Modeling these complex systems mathematically is crucial, as traditional laboratory experiments are often time-consuming and costly. 
+    While current models typically focus on one or two phage-bacteria pairs, classical models can be extended to accommodate multiple species. 
+    Such simulations can guide future laboratory work, particularly in addressing challenges such as antibiotic-resistant bacteria.
 
-    I created a program consisting of three parts that can model complex communities of $p$ phages, $b$ bacteria, and $r$ resources. 
-    The first part uses a GUI tool to create and edit the interactions between the phages, bacteria, and resources using a graph network. 
-    The nodes and edges hold the interaction and environmental parameter values. 
-    The second part, the simulation framework itself, models and calculates the population levels of phage, bacteria, and resources using the user-provided network and ODE model. 
-    The third part allows the user to interact with the simulation framework with a custom-built dashboard. 
-    The user can, for example, modify the parameter values from the dashboard and immediately observe the impact of the change on the simulation. 
-    There are five pre-built plots that the user can interact with. 
-    It is possible to download the simulation results, allowing users to create custom analyses and plots. 
+    To address this, I developed a three-part program capable of modeling complex communities comprising of $p$ phages, $b$ bacteria, and $r$ resources. 
+    The first part is a graphical user interface (GUI) tool that allows users to create and edit interaction networks between phages, bacteria, and resources. 
+    Nodes and edges within this network store interaction and environmental parameter values. 
+    The second part, the simulation framework, uses the user-defined network and ordinary differential equation (ODE) model to calculate population levels of phages, bacteria, and resources. 
+    The third part provides a custom-built dashboard for user interaction. 
+    Users can modify parameter values directly from the dashboard and immediately observe the effects of the simulation. 
+    The program includes five pre-built interactive plots, and users can download simulation results for custom analysis and further evaluation.
 
-    I apply this process to the model from \citet{gengUsingBacterialPopulation2024}. 
-    I qualitatively analyze the model's behavior and use a Sobol analysis to quantitatively assign a value to the model's variance in output based on its input. 
-    Additionally, understanding the various restriction regimes in phages, as well as the factors that drive reaction rates and determine the rate-limiting steps, is crucial.
-    By varying the initial population of uninfected bacteria, the model can interpolate between two limiting processes: adsorption and latency. 
-    It is essential to determine whether a phage population will proliferate in a laboratory setting under constant washout conditions to prevent the phage population from being inadvertently wiped out. 
-    I analyze whether phages will proliferate or die out, depending on the initial condition. 
-    Finally, I perform and analyze a co-existence analysis on a large 20-phage, 20-bacteria, and 10-resource community to determine whether phages and bacteria can coexist under various conditions. 
+    I applied this program to a model from \citet{gengUsingBacterialPopulation2024}, performing both qualitative and quantitative analyses. 
+    A Sobol analysis was used to quantify the variance in the model’s output based on its inputs. 
+    Understanding phage restriction regimes and the factors that influence reaction rates is critical. 
+    By varying the initial uninfected bacterial population, the model goes from being adsorption limited to latency limited, two limiting processes. 
+
+    It’s vital to determine if a phage population will proliferate under constant washout conditions in a lab setting to prevent its accidental elimination. 
+    I analyzed phage proliferation based on initial conditions. 
+    Finally, I conducted a coexistence analysis on a large community of 20 phages, 20 bacteria, and 10 resources to assess phage-bacteria coexistence under various conditions. 
+
     In large communities, phages and bacteria can coexist. 
-    Introducing a debris term  that can deactivate free phages increases the bacteria's survivability rate.
+    Introducing a term for debris that deactivates free phages increases the bacteria’s survivability rate.
 
-    The flexible simulation framework developed here can be used to study the dynamics of complex communities, thus contributing to a better understanding of phage-host dynamics in the future. 
-    Since it requires little to no programming skills on the part of the user, it can also serve as a value tool in teaching. 
-
-% Include your abstract here 
-% Abstracts must include sufficient information for reviewers to judge the nature and significance
-% of the topic, the adequacy of the investigative strategy, the nature of the results, and the
-% conclusions. The abstract should summarize the substantive results of the work and not merely
-% list topics to be discussed. 
-% Length 200-400 words.
+    Researchers can utilize the flexible simulation framework to study the dynamics of complex communities, thereby deepening our understanding of phage-host dynamics in the future. 
+    Since it requires little to no programming skills on the part of the user, it can also serve as a valuable teaching tool. 
 }
 \clearpage 
 
@@ -284,7 +255,7 @@ Date: \today\\
 \setstretch{1.3} 
 \acknowledgements{
     \addtocontents{toc}{\vspace{1em}} 
-    I want to thank my parents for loving me despite some of my faults and for supporting me throughout my Bachelor's and Master's studies. Without them, I would not be where I am today, and I would certainly be a different person if it were not for them. 
+    I want to thank my parents for loving me despite some of my faults and for supporting me throughout my Bachelor’s and Master’s studies. Without them, I would not be where I am today, and I would certainly be a different person if it were not for them. 
 
     Thank you to Dr. Matti Gralka for the weekly meetings and for teaching me everything about phages and bacteria. 
     Every meeting was always insightful, productive, engaging, and informative. 
@@ -294,14 +265,14 @@ Date: \today\\
     She acted as my \href{https://www.wikiwand.com/en/articles/Rubber_duck_debugging}{rubber duck programming buddy} and watched the cringe-worthy screen recordings that I sent her at 2 am, showcasing various demos of my project. 
     If she had not found this opening, I would not know what I would be doing for my thesis. 
 
-    If I had not followed Dr. Rik Kaasschieter's and Dr. Martijn Anthonissen's courses “Introduction Computational Sciences” and “Numerical Linear Algebra” in my Bachelor's, I would not have been interested in Computational Sciences. 
+    If I had not followed Dr. Rik Kaasschieter’s and Dr. Martijn Anthonissen’s courses, “Introduction Computational Sciences” and “Numerical Linear Algebra,” in my Bachelor’s program, I would not have been interested in Computational Sciences. 
     I would not have found the MSc Computational Sciences program, as Computational Sciences fits my interests and skill sets better than any other program I could have taken. 
     Rik and Martijn have forever altered my career trajectory. 
 
     Thank you to Sarah Flickinger for showing me the research she has been working on in the lab. 
     She allowed me to connect my research and models to real life, reminding me that what I am doing has real-life applications rather than just being a purely theoretical or programming challenge. 
 
-    Moreover, I want to thank my friends for keeping me sane and supporting me throughout both of my programs. 
+    Moreover, I want to thank my friends for keeping me sane and helping me throughout both of my programs. 
 }
 \clearpage 
 

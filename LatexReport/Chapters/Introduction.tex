@@ -1,18 +1,19 @@
 \chapter{Introduction}
 \label{Introduction}
 Phages are small viruses, measuring 27-190 nm in diameter, that infect and lyse (kill) specific bacteria. 
-Phages act as nature's antimicrobial defense, but they also impact bacterial evolution and resource turnover. 
+Phages act as nature’s antimicrobial defense, but they also impact bacterial evolution and resource turnover. 
 There are various medical and industrial applications for phages to control bacterial growth; however, to realize these applications, it is essential to understand how phages interact with bacteria, enabling the implementation of a robust method to control bacterial growth. 
 
 \section{Thesis Overview}
-To answer the question of how phages, bacteria, resources, and their interactions can be mathematically modeled, I developed a simulation framework that can model and interact with any $p\times b\times r$ system, where $p$ represents the number of phages, $b$ represents the number of bacteria and $r$ represents the number of resources. 
+I developed a simulation framework that can model and interact with any $p\times b\times r$ system, where $p$ represents the number of phages, $b$ represents the number of bacteria, and $r$ represents the number of resources. 
+This framework enables the mathematical description of these components and their interactions. 
 Using the software, I answer how phages impact community dynamics in complex microbial communities. 
 
 First, there is a biological introduction to phages and bacteria. 
 This introduction covers how phages infect bacteria, how bacteria defend against phages, how phages defeat bacterial defenses, and how phages defend against other phages. 
 There is an introduction to different methods of modeling phage and bacteria dynamics. 
 This thesis provides a brief overview of software that models phages, resources, bacteria, and their associated limitations. 
-This thesis presents software I developed to support the research, demonstrating its capabilities using a representative model of phage, bacteria, and resource interactions. 
+I present the simulation framework that I developed to support the research, demonstrating its capabilities using a representative model of phage, bacteria, and resource interactions. 
 The section also provides an overview of its usage, including example outputs from demonstration runs.
 I use the software to analyze various scenarios, such as phage proliferation under a washout scenario, and analyze growth rate-limited regions. 
 
@@ -28,18 +29,18 @@ These effects have a larger effect on the ecosystem and food chain as a whole, a
 
 \section{Biological Background}
 Phages are small viruses on the order of 27-190 nm (the average size of marine phages is 54 nm) that infect and lyse (kill) specific bacteria.
-The phage cycle process starts with a phage coming into contact with a bacterium \Cref{fig:cyanobacteria_bloom_cycle}.
+The phage cycle process starts with a phage coming into contact with a bacterium \Cref{fig:phage_life_cycle}.
 Once it has identified an injection site, the phage can inject a strain of DNA into the bacteria.
 The DNA strand has two options. 
 
-The first option is that the phage can enter the lysogenic cycle by integrating its DNA into the host cell's DNA. 
-Prophages are phages that have integrated with the host cell's DNA. 
-The new cell will contain the prophage's DNA as the bacteria replicate. 
+The first option is that the phage can enter the lysogenic cycle by integrating its DNA into the host cell’s DNA. 
+Prophages are phages that have integrated with the host cell’s DNA. 
+The new cell will contain the prophage’s DNA as the bacteria replicate. 
 The phage will exit the lysogenic cycle and enter the lytic cycle after receiving a signal, such as cell damage, and hijack the DNA replication mechanism. 
 
 The second option is that the phage immediately enters the lytic cycle by hijacking the DNA replication process to create copies of its DNA. 
-The phage will create multiple copies of itself using the host's transcription and translation machinery to replicate itself.
-The phages self-assemble inside the bacteria until they lyse the cell (e.g., through chemically induced rupture of the cell wall), releasing the phages into the environment. 
+The phage will create multiple copies of itself using the host’s transcription and translation machinery to replicate itself.
+The phages self-assemble inside the bacteria until they lyse the cell (e.g., through chemically induced rupture of the cell wall), releasing the phages into the environment \cite{campbellFutureBacteriophageBiology2003}. 
 
 \begin{figure}
     \centering
@@ -48,7 +49,7 @@ The phages self-assemble inside the bacteria until they lyse the cell (e.g., thr
     \label{fig:phage_life_cycle}
 \end{figure}
 
-\subsection{Phage's Role in the Environment}
+\subsection{Phage’s Role in the Environment}
 Phages play a significant role in the ecosystem. 
 Phage-mediated death occurs when phages infect susceptible bacteria, resulting in cell lysis and the release of cellular contents and nutrients that other organisms, such as bacteria and plants, can utilize. 
 This process not only reduces bacterial populations but also accelerates the turnover of resources, such as nitrogen and carbon, for other bacteria and plants to utilize. 
@@ -62,8 +63,8 @@ UV is a significant factor in deactivating marine phages, causing up to a 5\% re
 
 \subsubsection{Phages and Controlling Bacterial Blooms}
 Phages can only kill a specific bacteria. 
-The bacteria that a phage can kill depends on the receptors on the bacteria that the phage can detect, as well as the internal bacterial mechanisms. 
-They have the potential of being used by humans to control bacterial infections in a patient to large environmental bioengineering efforts by controlling \textit{Cyanobacteria} populations in lakes and rivers. 
+The bacteria that a phage can kill depends on the receptors of the bacteria that the phage can detect. 
+They have the potential to be used by humans to control bacterial infections in patients and large-scale environmental bioengineering efforts by controlling \textit{Cyanobacteria} populations in lakes and rivers. 
 
 \textit{Cyanobacteria} cause damage to aquatic life by consuming resources and oxygen, starving aquatic life, and negatively affecting human health. 
 Scientists are investigating the potential use of phages to control cyanobacteria (also known as blue-green algae) blooms in the environment \cite{colomaFrequencyVirusresistantHosts2019}. 
@@ -77,7 +78,7 @@ The phages will target the specific bacteria of interest, for example, \textit{E
 Antibiotics indiscriminately affect any bacteria, disrupting the intricate ecosystem of the gut microbiome, acting as a scorched-earth mechanism. 
 Antibiotics have also faced the challenge that bacteria are growing resistant to them, making the antibiotics less effective in the future \cite{odonkorBacteriaResistanceAntibiotics2011, volkovaEffectsEarlylifePenicillin2021}. 
 
-Phages, on the other hand, specifically target a specific bacterial strain. 
+Phages, on the other hand, target a specific bacterial strain. 
 Antibiotic-resistant bacteria are typically less resistant to phages. 
 The bacteria cell typically has a trade-off between antibiotic resistance and phage resistance. 
 So by designing phages to be highly infective, there is hope that the phage-resistant bacteria will lose the antibiotic resistance to counter the phages \cite{laurePhageResistancemediatedTradeoffs2022, zhaoPhagedrivenCoevolutionReveals2024}. 
@@ -99,7 +100,7 @@ Researchers cannot identify every interaction in the complex community, and even
 
 There are two primary methods for modeling phage-bacteria dynamics: spatial and non-spatial.
 In a spatial model, phages and bacteria can move through space and interact with their neighbors. 
-Researchers have used partial differential equations (PDE) and cellular agent-based models (ABM) to model spatial interactions.
+Researchers have utilized partial differential equations (PDEs) and cellular agent-based models (ABMs) to model spatial interactions.
 Spatial models lead to more computationally complex models but can result in more biologically realistic results. 
 By contrast, ODE and DDE models describe non-spatial models. 
 In a non-spatial model, a well-mixed solution contains the bacteria and phages, and researchers make no distinctions regarding neighbors or distances to other entities. 
@@ -114,11 +115,12 @@ This thesis aims to develop a simulation framework that can model any $p\times b
 
 \section{Software Overview}
 The project contains three parts, with an optional fourth part.
-The first section is to create the network interaction. 
-Here, the user can define the number of resources, phages, and bacteria, who interacts with whom, and the strength and type of interactions. See \Cref{sec:network_creation_tool} for further information. 
-In \Cref{sec:simulation_framework}, the user uploads the network model and parameters and, as output, receives the time data and population data as an array. 
-\Cref{sec:visualization_framework} allows the user to interact with \Cref{sec:network_creation_tool} and \Cref{sec:simulation_framework} with a dashboard. 
-The user can graphically edit the attribute values of the network's edges and nodes and run more advanced visualizations, such as changing a parameter value to observe its impact on the population count. 
+In the first part, the user creates a network interaction. 
+Here, the user can define the number of resources, phages, and bacteria that interact with each other, as well as the parameter names and values. See \Cref{sec:network_creation_tool} for further information. 
+In the second part (\Cref{sec:simulation_framework}), the user sends the network model and parameters to the framework. 
+The third section (\Cref{sec:visualization_framework}) allows the user to interact with the graph structure  and \Cref{sec:simulation_framework} with a dashboard, but it is also possible to do this from a Python file, skipping the dashboard. 
+The user sends the simulation parameter data to the solver and receives the time data and population data as an array as the output. 
+The user can easily edit the parameter values of the network’s edges and nodes and run more advanced visualizations, such as changing a parameter value to observe its impact on the population count from the dashboard. 
 
 Several plots are included out of the box, allowing the user to test them. 
 The plots offered in Part 3 of the program provide interactivity, including the ability to hide and show lines and dots, zoom in and out, and hover over lines and dots to display more detailed data. 
@@ -126,5 +128,3 @@ The plots offered in Part 3 of the program provide interactivity, including the 
 Finally, the user can optionally run multiple simulations and download the data to their disk to create their own visualizations using \Cref{sec:custom_visualizations_and_framework}. 
 The visualizations created in \Cref{sec:visualization_framework} can be recreated in \Cref{sec:custom_visualizations_and_framework}. 
 The user can choose the same parameter values used for a specific plot in \Cref{sec:visualization_framework}, run the simulation (as described in \Cref{sec:ultimate_analysis}), download the data, and reimplement the graphs. 
-
-The user can use the tool themselves by importing the Python classes in their code, initializing the classes, and passing the appropriate data. 
