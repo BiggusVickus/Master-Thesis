@@ -98,8 +98,8 @@ The second output is an array containing the population count at each time step 
 
 To facilitate more complex model behavior, additional system variables can be added to the simulation.  
 An example of this distinction is the difference between uninfected and infected bacteria. 
-In the network model, you explicitly create a $3\times 2 \times 3$ network with three phages, two bacteria, and three resources. 
-You additionally tell the solver to add $2\cdot M$ additional states that represent the infected states. 
+In the network model, a $3\times 2 \times 3$ structure is explicitly defined, representing three phages, two bacterial strains, and three resources. 
+Additionally, the solver is instructed to incorporate $2\cdot M$ supplementary state variables corresponding to the infected states.
 Therefore, the ODE solver would solve for three phages, two uninfected bacteria states, $2\cdot M = 2\cdot 4 = 8$ infected bacteria states, and three resources. 
 
 Adding a resource reservoir to the model would also be straightforward. 
@@ -199,7 +199,7 @@ In the analysis section, the user can run different analysis methods to gain a g
 For simplicity, the visualizations on the dashboard only support a $1 \times 1\times 1$ model. 
 This makes it easier for the user to analyze the system. 
 The goal of the dashboard is to investigate a simple system in order to gain a deeper understanding of the system. 
-The next step is to simulate more complex models using the Ultimate Analysis section, where you implement your own visualizations. 
+The next step is to simulate more complex models using the Ultimate Analysis section, where it is possible to implement your own visualizations. 
 There are five prebuilt visualizations, which are described below. 
 These five visualizations are called serial transfer, parameter analysis, initial value analysis, phase portrait, and Sobol analysis. 
 The aim of these visualizations is to investigate how a simple system responds to varying inputs before moving on to more complex models. 
@@ -418,7 +418,7 @@ It measures the contribution to the output variance of $X_i$, including all vari
 \]
 
 Sobol accepts a list of parameter names and an interval of values to sample from, which the user can input in the Sobol settings tab, \Cref{fig:ss:av:Sobol_analysis_settings}. 
-If you do not specify any values, the simulation excludes the parameter and uses the default value instead.
+If no values are specified, the simulation excludes the parameter and uses the default value instead.
 The user then needs to select the number of samples to run, using the formula $2^x$, where $x$ is the number they input, and $2^x$ is the number of samples that Sobol will create and run.
 The larger $x$ is, the more accurate the Sobol analysis results will be, but the more simulations we will need to run. 
 If the second order is not chosen, we run the model $N(D+2)$ times with the randomly sampled input values. 

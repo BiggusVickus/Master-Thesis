@@ -184,7 +184,7 @@ However, for large $r$ values, there was little growth of phage and bacteria.
 For large $r=0.2$ values, the maximum number of phages and bacteria was 154 and 79, while for small $r=0.001$ values, the maximum number of phages and total bacteria was 10,464 and 1,588, respectively. 
 As $r$ increases, the probability of a successful infection increases, thereby enhancing the adsorption rate of phages and causing them to grow and peak earlier. 
 This higher adsorption rate causes the bacteria to become infected more quickly, resulting in their faster death. 
-Lower $r$ values allow the bacteria to grow for a more extended period, providing more bacteria for the phages to infect, which in turn leads to higher final phage populations.
+Lower $r$ values allow the bacteria to grow for an extended period, providing more bacteria for the phages to infect, which in turn leads to higher final phage populations.
 
 \subsection{Burst Size $\beta$}
 The burst size $\beta$ parameter values were tested across a range from 1 to 100, with a default parameter value of 10. 
@@ -372,8 +372,10 @@ The $3\times 2\times 3$ graph network used can be found in \Cref{fig:ss:example_
 $B_0$ is infected by $P_1$ and $P_2$, and consumes $R_0$ and $R_1$. 
 $B_1$ is infected by $P_0$ and $P_2$, while consuming $R_2$. 
 
-\Cref{fig:created:r_beta_washout_0}, \Cref{fig:created:r_beta_washout_0.02}, and \Cref{fig:created:r_beta_washout_0.05}, show a $7\times7$ matrix of subfigures across washout rates of 0, 0.02, and 0.05
+\Cref{fig:created:r_beta_washout_0} and \Cref{fig:created:r_beta_washout_0.02} show a $7\times7$ matrix of subfigures between washout rates of 0 and 0.02. 
 Each subfigure uses a different combination of $r$ and $\beta$ parameter values. 
+The adsorption rate and burst size was chosen as it had the largest effect on the phage population. 
+These results are to show how even controlling the two most important parameters for the phages, the parameters that drive the phage growth, the secondary less important parameters and interactions still influence the interactions. 
 
 All initial phage values started at 10. 
 This was specifically chosen to illustrate how, although the phage values all start the same, the different parameter values and interactions ultimately influence population growth. 
@@ -385,9 +387,10 @@ The columns and rows of each figure illustrate how a change in parameter value a
 A visualization of which phages can infect which bacteria and which bacteria can consume which resources can be seen in the $3 \times 2\times 3$ model in \Cref{fig:ss:example_network}. 
 $P_0$ infects $B_1$, $P_1$ infects $B_0$, and $P_2$ infects $B_0$ and $B_1$. 
 $B_0$ consumes $R_0$ and $R_1$, while $B_1$ consumes $R_2$. 
+Washin and washout is included, where washin $\omega^i_r$ has been set such that $\omega_r = \omega^o \cdot R_r$, where $R_r$ is the initial resource concentration for resource $r$. 
 
 In $r, \beta, \omega^o=Original, Original, 0$, the graph shows how the different parameter values for each interaction uniquely affect the growth rate of each entity, especially the phage population ($P_0$=blue, $P_1$=green, and $P_2$=purple). 
-All phages start at the same population level. 
+All phages start at the same population level of 10. 
 $P_2$ has the fastest initial growth rate until $t=4$, at which $P_1$ overtakes $P_2$. 
 $P_2$ reaches its peak population count before $P_0$ or $P_1$, but despite the slower initial growth, $P_0$ and $P_1$ eventually overtake $P_2$ in total phage population. 
 $P_2$ also reaches its peak before decreasing in population. 
@@ -396,7 +399,10 @@ The peak times for $P_0$, $P_1$, and $P_2$ are $t=6.33, 7.99, 4.52$, a differenc
 This illustrates how the other parameter values influence the growth and competition of phages for bacteria, as well as the impact these parameters have on the phage populations. 
 
 Contrast $r, \beta, \omega^o=Original, Original, 0$ (the previous paragraph) with the phage population dynamics of $r, \beta, \omega^o = Original, 100, 0$, the phage populations show less notable dynamics. 
-The peak times are more similar and consistent to one another ($t=5.50, 7.01, 6.78$, a maximum difference of $1.51$ time units). 
+The time of peak vlaues are more similar and consistent to one another ($t=5.50, 7.01, 6.78$, a maximum difference of $1.51$ time units). 
+By decreasing the variability of the $\beta$ values, the dynamics of the system has significantly changed. 
+Sobol suggested that changing $\beta$ won't have a big affect on the time of peak values, but when combined with other interactions, the parameter effect can propagate through the network. 
+
 The phage population curve all appears the same, with slightly slower growth rates compared to $r, \beta, \omega^o=Original, Original, 0$. 
 There is no crossing of phage population count, unlike with $r, \beta, \omega^o=Original, Original, 0$. 
 The crossing of phage populations highlights how one phage population performs better than the other, especially when compared to different situations where the cross does not occur. 
@@ -404,9 +410,12 @@ The crossing of phage populations highlights how one phage population performs b
 As the washout term changes, the choice of parameters becomes more critical. 
 The top row of \Cref{fig:created:r_beta_washout_0.02} $(\omega^o = 0.02)$ shows how the phages and resources died out relative to the top row of \Cref{fig:created:r_beta_washout_0} $(\omega^o = 0)$. 
 Even with a high burst value, the phages were unable to overcome the pressure from the washout. 
-However, by changing the $r$ value from $r=0.001$ to $r=0.041$, the phages were able to proliferate at a higher adsorption rate. 
+The phages were not able to proliferate under these conditions. 
 
-The highlighted example demonstrated the dynamics and influence that multiple agents can have on the final output. 
+However, by changing the $r$ value from $r=0.001$ to $r=0.009$, with $\beta \geq 21.6$, the phages were able to proliferate at a higher washout rate. 
+Small changes in parameter values can have a drastic change in outcomes.
+
+The highlighted examples demonstrated the dynamics and influence that multiple agents can have on the final output. 
 These graphs still show some realistic growth curves that can be directly compared against \Cref{fig:created:a_good_curve_linear}. 
 However, with the addition of more interactions, phage and bacterial growth differ, where some phages and bacteria die out faster than others. 
 
@@ -429,18 +438,11 @@ However, with the addition of more interactions, phage and bacterial growth diff
         }
         \label{fig:created:r_beta_washout_0.02}
     \end{subfigure}
-    \begin{subfigure}{0.49\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{Plots/Created/UA/r_beta_washout_0.05.png}
-        \caption{
-            Washout $\omega^o=0.05$. 
-        }
-        \label{fig:created:r_beta_washout_0.05}
-    \end{subfigure}
     \caption{
-        Varying washout $\omega^o, r,$ and $\beta$. 
+        Varying adsorption rate $r$, $\beta$, $\omega^o$ and $\omega^i$. 
         The default values for the parameters can be found in \Cref{tab:appendixE:complex_model}. 
         All initial phage population values were set to 10. 
+        Washout vlaues
     }
 \end{figure}
 
@@ -449,8 +451,8 @@ In the context of large communities, it is essential to understand how different
 Different interactions and environmental factors will influence the community's evolution. 
 Sometimes, populations of phages or bacteria will die out due to external factors, such as a lack of resources or bacteria to consume or infect, natural degradation, or exposure to external factors like UV light. 
 
-Using the simulation framework, I created and analyzed a $20\times20\times10$ system using the extended Golding model. 
-I selected two parameters, $\tau$ and $\beta$, to run a survivability analysis using the extended Golding model. 
+Using the simulation framework, I created and analyzed a $20\times20\times10$ system using the adapted Golding model. 
+I selected two parameters, $\tau$ and $\beta$, to run a survivability analysis using the adapted Golding model. 
 A phage is considered to have survived if its final population is greater than 1 at the end of the simulation. 
 A bacteria population survived if the final population for the uninfected bacteria was greater than 1. 
 Washin and washout are included in the simulation. 
@@ -537,7 +539,7 @@ The debris term more accurately models real communities as phages can randomly d
         \label{fig:created:no_debris_model}
     \end{subfigure}
     \caption{
-        A large $20\times20\times10$ model with a debris model added. 
+        A large $20\times20\times10$ model with a debris parameter added. 
         The debris parameter values were randomly and uniformly selected between 0.01 and 0.2 for each phage-bacteria interaction. 
         Washin of resources and washout is included. 
     }

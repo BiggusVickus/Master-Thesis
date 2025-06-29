@@ -142,8 +142,8 @@ class System(Analysis):
 
 # graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
 # system = System('a_good_curve.gexf') # load the graph from the file.
-system = System('a_good_curve_2.gexf') # load the graph from the file.
-# system = System('complex_graph.gexf') # load the graph from the file.
+# system = System('a_good_curve_2.gexf') # load the graph from the file.
+system = System('complex_graph.gexf') # load the graph from the file.
 # system = System('large_graph.gexf') # load the graph from the file.
 # system = System('large_graph_knocked_out_P2_B14.gexf') # load the graph from the file.
 

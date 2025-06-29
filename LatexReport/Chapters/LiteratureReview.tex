@@ -270,7 +270,7 @@ PhageDyn does not simulate phage dynamics on its own; instead, it manipulates ex
 PhiSite is a website created by \citet{bekeModellingInteractionBacteriophages2016} to allow users to interact with the \citet{schragHostParasiteCoexistenceRole1996} model. 
 The website can be accessed \href{http://dublin.embnet.sk:3838/model/}{here}. 
 It is possible to change various input parameters, like the temperature and pH of the system, infected bacteria count, washout, and more. 
-The software allows you to download the graphs and simulation data. 
+It is possible to download the graphs and raw simulation data from the dashboard
 See \Cref{sec:lit:schrag} for more details on the model. 
 \Cref{fig:sourced:phisite_plot} shows the output that PhiSite provides. 
 
@@ -463,7 +463,7 @@ The original Golding model simulates a $1\times 1 \times 1$ system.
 To generalize this model to fit a $p \times b \times r$ model, it needs to be slightly modified by adding summation and index terms. 
 Other changes can be made to the model, for example, by adding a washin rate $\omega^{i}$, where resources are constantly introduced, and a washout rate $\omega^{o}$, where all phages, bacteria, and resources are washed out at a proportional rate. 
 \Cref{eq:adapted_golding_model} highlights the $\omega^i$ and $\omega^o$ in \textcolor{red}{red}. 
-If $\omega^i$ and $\omega^o$ are zero, and there is only one phage, one bacteria, and one resource, then you get the original Golding model. 
+When $\omega^i=0$ and $\omega^o=0$, and the system includes only a single phage, a single bacterial strain, and a single resource, the model reduces to the original Golding model.
 
 The generalized model accounts for the interactions among multiple phages, bacteria, and resources, assuming that these interactions occur independently of one another. 
 

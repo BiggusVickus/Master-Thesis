@@ -190,7 +190,7 @@ The transition rate from uninfected bacteria $U$ to the first infected stage $I_
 Fewer bacteria are initially infected when the starting number of bacteria is low. 
 If the phages can't infect the bacteria, the later infection stages are delayed due to the slow infection process. 
 There could be a threshold for phage to uninfected bacteria where a specific dilution rate will significantly affect the peak time. 
-This value could be approximately $\frac{\text{initial phage}}{\text{initial bacteria}} = \frac{10}{25} = 0.4$, as the system transitions from a latency-limited to a new limited regime around 25 uninfected bacteria. 
+% This value could be approximately $\frac{\text{initial phage}}{\text{initial bacteria}} = \frac{10}{25} = 0.4$, as the system transitions from a latency-limited to a new limited regime around 25 uninfected bacteria. 
 The bacteria have a more extended period to grow, as there is a low infection rate and ample resources to consume. 
 This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
 As the bacteria population drives the phage population, an increase in bacteria time of peak causes an increase in phage time of peak. 
@@ -219,8 +219,8 @@ The lack of resources restricts the bacteria's growth, and the bacteria will gro
 As the resource concentration increases towards $K=10$, the bacteria can grow faster. 
 Since $K$ is small, a slight change in $R$ causes a relatively large change in the Monod rate. 
 
-At around the minimum in the phage proliferation boundary, the behavior changes. 
-As $R$ increases from $K$, the bacteria are no longer significantly limited by the nutrient concentration and can grow faster.
+At around the minimum in the phage proliferation boundary, at around $R=7$, the behavior changes. 
+As $R$ increases from $K$, the bacteria are no longer significantly limited by the nutrient concentration and can grow at their max rate.
 However, as $R$ increases beyond $K$, each additional unit of $R$ results in a diminishing rise in the Monod rate, which asymptotically approaches its maximum growth rate $v$. 
 
 Phage proliferation becomes a race against time under external pressure. 
@@ -246,4 +246,4 @@ For a species that consumes multiple resources, the growth of the species is def
 The Zero Net Growth Isoclines (ZNGI) graph shows how a species transitions between being limited by $R_1$ to being limited by $R_2$. 
 The isocline defines the optimal supply ratio at which a bacteria transitions from being limited by $R_1$ to being limited by $R_2$. 
 The isocline represents where cell growth = cell death. 
-With multiple isoclines, with each isocline representing a bacteria strain, you can tell which strain will outcompete and proliferate, and under which initial resource concentrations coexistence can occur \cite{smithEffectsResourceSupplies2002}.
+With multiple isoclines, with each isocline representing a bacteria strain, it is possible to tell which strain will outcompete and proliferate, and under which initial resource concentrations coexistence can occur \cite{smithEffectsResourceSupplies2002}.
