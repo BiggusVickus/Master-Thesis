@@ -25,10 +25,9 @@ The time at peak is measured at the point in time that the population reaches 95
 This removes unintended side effects of the simulation. 
 For populations that are only increasing in value, this prevents the measured peak from clustering at the end of the simulation, thereby skewing the data. 
 As the peak is defined at 95\% of the absolute maximum value, populations that experience a faster increase in population count at the end will have a time value closer to the end of the simulation. 
-For populations that reach a plateau, the 95\% rule will push the peak time towards the beginning of the simulation while still “respecting” the absolute final value since $95\% \approx 100\%$. 
+For populations that reach a plateau, the 95\% rule will push the time of peak towards the beginning of the simulation while still “respecting” the absolute final value since $95\% \approx 100\%$. 
 The 95\% rule can fail under certain situations, such as when there is cyclic behavior. 
 See \Cref{sec:appendixF:why_95} for a more detailed explanation on why the 95\% rule is used. 
-
 
 The results of the Sobol peak and time at peak analyses can be seen in \Cref{fig:created:Sobol_peak} and \Cref{fig:created:Sobol_peak_time}. 
 Although some bars between the final, peak, and time at peak values are the same, others differ. 
@@ -63,7 +62,7 @@ The final and peak values can fall anywhere between 0 and any value, depending o
     \begin{subfigure}{0.32\linewidth}
         \centering
         \captionsetup{width=1\linewidth}
-        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Peak_Time.png}
+        \includegraphics[width=\linewidth]{Plots/Created/SOBOL/SOBOL_analysis_1749149674_Time_of_Peak.png}
         \caption{
             Time at peak population. 
         }
@@ -90,7 +89,7 @@ However, at $t=15$, the population plateaued, as evident by the line graph.
 Plotting the same plot but calculating the peak at 95\% of the actual peak (\Cref{fig:appendixF:IVA_phage_95}) shows that the green line ($e=0.25$) “reached” its peak at $t=8.4$ before the red line ($e=0.05$) at $t=9.4$, a whole unit of time after $e=0.25$. 
 The user can thus conclude that, for this instance, larger $e$ values will cause the phage population to reach its “peak” faster than smaller $e$ values. 
 
-\Cref{fig:appendixF:IVA_uninfected_bacteria_95} and \Cref{fig:appendixF:IVA_uninfected_bacteria_100} likewise show how the 95\% rule can improve analysis of the change in peak time. 
+\Cref{fig:appendixF:IVA_uninfected_bacteria_95} and \Cref{fig:appendixF:IVA_uninfected_bacteria_100} likewise show how the 95\% rule can improve analysis of the change in time of peak. 
 \Cref{fig:appendixF:IVA_uninfected_bacteria_100} shows how the peak is reached at set time values. 
 Due to how \textit{solve\_ivp()} from SciPy works, it automatically chooses time values that it thinks would best capture the dynamics of the system without calculating too many steps. 
 The user can control the step size by adjusting the absolute and relative error bounds, as well as by minimizing the time step size. 
@@ -108,7 +107,7 @@ The slope (the $a$ value) and the intercept (the $c$ value) are somewhat similar
 
 \Cref{fig:appendixF:IVA_uninfected_bacteria_100_own_time} illustrates how increasing the time sampling to a more fine-grained level yields a more accurate graph. 
 Instead of having the solver choose the time values to test, 1000 equidistant time values were selected between 0 and 15. 
-The solver can more accurately calculate the population values and calculate the proper peak time. 
+The solver can more accurately calculate the population values and calculate the proper time of peak. 
 Comparing the 100\% rule without the custom time values with the 100\% rule with the custom time values shows that the same time values were calculated. 
 In both, $e=0.25$ resulted in a time of peak at 3.2, and for $e=0.05$, the time of peak occurred at $t=3.95$. 
 This is in stark contrast to the 95\% rule vs 100\% rule without the custom time, showing a difference of $0.15$ time units. 

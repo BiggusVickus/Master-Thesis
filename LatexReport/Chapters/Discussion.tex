@@ -120,7 +120,7 @@ The barplot values for the peak value of phages using the 95\% rule match the fi
 This makes sense as there is no removal of phages from the system, so any phages created by the lysis that are heavily influenced by $r$ and $\beta$ will stay in the system. 
 As the population continues to increase, the final and peak values will occur near one another (due to the 95\% rule) and are closely associated with each other.
 
-$\tau$, the latent infection period, emerges as the most critical parameter, setting the peak time for the phage population. 
+$\tau$, the latent infection period, emerges as the most critical parameter, setting the time of peak for the phage population. 
 The $\tau$ parameter determines the rate at which an infected bacterium progresses through the infection process. 
 Decreasing tau increases the speed of lysis, allowing more phages to be produced faster. 
 More phages earlier in the system will allow more infections to occur, thereby decreasing the pool of available bacteria. 
@@ -162,7 +162,7 @@ The region is adsorption limited when $k_{absorb}b(t) \ll k_{burst}$.
 If the system is burst limited, the time of collapse can be calculated as follows: $t_{\text{col}} = \frac{\log\left(\frac{r_{\text{bac}}}{k_{\text{burst}}}\left(\frac{1}{n_{\text{burst}}} + \frac{1}{\text{MOI}_0} - \frac{r_{\text{bac}}}{k_{\text{burst}}}\right)\right)}{k_{\text{burst}}n_{\text{burst}} - r_{\text{bac}}}$ \cite{mullaExtremeDiversityPhage2024}. 
 
 The behavior between \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot_2} and \Cref{fig:created:initial_value_analysis_UB_50_500_a_good_plot} should be similar. However, the change in parameter values altered the simulation to introduce a region in behavior change. 
-It would be expected that for 100 initial uninfected bacteria and fewer, the bacteria sum peak time would follow the linear regression line; however, at around 100 uninfected bacteria, the peak curve deviates from the linear expression. 
+It would be expected that for 100 initial uninfected bacteria and fewer, the bacteria sum time of peak would follow the linear regression line; however, at around 100 uninfected bacteria, the peak curve deviates from the linear expression. 
 
 Between 100 and 500 uninfected bacteria, the system is adsorption limited.
 The curve follows what was proposed by \citet{mullaExtremeDiversityPhage2024}. 
@@ -185,10 +185,10 @@ For uninfected bacteria with fewer than 25, the system enters a new type of rest
 The transition rate from uninfected bacteria $U$ to the first infected stage $I_1$ is proportional to $U\cdot P$. 
 Fewer bacteria are initially infected when the starting number of bacteria is low. 
 If the phages cannot infect the bacteria, the later infection stages are delayed due to the slow infection process. 
-There could be a threshold for phage to uninfected bacteria where a specific dilution rate will significantly affect the peak time. 
+There could be a threshold for phage to uninfected bacteria where a specific dilution rate will significantly affect the time of peak. 
 % This value could be approximately $\frac{\text{initial phage}}{\text{initial bacteria}} = \frac{10}{25} = 0.4$, as the system transitions from a latency-limited to a new limited regime around 25 uninfected bacteria. 
 The bacteria have a more extended period to grow, as there is a low infection rate and ample resources to consume. 
-This means that it takes longer for the bacteria to grow, as noticed by the increase in peak time relative to larger initial uninfected bacteria populations. 
+This means that it takes longer for the bacteria to grow, as noticed by the increase in time of peak relative to larger initial uninfected bacteria populations. 
 As the bacteria population drives the phage population, an increase in bacteria time of peak causes an increase in phage time of peak. 
 
 \section{Phage Proliferation}
