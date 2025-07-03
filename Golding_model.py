@@ -19,6 +19,7 @@ class System(Analysis):
         Args:
             t (float): The time value that the solver is currently at.
             Y (np.array): The initial (for t=0)/current (for t>0) population values of the system. A 1D array of length equal to the number of variables in the system.
+            *params: Additional parameters that are passed to the system. These include the graph object, the list of phage/bacteria/resource node names, value of M, the vectors (tau and washin), and the matrices (e, v, K, r, B), and the environment settings.
         """
         def g(R, v, K):
             """Calculate the growth rate of the bacteria. The growth rate is a function of the concentration of the resource, the growth rate of the bacteria, and the carrying capacity of the bacteria.
@@ -140,10 +141,10 @@ class System(Analysis):
         return flattened_y1
 
 
-# graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
+graph = GraphMakerGUI(seed=0) # create a new object using the GUI tool. 
 # system = System('a_good_curve.gexf') # load the graph from the file.
-# system = System('a_good_curve_2.gexf') # load the graph from the file.
-system = System('complex_graph.gexf') # load the graph from the file.
+system = System('a_good_curve_2.gexf') # load the graph from the file.
+# system = System('complex_graph.gexf') # load the graph from the file.
 # system = System('large_graph.gexf') # load the graph from the file.
 # system = System('large_graph_knocked_out_P2_B14.gexf') # load the graph from the file.
 
